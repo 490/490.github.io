@@ -281,6 +281,146 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/freemarker基础知识总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="le">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/490.github.io/2019/03/09/freemarker基础知识总结/" itemprop="url">freemarker基础知识总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-09T22:38:07+08:00">
+                2019-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/490.github.io/2019/03/09/freemarker基础知识总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/03/09/freemarker基础知识总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Freemaker-FTL指令常用标签及语法"><a href="#Freemaker-FTL指令常用标签及语法" class="headerlink" title="Freemaker FTL指令常用标签及语法"></a>Freemaker FTL指令常用标签及语法</h1><p><strong>注意**</strong>：使用freemaker，要求所有标签必须闭合，否则会导致freemaker无法解析。</p>
+<p>freemaker注释:&lt;#– 注释内容 –&gt;格式部分,不会输出</p>
+<h2 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h2><h3 id="1、字符输出"><a href="#1、字符输出" class="headerlink" title="1、字符输出"></a>1、字符输出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&#123;emp.name?if_exists&#125;　　　　　　// 变量存在，输出该变量，否则不输出</span><br><span class="line">$&#123;emp.name!&#125;　　　　　　　　　　  // 变量存在，输出该变量，否则不输出</span><br><span class="line"></span><br><span class="line">$&#123;emp.name?default(&quot;xxx&quot;)&#125;     // 变量不存在，取默认值xxx </span><br><span class="line">$&#123;emp.name!&quot;xxx&quot;&#125;    　　　　　　// 变量不存在，取默认值xxx</span><br></pre></td></tr></table></figure>
+<p>常用内部函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&#123;&quot;123&lt;br&gt;456&quot;?html&#125;    　　// 对字符串进行HTML编码，对html中特殊字符进行转义</span><br><span class="line">$&#123;&quot;str&quot;?cap_first&#125;    　　  // 使字符串第一个字母大写 </span><br><span class="line">$&#123;&quot;Str&quot;?lower_case&#125;        // 将字符串转换成小写 </span><br><span class="line">$&#123;&quot;Str&quot;?upper_case&#125;        // 将字符串转换成大写</span><br><span class="line">$&#123;&quot;str&quot;?trim&#125;              // 去掉字符串前后的空白字符</span><br></pre></td></tr></table></figure>
+<p>字符串的两种拼接方式拼接：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&#123;&quot;hello$&#123;emp.name!&#125;&quot;&#125;     // 输出hello+变量名</span><br><span class="line">$&#123;&quot;hello&quot;+emp.name!&#125;       // 使用+号来连接，输出hello+变量名</span><br></pre></td></tr></table></figure>
+<p>可以通过如下语法来截取子串:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;#assign str = &quot;abcdefghijklmn&quot;/&gt;</span><br><span class="line"></span><br><span class="line">// 方法1</span><br><span class="line">$&#123;str?substring(0,4)&#125;  // 输出abcd</span><br><span class="line"></span><br><span class="line">// 方法2</span><br><span class="line">$&#123;str[0]&#125;$&#123;str[4]&#125;    // 结果是ae</span><br><span class="line">$&#123;str[1..4]&#125;    　　　 // 结果是bcde</span><br><span class="line"></span><br><span class="line">// 返回指定字符的索引</span><br><span class="line">$&#123;str?index_of(&quot;n&quot;)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2、日期输出"><a href="#2、日期输出" class="headerlink" title="2、日期输出"></a>2、日期输出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;emp.date?string(&apos;yyyy-MM-dd&apos;)&#125; //日期格式</span><br></pre></td></tr></table></figure>
+<h3 id="3、数字输出-以数字20为例"><a href="#3、数字输出-以数字20为例" class="headerlink" title="3、数字输出(以数字20为例)"></a>3、数字输出(以数字20为例)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">$&#123;emp.name?string.number&#125;    　// 输出20</span><br><span class="line">$&#123;emp.name?string.currency&#125;    // ￥20.00 </span><br><span class="line">$&#123;emp.name?string.percent&#125;     // 20%</span><br><span class="line">$&#123;1.222?int&#125; 　　　　　　　　　　 // 将小数转为int，输出1</span><br><span class="line"></span><br><span class="line">&lt;#setting number_format=&quot;percent&quot;/&gt;    // 设置数字默认输出方式(&apos;percent&apos;,百分比)</span><br><span class="line">&lt;#assign answer=42/&gt;    　　　　　　　　 // 声明变量 answer 42</span><br><span class="line">#&#123;answer&#125;    　　　　　　　　 // 输出 4,200%</span><br><span class="line">$&#123;answer?string&#125;    　　　　 // 输出 4,200%</span><br><span class="line">$&#123;answer?string.number&#125; 　　// 输出 42</span><br><span class="line">$&#123;answer?string.currency&#125;  // 输出 ￥42.00</span><br><span class="line">$&#123;answer?string.percent&#125; 　// 输出 4,200%</span><br><span class="line">#&#123;answer&#125;    　　　　　　　　// 输出 42</span><br><span class="line">数字格式化插值可采用#&#123;expr;format&#125;形式来格式化数字,其中format可以是:</span><br><span class="line">mX:小数部分最小X位</span><br><span class="line">MX:小数部分最大X位</span><br><span class="line">如下面的例子:</span><br><span class="line">&lt;#assign x=2.582/&gt;</span><br><span class="line">&lt;#assign y=4/&gt;</span><br><span class="line">#&#123;x; M2&#125;    // 输出2.58</span><br><span class="line">#&#123;y; M2&#125;    // 输出4</span><br><span class="line">#&#123;x; m2&#125;    // 输出2.58</span><br><span class="line">#&#123;y; m2&#125;    // 输出4.0</span><br><span class="line">#&#123;x; m1M2&#125;  // 输出2.58</span><br><span class="line">#&#123;x; m1M2&#125;  // 输出4.0</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/基于前缀树图文详解敏感词过滤/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1435,135 +1575,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/Java语言基础知识/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="le">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/490.github.io/2019/03/09/Java语言基础知识/" itemprop="url">Java语言基础知识</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-09T21:37:15+08:00">
-                2019-03-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/490.github.io/2019/03/09/Java语言基础知识/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/03/09/Java语言基础知识/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1614,7 +1625,7 @@
               
                 <a href="/490.github.io/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1627,7 +1638,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/490.github.io/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
