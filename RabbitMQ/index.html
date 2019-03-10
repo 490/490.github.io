@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="消息队列,系统,">
 
 
 
@@ -77,14 +77,25 @@
 
 
 
+<meta name="description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。 AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。 RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、">
+<meta name="keywords" content="消息队列,系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RabbitMQ">
 <meta property="og:url" content="https://490.github.io/RabbitMQ/index.html">
 <meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。 AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。 RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-09T13:38:58.466Z">
+<meta property="og:image" content="http://490.github.io/images/20190310_080814.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_080835.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_081017.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_081109.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_081116.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_081253.png">
+<meta property="og:updated_time" content="2019-03-10T00:13:47.496Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RabbitMQ">
+<meta name="twitter:description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。 AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。 RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、">
+<meta name="twitter:image" content="http://490.github.io/images/20190310_080814.png">
 
 
 
@@ -356,7 +367,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  1.3k
                 </span>
               
 
@@ -372,7 +383,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  4
                 </span>
               
             </div>
@@ -393,7 +404,28 @@
       
 
       
-        
+        <p>AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。</p>
+<p>AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。</p>
+<p>RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，具有很高的易用性和可用性。<br><a id="more"></a></p>
+<p><strong>ConnectionFactory、Connection、Channel </strong> 都是RabbitMQ对外提供的API中最基本的对象。</p>
+<p>ConnectionFactory：ConnectionFactory为Connection的制造工厂。</p>
+<p>Connection：Connection是RabbitMQ的socket链接，它封装了socket协议相关部分逻辑。</p>
+<p>Channel(信道)：信道是建立在“真实的”TCP连接上的虚拟连接，在一条TCP链接上创建多少条信道是没有限制的，把他想象成光纤就是可以了。它是我们与RabbitMQ打交道的最重要的一个接口，我们大部分的业务操作是在Channel这个接口中完成的，包括定义Queue、定义Exchange、绑定Queue与Exchange、发布消息等。</p>
+<p><img src="http://490.github.io/images/20190310_080814.png" alt="image"><br>queue队列<br><img src="http://490.github.io/images/20190310_080835.png" alt="image"><br>生产者Send Message “A”被传送到Queue中，消费者发现消息队列Queue中有订阅的消息，就会将这条消息A读取出来进行一些列的业务操作。这里只是一个消费正对应一个队列Queue，也可以多个消费者订阅同一个队列Queue，当然这里就会将Queue里面的消息平分给其他的消费者，但是会存在一个一个问题就是如果每个消息的处理时间不同，就会导致某些消费者一直在忙碌中，而有的消费者处理完了消息后一直处于空闲状态，因为前面已经提及到了Queue会平分这些消息给相应的消费者。这里我们就可以使用prefetchCount来限制每次发送给消费者消息的个数。详情见下图所示：<br><img src="http://490.github.io/images/20190310_081017.png" alt="image"><br>生产者在将消息发送给 Exchange 的时候，一般会指定一个 routing key，来指定这个消息的路由规则。 Exchange 会根据 routing key 和 Exchange Type（交换器类型） 以及 Binding key 的匹配情况来决定把消息路由到哪个 Queue。RabbitMQ为routing key设定的长度限制为255 bytes。</p>
+<p>RabbitMQ常用的Exchange Type有 Fanout、 Direct、 Topic、 Headers 这四种。</p>
+<p><strong>Fanout</strong></p>
+<p>这种类型的Exchange路由规则非常简单，它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中，这时 Routing key 不起作用。<br><img src="http://490.github.io/images/20190310_081109.png" alt="image"></p>
+<p><strong>Direct</strong></p>
+<p>这种类型的Exchange路由规则也很简单，它会把消息路由到那些 binding key 与 routing key完全匹配的Queue中。<br><img src="http://490.github.io/images/20190310_081116.png" alt="image"><br>     当生产者（P）发送消息时Rotuing key=booking时，这时候将消息传送给Exchange，Exchange获取到生产者发送过来消息后，会根据自身的规则进行与匹配相应的Queue，这时发现Queue1和Queue2都符合，就会将消息传送给这两个队列，如果我们以Rotuing key=create和Rotuing key=confirm发送消息时，这时消息只会被推送到Queue2队列中，其他Routing Key的消息将会被丢弃。</p>
+<p><strong>Topic</strong></p>
+<p>这种类型的Exchange的路由规则支持 binding key 和 routing key 的模糊匹配，会把消息路由到满足条件的Queue。 binding key 中可以存在两种特殊字符 <code>*</code>与 <code>#</code>，用于做模糊匹配，其中 <code>*</code>用于匹配一个单词，<code>#</code> 用于匹配0个或多个单词，单词以符号<code>.</code>为分隔符。<br><img src="http://490.github.io/images/20190310_081253.png" alt="image"></p>
+<p><strong>Headers</strong></p>
+<p>这种类型的Exchange不依赖于 routing key 与 binding key 的匹配规则来路由消息，而是根据发送的消息内容中的 headers 属性进行匹配,对比其中的键值对是否完全匹配Queue与Exchange绑定时指定的键值对；如果完全匹配则消息会路由到该Queue，否则不会路由到该Queue。</p>
+<p><strong>Message durability（消息的持久化）</strong></p>
+<p>如果我们希望即使在RabbitMQ服务重启的情况下，也不会丢失消息，我们可以将Queue与Message都设置为可持久化的（durable），这样可以保证绝大部分情况下我们的RabbitMQ消息不会丢失。但依然解决不了小概率丢失事件的发生（比如RabbitMQ服务器已经接收到生产者的消息，但还没来得及持久化该消息时RabbitMQ服务器就断电了），如果我们需要对这种小概率事件也要管理起来，那么我们要用到事务。由于这里仅为RabbitMQ的简单介绍，所以这里将不讲解RabbitMQ相关的事务。具体可以参考 <a href="https://link.jianshu.com?t=http%3A%2F%2Fblog.csdn.net%2Fu013256816%2Farticle%2Fdetails%2F55515234" target="_blank" rel="noopener">RabbitMQ之消息确认机制（事务+Confirm）</a></p>
+<hr>
+<p>接口优化===同步下单改为异步下单<br>收到请求后由redis先预检库存，不足的话直接返回，减少数据库访问<br>如果有库存，则请求放到消息队列。返回一个排队中<br>请求出队。客户端轮询是否秒杀成功</p>
+
       
     </div>
     
@@ -407,6 +439,14 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/消息队列/" rel="tag"># 消息队列</a>
+          
+            <a href="/tags/系统/" rel="tag"># 系统</a>
+          
+        </div>
       
 
       
@@ -517,7 +557,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -584,7 +624,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">20.9k</span>
+    <span title="Site words total count">25.1k</span>
   
 </div>
 
