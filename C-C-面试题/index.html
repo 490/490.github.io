@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="C/C++,">
 
 
 
@@ -77,14 +77,20 @@
 
 
 
+<meta name="description" content="构造函数 析构函数析构函数和构造函数是一对。构造函数用于创建对象，而析构函数是用来撤销对象。 内联函数inline 1.内联函数在运行时可调试，而宏定义不可以;2.编译器会对内联函数的参数类型做安全检查或自动类型转换（同普通函数），而宏定义则不会；3.内联函数可以访问类的成员变量，宏定义则不能；4.在类中声明同时定义的成员函数，自动转化为内联函数。 C语言中switch 的查找实现原理 if…el">
+<meta name="keywords" content="C&#x2F;C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C&#x2F;C++面试题">
 <meta property="og:url" content="https://490.github.io/C-C-面试题/index.html">
 <meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="构造函数 析构函数析构函数和构造函数是一对。构造函数用于创建对象，而析构函数是用来撤销对象。 内联函数inline 1.内联函数在运行时可调试，而宏定义不可以;2.编译器会对内联函数的参数类型做安全检查或自动类型转换（同普通函数），而宏定义则不会；3.内联函数可以访问类的成员变量，宏定义则不能；4.在类中声明同时定义的成员函数，自动转化为内联函数。 C语言中switch 的查找实现原理 if…el">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-09T13:37:58.735Z">
+<meta property="og:image" content="http://490.github.io/images/20190310_145151.png">
+<meta property="og:updated_time" content="2019-03-10T06:53:14.840Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C&#x2F;C++面试题">
+<meta name="twitter:description" content="构造函数 析构函数析构函数和构造函数是一对。构造函数用于创建对象，而析构函数是用来撤销对象。 内联函数inline 1.内联函数在运行时可调试，而宏定义不可以;2.编译器会对内联函数的参数类型做安全检查或自动类型转换（同普通函数），而宏定义则不会；3.内联函数可以访问类的成员变量，宏定义则不能；4.在类中声明同时定义的成员函数，自动转化为内联函数。 C语言中switch 的查找实现原理 if…el">
+<meta name="twitter:image" content="http://490.github.io/images/20190310_145151.png">
 
 
 
@@ -356,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  467
                 </span>
               
 
@@ -393,7 +399,15 @@
       
 
       
-        
+        <h1 id="构造函数-析构函数"><a href="#构造函数-析构函数" class="headerlink" title="构造函数 析构函数"></a>构造函数 析构函数</h1><p>析构函数和构造函数是一对。构造函数用于创建对象，而析构函数是用来撤销对象。</p>
+<h1 id="内联函数"><a href="#内联函数" class="headerlink" title="内联函数"></a>内联函数</h1><p><a href="https://blog.csdn.net/will130/article/details/48712453" target="_blank" rel="noopener">inline</a></p>
+<p>1.内联函数在运行时可调试，而宏定义不可以;<br>2.编译器会对内联函数的参数类型做安全检查或自动类型转换（同普通函数），而宏定<br>义则不会；<br>3.内联函数可以访问类的成员变量，宏定义则不能；<br>4.在类中声明同时定义的成员函数，自动转化为内联函数。</p>
+<h1 id="C语言中switch-的查找实现原理"><a href="#C语言中switch-的查找实现原理" class="headerlink" title="C语言中switch 的查找实现原理"></a><a href="https://blog.csdn.net/wjy160925/article/details/63686967" target="_blank" rel="noopener">C语言中switch 的查找实现原理</a></h1><ol>
+<li><strong>if…else结果的查找</strong><br>当case语句是小于3句的时候，switch语句底层的实现和if…else的实现方式相同。</li>
+<li><strong>线性查找</strong><br>当case语句大于等于4的时候，且每两个case之间产生的间隔之和不超过6时，就按线性结构查找。即，如下图的汇编里面的jmp dword ptr [edx*4+11B1428h]该指令里面的11B1428h地址里面，其存放着各个case语句的首地址。由于内存中下标是从0开始的，因此，通过对其进行减一操作，在判断其是否大于11B1428h地址的数组长度，如果大于直接跳出，否则通过计算直接定位到该数组上的地址进行跳转。<br><img src="http://490.github.io/images/20190310_145151.png" alt="image"></li>
+<li><strong>树形查找</strong><br>当最大case值和最小case值之差大于255的情况下，此时，编译器会采用树形查找。即，将数据由小到大排列，并取中间值（如果是偶数，就取中间两个靠右的那一个），在左右两边继续取中间值划分（左右两边划分不需要将中间值算进去），直到小于等于3个数据的时候不在划分。<br>​​<h1 id="海量数据处理面试题"><a href="#海量数据处理面试题" class="headerlink" title="海量数据处理面试题"></a><a href="https://blog.csdn.net/v_july_v/article/details/7382693" target="_blank" rel="noopener">海量数据处理面试题</a></h1></li>
+</ol>
+
       
     </div>
     
@@ -407,6 +421,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C-C/" rel="tag"># C/C++</a>
+          
+        </div>
       
 
       
@@ -488,8 +508,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -517,7 +546,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -557,6 +586,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#构造函数-析构函数"><span class="nav-number">1.</span> <span class="nav-text">构造函数 析构函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内联函数"><span class="nav-number">2.</span> <span class="nav-text">内联函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C语言中switch-的查找实现原理"><span class="nav-number">3.</span> <span class="nav-text">C语言中switch 的查找实现原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#海量数据处理面试题"><span class="nav-number">4.</span> <span class="nav-text">海量数据处理面试题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -584,7 +629,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">9.6k</span>
+    <span title="Site words total count">10.1k</span>
   
 </div>
 
