@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Java,多线程,并发,">
 
 
 
@@ -77,14 +77,39 @@
 
 
 
+<meta name="description" content="线程池基本组成1、线程池管理器（ThreadPool）：用于创建并管理线程池，包括 创建线程池，销毁线程池，添加新任务；2、工作线程（PoolWorker）：线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；3、任务接口（Task）：每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务的入口，任务执行完后的收尾工作，任务的执行状态等；4、任务队列（taskQueue）：用">
+<meta name="keywords" content="Java,多线程,并发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java多线程与并发">
 <meta property="og:url" content="https://490.github.io/Java多线程与并发/index.html">
 <meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="线程池基本组成1、线程池管理器（ThreadPool）：用于创建并管理线程池，包括 创建线程池，销毁线程池，添加新任务；2、工作线程（PoolWorker）：线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；3、任务接口（Task）：每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务的入口，任务执行完后的收尾工作，任务的执行状态等；4、任务队列（taskQueue）：用">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-09T13:37:29.787Z">
+<meta property="og:image" content="http://490.github.io/images/20190310_101501.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_101645.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_101722.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_101759.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_101805.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_102048.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_102239.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_102245.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_102252.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_102602.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_102609.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_102654.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_103034.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_103049.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_103055.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_103102.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_103127.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_103134.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_103148.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_103208.png">
+<meta property="og:updated_time" content="2019-03-10T02:33:16.148Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程与并发">
+<meta name="twitter:description" content="线程池基本组成1、线程池管理器（ThreadPool）：用于创建并管理线程池，包括 创建线程池，销毁线程池，添加新任务；2、工作线程（PoolWorker）：线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；3、任务接口（Task）：每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务的入口，任务执行完后的收尾工作，任务的执行状态等；4、任务队列（taskQueue）：用">
+<meta name="twitter:image" content="http://490.github.io/images/20190310_101501.png">
 
 
 
@@ -356,7 +381,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  2.2k
                 </span>
               
 
@@ -372,7 +397,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  8
                 </span>
               
             </div>
@@ -393,7 +418,61 @@
       
 
       
-        
+        <h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><h2 id="基本组成"><a href="#基本组成" class="headerlink" title="基本组成"></a>基本组成</h2><p>1、线程池管理器（ThreadPool）：用于创建并管理线程池，包括 创建线程池，销毁线程池，添加新任务；<br>2、工作线程（PoolWorker）：线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；<br>3、任务接口（Task）：每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务的入口，任务执行完后的收尾工作，任务的执行状态等；<br>4、任务队列（taskQueue）：用于存放没有处理的任务。提供一种缓冲机制。</p>
+<p>如果并发的线程数量很多，并且每个线程都是执行一个时间很短的任务就结束了，这样频繁创建线程就会大大降低系统的效率，因为频繁创建线程和销毁线程需要时间。</p>
+<p>线程并发数量过多，抢占系统资源从而导致阻塞运用线程池能有效的控制线程最大并发数，避免以上的问题</p>
+<p>对线程进行一些简单的管理比如：延时执行、定时循环执行的策略等<br><a id="more"></a><br><img src="http://490.github.io/images/20190310_101501.png" alt="image"><br>java.uitl.concurrent.ThreadPoolExecutor类是线程池中最核心的一个类</p>
+<p>构造参数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">java.uitl.concurrent.ThreadPoolExecutor类是线程池中最核心的一个类</span><br><span class="line"></span><br><span class="line">构造参数</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params"><span class="keyword">int</span> ==corePoolSize==,该线程池中核心线程数最大值。线程池新建线程的时候，如果当前线程总数小于corePoolSize，则新建的是核心线程，如果超过corePoolSize，则新建的是非核心线程  核心线程默认情况下会一直存活在线程池中，即使这个核心线程啥也不干(闲置状态)</span>。  如果指定ThreadPoolExecutor的allowCoreThreadTimeOut这个属性为<span class="keyword">true</span>，那么核心线程如果不干活<span class="params">(闲置状态)</span>的话，超过一定时间<span class="params">(时长下面参数决定)</span>，就会被销毁掉  </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> </span>==maximumPoolSize==,（线程不够用时能够创建的最大线程数）线程总数 = 核心线程数 + 非核心线程数</span><br><span class="line"><span class="keyword">long</span> ==keepAliveTime==,非核心线程闲置超时时长</span><br><span class="line">TimeUnit ==unit==,keepAliveTime的单位，TimeUnit是一个枚举类型</span><br><span class="line">BlockingQueue&lt;Runnable&gt; ==workQueue==,任务队列：维护着等待执行的Runnable对象  当所有的核心线程都在干活时，新添加的任务会被添加到这个队列中等待处理，如果队列满了，则新建非核心线程执行任务                          </span><br><span class="line">ThreadFactory ==threadFactory==, 创建新线程，Executors.defaultThreadFactory()</span><br><span class="line">RejectedExecutionHandler ==handler ==线程池的饱和策略)</span><br></pre></td></tr></table></figure>
+<p><img src="http://490.github.io/images/20190310_101645.png" alt="image"></p>
+<p>通过ThreadPoolExecutor.execute(Runnable command)方法即可向线程池内添加一个任务</p>
+<p><strong>当一个任务被添加进线程池时</strong>：<br><img src="http://490.github.io/images/20190310_101722.png" alt="image"></p>
+<p>1、线程数量未达到corePoolSize，则新建一个线程(核心线程)执行任务<br>2、线程数量达到了corePools，则将任务移入队列BlockingQueue等待<br>3、如果无法将任务加入BlockingQueue（队列已满），则在非corePool中创建新的线程来处理任务（注意，执行这一步骤需要获取全局锁）。<br>4、队列已满，总线程数又达到了maximumPoolSize，(RejectedExecutionHandler)抛出异常<br><img src="http://490.github.io/images/20190310_101759.png" alt="image"><br><img src="http://490.github.io/images/20190310_101805.png" alt="image"></p>
+<h2 id="四种java实现好的线程池"><a href="#四种java实现好的线程池" class="headerlink" title="四种java实现好的线程池"></a>四种java实现好的线程池</h2><p><strong>CachedThreadPool</strong>()</p>
+<p>可缓存线程池：<br>线程数无限制<br>有空闲线程则复用空闲线程，若无空闲线程则新建线程<br>一定程序减少频繁创建/销毁线程，减少系统开销</p>
+<p><strong>FixedThreadPool</strong>()</p>
+<p>定长线程池：<br>可控制线程最大并发数（同时执行的线程数）<br>超出的线程会在队列中等待</p>
+<p><strong>ScheduledThreadPool</strong>()</p>
+<p>定长线程池：<br>支持定时及周期性任务执行。</p>
+<p><strong>SingleThreadExecutor</strong>()</p>
+<p>单线程化的线程池：<br>有且仅有一个工作线程执行任务<br>所有任务按照指定顺序执行，即遵循队列的入队出队规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import java.util.concurrent.Executors;</span><br><span class="line">import java.util.concurrent.ScheduledExecutorService;</span><br><span class="line">import java.util.concurrent.TimeUnit;public  class ThreadPoolExecutorTest &#123;</span><br><span class="line">public  static  void main(String[] args) &#123;</span><br><span class="line">ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(5);</span><br><span class="line">scheduledThreadPool.schedule(new Runnable() &#123;</span><br><span class="line">public  void run() &#123;</span><br><span class="line">System.out.println(&quot;delay 3 seconds&quot;);</span><br><span class="line">&#125;</span><br><span class="line">&#125;, 3, TimeUnit.SECONDS);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="线程池的状态"><a href="#线程池的状态" class="headerlink" title="线程池的状态"></a>线程池的状态</h2><p><img src="http://490.github.io/images/20190310_102048.png" alt="image"><br><img src="http://490.github.io/images/20190310_102239.png" alt="image"><br><img src="http://490.github.io/images/20190310_102245.png" alt="image"><br><img src="http://490.github.io/images/20190310_102252.png" alt="image"></p>
+<p>线程池风险：</p>
+<p>死锁、资源不足、并发错误、 线程泄漏、请求过载</p>
+<h1 id="Executor"><a href="#Executor" class="headerlink" title="Executor"></a>Executor</h1><p>管理多个异步任务的执行，而无需程序员显式地管理线程的生命周期。这里的异步是指多个任务的执行互不干扰，不需要进行同步操作。</p>
+<p>主要有三种 Executor：</p>
+<ul>
+<li>CachedThreadPool：一个任务创建一个线程；</li>
+<li>FixedThreadPool：所有任务只能使用固定大小的线程；</li>
+<li>SingleThreadExecutor：相当于大小为 1 的 FixedThreadPool。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    ExecutorService executorService = Executors.newCachedThreadPool();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">        executorService.execute(<span class="keyword">new</span> MyRunnable());</span><br><span class="line">    &#125;</span><br><span class="line">    executorService.shutdown();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://490.github.io/images/20190310_102602.png" alt="image"><br><img src="http://490.github.io/images/20190310_102609.png" alt="image"></p>
+<hr>
+<h1 id="volatile关键字解析"><a href="#volatile关键字解析" class="headerlink" title="volatile关键字解析"></a><a href="https://www.cnblogs.com/dolphin0520/p/3920373.html" target="_blank" rel="noopener">volatile关键字解析</a></h1><p>如果一个变量在多个CPU中都存在缓存（一般在多线程编程时才会出现），那么就可能存在缓存不一致的问题。</p>
+<p>为了解决缓存不一致性问题，通常来说有以下2种解决方法：1）通过在总线加LOCK#锁的方式</p>
+<p>2）通过缓存一致性协议</p>
+<p>。这2种方式都是硬件层面上提供的方式。</p>
+<p>i = i +1，如果在执行这段代码的过程中，在总线上发出了LCOK#锁的信号，那么只有等待这段代码完全执行完毕之后，其他CPU才能从变量i所在的内存读取变量，然后进行相应的操作。这样就解决了缓存不一致的问题。</p>
+<p>缓存一致性协议。最出名的就是Intel 的MESI协议，MESI协议保证了每个缓存中使用的共享变量的副本是一致的。它核心的思想是：当CPU写数据时，如果发现操作的变量是共享变量，即在其他CPU中也存在该变量的副本，会发出信号通知其他CPU将该变量的缓存行置为无效状态，因此当其他CPU需要读取这个变量时，发现自己缓存中缓存该变量的缓存行是无效的，那么它就会从内存重新读取。<br><img src="http://490.github.io/images/20190310_102654.png" alt="image"></p>
+<p><strong>原子性问题，可见性问题，有序性问题</strong></p>
+<p>　　对于可见性，Java提供了volatile关键字来保证可见性。<br>　　当一个共享变量被volatile修饰时，它会保证修改的值会立即被更新到主存，当有其他线程需要读取时，它会去内存中读取新值。<br>　　而普通的共享变量不能保证可见性，因为普通共享变量被修改之后，什么时候被写入主存是不确定的，当其他线程去读取时，此时内存中可能还是原来的旧值，因此无法保证可见性。</p>
+<p>　　另外，通过synchronized和Lock也能够保证可见性，synchronized和Lock能保证同一时刻只有一个线程获取锁然后执行同步代码，并且在释放锁之前会将对变量的修改刷新到主存当中。因此可以保证可见性。</p>
+<p>　　下面这段话摘自《深入理解Java虚拟机》：<br>　　“观察加入volatile关键字和没有加入volatile关键字时所生成的汇编代码发现，加入volatile关键字时，会多出一个lock前缀指令”<br>　　lock前缀指令实际上相当于一个内存屏障（也成内存栅栏），内存屏障会提供3个功能：</p>
+<p>　　1）它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成；<br>　　2）它会强制将对缓存的修改操作立即写入主存；<br>　　3）如果是写操作，它会导致其他CPU中对应的缓存行无效。</p>
+<p>　　下面列举几个Java中使用volatile的几个场景。1.状态标记量2.double check</p>
+<hr>
+<h1 id="Daemon"><a href="#Daemon" class="headerlink" title="Daemon"></a>Daemon</h1><p>守护线程是程序运行时在后台提供服务的线程，不属于程序中不可或缺的部分。<br>当所有非守护线程结束时，程序也就终止，同时会杀死所有守护线程。<br>main() 属于非守护线程。<br>使用 setDaemon() 方法将一个线程设置为守护线程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">Thread thread =  <span class="keyword">new</span> Thread(<span class="keyword">new</span> MyRunnable());</span><br><span class="line">thread.setDaemon(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="同步-synchronized、ReentrantLock"><a href="#同步-synchronized、ReentrantLock" class="headerlink" title="同步-synchronized、ReentrantLock"></a>同步-synchronized、ReentrantLock</h1><p>第一个是 JVM 实现的 synchronized，它只作用于同一个对象，如果调用两个对象上的同步代码块，就不会进行同步.方法也是。</p>
+<p>但是同步一个类<br>public void func() {<br>    synchronized (SynchronizedExample.class) {<br>        // …<br>    }<br>}<br>作用于整个类，也就是说两个线程调用同一个类的不同对象上的这种同步语句，也会进行同步。<br>同步一个静态方法作用于整个类。</p>
+<p>而另一个是 JDK 实现的 ReentrantLock。</p>
+<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><p><img src="http://490.github.io/images/20190310_103034.png" alt="image"><br>==锁的不是代码。是对象==<br><img src="http://490.github.io/images/20190310_103049.png" alt="image"><br><img src="http://490.github.io/images/20190310_103055.png" alt="image"><br><img src="http://490.github.io/images/20190310_103102.png" alt="image"></p>
+<p>对象在内存中的布局：对象头、实例数据、对齐填充<br><img src="http://490.github.io/images/20190310_103127.png" alt="image"><br><img src="http://490.github.io/images/20190310_103134.png" alt="image"><br><strong>自旋锁、自适应自旋锁</strong><br><img src="http://490.github.io/images/20190310_103148.png" alt="image"><br><img src="http://490.github.io/images/20190310_103208.png" alt="image"></p>
+<h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><p>TODO</p>
+
       
     </div>
     
@@ -407,6 +486,16 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+            <a href="/tags/并发/" rel="tag"># 并发</a>
+          
+        </div>
       
 
       
@@ -488,8 +577,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -517,7 +615,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -557,6 +655,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池"><span class="nav-number">1.</span> <span class="nav-text">线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本组成"><span class="nav-number">1.1.</span> <span class="nav-text">基本组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四种java实现好的线程池"><span class="nav-number">1.2.</span> <span class="nav-text">四种java实现好的线程池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程池的状态"><span class="nav-number">1.3.</span> <span class="nav-text">线程池的状态</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Executor"><span class="nav-number">2.</span> <span class="nav-text">Executor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#volatile关键字解析"><span class="nav-number">3.</span> <span class="nav-text">volatile关键字解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Daemon"><span class="nav-number">4.</span> <span class="nav-text">Daemon</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#同步-synchronized、ReentrantLock"><span class="nav-number">5.</span> <span class="nav-text">同步-synchronized、ReentrantLock</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized"><span class="nav-number">5.1.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">5.2.</span> <span class="nav-text">ReentrantLock</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -584,7 +698,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">7.4k</span>
+    <span title="Site words total count">9.6k</span>
   
 </div>
 
