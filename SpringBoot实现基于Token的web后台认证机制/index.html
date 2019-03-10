@@ -87,7 +87,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190310_154148.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_154210.png">
-<meta property="og:updated_time" content="2019-03-10T07:53:55.540Z">
+<meta property="og:updated_time" content="2019-03-10T07:56:55.546Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot实现基于Token的web后台认证机制">
 <meta name="twitter:description" content="几种常用的认证机制HTTP Basic AuthHTTP Basic Auth简单点说明就是每次请求API时都提供用户的username和password，简言之，Basic Auth是配合RESTful API 使用的最简单的认证方式，只需提供用户名密码即可，但由于有把用户名密码暴露给第三方客户端的风险，在生产环境下被使用的越来越少。因此，在开发对外开放的RESTful API时，尽量避免采用H">
@@ -425,7 +425,7 @@
 <li>客户端每次向服务端请求资源的时候需要带着服务端签发的 Token</li>
 <li>服务端收到请求，然后去验证客户端请求里面带着的 Token，如果验证成功，就向客户端返回请求的数据</li>
 </ul>
-<p><a href="https://github.com/490/wenda/tree/master/src/main/java/com/zhaole" target="_blank" rel="noopener">实现见UserService，LoginController，PassportInterceptor</a></p>
+<h1 id="Spring-Boot-实现"><a href="#Spring-Boot-实现" class="headerlink" title="Spring Boot 实现"></a>Spring Boot 实现</h1><p><a href="https://github.com/490/wenda/tree/master/src/main/java/com/zhaole" target="_blank" rel="noopener">实现见UserService，LoginController，PassportInterceptor</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginTicket</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> userId;</span><br><span class="line">    <span class="keyword">private</span> Date expired;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> status;<span class="comment">//0有效</span></span><br><span class="line">    <span class="keyword">private</span> String ticket;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>用户先去请求注册或者是登陆，然后服务器去验证他的用户名和密码</p>
 <p>验证成功后userservice会生成一个Token，这里是ticket，客户端收到ticket之后呢会把ticket存在Cookie中，登录成功之后会有一个与当前用户对应的ticket</p>
 <p>每次访问服务器资源的时候需要带着这个ticket，然后怎么判断是否有呢？就要用拦截器来实现过滤，用拦截器去判断这个ticket当前的状态是什么样的？有没有过期？身份状态是不是有效的？然后根据这个来判断应该赋予什么样的权限？当验证成功之后就把ticket对应的用户的通过下面一段发送给freemaker的上下文，实现页面的正常的渲染</p>
@@ -617,7 +617,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#几种常用的认证机制"><span class="nav-number">1.</span> <span class="nav-text">几种常用的认证机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-Basic-Auth"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP Basic Auth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OAuth"><span class="nav-number">1.2.</span> <span class="nav-text">OAuth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-Auth"><span class="nav-number">1.3.</span> <span class="nav-text">Cookie Auth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Token-Auth"><span class="nav-number">1.4.</span> <span class="nav-text">Token Auth</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#几种常用的认证机制"><span class="nav-number">1.</span> <span class="nav-text">几种常用的认证机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-Basic-Auth"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP Basic Auth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OAuth"><span class="nav-number">1.2.</span> <span class="nav-text">OAuth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-Auth"><span class="nav-number">1.3.</span> <span class="nav-text">Cookie Auth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Token-Auth"><span class="nav-number">1.4.</span> <span class="nav-text">Token Auth</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot-实现"><span class="nav-number">2.</span> <span class="nav-text">Spring Boot 实现</span></a></li></ol></div>
             
 
           </div>
