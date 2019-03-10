@@ -77,13 +77,13 @@
 
 
 
-<meta name="description" content="@toc">
+<meta name="description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL数据库">
 <meta property="og:url" content="https://490.github.io/MySQL数据库/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="@toc">
+<meta property="og:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190310_082950.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_082957.png">
@@ -93,10 +93,10 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_084553.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_084559.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_084634.png">
-<meta property="og:updated_time" content="2019-03-10T00:50:28.217Z">
+<meta property="og:updated_time" content="2019-03-10T01:08:28.694Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库">
-<meta name="twitter:description" content="@toc">
+<meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
 <meta name="twitter:image" content="http://490.github.io/images/20190310_082950.png">
 
 
@@ -369,7 +369,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3k
+                  3.3k
                 </span>
               
 
@@ -385,7 +385,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  10
+                  11
                 </span>
               
             </div>
@@ -406,7 +406,7 @@
       
 
       
-        <p>@toc</p>
+        <p>索引<br>事务隔离级别<br>锁<br>SQL join<br>Innodb和MyISAM引擎<br>MyCAT</p>
 <a id="more"></a>
 <h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p>数据结构：</p>
 <p><strong>二叉树</strong>：O(logn),深度会深，io多<br><strong>B树</strong>：<br><img src="http://490.github.io/images/20190310_082950.png" alt="image"><br><img src="http://490.github.io/images/20190310_082957.png" alt="image"><br><strong>B+树</strong>：底下的链接可做范围统计。磁盘代价低、查询效率稳定、有利于对数据库扫描<br><img src="http://490.github.io/images/20190310_083024.png" alt="image"><br><strong>Hash</strong>：</p>
@@ -451,7 +451,19 @@
 <h1 id="Innodb与Myisam引擎"><a href="#Innodb与Myisam引擎" class="headerlink" title="Innodb与Myisam引擎"></a><a href="https://www.cnblogs.com/changna1314/p/6878900.html" target="_blank" rel="noopener">Innodb与Myisam</a>引擎</h1><h2 id="1-区别："><a href="#1-区别：" class="headerlink" title="1. 区别："></a>1. 区别：</h2><p>（1）<strong>事务处理</strong>：<br>MyISAM是非事务安全型的，而InnoDB是事务安全型的（支持事务处理等高级处理）；<br>（2）<strong>锁机制不同</strong>：<br>MyISAM是表级锁，而InnoDB是行级锁；<br>（3）<strong>select ,update ,insert ,delete 操作</strong>：<br>MyISAM：如果执行大量的SELECT，MyISAM是更好的选择<br>InnoDB：如果你的数据执行大量的INSERT或UPDATE，出于性能方面的考虑，应该使用InnoDB表<br>（4）<strong>查询表的行数不同</strong>：<br>MyISAM：select count(<em>) from table,MyISAM只要简单的读出保存好的行数，注意的是，当count(</em>)语句包含   where条件时，两种表的操作是一样的<br>InnoDB ： InnoDB 中不保存表的具体行数，也就是说，执行select count(*) from table时，InnoDB要扫描一遍整个表来计算有多少行<br>（5）<strong>外键支持</strong>：<br>mysiam表不支持外键，而InnoDB支持</p>
 <h2 id="2-为什么MyISAM会比Innodb-的查询速度快。"><a href="#2-为什么MyISAM会比Innodb-的查询速度快。" class="headerlink" title="2. 为什么MyISAM会比Innodb 的查询速度快。"></a>2. 为什么MyISAM会比Innodb 的查询速度快。</h2><p>INNODB在做SELECT的时候，要维护的东西比MYISAM引擎多很多；<br>1）数据块，INNODB要缓存，MYISAM只缓存索引块，  这中间还有换进换出的减少；<br>2）innodb寻址要映射到块，再到行，MYISAM 记录的直接是文件的OFFSET，定位比INNODB要快<br>3）INNODB还需要维护MVCC一致；虽然你的场景没有，但他还是需要去检查和维护<br>MVCC ( Multi-Version Concurrency Control )多版本并发控制 </p>
 <h2 id="3-应用场景"><a href="#3-应用场景" class="headerlink" title="3. 应用场景"></a>3. 应用场景</h2><p>MyISAM适合：(1)做很多count 的计算；(2)插入不频繁，查询非常频繁；(3)没有事务。<br>InnoDB适合：(1)可靠性要求比较高，或者要求事务；(2)表更新和查询都相当的频繁，并且行锁定的机会比较大的情况。</p>
-<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><p>InnoDB的MVCC,是通过在每行记录后面保存两个隐藏的列来实现的,这两个列，分别保存了这个行的创建时间，一个保存的是行的删除时间。这里存储的并不是实际的时间值,而是系统版本号(可以理解为事务的ID)，没开始一个新的事务，系统版本号就会自动递增，事务开始时刻的系统版本号会作为事务的ID.下面看一下在REPEATABLE READ隔离级别下,MVCC具体是如何操作的.<br><strong>SELECT</strong><br>InnoDB会根据以下两个条件检查每行记录: a.InnoDB只会查找版本早于当前事务版本的数据行(也就是,行的系统版本号小于或等于事务的系统版本号)，这样可以确保事务读取的行，要么是在事务开始前已经存在的，要么是事务自身插入或者修改过的. b.行的删除版本要么未定义,要么大于当前事务版本号,这可以确保事务读取到的行，在事务开始之前未被删除.<br>只有a,b同时满足的记录，才能返回作为查询结果.<br><strong>DELETE</strong><br>InnoDB会为删除的每一行保存当前系统的版本号(事务的ID)作为删除标识.<br><img src="http://490.github.io/images/20190310_084503.png" alt="image"></p>
+<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><p>通过加锁，让所有的读者等待写者工作完成，但是这样效率会很差。MVCC 使用了一种不同的手段，每个连接到数据库的读者，在某个瞬间看到的是数据库的一个快照，写者写操作造成的变化在写操作完成之前（或者数据库事务提交之前）对于其他的读者来说是不可见的。</p>
+<p>innodb存储的最基本row中包含一些额外的存储信息 DATA_TRX_ID，DATA_ROLL_PTR，DB_ROW_ID，DELETE BIT</p>
+<ul>
+<li><p>6字节的DATA_TRX_ID 标记了最新更新这条行记录的transaction id，每处理一个事务，其值自动+1</p>
+</li>
+<li><p>7字节的DATA_ROLL_PTR 指向当前记录项的rollback segment的undo log记录，找之前版本的数据就是通过这个指针</p>
+</li>
+<li><p>6字节的DB_ROW_ID，当由innodb自动产生聚集索引时，聚集索引包括这个DB_ROW_ID的值，否则聚集索引中不包括这个值.，这个用于索引当中</p>
+</li>
+<li>DELETE BIT位用于标识该记录是否被删除，这里的不是真正的删除数据，而是标志出来的删除。真正意义的删除是在commit的时候</li>
+</ul>
+<p>InnoDB的MVCC,是通过在每行记录后面保存两个隐藏的列来实现的,这两个列，分别保存了这个行的创建时间，一个保存的是行的删除时间。这里存储的并不是实际的时间值,而是系统版本号(可以理解为事务的ID)，每开始一个新的事务，系统版本号就会自动递增，事务开始时刻的系统版本号会作为事务的ID.</p>
+<p><strong>SELECT</strong><br>InnoDB会根据以下两个条件检查每行记录: a.InnoDB只会查找版本早于当前事务版本的数据行(也就是,行的系统版本号小于或等于事务的系统版本号)，这样可以确保事务读取的行，要么是在事务开始前已经存在的，要么是事务自身插入或者修改过的. b.行的删除版本要么未定义,要么大于当前事务版本号,这可以确保事务读取到的行，在事务开始之前未被删除.<br>只有a,b同时满足的记录，才能返回作为查询结果.<br><strong>DELETE</strong><br>InnoDB会为删除的每一行保存当前系统的版本号(事务的ID)作为删除标识.<br><img src="http://490.github.io/images/20190310_084503.png" alt="image"></p>
 <p>innodb索引和数据在一起</p>
 <p>myisam不在一起</p>
 <hr>
@@ -683,7 +695,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">7.1k</span>
+    <span title="Site words total count">7.4k</span>
   
 </div>
 
