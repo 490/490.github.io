@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前端,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Freemaker FTL指令常用标签及语法注意**：使用freemaker，要求所有标签必须闭合，否则会导致freemaker无法解析。 freemaker注释:&amp;lt;#– 注释内容 –&amp;gt;格式部分,不会输出 基础语法1、字符输出12345$&amp;#123;emp.name?if_exists&amp;#125;　　　　　　// 变量存在，输出该变量，否则不输出$&amp;#123;emp.name!&amp;#12">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="freemarker基础知识总结">
+<meta property="og:url" content="https://490.github.io/freemarker基础知识总结/index.html">
+<meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="Freemaker FTL指令常用标签及语法注意**：使用freemaker，要求所有标签必须闭合，否则会导致freemaker无法解析。 freemaker注释:&amp;lt;#– 注释内容 –&amp;gt;格式部分,不会输出 基础语法1、字符输出12345$&amp;#123;emp.name?if_exists&amp;#125;　　　　　　// 变量存在，输出该变量，否则不输出$&amp;#123;emp.name!&amp;#12">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-09T23:56:46.690Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="freemarker基础知识总结">
+<meta name="twitter:description" content="Freemaker FTL指令常用标签及语法注意**：使用freemaker，要求所有标签必须闭合，否则会导致freemaker无法解析。 freemaker注释:&amp;lt;#– 注释内容 –&amp;gt;格式部分,不会输出 基础语法1、字符输出12345$&amp;#123;emp.name?if_exists&amp;#125;　　　　　　// 变量存在，输出该变量，否则不输出$&amp;#123;emp.name!&amp;#12">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://490.github.io/freemarker基础知识总结/">
+
+
+
+
+
+  <title>freemarker基础知识总结 | 我的笔记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/freemarker基础知识总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="le">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">freemarker基础知识总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-09T22:38:07+08:00">
+                2019-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/freemarker基础知识总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/freemarker基础知识总结/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.6k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Freemaker-FTL指令常用标签及语法"><a href="#Freemaker-FTL指令常用标签及语法" class="headerlink" title="Freemaker FTL指令常用标签及语法"></a>Freemaker FTL指令常用标签及语法</h1><p><strong>注意**</strong>：使用freemaker，要求所有标签必须闭合，否则会导致freemaker无法解析。</p>
+<p>freemaker注释:&lt;#– 注释内容 –&gt;格式部分,不会输出</p>
+<h2 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h2><h3 id="1、字符输出"><a href="#1、字符输出" class="headerlink" title="1、字符输出"></a>1、字符输出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&#123;emp.name?if_exists&#125;　　　　　　// 变量存在，输出该变量，否则不输出</span><br><span class="line">$&#123;emp.name!&#125;　　　　　　　　　　  // 变量存在，输出该变量，否则不输出</span><br><span class="line"></span><br><span class="line">$&#123;emp.name?default(&quot;xxx&quot;)&#125;     // 变量不存在，取默认值xxx </span><br><span class="line">$&#123;emp.name!&quot;xxx&quot;&#125;    　　　　　　// 变量不存在，取默认值xxx</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>常用内部函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&#123;&quot;123&lt;br&gt;456&quot;?html&#125;    　　// 对字符串进行HTML编码，对html中特殊字符进行转义</span><br><span class="line">$&#123;&quot;str&quot;?cap_first&#125;    　　  // 使字符串第一个字母大写 </span><br><span class="line">$&#123;&quot;Str&quot;?lower_case&#125;        // 将字符串转换成小写 </span><br><span class="line">$&#123;&quot;Str&quot;?upper_case&#125;        // 将字符串转换成大写</span><br><span class="line">$&#123;&quot;str&quot;?trim&#125;              // 去掉字符串前后的空白字符</span><br></pre></td></tr></table></figure>
+<p>字符串的两种拼接方式拼接：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&#123;&quot;hello$&#123;emp.name!&#125;&quot;&#125;     // 输出hello+变量名</span><br><span class="line">$&#123;&quot;hello&quot;+emp.name!&#125;       // 使用+号来连接，输出hello+变量名</span><br></pre></td></tr></table></figure>
+<p>可以通过如下语法来截取子串:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;#assign str = &quot;abcdefghijklmn&quot;/&gt;</span><br><span class="line"></span><br><span class="line">// 方法1</span><br><span class="line">$&#123;str?substring(0,4)&#125;  // 输出abcd</span><br><span class="line"></span><br><span class="line">// 方法2</span><br><span class="line">$&#123;str[0]&#125;$&#123;str[4]&#125;    // 结果是ae</span><br><span class="line">$&#123;str[1..4]&#125;    　　　 // 结果是bcde</span><br><span class="line"></span><br><span class="line">// 返回指定字符的索引</span><br><span class="line">$&#123;str?index_of(&quot;n&quot;)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2、日期输出"><a href="#2、日期输出" class="headerlink" title="2、日期输出"></a>2、日期输出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;emp.date?string(&apos;yyyy-MM-dd&apos;)&#125; //日期格式</span><br></pre></td></tr></table></figure>
+<h3 id="3、数字输出-以数字20为例"><a href="#3、数字输出-以数字20为例" class="headerlink" title="3、数字输出(以数字20为例)"></a>3、数字输出(以数字20为例)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">$&#123;emp.name?string.number&#125;    　// 输出20</span><br><span class="line">$&#123;emp.name?string.currency&#125;    // ￥20.00 </span><br><span class="line">$&#123;emp.name?string.percent&#125;     // 20%</span><br><span class="line">$&#123;1.222?int&#125; 　　　　　　　　　　 // 将小数转为int，输出1</span><br><span class="line"></span><br><span class="line">&lt;#setting number_format=&quot;percent&quot;/&gt;    // 设置数字默认输出方式(&apos;percent&apos;,百分比)</span><br><span class="line">&lt;#assign answer=42/&gt;    　　　　　　　　 // 声明变量 answer 42</span><br><span class="line">#&#123;answer&#125;    　　　　　　　　 // 输出 4,200%</span><br><span class="line">$&#123;answer?string&#125;    　　　　 // 输出 4,200%</span><br><span class="line">$&#123;answer?string.number&#125; 　　// 输出 42</span><br><span class="line">$&#123;answer?string.currency&#125;  // 输出 ￥42.00</span><br><span class="line">$&#123;answer?string.percent&#125; 　// 输出 4,200%</span><br><span class="line">#&#123;answer&#125;    　　　　　　　　// 输出 42</span><br><span class="line">数字格式化插值可采用#&#123;expr;format&#125;形式来格式化数字,其中format可以是:</span><br><span class="line">mX:小数部分最小X位</span><br><span class="line">MX:小数部分最大X位</span><br><span class="line">如下面的例子:</span><br><span class="line">&lt;#assign x=2.582/&gt;</span><br><span class="line">&lt;#assign y=4/&gt;</span><br><span class="line">#&#123;x; M2&#125;    // 输出2.58</span><br><span class="line">#&#123;y; M2&#125;    // 输出4</span><br><span class="line">#&#123;x; m2&#125;    // 输出2.58</span><br><span class="line">#&#123;y; m2&#125;    // 输出4.0</span><br><span class="line">#&#123;x; m1M2&#125;  // 输出2.58</span><br><span class="line">#&#123;x; m1M2&#125;  // 输出4.0</span><br></pre></td></tr></table></figure>
+<h3 id="4、申明变量"><a href="#4、申明变量" class="headerlink" title="4、申明变量"></a>4、申明变量</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;#assign foo=false/&gt; // 声明变量,插入布尔值进行显示,注意不要用引号</span><br><span class="line">$&#123;foo?string(&quot;yes&quot;,&quot;no&quot;)&#125; // 当为true时输出&quot;yes&quot;,否则输出&quot;no&quot;</span><br><span class="line">申明变量的几种方式</span><br><span class="line"></span><br><span class="line">&lt;#assign name=value&gt; </span><br><span class="line">&lt;#assign name1=value1 name2=value2 ... nameN=valueN&gt; </span><br><span class="line">&lt;#assign same as above... in namespacehash&gt;</span><br><span class="line"></span><br><span class="line">&lt;#assign name&gt; </span><br><span class="line">capture this </span><br><span class="line">&lt;/#assign&gt;</span><br><span class="line"></span><br><span class="line">&lt;#assign name in namespacehash&gt; </span><br><span class="line">capture this </span><br><span class="line">&lt;/#assign&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="5、比较运算符"><a href="#5、比较运算符" class="headerlink" title="5、比较运算符"></a>5、比较运算符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">表达式中支持的比较运算符有如下几个:</span><br><span class="line">= 或 == ：判断两个值是否相等.</span><br><span class="line">!= ：判断两个值是否不等.</span><br><span class="line">&gt; 或 gt ：判断左边值是否大于右边值</span><br><span class="line">&gt;= 或 gte ：判断左边值是否大于等于右边值</span><br><span class="line">&lt; 或 lt ：判断左边值是否小于右边值</span><br><span class="line">&lt;= 或 lte ：判断左边值是否小于等于右边值</span><br></pre></td></tr></table></figure>
+<h3 id="6、算术运算符"><a href="#6、算术运算符" class="headerlink" title="6、算术运算符"></a>6、算术运算符</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FreeMarker表达式中完全支持算术运算,</span><br><span class="line">FreeMarker支持的算术运算符包括:+, - , * , / , %</span><br><span class="line">注意：</span><br><span class="line">（1）、运算符两边必须是数字</span><br><span class="line">（2）、使用+运算符时,如果一边是数字,一边是字符串,就会自动将数字转换为字符串再连接,如:$&#123;3 + “5”&#125;,结果是:35</span><br></pre></td></tr></table></figure>
+<h3 id="7、逻辑运算符"><a href="#7、逻辑运算符" class="headerlink" title="7、逻辑运算符"></a>7、逻辑运算符</h3><p>逻辑运算符有如下几个:<br>逻辑与:&amp;&amp;<br>逻辑或:||<br>逻辑非:!<br>逻辑运算符只能作用于布尔值,否则将产生错误</p>
+<h3 id="8、FreeMarker中的运算符优先级如下-由高到低排列"><a href="#8、FreeMarker中的运算符优先级如下-由高到低排列" class="headerlink" title="8、FreeMarker中的运算符优先级如下(由高到低排列):"></a>8、FreeMarker中的运算符优先级如下(由高到低排列):</h3><p>①、一元运算符:!<br>②、内建函数:?<br>③、乘除法:*, / , %<br>④、加减法:- , +<br>⑤、比较:&gt; , &lt; , &gt;= , &lt;= (lt , lte , gt , gte)<br>⑥、相等:== , = , !=<br>⑦、逻辑与:&amp;&amp;<br>⑧、逻辑或:||<br>⑨、数字范围:..<br>实际上,我们在开发过程中应该使用括号来严格区分,这样的可读性好,出错少</p>
+<h3 id="9、if-逻辑判断（注意：elseif-不加空格）"><a href="#9、if-逻辑判断（注意：elseif-不加空格）" class="headerlink" title="9、if 逻辑判断（注意：elseif 不加空格）"></a>9、if 逻辑判断（注意：elseif 不加空格）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;#if condition&gt;</span><br><span class="line">...</span><br><span class="line">&lt;#elseif condition2&gt;</span><br><span class="line">...</span><br><span class="line">&lt;#elseif condition3&gt;</span><br><span class="line">...</span><br><span class="line">&lt;#else&gt;</span><br><span class="line">...</span><br><span class="line">&lt;/#if&gt;</span><br><span class="line">if 空值判断</span><br><span class="line"></span><br><span class="line">// 当 photoList 不为空时</span><br><span class="line">&lt;#if photoList??&gt;...&lt;/#if&gt; </span><br><span class="line"></span><br><span class="line">值得注意的是,$&#123;..&#125;只能用于文本部分,不能用于表达式,下面的代码是错误的:</span><br><span class="line">&lt;#if $&#123;isBig&#125;&gt;Wow!&lt;/#if&gt;</span><br><span class="line">&lt;#if &quot;$&#123;isBig&#125;&quot;&gt;Wow!&lt;/#if&gt;</span><br><span class="line"></span><br><span class="line">// 正确写法</span><br><span class="line">&lt;#if isBig&gt;Wow!&lt;/#if&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="10、switch-条件可为数字，可为字符串"><a href="#10、switch-条件可为数字，可为字符串" class="headerlink" title="10、switch (条件可为数字，可为字符串)"></a>10、switch (条件可为数字，可为字符串)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;#switch value&gt; </span><br><span class="line">&lt;#case refValue1&gt; </span><br><span class="line">....</span><br><span class="line">&lt;#break&gt; </span><br><span class="line">&lt;#case refValue2&gt; </span><br><span class="line">....</span><br><span class="line">&lt;#break&gt; </span><br><span class="line">&lt;#case refValueN&gt; </span><br><span class="line">....</span><br><span class="line">&lt;#break&gt; </span><br><span class="line">&lt;#default&gt; </span><br><span class="line">.... </span><br><span class="line">&lt;/#switch&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="11、集合-amp-循环"><a href="#11、集合-amp-循环" class="headerlink" title="11、集合 &amp; 循环"></a>11、集合 &amp; 循环</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">// 遍历集合:</span><br><span class="line">&lt;#list empList! as emp&gt; </span><br><span class="line">    $&#123;emp.name!&#125;</span><br><span class="line">&lt;/#list&gt;</span><br><span class="line"></span><br><span class="line">// 可以这样遍历集合:</span><br><span class="line">&lt;#list 0..(empList!?size-1) as i&gt;</span><br><span class="line">    $&#123;empList[i].name!&#125;</span><br><span class="line">&lt;/#list&gt;</span><br><span class="line"></span><br><span class="line">// 与jstl循环类似,也可以访问循环的状态。</span><br><span class="line"></span><br><span class="line">empList?size 　　　// 取集合的长度</span><br><span class="line">emp_index: 　　　　// int类型，当前对象的索引值 </span><br><span class="line">emp_has_next:     // boolean类型，是否存在下一个对象</span><br><span class="line"></span><br><span class="line">// 使用&lt;#break&gt;跳出循环</span><br><span class="line">&lt;#if emp_index = 0&gt;&lt;#break&gt;&lt;/#if&gt;</span><br><span class="line"></span><br><span class="line">// 集合长度判断 </span><br><span class="line">&lt;#if empList?size != 0&gt;&lt;/#if&gt; // 判断=的时候,注意只要一个=符号,而不是==</span><br><span class="line"></span><br><span class="line">&lt;#assign l=0..100/&gt;    // 定义一个int区间的0~100的集合，数字范围也支持反递增,如100..2</span><br><span class="line">&lt;#list 0..100 as i&gt; 　　// 等效于java for(int i=0; i &lt;= 100; i++)</span><br><span class="line">　　$&#123;i&#125;</span><br><span class="line">&lt;/#list&gt;</span><br><span class="line"></span><br><span class="line">// 截取子集合：</span><br><span class="line">empList[3..5] //返回empList集合的子集合,子集合中的元素是empList集合中的第4-6个元素</span><br><span class="line"></span><br><span class="line">// 创建集合：</span><br><span class="line">&lt;#list [&quot;星期一&quot;, &quot;星期二&quot;, &quot;星期三&quot;, &quot;星期四&quot;, &quot;星期五&quot;, &quot;星期六&quot;, &quot;星期天&quot;] as x&gt;</span><br><span class="line"></span><br><span class="line">// 集合连接运算,将两个集合连接成一个新的集合</span><br><span class="line">&lt;#list [&quot;星期一&quot;,&quot;星期二&quot;,&quot;星期三&quot;] + [&quot;星期四&quot;,&quot;星期五&quot;,&quot;星期六&quot;,&quot;星期天&quot;] as x&gt;</span><br><span class="line"></span><br><span class="line">// 除此之外,集合元素也可以是表达式,例子如下:</span><br><span class="line">[2 + 2, [1, 2, 3, 4], &quot;whatnot&quot;]</span><br><span class="line"></span><br><span class="line">// seq_contains：判断序列中的元素是否存在</span><br><span class="line">&lt;#assign x = [&quot;red&quot;, 16, &quot;blue&quot;, &quot;cyan&quot;]&gt; </span><br><span class="line">$&#123;x?seq_contains(&quot;blue&quot;)?string(&quot;yes&quot;, &quot;no&quot;)&#125;    // yes</span><br><span class="line">$&#123;x?seq_contains(&quot;yellow&quot;)?string(&quot;yes&quot;, &quot;no&quot;)&#125;  // no</span><br><span class="line">$&#123;x?seq_contains(16)?string(&quot;yes&quot;, &quot;no&quot;)&#125;        // yes</span><br><span class="line">$&#123;x?seq_contains(&quot;16&quot;)?string(&quot;yes&quot;, &quot;no&quot;)&#125;      // no</span><br><span class="line"></span><br><span class="line">// seq_index_of：第一次出现的索引</span><br><span class="line">&lt;#assign x = [&quot;red&quot;, 16, &quot;blue&quot;, &quot;cyan&quot;, &quot;blue&quot;]&gt; </span><br><span class="line">$&#123;x?seq_index_of(&quot;blue&quot;)&#125;  // 2</span><br><span class="line"></span><br><span class="line">// sort_by：排序（升序）</span><br><span class="line">&lt;#list movies?sort_by(&quot;showtime&quot;) as movie&gt;&lt;/#list&gt;</span><br><span class="line"></span><br><span class="line">// sort_by：排序（降序）</span><br><span class="line">&lt;#list movies?sort_by(&quot;showtime&quot;)?reverse as movie&gt;&lt;/#list&gt;</span><br><span class="line"></span><br><span class="line">// 具体介绍：</span><br><span class="line">// 不排序的情况：</span><br><span class="line">&lt;#list movies as moive&gt;</span><br><span class="line">　　&lt;a href=&quot;$&#123;moive.url&#125;&quot;&gt;$&#123;moive.name&#125;&lt;/a&gt;</span><br><span class="line">&lt;/#list&gt;</span><br><span class="line"></span><br><span class="line">//要是排序，则用</span><br><span class="line">&lt;#list movies?sort as movie&gt;</span><br><span class="line">　　&lt;a href=&quot;$&#123;movie.url&#125;&quot;&gt;$&#123;movie.name&#125;&lt;/a&gt;</span><br><span class="line">&lt;/#list&gt;</span><br><span class="line"></span><br><span class="line">// 这是按元素的首字母排序。若要按list中对象元素的某一属性排序的话，则用</span><br><span class="line">&lt;#list moives?sort_by([&quot;name&quot;]) as movie&gt;</span><br><span class="line">　　&lt;a href=&quot;$&#123;movie.url&#125;&quot;&gt;$&#123;movie.name&#125;&lt;/a&gt;</span><br><span class="line">&lt;/#list&gt;</span><br><span class="line"></span><br><span class="line">//这个是按list中对象元素的[name]属性排序的，是升序，如果需要降序的话，如下所示：</span><br><span class="line">&lt;#list movies?sort_by([&quot;name&quot;])?reverse as movie&gt;</span><br><span class="line">　　&lt;a href=&quot;$&#123;movie.url&#125;&quot;&gt;$&#123;movie.name&#125;&lt;/a&gt;</span><br><span class="line">&lt;/#list&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="12、Map对象"><a href="#12、Map对象" class="headerlink" title="12、Map对象"></a>12、Map对象</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 创建map</span><br><span class="line">&lt;#assign scores = &#123;&quot;语文&quot;:86,&quot;数学&quot;:78&#125;&gt;</span><br><span class="line"></span><br><span class="line">// Map连接运算符</span><br><span class="line">&lt;#assign scores = &#123;&quot;语文&quot;:86,&quot;数学&quot;:78&#125; + &#123;&quot;数学&quot;:87,&quot;Java&quot;:93&#125;&gt;</span><br><span class="line"></span><br><span class="line">// Map元素输出</span><br><span class="line">emp.name       // 全部使用点语法</span><br><span class="line">emp[&quot;name&quot;]    // 使用方括号</span><br></pre></td></tr></table></figure>
+<h3 id="13、FreeMarker支持如下转义字符"><a href="#13、FreeMarker支持如下转义字符" class="headerlink" title="13、FreeMarker支持如下转义字符:"></a>13、FreeMarker支持如下转义字符:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">\” ：双引号(u0022)</span><br><span class="line">\’ ：单引号(u0027)</span><br><span class="line">\ ：反斜杠(u005C)</span><br><span class="line">\n ：换行(u000A)</span><br><span class="line">\r ：回车(u000D)</span><br><span class="line">\t ：Tab(u0009)</span><br><span class="line">\b ：退格键(u0008)</span><br><span class="line">\f ：Form feed(u000C)</span><br><span class="line">\l ：&lt;</span><br><span class="line">\g ：&gt;</span><br><span class="line">\a ：&amp;</span><br><span class="line">\&#123; ：&#123;</span><br><span class="line">\xCode ：直接通过4位的16进制数来指定Unicode码,输出该unicode码对应的字符.</span><br><span class="line"></span><br><span class="line">如果某段文本中包含大量的特殊符号,FreeMarker提供了另一种特殊格式:可以在指定字符串内容的引号前增加r标记,在r标记后的文件将会直接输出.看如下代码:</span><br><span class="line">r”$foo”//输出&#123;foo&#125;</span><br><span class="line">$&#123;r”C:/foo/bar”&#125; // 输出 C:/foo/bar</span><br></pre></td></tr></table></figure>
+<h3 id="14、include指令"><a href="#14、include指令" class="headerlink" title="14、include指令"></a>14、include指令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// include指令的作用类似于JSP的包含指令:</span><br><span class="line">&lt;#include &quot;/test.ftl&quot; encoding=&quot;UTF-8&quot; parse=true&gt;</span><br><span class="line"></span><br><span class="line">// 在上面的语法格式中,两个参数的解释如下:</span><br><span class="line">encoding=&quot;GBK&quot;  // 编码格式</span><br><span class="line">parse=true 　　 // 是否作为ftl语法解析,默认是true，false就是以文本方式引入,注意:在ftl文件里布尔值都是直接赋值的如parse=true,而不是parse=&quot;true&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="15、import指令"><a href="#15、import指令" class="headerlink" title="15、import指令"></a>15、import指令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 类似于jsp里的import,它导入文件，然后就可以在当前文件里使用被导入文件里的宏组件</span><br><span class="line">&lt;#import &quot;/libs/mylib.ftl&quot; as my&gt;</span><br><span class="line">// 上面的代码将导入/lib/common.ftl模板文件中的所有变量,交将这些变量放置在一个名为com的Map对象中，&quot;my&quot;在freemarker里被称作namespace</span><br></pre></td></tr></table></figure>
+<h3 id="17、compress-压缩"><a href="#17、compress-压缩" class="headerlink" title="17、compress 压缩"></a>17、compress 压缩</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 用来压缩空白空间和空白的行 </span><br><span class="line">&lt;#compress&gt; </span><br><span class="line">    ... </span><br><span class="line">&lt;/#compress&gt;</span><br><span class="line">&lt;#t&gt; // 去掉左右空白和回车换行 </span><br><span class="line">&lt;#lt&gt;// 去掉左边空白和回车换行 </span><br><span class="line">&lt;#rt&gt;// 去掉右边空白和回车换行 </span><br><span class="line">&lt;#nt&gt;// 取消上面的效果</span><br></pre></td></tr></table></figure>
+<h3 id="18、escape-noescape-对字符串进行HTML编码"><a href="#18、escape-noescape-对字符串进行HTML编码" class="headerlink" title="18、escape,noescape 对字符串进行HTML编码"></a>18、escape,noescape 对字符串进行HTML编码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// escape指令导致body区的插值都会被自动加上escape表达式,但不会影响字符串内的插值,只会影响到body内出现的插值,使用escape指令的语法格式如下:</span><br><span class="line">&lt;#escape x as x?html&gt; </span><br><span class="line">　　First name: $&#123;firstName&#125; </span><br><span class="line">&lt;#noescape&gt;Last name: $&#123;lastName&#125;&lt;/#noescape&gt; </span><br><span class="line">　　Maiden name: $&#123;maidenName&#125; </span><br><span class="line">&lt;/#escape&gt;</span><br><span class="line"></span><br><span class="line">// 相同表达式</span><br><span class="line">First name: $&#123;firstName?html&#125; </span><br><span class="line">Last name: $&#123;lastName&#125; </span><br><span class="line">Maiden name: $&#123;maidenName?html&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/基于前缀树图文详解敏感词过滤/" rel="next" title="基于前缀树图文详解敏感词过滤">
+                <i class="fa fa-chevron-left"></i> 基于前缀树图文详解敏感词过滤
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">le</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/490" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2961822005" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Freemaker-FTL指令常用标签及语法"><span class="nav-number">1.</span> <span class="nav-text">Freemaker FTL指令常用标签及语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础语法"><span class="nav-number">1.1.</span> <span class="nav-text">基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、字符输出"><span class="nav-number">1.1.1.</span> <span class="nav-text">1、字符输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、日期输出"><span class="nav-number">1.1.2.</span> <span class="nav-text">2、日期输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、数字输出-以数字20为例"><span class="nav-number">1.1.3.</span> <span class="nav-text">3、数字输出(以数字20为例)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、申明变量"><span class="nav-number">1.1.4.</span> <span class="nav-text">4、申明变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、比较运算符"><span class="nav-number">1.1.5.</span> <span class="nav-text">5、比较运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6、算术运算符"><span class="nav-number">1.1.6.</span> <span class="nav-text">6、算术运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7、逻辑运算符"><span class="nav-number">1.1.7.</span> <span class="nav-text">7、逻辑运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8、FreeMarker中的运算符优先级如下-由高到低排列"><span class="nav-number">1.1.8.</span> <span class="nav-text">8、FreeMarker中的运算符优先级如下(由高到低排列):</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9、if-逻辑判断（注意：elseif-不加空格）"><span class="nav-number">1.1.9.</span> <span class="nav-text">9、if 逻辑判断（注意：elseif 不加空格）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10、switch-条件可为数字，可为字符串"><span class="nav-number">1.1.10.</span> <span class="nav-text">10、switch (条件可为数字，可为字符串)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11、集合-amp-循环"><span class="nav-number">1.1.11.</span> <span class="nav-text">11、集合 &amp; 循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12、Map对象"><span class="nav-number">1.1.12.</span> <span class="nav-text">12、Map对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13、FreeMarker支持如下转义字符"><span class="nav-number">1.1.13.</span> <span class="nav-text">13、FreeMarker支持如下转义字符:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14、include指令"><span class="nav-number">1.1.14.</span> <span class="nav-text">14、include指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#15、import指令"><span class="nav-number">1.1.15.</span> <span class="nav-text">15、import指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#17、compress-压缩"><span class="nav-number">1.1.16.</span> <span class="nav-text">17、compress 压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#18、escape-noescape-对字符串进行HTML编码"><span class="nav-number">1.1.17.</span> <span class="nav-text">18、escape,noescape 对字符串进行HTML编码</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">le</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">7.1k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '490',
+            repo: 'https://github.com/490/490.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'dd4cdc4ae526b060d983e343530d30ed338af4b2',
+            
+                client_id: '2340dc349a2e19013ca4'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'Yi80CT04XNkVSJTMAPm5FtWc-gzGzoHsz',
+        appKey: 'j3zcBrBI4kxBuazJBe3Gra3B',
+        placeholder: '^_^',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":80,"height":160},"mobile":{"show":true}});</script></body>
+</html>

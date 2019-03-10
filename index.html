@@ -38,7 +38,7 @@
 
   
   
-  <link href="/490.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -46,21 +46,21 @@
 
 
 
-<link href="/490.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/490.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/490.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/490.github.io/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/490.github.io/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
 
 
-  <link rel="mask-icon" href="/490.github.io/images/logo.svg?v=5.1.4" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
 
 
 
@@ -90,7 +90,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/490.github.io/',
+    root: '/',
     scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -148,7 +148,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/490.github.io/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">我的笔记</span>
         <span class="logo-line-after"><i></i></span>
@@ -176,7 +176,7 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/490.github.io/" rel="section">
+          <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
             
@@ -186,7 +186,7 @@
       
         
         <li class="menu-item menu-item-about">
-          <a href="/490.github.io/about/" rel="section">
+          <a href="/about/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
             
@@ -196,7 +196,7 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/490.github.io/tags/" rel="section">
+          <a href="/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
             
@@ -206,7 +206,7 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/490.github.io/archives/" rel="section">
+          <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
             
@@ -233,20 +233,26 @@
   
     <div class="site-search">
       
-  <div class="popup search-popup local-search-popup">
-  <div class="local-search-header clearfix">
-    <span class="search-icon">
-      <i class="fa fa-search"></i>
-    </span>
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
     <span class="popup-btn-close">
       <i class="fa fa-times-circle"></i>
     </span>
-    <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
-    </div>
   </div>
-  <div id="local-search-result"></div>
-</div>
+
 
 
 
@@ -279,12 +285,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/freemarker基础知识总结/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/freemarker基础知识总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -298,7 +304,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/freemarker基础知识总结/" itemprop="url">freemarker基础知识总结</a></h1>
+                <a class="post-title-link" href="/freemarker基础知识总结/" itemprop="url">freemarker基础知识总结</a></h1>
         
 
         <div class="post-meta">
@@ -329,8 +335,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/freemarker基础知识总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/freemarker基础知识总结/" itemprop="commentCount"></span>
+                <a href="/freemarker基础知识总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/freemarker基础知识总结/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -395,7 +401,7 @@
 <h2 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h2><h3 id="1、字符输出"><a href="#1、字符输出" class="headerlink" title="1、字符输出"></a>1、字符输出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$&#123;emp.name?if_exists&#125;　　　　　　// 变量存在，输出该变量，否则不输出</span><br><span class="line">$&#123;emp.name!&#125;　　　　　　　　　　  // 变量存在，输出该变量，否则不输出</span><br><span class="line"></span><br><span class="line">$&#123;emp.name?default(&quot;xxx&quot;)&#125;     // 变量不存在，取默认值xxx </span><br><span class="line">$&#123;emp.name!&quot;xxx&quot;&#125;    　　　　　　// 变量不存在，取默认值xxx</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/490.github.io/2019/03/09/freemarker基础知识总结/#more" rel="contents">
+            <a class="btn" href="/freemarker基础知识总结/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -446,12 +452,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/基于前缀树图文详解敏感词过滤/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/基于前缀树图文详解敏感词过滤/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -465,7 +471,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/基于前缀树图文详解敏感词过滤/" itemprop="url">基于前缀树图文详解敏感词过滤</a></h1>
+                <a class="post-title-link" href="/基于前缀树图文详解敏感词过滤/" itemprop="url">基于前缀树图文详解敏感词过滤</a></h1>
         
 
         <div class="post-meta">
@@ -496,8 +502,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/基于前缀树图文详解敏感词过滤/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/基于前缀树图文详解敏感词过滤/" itemprop="commentCount"></span>
+                <a href="/基于前缀树图文详解敏感词过滤/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/基于前缀树图文详解敏感词过滤/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -561,7 +567,7 @@
 <p> 实现的功能就是将html的代码进行转义后显示出来，使其失效。举一个具体的例子：如果有一串字符串为xwabfabcff,敏感词为abc、bf、bc，若这个字符串中包含敏感词，则使用***代替敏感词，实现一个算法。<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/490.github.io/2019/03/09/基于前缀树图文详解敏感词过滤/#more" rel="contents">
+            <a class="btn" href="/基于前缀树图文详解敏感词过滤/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -612,12 +618,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/Spring/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Spring/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -631,7 +637,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/Spring/" itemprop="url">Spring</a></h1>
+                <a class="post-title-link" href="/Spring/" itemprop="url">Spring</a></h1>
         
 
         <div class="post-meta">
@@ -662,8 +668,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/Spring/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/Spring/" itemprop="commentCount"></span>
+                <a href="/Spring/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Spring/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -772,12 +778,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/Redis/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Redis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -791,7 +797,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/Redis/" itemprop="url">Redis</a></h1>
+                <a class="post-title-link" href="/Redis/" itemprop="url">Redis</a></h1>
         
 
         <div class="post-meta">
@@ -822,8 +828,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/Redis/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/Redis/" itemprop="commentCount"></span>
+                <a href="/Redis/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Redis/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -932,12 +938,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/Docker/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -951,7 +957,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/Docker/" itemprop="url">Docker</a></h1>
+                <a class="post-title-link" href="/Docker/" itemprop="url">Docker</a></h1>
         
 
         <div class="post-meta">
@@ -982,8 +988,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/Docker/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/Docker/" itemprop="commentCount"></span>
+                <a href="/Docker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Docker/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1092,12 +1098,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/RabbitMQ/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/RabbitMQ/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1111,7 +1117,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/RabbitMQ/" itemprop="url">RabbitMQ</a></h1>
+                <a class="post-title-link" href="/RabbitMQ/" itemprop="url">RabbitMQ</a></h1>
         
 
         <div class="post-meta">
@@ -1142,8 +1148,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/RabbitMQ/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/RabbitMQ/" itemprop="commentCount"></span>
+                <a href="/RabbitMQ/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/RabbitMQ/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1252,12 +1258,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/MySQL数据库/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/MySQL数据库/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1271,7 +1277,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/MySQL数据库/" itemprop="url">MySQL数据库</a></h1>
+                <a class="post-title-link" href="/MySQL数据库/" itemprop="url">MySQL数据库</a></h1>
         
 
         <div class="post-meta">
@@ -1302,8 +1308,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/MySQL数据库/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/MySQL数据库/" itemprop="commentCount"></span>
+                <a href="/MySQL数据库/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/MySQL数据库/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1325,7 +1331,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  3k
                 </span>
               
 
@@ -1341,7 +1347,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  10
                 </span>
               
             </div>
@@ -1363,9 +1369,14 @@
 
       
         
-          
-            
-          
+          <p>@toc</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/MySQL数据库/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1412,12 +1423,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/C-C-面试题/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/C-C-面试题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1431,7 +1442,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/C-C-面试题/" itemprop="url">C/C++面试题</a></h1>
+                <a class="post-title-link" href="/C-C-面试题/" itemprop="url">C/C++面试题</a></h1>
         
 
         <div class="post-meta">
@@ -1462,8 +1473,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/C-C-面试题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/C-C-面试题/" itemprop="commentCount"></span>
+                <a href="/C-C-面试题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/C-C-面试题/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1572,12 +1583,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/Java多线程与并发/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Java多线程与并发/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1591,7 +1602,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/Java多线程与并发/" itemprop="url">Java多线程与并发</a></h1>
+                <a class="post-title-link" href="/Java多线程与并发/" itemprop="url">Java多线程与并发</a></h1>
         
 
         <div class="post-meta">
@@ -1622,8 +1633,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/Java多线程与并发/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/Java多线程与并发/" itemprop="commentCount"></span>
+                <a href="/Java多线程与并发/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Java多线程与并发/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1732,12 +1743,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/490.github.io/2019/03/09/Java虚拟机/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Java虚拟机/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="/490.github.io/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -1751,7 +1762,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/490.github.io/2019/03/09/Java虚拟机/" itemprop="url">Java虚拟机</a></h1>
+                <a class="post-title-link" href="/Java虚拟机/" itemprop="url">Java虚拟机</a></h1>
         
 
         <div class="post-meta">
@@ -1782,8 +1793,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/490.github.io/2019/03/09/Java虚拟机/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/490.github.io/2019/03/09/Java虚拟机/" itemprop="commentCount"></span>
+                <a href="/Java虚拟机/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/Java虚拟机/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1883,7 +1894,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/490.github.io/page/2/">2</a><a class="extend next" rel="next" href="/490.github.io/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1927,7 +1938,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/490.github.io/archives/">
+                <a href="/archives/">
               
                   <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
@@ -1941,8 +1952,8 @@
               
               
               <div class="site-state-item site-state-tags">
-                <a href="/490.github.io/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2009,7 +2020,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">4.1k</span>
+    <span title="Site words total count">7.1k</span>
   
 </div>
 
@@ -2070,60 +2081,60 @@
 
   
   
-    <script type="text/javascript" src="/490.github.io/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/490.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
   
 
   
   
-    <script type="text/javascript" src="/490.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
   
 
   
   
-    <script type="text/javascript" src="/490.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/490.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/490.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
 
 
   
 
 
-  <script type="text/javascript" src="/490.github.io/js/src/utils.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
 
-  <script type="text/javascript" src="/490.github.io/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/490.github.io/js/src/affix.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/490.github.io/js/src/schemes/pisces.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
 
 
 
   
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
 
   
 
 
-  <script type="text/javascript" src="/490.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
@@ -2197,324 +2208,20 @@
 
   
 
-  <script type="text/javascript">
-    // Popup Window;
-    var isfetched = false;
-    var isXml = true;
-    // Search DB path;
-    var search_path = "";
-    if (search_path.length === 0) {
-      search_path = "search.xml";
-    } else if (/json$/i.test(search_path)) {
-      isXml = false;
-    }
-    var path = "/490.github.io/" + search_path;
-    // monitor main search box;
-
-    var onPopupClose = function (e) {
-      $('.popup').hide();
-      $('#local-search-input').val('');
-      $('.search-result-list').remove();
-      $('#no-result').remove();
-      $(".local-search-pop-overlay").remove();
-      $('body').css('overflow', '');
-    }
-
-    function proceedsearch() {
-      $("body")
-        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
-        .css('overflow', 'hidden');
-      $('.search-popup-overlay').click(onPopupClose);
-      $('.popup').toggle();
-      var $localSearchInput = $('#local-search-input');
-      $localSearchInput.attr("autocapitalize", "none");
-      $localSearchInput.attr("autocorrect", "off");
-      $localSearchInput.focus();
-    }
-
-    // search function;
-    var searchFunc = function(path, search_id, content_id) {
-      'use strict';
-
-      // start loading animation
-      $("body")
-        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
-          '<div id="search-loading-icon">' +
-          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
-          '</div>' +
-          '</div>')
-        .css('overflow', 'hidden');
-      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
-
-      $.ajax({
-        url: path,
-        dataType: isXml ? "xml" : "json",
-        async: true,
-        success: function(res) {
-          // get the contents from search data
-          isfetched = true;
-          $('.popup').detach().appendTo('.header-inner');
-          var datas = isXml ? $("entry", res).map(function() {
-            return {
-              title: $("title", this).text(),
-              content: $("content",this).text(),
-              url: $("url" , this).text()
-            };
-          }).get() : res;
-          var input = document.getElementById(search_id);
-          var resultContent = document.getElementById(content_id);
-          var inputEventFunction = function() {
-            var searchText = input.value.trim().toLowerCase();
-            var keywords = searchText.split(/[\s\-]+/);
-            if (keywords.length > 1) {
-              keywords.push(searchText);
-            }
-            var resultItems = [];
-            if (searchText.length > 0) {
-              // perform local searching
-              datas.forEach(function(data) {
-                var isMatch = false;
-                var hitCount = 0;
-                var searchTextCount = 0;
-                var title = data.title.trim();
-                var titleInLowerCase = title.toLowerCase();
-                var content = data.content.trim().replace(/<[^>]+>/g,"");
-                var contentInLowerCase = content.toLowerCase();
-                var articleUrl = decodeURIComponent(data.url);
-                var indexOfTitle = [];
-                var indexOfContent = [];
-                // only match articles with not empty titles
-                if(title != '') {
-                  keywords.forEach(function(keyword) {
-                    function getIndexByWord(word, text, caseSensitive) {
-                      var wordLen = word.length;
-                      if (wordLen === 0) {
-                        return [];
-                      }
-                      var startPosition = 0, position = [], index = [];
-                      if (!caseSensitive) {
-                        text = text.toLowerCase();
-                        word = word.toLowerCase();
-                      }
-                      while ((position = text.indexOf(word, startPosition)) > -1) {
-                        index.push({position: position, word: word});
-                        startPosition = position + wordLen;
-                      }
-                      return index;
-                    }
-
-                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
-                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
-                  });
-                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
-                    isMatch = true;
-                    hitCount = indexOfTitle.length + indexOfContent.length;
-                  }
-                }
-
-                // show search results
-
-                if (isMatch) {
-                  // sort index by position of keyword
-
-                  [indexOfTitle, indexOfContent].forEach(function (index) {
-                    index.sort(function (itemLeft, itemRight) {
-                      if (itemRight.position !== itemLeft.position) {
-                        return itemRight.position - itemLeft.position;
-                      } else {
-                        return itemLeft.word.length - itemRight.word.length;
-                      }
-                    });
-                  });
-
-                  // merge hits into slices
-
-                  function mergeIntoSlice(text, start, end, index) {
-                    var item = index[index.length - 1];
-                    var position = item.position;
-                    var word = item.word;
-                    var hits = [];
-                    var searchTextCountInSlice = 0;
-                    while (position + word.length <= end && index.length != 0) {
-                      if (word === searchText) {
-                        searchTextCountInSlice++;
-                      }
-                      hits.push({position: position, length: word.length});
-                      var wordEnd = position + word.length;
-
-                      // move to next position of hit
-
-                      index.pop();
-                      while (index.length != 0) {
-                        item = index[index.length - 1];
-                        position = item.position;
-                        word = item.word;
-                        if (wordEnd > position) {
-                          index.pop();
-                        } else {
-                          break;
-                        }
-                      }
-                    }
-                    searchTextCount += searchTextCountInSlice;
-                    return {
-                      hits: hits,
-                      start: start,
-                      end: end,
-                      searchTextCount: searchTextCountInSlice
-                    };
-                  }
-
-                  var slicesOfTitle = [];
-                  if (indexOfTitle.length != 0) {
-                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
-                  }
-
-                  var slicesOfContent = [];
-                  while (indexOfContent.length != 0) {
-                    var item = indexOfContent[indexOfContent.length - 1];
-                    var position = item.position;
-                    var word = item.word;
-                    // cut out 100 characters
-                    var start = position - 20;
-                    var end = position + 80;
-                    if(start < 0){
-                      start = 0;
-                    }
-                    if (end < position + word.length) {
-                      end = position + word.length;
-                    }
-                    if(end > content.length){
-                      end = content.length;
-                    }
-                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
-                  }
-
-                  // sort slices in content by search text's count and hits' count
-
-                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
-                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
-                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
-                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
-                      return sliceRight.hits.length - sliceLeft.hits.length;
-                    } else {
-                      return sliceLeft.start - sliceRight.start;
-                    }
-                  });
-
-                  // select top N slices in content
-
-                  var upperBound = parseInt('1');
-                  if (upperBound >= 0) {
-                    slicesOfContent = slicesOfContent.slice(0, upperBound);
-                  }
-
-                  // highlight title and content
-
-                  function highlightKeyword(text, slice) {
-                    var result = '';
-                    var prevEnd = slice.start;
-                    slice.hits.forEach(function (hit) {
-                      result += text.substring(prevEnd, hit.position);
-                      var end = hit.position + hit.length;
-                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
-                      prevEnd = end;
-                    });
-                    result += text.substring(prevEnd, slice.end);
-                    return result;
-                  }
-
-                  var resultItem = '';
-
-                  if (slicesOfTitle.length != 0) {
-                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
-                  } else {
-                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
-                  }
-
-                  slicesOfContent.forEach(function (slice) {
-                    resultItem += "<a href='" + articleUrl + "'>" +
-                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
-                      "...</p>" + "</a>";
-                  });
-
-                  resultItem += "</li>";
-                  resultItems.push({
-                    item: resultItem,
-                    searchTextCount: searchTextCount,
-                    hitCount: hitCount,
-                    id: resultItems.length
-                  });
-                }
-              })
-            };
-            if (keywords.length === 1 && keywords[0] === "") {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
-            } else if (resultItems.length === 0) {
-              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
-            } else {
-              resultItems.sort(function (resultLeft, resultRight) {
-                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
-                  return resultRight.searchTextCount - resultLeft.searchTextCount;
-                } else if (resultLeft.hitCount !== resultRight.hitCount) {
-                  return resultRight.hitCount - resultLeft.hitCount;
-                } else {
-                  return resultRight.id - resultLeft.id;
-                }
-              });
-              var searchResultList = '<ul class=\"search-result-list\">';
-              resultItems.forEach(function (result) {
-                searchResultList += result.item;
-              })
-              searchResultList += "</ul>";
-              resultContent.innerHTML = searchResultList;
-            }
-          }
-
-          if ('auto' === 'auto') {
-            input.addEventListener('input', inputEventFunction);
-          } else {
-            $('.search-icon').click(inputEventFunction);
-            input.addEventListener('keypress', function (event) {
-              if (event.keyCode === 13) {
-                inputEventFunction();
-              }
-            });
-          }
-
-          // remove loading animation
-          $(".local-search-pop-overlay").remove();
-          $('body').css('overflow', '');
-
-          proceedsearch();
-        }
-      });
-    }
-
-    // handle and trigger popup window;
-    $('.popup-trigger').click(function(e) {
-      e.stopPropagation();
-      if (isfetched === false) {
-        searchFunc(path, 'local-search-input', 'local-search-result');
-      } else {
-        proceedsearch();
-      };
-    });
-
-    $('.popup-btn-close').click(onPopupClose);
-    $('.popup').click(function(e){
-      e.stopPropagation();
-    });
-    $(document).on('keyup', function (event) {
-      var shouldDismissSearchPopup = event.which === 27 &&
-        $('.search-popup').is(':visible');
-      if (shouldDismissSearchPopup) {
-        onPopupClose();
-      }
-    });
-  </script>
 
 
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
 
 
 
@@ -2555,5 +2262,5 @@
 
   
 
-<script src="/490.github.io/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/490.github.io/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":80,"height":160},"mobile":{"show":true}});</script></body>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":80,"height":160},"mobile":{"show":true}});</script></body>
 </html>

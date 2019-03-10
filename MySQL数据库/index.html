@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="@toc">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL数据库">
+<meta property="og:url" content="https://490.github.io/MySQL数据库/index.html">
+<meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="@toc">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://490.github.io/images/20190310_082950.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_082957.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_083024.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_083531.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_084503.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_084553.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_084559.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_084634.png">
+<meta property="og:updated_time" content="2019-03-10T00:50:28.217Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL数据库">
+<meta name="twitter:description" content="@toc">
+<meta name="twitter:image" content="http://490.github.io/images/20190310_082950.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://490.github.io/MySQL数据库/">
+
+
+
+
+
+  <title>MySQL数据库 | 我的笔记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/MySQL数据库/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="le">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL数据库</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-09T21:38:30+08:00">
+                2019-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/MySQL数据库/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/MySQL数据库/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>@toc</p>
+<a id="more"></a>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p>数据结构：</p>
+<p><strong>二叉树</strong>：O(logn),深度会深，io多<br><strong>B树</strong>：<br><img src="http://490.github.io/images/20190310_082950.png" alt="image"><br><img src="http://490.github.io/images/20190310_082957.png" alt="image"><br><strong>B+树</strong>：底下的链接可做范围统计。磁盘代价低、查询效率稳定、有利于对数据库扫描<br><img src="http://490.github.io/images/20190310_083024.png" alt="image"><br><strong>Hash</strong>：</p>
+<p>innoDB密集索引：每个搜索码值都对应一个索引值<br>Myisam稀疏索引：只为索引码的某些值建立索引项</p>
+<p><strong>如何定位并优化慢查询sql：</strong><br>根据慢日志定位慢查询SQL<br>使用explain等工具分析SQL<br>修改SQL或尽量让SQL走索引</p>
+<hr>
+<h1 id="事务的隔离级别、锁"><a href="#事务的隔离级别、锁" class="headerlink" title="事务的隔离级别、锁"></a>事务的隔离级别、锁</h1><p><a href="http://www.hollischuang.com/archives/934" target="_blank" rel="noopener">深入理解乐观锁与悲观锁</a></p>
+<p><a href="http://www.hollischuang.com/archives/943" target="_blank" rel="noopener">事务的隔离级别</a></p>
+<h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><p>在关系数据库管理系统里，<strong>悲观并发控制</strong>（又名“悲观锁”，Pessimistic Concurrency Control，缩写“PCC”）是一种并发控制的方法。它可以阻止一个事务以影响其他用户的方式来修改数据。如果一个事务执行的操作都某行数据应用了锁，那只有当这个事务把锁释放，其他事务才能够执行与该锁冲突的操作。<br>悲观并发控制主要用于数据争用激烈的环境，以及发生并发冲突时使用锁保护数据的成本要低于回滚事务的成本的环境中。</p>
+<p>在对任意记录进行修改前，先尝试为该记录加上<strong>排他锁</strong>（exclusive locking）。如果加锁失败，说明该记录正在被修改，那么当前查询可能要等待或者抛出异常。 具体响应方式由开发者根据实际需要决定。如果成功加锁，那么就可以对记录做修改，事务完成后就会解锁了。<br>其间如果有其他对该记录做修改或加排他锁的操作，都会等待我们解锁或直接抛出异常。</p>
+<p>上面我们提到，使用<code>select…for update</code>会把数据给锁住，不过我们需要注意一些锁的级别，MySQL InnoDB默认行级锁。行级锁都是基于索引的，如果一条SQL语句用不到索引是不会使用行级锁的，会使用表级锁把整张表锁住，这点需要注意。</p>
+<p><strong>乐观锁</strong>（ Optimistic Locking ） 相对悲观锁而言，乐观锁假设认为数据一般情况下不会造成冲突，所以在数据进行提交更新的时候，才会正式对数据的冲突与否进行检测，如果发现冲突了，则让返回用户错误的信息，让用户决定如何去做。只能防止脏读后数据的提交，不能解决脏读。<br>相对于悲观锁，在对数据库进行处理的时候，乐观锁并不会使用数据库提供的锁机制。一般的实现乐观锁的方式就是记录数据版本。</p>
+<p><strong>行级锁</strong><br>开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度也最高。</p>
+<p><strong>表级锁</strong><br>开销小，加锁快；不会出现死锁；锁定粒度大，发出锁冲突的概率最高，并发度最低。</p>
+<p><strong>页级锁</strong><br>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。</p>
+<p>在不通过索引条件查询的时候,InnoDB 确实使用的是表锁,而不是行锁。<br>MyISAM中是不会产生死锁的，因为MyISAM总是一次性获得所需的全部锁，要么全部满足，要么全部等待。而在InnoDB中，锁是逐步获得的，就造成了死锁的可能。</p>
+<p><strong>行锁</strong><br>TODO….<br><strong>gap锁</strong></p>
+<hr>
+<p><img src="http://490.github.io/images/20190310_083531.png" alt="image"><br>ANSI/ISO SQL定义的标准隔离级别有四种，从高到底依次为：可序列化(Serializable)、可重复读(Repeatable reads)、提交读(Read committed)、未提交读(Read uncommitted)。</p>
+<h2 id="未提交读-Read-uncommitted"><a href="#未提交读-Read-uncommitted" class="headerlink" title="未提交读(Read uncommitted)"></a>未提交读(Read uncommitted)</h2><p>事务在读数据的时候并未对数据加锁。<br>事务在修改数据的时候只对数据增加行级共享锁。<br>所以，未提交读会导致脏读<br>可以读到其他事务未提交的结果</p>
+<h2 id="提交读-Read-committed"><a href="#提交读-Read-committed" class="headerlink" title="提交读(Read committed)"></a>提交读(Read committed)</h2><p>提交读(READ COMMITTED)也可以翻译成读已提交，通过名字也可以分析出，在一个事务修改数据过程中，如果事务还没提交，其他事务不能读该数据。<br>提交读的数据库锁情况<br>事务对当前被读取的数据加 行级共享锁（当读到时才加锁），一旦读完该行，立即释放该行级共享锁；<br>事务在更新某数据的瞬间（就是发生更新的瞬间），必须先对其加 行级排他锁，直到事务结束才释放。<br>简而言之，提交读这种隔离级别保证了读到的任何数据都是提交的数据，避免了脏读(dirty reads)。但是不保证事务重新读的时候能读到相同的数据，因为在每次数据读完之后其他事务可以修改刚才读到的数据。</p>
+<h2 id="可重复读-Repeatable-reads"><a href="#可重复读-Repeatable-reads" class="headerlink" title="可重复读(Repeatable reads)"></a>可重复读(Repeatable reads)</h2><p>事务在读取某数据的瞬间（就是开始读取的瞬间），必须先对其加 行级共享锁，直到事务结束才释放；<br>事务在更新某数据的瞬间（就是发生更新的瞬间），必须先对其加 行级排他锁，直到事务结束才释放。<br>可重复读隔离级别可以解决不可重复读的读现象。但是可重复读这种隔离级别中，还有另外一种读现象他解决不了，那就是幻读。</p>
+<h2 id="可序列化-Serializable"><a href="#可序列化-Serializable" class="headerlink" title="可序列化(Serializable)"></a>可序列化(Serializable)</h2><p>事务在读取数据时，必须先对其加 表级共享锁 ，直到事务结束才释放；<br>事务在更新数据时，必须先对其加 表级排他锁 ，直到事务结束才释放。</p>
+<hr>
+<p><strong>脏读</strong></p>
+<p>脏读又称无效数据的读出，是指在数据库访问中，事务T1将某一值修改，然后事务T2读取该值，此后T1因为某种原因撤销对该值的修改，这就导致了T2所读取到的数据是无效的。</p>
+<p><strong>不可重复读</strong></p>
+<p>一种更易理解的说法是：在一个事务内，多次读同一个数据。在这个事务还没有结束时，另一个事务也访问该同一数据。那么，在第一个事务的两次读数据之间。由于第二个事务的修改，那么第一个事务读到的数据可能不一样，这样就发生了在一个事务内两次读到的数据是不一样的，因此称为不可重复读，即原始读取不可重复。</p>
+<p><strong>幻读</strong></p>
+<p>幻读是指当事务不是独立执行时发生的一种现象，例如第一个事务对一个表中的数据进行了修改，比如这种修改涉及到表中的“全部数据行”。同时，第二个事务也修改这个表中的数据，这种修改是向表中插入“一行新数据”。那么，以后就会发生操作第一个事务的用户发现表中还有没有修改的数据行，就好象发生了幻觉一样.一般解决幻读的方法是增加范围锁RangeS，锁定检锁范围为只读，这样就避免了幻读。　　幻读(phantom read)”是不可重复读(Non-repeatable reads)的一种特殊场景：当事务没有获取范围锁的情况下执行SELECT … WHERE操作可能会发生“幻影读(phantom read)”。</p>
+<p>当前读、快照读</p>
+<p>DB_TRX_ID ，，DB_ROLL_PTR ，， DB_ROW_ID字段</p>
+<p>undo日志</p>
+<hr>
+<h1 id="SQL-JOIN"><a href="#SQL-JOIN" class="headerlink" title="SQL JOIN"></a>SQL JOIN</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Id_P	LastName	FirstName	Address	City</span><br><span class="line">1	Adams	John	Oxford Street	London</span><br><span class="line">2	Bush	George	Fifth Avenue	New York</span><br><span class="line">3	Carter	Thomas	Changan Street	Beijing</span><br><span class="line"></span><br><span class="line">Id_O OrderNo Id_P</span><br><span class="line"></span><br><span class="line">1     77895 3</span><br><span class="line">2     44678 3</span><br><span class="line">3     22456 1</span><br><span class="line">4     24562 1</span><br><span class="line">5     34764 65</span><br></pre></td></tr></table></figure>
+<p>SELECT Persons.LastName, Persons.FirstName, Orders.OrderNo<br>FROM PersonsINNER JOIN Orders<br>ON Persons.Id_P = Orders.Id_P<br>ORDER BY Persons.LastName</p>
+<p>结果：</p>
+<p>LastName FirstName OrderNo<br>Adams John 22456<br>Adams John 24562<br>Carter Thomas 77895<br>Carter Thomas 44678</p>
+<p>在表中存在至少一个匹配时（来自两个表的所有字段都不为空），INNER JOIN 关键字返回行。与 JOIN 是相同的<br>LEFT JOIN 关键字会从左表 (table_name1) 那里返回所有的行，即使在右表 (table_name2) 中没有匹配的行。 LEFT OUTER JOIN。<br>SELECT Persons.LastName, Persons.FirstName, Orders.OrderNo<br>FROM Persons<br>LEFT JOIN Orders<br>ON Persons.Id_P=Orders.Id_P<br>ORDER BY Persons.LastName</p>
+<p>LastName    FirstName    OrderNo<br>Adams    John    22456<br>Adams    John    24562<br>Carter    Thomas    77895<br>Carter    Thomas    44678<br>Bush    George<br>RIGHT JOIN 关键字会右表 (table_name2) 那里返回所有的行，即使在左表 (table_name1) 中没有匹配的行。只要其中某个表存在匹配，FULL JOIN 关键字就会返回行。<br>LastName    FirstName    OrderNo<br>Adams    John    22456<br>Adams    John    24562<br>Carter    Thomas    77895<br>Carter    Thomas    44678<br>Bush    George     34764</p>
+<hr>
+<h1 id="Innodb与Myisam引擎"><a href="#Innodb与Myisam引擎" class="headerlink" title="Innodb与Myisam引擎"></a><a href="https://www.cnblogs.com/changna1314/p/6878900.html" target="_blank" rel="noopener">Innodb与Myisam</a>引擎</h1><h2 id="1-区别："><a href="#1-区别：" class="headerlink" title="1. 区别："></a>1. 区别：</h2><p>（1）<strong>事务处理</strong>：<br>MyISAM是非事务安全型的，而InnoDB是事务安全型的（支持事务处理等高级处理）；<br>（2）<strong>锁机制不同</strong>：<br>MyISAM是表级锁，而InnoDB是行级锁；<br>（3）<strong>select ,update ,insert ,delete 操作</strong>：<br>MyISAM：如果执行大量的SELECT，MyISAM是更好的选择<br>InnoDB：如果你的数据执行大量的INSERT或UPDATE，出于性能方面的考虑，应该使用InnoDB表<br>（4）<strong>查询表的行数不同</strong>：<br>MyISAM：select count(<em>) from table,MyISAM只要简单的读出保存好的行数，注意的是，当count(</em>)语句包含   where条件时，两种表的操作是一样的<br>InnoDB ： InnoDB 中不保存表的具体行数，也就是说，执行select count(*) from table时，InnoDB要扫描一遍整个表来计算有多少行<br>（5）<strong>外键支持</strong>：<br>mysiam表不支持外键，而InnoDB支持</p>
+<h2 id="2-为什么MyISAM会比Innodb-的查询速度快。"><a href="#2-为什么MyISAM会比Innodb-的查询速度快。" class="headerlink" title="2. 为什么MyISAM会比Innodb 的查询速度快。"></a>2. 为什么MyISAM会比Innodb 的查询速度快。</h2><p>INNODB在做SELECT的时候，要维护的东西比MYISAM引擎多很多；<br>1）数据块，INNODB要缓存，MYISAM只缓存索引块，  这中间还有换进换出的减少；<br>2）innodb寻址要映射到块，再到行，MYISAM 记录的直接是文件的OFFSET，定位比INNODB要快<br>3）INNODB还需要维护MVCC一致；虽然你的场景没有，但他还是需要去检查和维护<br>MVCC ( Multi-Version Concurrency Control )多版本并发控制 </p>
+<h2 id="3-应用场景"><a href="#3-应用场景" class="headerlink" title="3. 应用场景"></a>3. 应用场景</h2><p>MyISAM适合：(1)做很多count 的计算；(2)插入不频繁，查询非常频繁；(3)没有事务。<br>InnoDB适合：(1)可靠性要求比较高，或者要求事务；(2)表更新和查询都相当的频繁，并且行锁定的机会比较大的情况。</p>
+<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><p>InnoDB的MVCC,是通过在每行记录后面保存两个隐藏的列来实现的,这两个列，分别保存了这个行的创建时间，一个保存的是行的删除时间。这里存储的并不是实际的时间值,而是系统版本号(可以理解为事务的ID)，没开始一个新的事务，系统版本号就会自动递增，事务开始时刻的系统版本号会作为事务的ID.下面看一下在REPEATABLE READ隔离级别下,MVCC具体是如何操作的.<br><strong>SELECT</strong><br>InnoDB会根据以下两个条件检查每行记录: a.InnoDB只会查找版本早于当前事务版本的数据行(也就是,行的系统版本号小于或等于事务的系统版本号)，这样可以确保事务读取的行，要么是在事务开始前已经存在的，要么是事务自身插入或者修改过的. b.行的删除版本要么未定义,要么大于当前事务版本号,这可以确保事务读取到的行，在事务开始之前未被删除.<br>只有a,b同时满足的记录，才能返回作为查询结果.<br><strong>DELETE</strong><br>InnoDB会为删除的每一行保存当前系统的版本号(事务的ID)作为删除标识.<br><img src="http://490.github.io/images/20190310_084503.png" alt="image"></p>
+<p>innodb索引和数据在一起</p>
+<p>myisam不在一起</p>
+<hr>
+<h1 id="MyCAT"><a href="#MyCAT" class="headerlink" title="MyCAT"></a><a href="http://www.cnblogs.com/joylee/p/7513038.html" target="_blank" rel="noopener">MyCAT</a></h1><p><a href="https://www.jianshu.com/p/21b1e133dd9b" target="_blank" rel="noopener">https://www.jianshu.com/p/21b1e133dd9b</a><br>分布式数据库系统中间层</p>
+<p>应用场景：需要读写分离，需要分库分表，多租户，数据统计系统，HBASE的一种替代方案</p>
+<p>支持全局表<br>支持ER的分片策略<br>支持一致性hash分片</p>
+<p><img src="http://490.github.io/images/20190310_084553.png" alt="image"><br><img src="http://490.github.io/images/20190310_084559.png" alt="image"></p>
+<p><img src="http://490.github.io/images/20190310_084634.png" alt="image"></p>
+<p><strong>使用MySQL客户端管理mycat</strong><br>动态加载配置文件：reload @@config;<br>查看数据节点：show @@datanode;<br>查看后端数据库：show @@datasource;</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/C-C-面试题/" rel="next" title="C/C++面试题">
+                <i class="fa fa-chevron-left"></i> C/C++面试题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/RabbitMQ/" rel="prev" title="RabbitMQ">
+                RabbitMQ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">le</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/490" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/2961822005" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务的隔离级别、锁"><span class="nav-number">2.</span> <span class="nav-text">事务的隔离级别、锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">2.1.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未提交读-Read-uncommitted"><span class="nav-number">2.2.</span> <span class="nav-text">未提交读(Read uncommitted)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交读-Read-committed"><span class="nav-number">2.3.</span> <span class="nav-text">提交读(Read committed)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重复读-Repeatable-reads"><span class="nav-number">2.4.</span> <span class="nav-text">可重复读(Repeatable reads)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可序列化-Serializable"><span class="nav-number">2.5.</span> <span class="nav-text">可序列化(Serializable)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-JOIN"><span class="nav-number">3.</span> <span class="nav-text">SQL JOIN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Innodb与Myisam引擎"><span class="nav-number">4.</span> <span class="nav-text">Innodb与Myisam引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-区别："><span class="nav-number">4.1.</span> <span class="nav-text">1. 区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-为什么MyISAM会比Innodb-的查询速度快。"><span class="nav-number">4.2.</span> <span class="nav-text">2. 为什么MyISAM会比Innodb 的查询速度快。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-应用场景"><span class="nav-number">4.3.</span> <span class="nav-text">3. 应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-number">4.4.</span> <span class="nav-text">MVCC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyCAT"><span class="nav-number">5.</span> <span class="nav-text">MyCAT</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">le</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">7.1k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '490',
+            repo: 'https://github.com/490/490.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'dd4cdc4ae526b060d983e343530d30ed338af4b2',
+            
+                client_id: '2340dc349a2e19013ca4'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'Yi80CT04XNkVSJTMAPm5FtWc-gzGzoHsz',
+        appKey: 'j3zcBrBI4kxBuazJBe3Gra3B',
+        placeholder: '^_^',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":80,"height":160},"mobile":{"show":true}});</script></body>
+</html>
