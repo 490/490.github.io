@@ -87,7 +87,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190310_151259.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_152038.png">
-<meta property="og:updated_time" content="2019-03-10T07:33:34.771Z">
+<meta property="og:updated_time" content="2019-03-10T07:34:34.772Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="教你如何迅速秒杀掉：99%的海量数据处理面试题">
 <meta name="twitter:description" content="原文地址  分而治之/hash映射 + hash统计 + 堆/快速/归并排序； 双层桶划分 Bloom filter/Bitmap； Trie树/数据库/倒排索引； 外排序； 分布式处理之Hadoop/Mapreduce。">
@@ -363,7 +363,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8.9k
+                  9.2k
                 </span>
               
 
@@ -379,7 +379,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  31
+                  32
                 </span>
               
             </div>
@@ -525,6 +525,8 @@
 <li>物理地址 (physical address): 放在寻址总线上的地址。放在寻址总线上，如果是读，电路根据这个地址每位的值就将相应地址的物理内存中的数据放到数据总线中传输。如果是写，电路根据这个 地址每位的值就将相应地址的物理内存中放入数据总线上的内容。物理内存是以字节(8位)为单位编址的。 </li>
 <li>虚拟地址 (virtual address): 4G虚拟地址空间中的地址，程序中使用的都是虚拟地址。 使用了分页机制之后，4G的地址空间被分成了固定大小的页，每一页或者被映射到物理内存，或者被映射到硬盘上的交换文件中，或者没有映射任何东西。对于一 般程序来说，4G的地址空间，只有一小部分映射了物理内存，大片大片的部分是没有映射任何东西。物理内存也被分页，来映射地址空间。对于32bit的 Win2k，页的大小是4K字节。CPU用来把虚拟地址转换成物理地址的信息存放在叫做页目录和页表的结构里。 </li>
 </ul>
+<p>物理内存分页，一个物理页的大小为4K字节，第0个物理页从物理地址 0x00000000 处开始。由于页的大小为4KB，就是0x1000字节，所以第1页从物理地址 0x00001000 处开始。第2页从物理地址 0x00002000 处开始。可以看到由于页的大小是4KB，所以只需要32bit的地址中高20bit来寻址物理页。<br>    返回上面我们的题目：非常大的文件，装不进内存。每行一个int类型数据，现在要你随机取100个数。针对此题，我们可以借鉴上述操作系统中内存分页的设计方法，做出如下解决方案：<br>    操作系统中的方法，先生成4G的地址表，在把这个表划分为小的4M的小文件做个索引，二级索引。30位前十位表示第几个4M文件，后20位表示在这个4M文件的第几个，等等，基于key value来设计存储，用key来建索引。</p>
+<p><a href="http://blog.csdn.net/v_july_v/article/details/6685962" target="_blank" rel="noopener">更多海里数据处理面试题</a></p>
 
       
     </div>
@@ -566,6 +568,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/SpringBoot实现基于Token的web后台认证机制/" rel="prev" title="SpringBoot实现基于Token的web后台认证机制">
+                SpringBoot实现基于Token的web后台认证机制 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -649,7 +655,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -662,7 +668,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -745,7 +751,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">19k</span>
+    <span title="Site words total count">21k</span>
   
 </div>
 
