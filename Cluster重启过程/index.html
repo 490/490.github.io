@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="数据库,">
 
 
 
@@ -77,13 +77,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="我的笔记">
-<meta property="og:url" content="https://490.github.io/tags/消息队列/index.html">
+<meta name="description" content="在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cluster重启过程">
+<meta property="og:url" content="https://490.github.io/Cluster重启过程/index.html">
 <meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-11T11:37:14.673Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我的笔记">
+<meta name="twitter:title" content="Cluster重启过程">
+<meta name="twitter:description" content="在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。">
 
 
 
@@ -113,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="https://490.github.io/tags/消息队列/">
+  <link rel="canonical" href="https://490.github.io/Cluster重启过程/">
 
 
 
 
 
-  <title>标签: 消息队列 | 我的笔记</title>
+  <title>Cluster重启过程 | 我的笔记</title>
   
 
 
@@ -138,7 +143,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -260,52 +265,205 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>消息队列<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Cluster重启过程/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="le">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/RabbitMQ/" itemprop="url">
-              
-                <span itemprop="name">RabbitMQ基础知识简介</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Cluster重启过程</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-09T21:38:58+08:00" content="2019-03-09">
-          03-09
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-11T19:22:08+08:00">
+                2019-03-11
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Cluster重启过程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/Cluster重启过程/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。<br><a id="more"></a></p>
+<p><a href="https://github.com/mysql/mysql-server/blob/8e797a5d6eb3a87f16498edcb7261a75897babae/storage/ndb/src/kernel/blocks/ndbcntr/NdbcntrMain.cpp" target="_blank" rel="noopener">原文</a></p>
+<p>启动节点的第一步是创建数据节点运行时环境。数据节点进程通常使用angel进程运行，此angel进程确保数据节点自动重新启动失败。因此，再次运行数据节点的唯一原因是在OS崩溃之后或运营商关闭之后或作为软件升级的一部分。</p>
+<p>当启动数据节点时，数据节点需要一个节点id，这是通过设置参数–ndb-nodeid在启动datanode时，或者在检索配置时由管理服务器分配。对于数据节点的所有重新启动，angel进程将确保所分配的节点id将相同。</p>
+<p>在分配数据节点进程之后，启动进程保持为angel进程并且新进程成为实际的数据节点进程。实际的数据节点进程首先从managementserver检索配置。</p>
+<p>在这个阶段我们已经阅读了选项，我们已经分配了一个节点ID，我们从管理服务器加载了配置。我们将在数据节点日志中打印一些关于我们的线程配置和其他一些重要信息。为了确保我们找到正确的文件并在正确的位置创建文件，我们设置了数据节点进程的数据库。</p>
+<p>接下来我们必须启动看门狗线程，因为我们现在开始执行操作，我们希望确保我们不要由于某些软件错误而卡住了。</p>
+<p>接下来我们将分配全局内存池的内存，这是分配最多内存的地方，我们仍然有相当多的内存分配，作为NDB内核中各种软件模块初始化的部分，但是我们正在逐步使用全局内存池。</p>
+<p>分配内存可能是一个相当耗时的过程，其中操作系统可以为每个分配的GByte内存提供长达一秒的时间（自然是OS依赖的并且会随着时间的推移而变化）。</p>
+<p>实际上在这里消耗时间实际上是我们还触摸每个页面以确保分配的内存也被映射到真实物理内存以避免在我们运行该过程时页面未命中。为了加快这个过程，我们已经触及了内存多线程。实际上，大多数内存的分配是可配置的，配置变量LateAlloc可用于延迟大多数内存分配到重启的早期阶段。</p>
+<p>分配全局内存池后，我们初始化运行时环境使用的所有数据。 这可确保我们准备好在数据节点进程启动后立即在线程之间发送和接收数据。</p>
+<p>在这一点上，我们只启动了看门狗进程并且线程在创建进程的过程中启动（如果我们运行ndbmtd，这个线程稍后将被转换为第一个接收线程，如果我们正在运行，则该线程将被转换为唯一的执行线程NDBD）。 下一步是加载所有软件模块并初始化它们，以确保在消息开始到达执行时正确设置它们。</p>
+<p>在我们启动运行时环境之前，我们还需要激活发送和接收服务。 这涉及创建一个套接字客户端线程，该线程试图连接到集群中其他节点的套接字服务器部分，并创建一个线程来监听用于我们作为套接字服务器通信的那些数据节点的套接字服务器。</p>
+<p>默认行为是nodeid最低的节点是通信设置中的套接字服务器。 这可以在数据节点配置中更改。</p>
+<p>在我们继续并启动数据节点环境之前，我们将运行时环境的启动信号放在其正确的作业缓冲区中。 实际上，为了启动系统，需要在作业缓冲区中放置两个相等的信号。 第一个启动信号开始与其他节点的通信，并设置状态以等待下一个信号实际启动系统。 第二个将开始运行启动阶段。</p>
+<p>最后，我们启动运行时环境的所有线程。 这些当前可以包括主线程，代表线程，多个tc线程，多个发送线程，多个接收线程和多个ldm线程。 鉴于已预先分配了所有线程的通信缓冲区，我们可以在这些线程启动时立即开始发送信号。 接收线程一旦到达其线程启动代码中的那一点就会开始处理其接收到的信号。</p>
+<p>有两个相同的启动信号，第一个启动定期发送的重复信号，以跟踪数据节点中的时间。 只有第二个开始执行各种启动阶段。</p>
+<hr>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/数据库中的undo日志、redo日志、检查点/" rel="next" title="数据库中的undo日志、redo日志、检查点">
+                <i class="fa fa-chevron-left"></i> 数据库中的undo日志、redo日志、检查点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -313,6 +471,17 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
 
         </div>
         
@@ -539,6 +708,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -585,6 +758,30 @@
 
     
 
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '490',
+            repo: 'https://github.com/490/490.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'dd4cdc4ae526b060d983e343530d30ed338af4b2',
+            
+                client_id: '2340dc349a2e19013ca4'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
     
 
 
@@ -961,26 +1158,6 @@
   
 
   
-  
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-          processEscapes: true,
-          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        }
-      });
-    </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-      });
-    </script>
-    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
