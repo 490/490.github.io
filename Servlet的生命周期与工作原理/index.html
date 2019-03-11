@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Java,网络,">
 
 
 
@@ -77,14 +77,18 @@
 
 
 
+<meta name="description" content="Servlet运行在Servlet容器中，其生命周期由容器来管理。Servlet的生命周期通过javax.servlet.Servlet接口中的init()、service()和destroy()方法来表示,Servlet的生命周期包含了下面4个阶段：  加载和实例化 初始化 请求处理 服务终止">
+<meta name="keywords" content="Java,网络">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Servlet的生命周期与工作原理">
 <meta property="og:url" content="https://490.github.io/Servlet的生命周期与工作原理/index.html">
 <meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="Servlet运行在Servlet容器中，其生命周期由容器来管理。Servlet的生命周期通过javax.servlet.Servlet接口中的init()、service()和destroy()方法来表示,Servlet的生命周期包含了下面4个阶段：  加载和实例化 初始化 请求处理 服务终止">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-10T15:16:11.237Z">
+<meta property="og:updated_time" content="2019-03-11T02:09:28.537Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Servlet的生命周期与工作原理">
+<meta name="twitter:description" content="Servlet运行在Servlet容器中，其生命周期由容器来管理。Servlet的生命周期通过javax.servlet.Servlet接口中的init()、service()和destroy()方法来表示,Servlet的生命周期包含了下面4个阶段：  加载和实例化 初始化 请求处理 服务终止">
 
 
 
@@ -346,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  196
                 </span>
               
 
@@ -383,7 +387,25 @@
       
 
       
-        
+        <p>Servlet运行在Servlet容器中，其生命周期由容器来管理。Servlet的生命周期通过javax.servlet.Servlet接口中的init()、service()和destroy()方法来表示,Servlet的生命周期包含了下面4个阶段：</p>
+<ol>
+<li>加载和实例化</li>
+<li>初始化</li>
+<li>请求处理</li>
+<li><p>服务终止</p>
+<a id="more"></a>
+</li>
+<li><p>Web Client 向Servlet容器（Tomcat）发出Http请求</p>
+</li>
+<li>Servlet容器接收Web Client的请求</li>
+<li>Servlet容器创建一个HttpRequest对象，将Web Client请求的信息封装到这个对象中。</li>
+<li>Servlet容器创建一个HttpResponse对象</li>
+<li>Servlet容器调用HttpServlet对象的service方法，把HttpRequest对象与HttpResponse对象作为参数传给HttpServlet 对象。</li>
+<li>HttpServlet调用HttpRequest对象的有关方法，获取Http请求信息。</li>
+<li>HttpServlet调用HttpResponse对象的有关方法，生成响应数据。</li>
+<li>Servlet容器把HttpServlet的响应结果传给Web Client。</li>
+</ol>
+
       
     </div>
     
@@ -397,6 +419,14 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/网络/" rel="tag"># 网络</a>
+          
+        </div>
       
 
       
@@ -574,7 +604,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">28.9k</span>
+    <span title="Site words total count">29.4k</span>
   
 </div>
 

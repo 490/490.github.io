@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Java,">
 
 
 
@@ -77,14 +77,18 @@
 
 
 
+<meta name="description" content="受检查的(checked)异常和不受检查的(unchecked)异常">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java的异常体系">
 <meta property="og:url" content="https://490.github.io/Java的异常体系/index.html">
 <meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="受检查的(checked)异常和不受检查的(unchecked)异常">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-10T15:15:53.090Z">
+<meta property="og:updated_time" content="2019-03-11T02:06:10.005Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java的异常体系">
+<meta name="twitter:description" content="受检查的(checked)异常和不受检查的(unchecked)异常">
 
 
 
@@ -346,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  304
                 </span>
               
 
@@ -383,7 +387,15 @@
       
 
       
-        
+        <p>受检查的(checked)异常和不受检查的(unchecked)异常<br><a id="more"></a><br>Throwable下面有两个子类一个是Error，一个是Exception.. 在Exception下面，又分出了两个分支，一个是RuntimeException，一个是非RuntimeException。这两个分支是什么意思呢？根据前面错误类型分析，我们其实也可以将错误分为两种，一种就是你自己犯了错，就是你的代码有问题，一种不是你犯了错。对于你自己犯的错，我们就称为RuntimeException，我们也叫做unchecked Exception。对于不是你犯的错，我们统称为非RuntimeException，也叫checked Exception。</p>
+<p>对于未检查异常也叫RuntimeException(运行时异常).</p>
+<p>对未检查的异常(unchecked exception )的几种处理方式：</p>
+<p>1、捕获<br>2、继续抛出<br>3、不处理</p>
+<p>对检查的异常(checked exception，除了RuntimeException，其他的异常都是checked exception )的几种处理方式：</p>
+<p>1、继续抛出，消极的方法，一直可以抛到java虚拟机来处理<br>2、用try…catch捕获</p>
+<p>注意，对于检查的异常必须处理，或者必须捕获或者必须抛出</p>
+<p>异常处理完成以后，Exception对象会在下一个垃圾回收过程中被回收掉。</p>
+
       
     </div>
     
@@ -397,6 +409,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
       
 
       
@@ -574,7 +592,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">28.9k</span>
+    <span title="Site words total count">29.4k</span>
   
 </div>
 
