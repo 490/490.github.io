@@ -77,13 +77,13 @@
 
 
 
-<meta name="description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。 AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。 RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、">
+<meta name="description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.N">
 <meta name="keywords" content="消息队列,系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RabbitMQ">
+<meta property="og:title" content="RabbitMQ基础知识简介">
 <meta property="og:url" content="https://490.github.io/RabbitMQ/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。 AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。 RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、">
+<meta property="og:description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.N">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190310_080814.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_080835.png">
@@ -91,10 +91,10 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_081109.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081116.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081253.png">
-<meta property="og:updated_time" content="2019-03-10T00:13:47.496Z">
+<meta property="og:updated_time" content="2019-03-11T00:31:14.789Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RabbitMQ">
-<meta name="twitter:description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。 AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。 RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、">
+<meta name="twitter:title" content="RabbitMQ基础知识简介">
+<meta name="twitter:description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.N">
 <meta name="twitter:image" content="http://490.github.io/images/20190310_080814.png">
 
 
@@ -131,7 +131,7 @@
 
 
 
-  <title>RabbitMQ | 我的笔记</title>
+  <title>RabbitMQ基础知识简介 | 我的笔记</title>
   
 
 
@@ -313,7 +313,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">RabbitMQ</h1>
+          <h1 class="post-title" itemprop="name headline">RabbitMQ基础知识简介</h1>
         
 
         <div class="post-meta">
@@ -404,9 +404,7 @@
       
 
       
-        <p>AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。</p>
-<p>AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。</p>
-<p>RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，具有很高的易用性和可用性。<br><a id="more"></a></p>
+        <p>AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。<br>AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。<br>RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，具有很高的易用性和可用性。<br><a id="more"></a></p>
 <p><strong>ConnectionFactory、Connection、Channel </strong> 都是RabbitMQ对外提供的API中最基本的对象。</p>
 <p>ConnectionFactory：ConnectionFactory为Connection的制造工厂。</p>
 <p>Connection：Connection是RabbitMQ的socket链接，它封装了socket协议相关部分逻辑。</p>
@@ -457,8 +455,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/MySQL数据库/" rel="next" title="MySQL数据库">
-                <i class="fa fa-chevron-left"></i> MySQL数据库
+              <a href="/MySQL数据库/" rel="next" title="MySQL数据库必备基础">
+                <i class="fa fa-chevron-left"></i> MySQL数据库必备基础
               </a>
             
           </div>
@@ -624,7 +622,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">27.9k</span>
+    <span title="Site words total count">28.8k</span>
   
 </div>
 
