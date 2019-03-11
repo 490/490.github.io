@@ -108,7 +108,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_104449.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104457.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104643.png">
-<meta property="og:updated_time" content="2019-03-11T14:27:19.197Z">
+<meta property="og:updated_time" content="2019-03-11T15:20:07.871Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机内存管理机制">
 <meta name="twitter:description" content="整体结构参考原文">
@@ -536,22 +536,20 @@
 <li>如果不存在泄漏，检查虚拟机堆参数（-Xmx 和 -Xms）是否可以调大，检查代码中是否有哪些对象的生命周期过长，尝试减少程序运行期的内存消耗。</li>
 </ul>
 </li>
-<li><p>虚拟机参数：</p>
-<ul>
+<li>虚拟机参数：<ul>
 <li><code>-XX:HeapDumpOnOutOfMemoryError</code>：让虚拟机在出现内存泄漏异常时 Dump 出当前的内存堆转储快照用于事后分析。</li>
-<li><h2 id="Java-虚拟机栈和本地方法栈溢出"><a href="#Java-虚拟机栈和本地方法栈溢出" class="headerlink" title="Java 虚拟机栈和本地方法栈溢出"></a>Java 虚拟机栈和本地方法栈溢出</h2></li>
 </ul>
 </li>
-<li><p>单线程下，栈帧过大、虚拟机容量过小都不会导致 OutOfMemoryError，只会导致 StackOverflowError（栈会比内存先爆掉），一般多线程才会出现 OutOfMemoryError，因为线程本身要占用内存；</p>
-</li>
-<li><p>如果是多线程导致的 OutOfMemoryError，在不能减少线程数或更换 64 位虚拟机的情况，只能通过减少最大堆和减少栈容量来换取更多的线程；</p>
-<ul>
+</ul>
+<h2 id="Java-虚拟机栈和本地方法栈溢出"><a href="#Java-虚拟机栈和本地方法栈溢出" class="headerlink" title="Java 虚拟机栈和本地方法栈溢出"></a>Java 虚拟机栈和本地方法栈溢出</h2><ul>
+<li>单线程下，栈帧过大、虚拟机容量过小都不会导致 OutOfMemoryError，只会导致 StackOverflowError（栈会比内存先爆掉），一般多线程才会出现 OutOfMemoryError，因为线程本身要占用内存；</li>
+<li>如果是多线程导致的 OutOfMemoryError，在不能减少线程数或更换 64 位虚拟机的情况，只能通过减少最大堆和减少栈容量来换取更多的线程；<ul>
 <li>这个调节思路和 Java 堆出现 OOM 正好相反，Java 堆出现 OOM 要调大堆内存的设置值，而栈出现 OOM 反而要调小。</li>
-<li><h2 id="方法区和运行时常量池溢出"><a href="#方法区和运行时常量池溢出" class="headerlink" title="方法区和运行时常量池溢出"></a>方法区和运行时常量池溢出</h2></li>
 </ul>
 </li>
-<li><p>测试思路：产生大量的类去填满方法区，直到溢出；</p>
-</li>
+</ul>
+<h2 id="方法区和运行时常量池溢出"><a href="#方法区和运行时常量池溢出" class="headerlink" title="方法区和运行时常量池溢出"></a>方法区和运行时常量池溢出</h2><ul>
+<li>测试思路：产生大量的类去填满方法区，直到溢出；</li>
 <li>在经常动态生成大量 Class 的应用中，如 Spring 框架（使用 CGLib 字节码技术），方法区溢出是一种常见的内存溢出，要特别注意类的回收状况。</li>
 </ul>
 <h2 id="直接内存溢出"><a href="#直接内存溢出" class="headerlink" title="直接内存溢出"></a>直接内存溢出</h2><ul>
@@ -574,9 +572,11 @@
 </ul>
 </li>
 <li><strong>缺点：</strong><ul>
-<li>很难解决循环引用的问题。即 <code>objA.instance = objB; objB.instance = objA;</code>，objA 和 objB 都不会再被访问后，它们仍然相互引用着对方，所以它们的引用计数器不为 0，将永远不能被判为不可用。<h4 id="可达性分析算法（主流）"><a href="#可达性分析算法（主流）" class="headerlink" title="可达性分析算法（主流）"></a>可达性分析算法（主流）</h4></li>
+<li>很难解决循环引用的问题。即 <code>objA.instance = objB; objB.instance = objA;</code>，objA 和 objB 都不会再被访问后，它们仍然相互引用着对方，所以它们的引用计数器不为 0，将永远不能被判为不可用。</li>
 </ul>
 </li>
+</ul>
+<h4 id="可达性分析算法（主流）"><a href="#可达性分析算法（主流）" class="headerlink" title="可达性分析算法（主流）"></a>可达性分析算法（主流）</h4><ul>
 <li><strong>算法描述：</strong><ul>
 <li>从 “GC Root” 对象作为起点开始向下搜索，走过的路径称为引用链（Reference Chain）；</li>
 <li>从 “GC Root” 开始，不可达的对象被判为不可用。</li>
@@ -601,7 +601,9 @@
 <li><strong>强引用：</strong> 像 <code>Object obj = new Object()</code> 这种，只要强引用还存在，垃圾收集器就永远不会回收掉被引用的对象。</li>
 <li><strong>软引用：</strong> 用来引用还存在但非必须的对象。对于软引用对象，在 OOM 前，虚拟机会把这些对象列入回收范围中进行第二次回收，如果这次回收后，内存还是不够用，就 OOM。实现类：<code>SoftReference</code>。</li>
 <li><strong>弱引用：</strong> 被弱引用引用的对象只能生存到下一次垃圾收集前，一旦发生垃圾收集，被弱引用所引用的对象就会被清掉。实现类：<code>WeakReference</code>。</li>
-<li><strong>虚引用：</strong> 幽灵引用，对对象没有半毛钱影响，甚至不能用来取得一个对象的实例。它唯一的用途就是：当被一个虚引用引用的对象被回收时，系统会收到这个对象被回收了的通知。实现类：<code>PhantomReference</code>。<h3 id="宣告对象死亡的两次标记过程"><a href="#宣告对象死亡的两次标记过程" class="headerlink" title="宣告对象死亡的两次标记过程"></a>宣告对象死亡的两次标记过程</h3></li>
+<li><strong>虚引用：</strong> 幽灵引用，对对象没有半毛钱影响，甚至不能用来取得一个对象的实例。它唯一的用途就是：当被一个虚引用引用的对象被回收时，系统会收到这个对象被回收了的通知。实现类：<code>PhantomReference</code>。</li>
+</ul>
+<h3 id="宣告对象死亡的两次标记过程"><a href="#宣告对象死亡的两次标记过程" class="headerlink" title="宣告对象死亡的两次标记过程"></a>宣告对象死亡的两次标记过程</h3><ul>
 <li>当发现对象不可达后，该对象被第一次标记，并进行是否有必要执行 <code>finalize()</code> 方法的判断；<ul>
 <li>不需要执行：对象没有覆盖 <code>finalize()</code> 方法，或者 <code>finalize()</code> 方法已被执行过（<code>finalize()</code> 只被执行一次）；</li>
 <li>需要执行：将该对象放置在一个队列中，稍后由一个虚拟机自动创建的低优先级线程执行。</li>
@@ -642,8 +644,7 @@
 </ul>
 </li>
 <li><strong>不足：</strong> 可用内存缩小为原来的一半，适合GC过后只有少量对象存活的新生代。</li>
-<li><p><strong>节省内存的方法：</strong></p>
-<ul>
+<li><strong>节省内存的方法：</strong><ul>
 <li>新生代中的对象 98% 都是朝生夕死的，所以不需要按照 1:1 的比例对内存进行划分；</li>
 <li>把内存划分为：<ul>
 <li>1 块比较大的 Eden 区；</li>
@@ -652,11 +653,12 @@
 </li>
 <li>每次使用 Eden 区和 1 块 Survivor 区；</li>
 <li>回收时，将以上 2 部分区域中的存活对象复制到另一块 Survivor 区中，然后将以上两部分区域清空；</li>
-<li>JVM 参数设置：<code>-XX:SurvivorRatio=8</code> 表示 <code>Eden 区大小 / 1 块 Survivor 区大小 = 8</code>。<br><img src="http://490.github.io/images/20190311_104340.png" alt="image"><h3 id="解决空间碎片问题：标记-整理算法"><a href="#解决空间碎片问题：标记-整理算法" class="headerlink" title="解决空间碎片问题：标记 - 整理算法"></a>解决空间碎片问题：标记 - 整理算法</h3></li>
+<li>JVM 参数设置：<code>-XX:SurvivorRatio=8</code> 表示 <code>Eden 区大小 / 1 块 Survivor 区大小 = 8</code>。<br><img src="http://490.github.io/images/20190311_104340.png" alt="image"></li>
 </ul>
 </li>
-<li><p><strong>算法描述：</strong></p>
-<ul>
+</ul>
+<h3 id="解决空间碎片问题：标记-整理算法"><a href="#解决空间碎片问题：标记-整理算法" class="headerlink" title="解决空间碎片问题：标记 - 整理算法"></a>解决空间碎片问题：标记 - 整理算法</h3><ul>
+<li><strong>算法描述：</strong><ul>
 <li>标记方法与 “标记 - 清除算法” 一样；</li>
 <li>标记完后，将所有存活对象向一端移动，然后直接清理掉边界以外的内存。</li>
 </ul>
@@ -665,9 +667,9 @@
 <h3 id="进化：分代收集算法"><a href="#进化：分代收集算法" class="headerlink" title="进化：分代收集算法"></a>进化：分代收集算法</h3></li>
 <li><p><strong>新生代：</strong> GC 过后只有少量对象存活 —— <strong>复制算法</strong></p>
 </li>
-<li><strong>老年代：</strong> GC 过后对象存活率高 —— <strong>标记 - 整理算法</strong><h2 id="HotSpot-中-GC-算法的实现"><a href="#HotSpot-中-GC-算法的实现" class="headerlink" title="HotSpot 中 GC 算法的实现"></a>HotSpot 中 GC 算法的实现</h2></li>
+<li><strong>老年代：</strong> GC 过后对象存活率高 —— <strong>标记 - 整理算法</strong></li>
 </ul>
-<p>通过前两小节对于判断对象生死和垃圾收集算法的介绍，我们已经对虚拟机是进行 GC 的流程有了一个大致的了解。但是，在 HotSpot 虚拟机中，高效的实现这些算法也是一个需要考虑的问题。所以，接下来，我们将研究一下 HotSpot 虚拟机到底是如何高效的实现这些算法的，以及在实现中有哪些需要注意的问题。</p>
+<h2 id="HotSpot-中-GC-算法的实现"><a href="#HotSpot-中-GC-算法的实现" class="headerlink" title="HotSpot 中 GC 算法的实现"></a>HotSpot 中 GC 算法的实现</h2><p>通过前两小节对于判断对象生死和垃圾收集算法的介绍，我们已经对虚拟机是进行 GC 的流程有了一个大致的了解。但是，在 HotSpot 虚拟机中，高效的实现这些算法也是一个需要考虑的问题。所以，接下来，我们将研究一下 HotSpot 虚拟机到底是如何高效的实现这些算法的，以及在实现中有哪些需要注意的问题。</p>
 <p><img src="http://490.github.io/images/20190311_104400.png" alt="image"></p>
 <p>通过之前的分析，GC 算法的实现流程简单的来说分为以下两步：</p>
 <ol>
@@ -715,9 +717,9 @@
 <p><strong>参数设置：</strong></p>
 <ul>
 <li><code>-XX:+UseCMSCompactAtFullCollection</code>：在 CMS 要进行 Full GC 时进行内存碎片整理（默认开启）</li>
-<li><code>-XX:CMSFullGCsBeforeCompaction</code>：在多少次 Full GC 后进行一次空间整理（默认是 0，即每一次 Full GC 后都进行一次空间整理）<h3 id="G1-收集器"><a href="#G1-收集器" class="headerlink" title="G1 收集器"></a>G1 收集器</h3></li>
+<li><code>-XX:CMSFullGCsBeforeCompaction</code>：在多少次 Full GC 后进行一次空间整理（默认是 0，即每一次 Full GC 后都进行一次空间整理）</li>
 </ul>
-<p><img src="http://490.github.io/images/20190311_104443.png" alt="image"></p>
+<h3 id="G1-收集器"><a href="#G1-收集器" class="headerlink" title="G1 收集器"></a>G1 收集器</h3><p><img src="http://490.github.io/images/20190311_104443.png" alt="image"></p>
 <p><img src="http://490.github.io/images/20190311_104449.png" alt="image"></p>
 <h2 id="GC-日志解读"><a href="#GC-日志解读" class="headerlink" title="GC 日志解读"></a>GC 日志解读</h2><p><img src="http://490.github.io/images/20190311_104457.png" alt="image"></p>
 <h1 id="Java-内存分配策略"><a href="#Java-内存分配策略" class="headerlink" title="Java 内存分配策略"></a>Java 内存分配策略</h1><p><img src="http://490.github.io/images/20190311_104643.png" alt="image"></p>
@@ -727,23 +729,26 @@
 <li><code>-Xmx</code>：Java 堆的最大值；</li>
 <li><code>-Xms</code>：Java 堆的最小值；</li>
 <li><code>-Xmn</code>：新生代大小；</li>
-<li><code>-XX:SurvivorRatio=8</code>：Eden 区 / Survivor 区 = 8 : 1<h2 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a>大对象直接进入老年代</h2></li>
+<li><code>-XX:SurvivorRatio=8</code>：Eden 区 / Survivor 区 = 8 : 1</li>
 </ul>
 </li>
+</ul>
+<h2 id="大对象直接进入老年代"><a href="#大对象直接进入老年代" class="headerlink" title="大对象直接进入老年代"></a>大对象直接进入老年代</h2><ul>
 <li><strong>大对象定义：</strong> 需要大量连续内存空间的 Java 对象。例如那种很长的字符串或者数组。</li>
-<li><p><strong>设置对象直接进入老年代大小限制：</strong></p>
-<ul>
+<li><strong>设置对象直接进入老年代大小限制：</strong><ul>
 <li><code>-XX:PretenureSizeThreshold</code>：单位是字节；<ul>
 <li>只对 Serial 和 ParNew 两款收集器有效。</li>
 </ul>
 </li>
-<li><strong>目的：</strong> 因为新生代采用的是复制算法收集垃圾，大对象直接进入老年代可以避免在 Eden 区和 Survivor 区发生大量的内存复制。<h2 id="长期存活的对象将进入老年代"><a href="#长期存活的对象将进入老年代" class="headerlink" title="长期存活的对象将进入老年代"></a>长期存活的对象将进入老年代</h2></li>
+<li><strong>目的：</strong> 因为新生代采用的是复制算法收集垃圾，大对象直接进入老年代可以避免在 Eden 区和 Survivor 区发生大量的内存复制。</li>
 </ul>
 </li>
-<li><p><strong>固定对象年龄判定：</strong> 虚拟机给每个对象定义一个年龄计数器，对象每在 Survivor 中熬过一次 Minor GC，年龄 +1，达到 <code>-XX:MaxTenuringThreshold</code> 设定值后，会被晋升到老年代，<code>-XX:MaxTenuringThreshold</code> 默认为 15；</p>
-</li>
-<li><strong>动态对象年龄判定：</strong> Survivor 中有相同年龄的对象的空间总和大于 Survivor 空间的一半，那么，年龄大于或等于该年龄的对象直接晋升到老年代。<h2 id="空间分配担保"><a href="#空间分配担保" class="headerlink" title="空间分配担保"></a>空间分配担保</h2>我们知道，新生代采用的是复制算法清理内存，每一次 Minor GC，虚拟机会将 Eden 区和其中一块 Survivor 区的存活对象复制到另一块 Survivor 区，但<strong>当出现大量对象在一次 Minor GC 后仍然存活的情况时，Survivor 区可能容纳不下这么多对象，此时，就需要老年代进行分配担保，即将 Survivor 无法容纳的对象直接进入老年代。</strong></li>
 </ul>
+<h2 id="长期存活的对象将进入老年代"><a href="#长期存活的对象将进入老年代" class="headerlink" title="长期存活的对象将进入老年代"></a>长期存活的对象将进入老年代</h2><ul>
+<li><strong>固定对象年龄判定：</strong> 虚拟机给每个对象定义一个年龄计数器，对象每在 Survivor 中熬过一次 Minor GC，年龄 +1，达到 <code>-XX:MaxTenuringThreshold</code> 设定值后，会被晋升到老年代，<code>-XX:MaxTenuringThreshold</code> 默认为 15；</li>
+<li><strong>动态对象年龄判定：</strong> Survivor 中有相同年龄的对象的空间总和大于 Survivor 空间的一半，那么，年龄大于或等于该年龄的对象直接<br>晋升到老年代。</li>
+</ul>
+<h2 id="空间分配担保"><a href="#空间分配担保" class="headerlink" title="空间分配担保"></a>空间分配担保</h2><p>我们知道，新生代采用的是复制算法清理内存，每一次 Minor GC，虚拟机会将 Eden 区和其中一块 Survivor 区的存活对象复制到另一块 Survivor 区，但<strong>当出现大量对象在一次 Minor GC 后仍然存活的情况时，Survivor 区可能容纳不下这么多对象，此时，就需要老年代进行分配担保，即将 Survivor 无法容纳的对象直接进入老年代。</strong></p>
 <p>这么做有一个前提，就是老年代得装得下这么多对象。可是在一次 GC 操作前，虚拟机并不知道到底会有多少对象存活，所以空间分配担保有这样一个判断流程：</p>
 <ul>
 <li>发生 Minor GC 前，虚拟机先检查老年代的最大可用连续空间是否大于新生代所有对象的总空间；<ul>
@@ -755,9 +760,9 @@
 </li>
 </ul>
 </li>
-<li>不过 JDK 6 Update 24 后，HandlePromotionFailure 参数就没有用了，规则变为只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小就会进行 Minor GC，否则将进行 Full GC。<h2 id="Metaspace-元空间与-PermGem-永久代"><a href="#Metaspace-元空间与-PermGem-永久代" class="headerlink" title="Metaspace 元空间与 PermGem 永久代"></a>Metaspace 元空间与 PermGem 永久代</h2></li>
+<li>不过 JDK 6 Update 24 后，HandlePromotionFailure 参数就没有用了，规则变为只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小就会进行 Minor GC，否则将进行 Full GC。</li>
 </ul>
-<p>Java 8 彻底将永久代 (PermGen) 移除出了 HotSpot JVM，将其原有的数据迁移至 Java Heap 或 Metaspace。</p>
+<h2 id="Metaspace-元空间与-PermGem-永久代"><a href="#Metaspace-元空间与-PermGem-永久代" class="headerlink" title="Metaspace 元空间与 PermGem 永久代"></a>Metaspace 元空间与 PermGem 永久代</h2><p>Java 8 彻底将永久代 (PermGen) 移除出了 HotSpot JVM，将其原有的数据迁移至 Java Heap 或 Metaspace。</p>
 <p><strong>移除 PermGem 的原因：</strong></p>
 <ul>
 <li>PermGen 内存经常会溢出，引发恼人的 java.lang.OutOfMemoryError: PermGen，因此 JVM 的开发者希望这一块内存可以更灵活地被管理，不要再经常出现这样的 OOM；</li>
