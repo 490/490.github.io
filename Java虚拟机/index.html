@@ -108,7 +108,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_104449.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104457.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104643.png">
-<meta property="og:updated_time" content="2019-03-11T05:56:41.739Z">
+<meta property="og:updated_time" content="2019-03-11T14:27:19.197Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机内存管理机制">
 <meta name="twitter:description" content="整体结构参考原文">
@@ -419,7 +419,9 @@
 <li>执行 native 方法时：无定义；</li>
 </ul>
 </li>
-<li>是 5 个区域中唯一不会出现 OOM 的区域。<h1 id="Java-虚拟机栈"><a href="#Java-虚拟机栈" class="headerlink" title="Java 虚拟机栈"></a>Java 虚拟机栈</h1></li>
+<li>是 5 个区域中唯一不会出现 OOM 的区域。</li>
+</ul>
+<h1 id="Java-虚拟机栈"><a href="#Java-虚拟机栈" class="headerlink" title="Java 虚拟机栈"></a>Java 虚拟机栈</h1><ul>
 <li>Java 方法执行的内存模型，每个方法执行的过程，就是它所对应的栈帧在虚拟机栈中入栈到出栈的过程；</li>
 <li>服务于 Java 方法；</li>
 <li>可能抛出的异常：<ul>
@@ -427,9 +429,13 @@
 <li>StackOverflowError（线程请求的栈深度 &gt; 虚拟机所允许的深度）；</li>
 </ul>
 </li>
-<li>虚拟机参数设置：<code>-Xss</code>.<br><img src="http://490.github.io/images/20190311_101847.png" alt="image"><h1 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h1></li>
+<li>虚拟机参数设置：<code>-Xss</code>.<br><img src="http://490.github.io/images/20190311_101847.png" alt="image"></li>
+</ul>
+<h1 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h1><ul>
 <li>服务于 native 方法；</li>
-<li>可能抛出的异常：与 Java 虚拟机栈一样。<br><img src="http://490.github.io/images/20190311_101901.png" alt="image"><h1 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h1></li>
+<li>可能抛出的异常：与 Java 虚拟机栈一样。<br><img src="http://490.github.io/images/20190311_101901.png" alt="image"></li>
+</ul>
+<h1 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h1><ul>
 <li>唯一的目的：存放对象实例；</li>
 <li>垃圾收集器管理的主要区域；</li>
 <li>可以处于物理上不连续的内存空间中；</li>
@@ -437,15 +443,15 @@
 <li>OutOfMemoryError（堆中没有内存可以分配给新创建的实例，并且堆也无法再继续扩展了）。</li>
 </ul>
 </li>
-<li><p>虚拟机参数设置：</p>
-<ul>
+<li>虚拟机参数设置：<ul>
 <li>最大值：<code>-Xmx</code></li>
 <li>最小值：<code>-Xms</code></li>
-<li>两个参数设置成相同的值可避免堆自动扩展。<h1 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h1></li>
+<li>两个参数设置成相同的值可避免堆自动扩展。</li>
 </ul>
 </li>
-<li><p>存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据；</p>
-<ul>
+</ul>
+<h1 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h1><ul>
+<li>存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据；<ul>
 <li>类信息：即 Class 类，如类名、访问修饰符、常量池、字段描述、方法描述等。</li>
 </ul>
 </li>
@@ -458,9 +464,11 @@
 </ul>
 </li>
 <li>可能抛出的异常：<ul>
-<li>OutOfMemoryError（方法区无法满足内存分配需求时）。<h1 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h1></li>
+<li>OutOfMemoryError（方法区无法满足内存分配需求时）。</li>
 </ul>
 </li>
+</ul>
+<h1 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h1><ul>
 <li>JDK 1.4 的 NIO 类可以使用 native 函数库直接分配堆外内存，这是一种基于通道与缓冲区的 I/O 方式，它在 Java 堆中存储一个 DirectByteBuffer 对象作为堆外内存的引用，这样就可以对堆外内存进行操作了。因为可以避免 Java 堆和 Native 堆之间来回复制数据，在一些场景可以带来显著的性能提高。</li>
 <li>虚拟机参数设置：<code>-XX:MaxDirectMemorySize</code><ul>
 <li>默认等于 Java 堆最大值，即 <code>-Xmx</code> 指定的值。</li>
@@ -513,9 +521,14 @@
 </li>
 <li>实例数据：<ul>
 <li>默认分配顺序：longs/doubles、ints、shorts/chars、bytes/booleans、oops (Ordinary Object Pointers)，相同宽度的字段会被分配在一起，除了 oops，其他的长度由长到短；</li>
-<li>默认分配顺序下，父类字段会被分配在子类字段前面。<br><em>注：HotSpot VM要求对象的起始地址必须是8字节的整数倍，所以不够要补齐。</em><h2 id="对象的访问"><a href="#对象的访问" class="headerlink" title="对象的访问"></a>对象的访问</h2>Java 程序需要通过虚拟机栈上的 reference 数据来操作堆上的具体对象，reference 数据是一个指向对象的引用，不过如何通过这个引用定位到具体的对象，目前主要有以下两种访问方式：句柄访问和直接指针访问。<h3 id="句柄访问"><a href="#句柄访问" class="headerlink" title="句柄访问"></a>句柄访问</h3>句柄访问会在 Java 堆中划分一块内存作为句柄池，每一个句柄存放着到对象实例数据和对象类型数据的指针。<br>优势：对象移动的时候（这在垃圾回收时十分常见）只需改变句柄池中对象实例数据的指针，不需要修改reference本身。<br><img src="http://490.github.io/images/20190311_103620.png" alt="image"><h3 id="直接指针访问"><a href="#直接指针访问" class="headerlink" title="直接指针访问"></a>直接指针访问</h3>直接指针访问方式在 Java 堆对象的实例数据中存放了一个指向对象类型数据的指针，在 HotSpot 中，这个指针会被存放在对象头中。<br>优势：减少了一次指针定位对象实例数据的开销，速度更快。<br><img src="http://490.github.io/images/20190311_103639.png" alt="image"><h1 id="OOM-异常-OutOfMemoryError"><a href="#OOM-异常-OutOfMemoryError" class="headerlink" title="OOM 异常 (OutOfMemoryError)"></a>OOM 异常 (OutOfMemoryError)</h1><h2 id="Java-堆溢出"><a href="#Java-堆溢出" class="headerlink" title="Java 堆溢出"></a>Java 堆溢出</h2></li>
+<li>默认分配顺序下，父类字段会被分配在子类字段前面。<br><em>注：HotSpot VM要求对象的起始地址必须是8字节的整数倍，所以不够要补齐。</em></li>
 </ul>
 </li>
+</ul>
+<h2 id="对象的访问"><a href="#对象的访问" class="headerlink" title="对象的访问"></a>对象的访问</h2><p>Java 程序需要通过虚拟机栈上的 reference 数据来操作堆上的具体对象，reference 数据是一个指向对象的引用，不过如何通过这个引用定位到具体的对象，目前主要有以下两种访问方式：句柄访问和直接指针访问。</p>
+<h3 id="句柄访问"><a href="#句柄访问" class="headerlink" title="句柄访问"></a>句柄访问</h3><p>句柄访问会在 Java 堆中划分一块内存作为句柄池，每一个句柄存放着到对象实例数据和对象类型数据的指针。<br>优势：对象移动的时候（这在垃圾回收时十分常见）只需改变句柄池中对象实例数据的指针，不需要修改reference本身。<br><img src="http://490.github.io/images/20190311_103620.png" alt="image"></p>
+<h3 id="直接指针访问"><a href="#直接指针访问" class="headerlink" title="直接指针访问"></a>直接指针访问</h3><p>直接指针访问方式在 Java 堆对象的实例数据中存放了一个指向对象类型数据的指针，在 HotSpot 中，这个指针会被存放在对象头中。<br>优势：减少了一次指针定位对象实例数据的开销，速度更快。<br><img src="http://490.github.io/images/20190311_103639.png" alt="image"></p>
+<h1 id="OOM-异常-OutOfMemoryError"><a href="#OOM-异常-OutOfMemoryError" class="headerlink" title="OOM 异常 (OutOfMemoryError)"></a>OOM 异常 (OutOfMemoryError)</h1><h2 id="Java-堆溢出"><a href="#Java-堆溢出" class="headerlink" title="Java 堆溢出"></a>Java 堆溢出</h2><ul>
 <li>出现标志：<code>java.lang.OutOfMemoryError: Java heap space</code></li>
 <li>解决方法：<ul>
 <li>先通过内存映像分析工具分析 Dump 出来的堆转储快照，确认内存中的对象是否是必要的，即分清楚是出现了内存泄漏还是内存溢出；</li>
@@ -523,24 +536,35 @@
 <li>如果不存在泄漏，检查虚拟机堆参数（-Xmx 和 -Xms）是否可以调大，检查代码中是否有哪些对象的生命周期过长，尝试减少程序运行期的内存消耗。</li>
 </ul>
 </li>
-<li>虚拟机参数：<ul>
-<li><code>-XX:HeapDumpOnOutOfMemoryError</code>：让虚拟机在出现内存泄漏异常时 Dump 出当前的内存堆转储快照用于事后分析。<h2 id="Java-虚拟机栈和本地方法栈溢出"><a href="#Java-虚拟机栈和本地方法栈溢出" class="headerlink" title="Java 虚拟机栈和本地方法栈溢出"></a>Java 虚拟机栈和本地方法栈溢出</h2></li>
+<li><p>虚拟机参数：</p>
+<ul>
+<li><code>-XX:HeapDumpOnOutOfMemoryError</code>：让虚拟机在出现内存泄漏异常时 Dump 出当前的内存堆转储快照用于事后分析。</li>
+<li><h2 id="Java-虚拟机栈和本地方法栈溢出"><a href="#Java-虚拟机栈和本地方法栈溢出" class="headerlink" title="Java 虚拟机栈和本地方法栈溢出"></a>Java 虚拟机栈和本地方法栈溢出</h2></li>
 </ul>
 </li>
-<li>单线程下，栈帧过大、虚拟机容量过小都不会导致 OutOfMemoryError，只会导致 StackOverflowError（栈会比内存先爆掉），一般多线程才会出现 OutOfMemoryError，因为线程本身要占用内存；</li>
-<li>如果是多线程导致的 OutOfMemoryError，在不能减少线程数或更换 64 位虚拟机的情况，只能通过减少最大堆和减少栈容量来换取更多的线程；<ul>
-<li>这个调节思路和 Java 堆出现 OOM 正好相反，Java 堆出现 OOM 要调大堆内存的设置值，而栈出现 OOM 反而要调小。<h2 id="方法区和运行时常量池溢出"><a href="#方法区和运行时常量池溢出" class="headerlink" title="方法区和运行时常量池溢出"></a>方法区和运行时常量池溢出</h2></li>
+<li><p>单线程下，栈帧过大、虚拟机容量过小都不会导致 OutOfMemoryError，只会导致 StackOverflowError（栈会比内存先爆掉），一般多线程才会出现 OutOfMemoryError，因为线程本身要占用内存；</p>
+</li>
+<li><p>如果是多线程导致的 OutOfMemoryError，在不能减少线程数或更换 64 位虚拟机的情况，只能通过减少最大堆和减少栈容量来换取更多的线程；</p>
+<ul>
+<li>这个调节思路和 Java 堆出现 OOM 正好相反，Java 堆出现 OOM 要调大堆内存的设置值，而栈出现 OOM 反而要调小。</li>
+<li><h2 id="方法区和运行时常量池溢出"><a href="#方法区和运行时常量池溢出" class="headerlink" title="方法区和运行时常量池溢出"></a>方法区和运行时常量池溢出</h2></li>
 </ul>
 </li>
-<li>测试思路：产生大量的类去填满方法区，直到溢出；</li>
-<li>在经常动态生成大量 Class 的应用中，如 Spring 框架（使用 CGLib 字节码技术），方法区溢出是一种常见的内存溢出，要特别注意类的回收状况。<h2 id="直接内存溢出"><a href="#直接内存溢出" class="headerlink" title="直接内存溢出"></a>直接内存溢出</h2></li>
+<li><p>测试思路：产生大量的类去填满方法区，直到溢出；</p>
+</li>
+<li>在经常动态生成大量 Class 的应用中，如 Spring 框架（使用 CGLib 字节码技术），方法区溢出是一种常见的内存溢出，要特别注意类的回收状况。</li>
+</ul>
+<h2 id="直接内存溢出"><a href="#直接内存溢出" class="headerlink" title="直接内存溢出"></a>直接内存溢出</h2><ul>
 <li>出现特征：Heap Dump 文件中看不见明显异常，程序中直接或间接用了 NIO；</li>
 <li>虚拟机参数：<code>-XX:MaxDirectMemorySize</code>，如果不指定，则和 <code>-Xmx</code> 一样。</li>
-<li><h1 id="垃圾收集-GC"><a href="#垃圾收集-GC" class="headerlink" title="垃圾收集 (GC)"></a>垃圾收集 (GC)</h1>垃圾收集（Garbage Collection，GC），它的任务是解决以下 3 件问题：</li>
+</ul>
+<h1 id="垃圾收集-GC"><a href="#垃圾收集-GC" class="headerlink" title="垃圾收集 (GC)"></a>垃圾收集 (GC)</h1><p>垃圾收集（Garbage Collection，GC），它的任务是解决以下 3 件问题：</p>
+<ul>
 <li>哪些内存需要回收？</li>
 <li>什么时候回收？</li>
-<li>如何回收？<br>其中第一个问题很好回答，在 Java 中，GC 主要发生在 Java 堆和方法区中，对于后两个问题，我们将在之后的内容中进行讨论，并介绍 HotSpot 的 7 个垃圾收集器。<h2 id="判断对象的生死"><a href="#判断对象的生死" class="headerlink" title="判断对象的生死"></a>判断对象的生死</h2><img src="http://490.github.io/images/20190311_104137.png" alt="image"></li>
+<li>如何回收？<br>其中第一个问题很好回答，在 Java 中，GC 主要发生在 Java 堆和方法区中，对于后两个问题，我们将在之后的内容中进行讨论，并介绍 HotSpot 的 7 个垃圾收集器。</li>
 </ul>
+<h2 id="判断对象的生死"><a href="#判断对象的生死" class="headerlink" title="判断对象的生死"></a>判断对象的生死</h2><p><img src="http://490.github.io/images/20190311_104137.png" alt="image"></p>
 <h3 id="判断对象是否可用的算法"><a href="#判断对象是否可用的算法" class="headerlink" title="判断对象是否可用的算法"></a>判断对象是否可用的算法</h3><h4 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h4><ul>
 <li><strong>算法描述：</strong><ul>
 <li>给对象添加一个引用计数器；</li>
