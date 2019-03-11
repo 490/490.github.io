@@ -80,14 +80,14 @@
 <meta name="description" content="LCP：本地检查点，在NDB中，这意味着主内存中的所有数据都写入磁盘，我们还将更改的磁盘页写入磁盘，以确保磁盘上某个点之前的所有更改都可用。 执行REDO日志：这意味着我们一次读取REDO日志一条REDO日志记录，并在需要时执行REDO日志记录中的操作。">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cluster重启过程(3) START OF DATABASE RECOVERY">
+<meta property="og:title" content="MySQL Cluster重启过程(3) START OF DATABASE RECOVERY">
 <meta property="og:url" content="https://490.github.io/Cluster重启过程23/index.html">
 <meta property="og:site_name" content="我的笔记">
 <meta property="og:description" content="LCP：本地检查点，在NDB中，这意味着主内存中的所有数据都写入磁盘，我们还将更改的磁盘页写入磁盘，以确保磁盘上某个点之前的所有更改都可用。 执行REDO日志：这意味着我们一次读取REDO日志一条REDO日志记录，并在需要时执行REDO日志记录中的操作。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-11T13:58:44.949Z">
+<meta property="og:updated_time" content="2019-03-11T14:05:36.462Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cluster重启过程(3) START OF DATABASE RECOVERY">
+<meta name="twitter:title" content="MySQL Cluster重启过程(3) START OF DATABASE RECOVERY">
 <meta name="twitter:description" content="LCP：本地检查点，在NDB中，这意味着主内存中的所有数据都写入磁盘，我们还将更改的磁盘页写入磁盘，以确保磁盘上某个点之前的所有更改都可用。 执行REDO日志：这意味着我们一次读取REDO日志一条REDO日志记录，并在需要时执行REDO日志记录中的操作。">
 
 
@@ -124,7 +124,7 @@
 
 
 
-  <title>Cluster重启过程(3) START OF DATABASE RECOVERY | 我的笔记</title>
+  <title>MySQL Cluster重启过程(3) START OF DATABASE RECOVERY | 我的笔记</title>
   
 
 
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Cluster重启过程(3) START OF DATABASE RECOVERY</h1>
+          <h1 class="post-title" itemprop="name headline">MySQL Cluster重启过程(3) START OF DATABASE RECOVERY</h1>
         
 
         <div class="post-meta">
@@ -350,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.7k
+                  2.5k
                 </span>
               
 
@@ -366,7 +366,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  5
+                  8
                 </span>
               
             </div>
@@ -425,6 +425,17 @@
 <p>完成此操作后，DBDIH报告已通过将START_RECREQ发送到DBLQH发送了所有要启动的片段副本，我们将向TSMAN发送START_RECREQ，之后我们将完成数据的恢复。</p>
 <p>我们将指定要作为REDO日志执行的一部分进行恢复的所有片段副本。 这是通过信号EXEC_FRAGREQ完成的。 当所有这些信号都被发送后，我们发送EXEC_SRREQ表示我们已经准备好在DBLQH中执行下一个REDO日志执行阶段。</p>
 <p>当发送所有这些信号时，我们已经完成了所谓的DBLQH的第2阶段，DBLQH中的阶段1是在NDB_STTOR阶段3中开始准备REDO日志以进行读取。 因此，当这两个阶段都完成时，我们就可以开始在DBLQH中开始所谓的阶段3。</p>
+<p>这些DBLQH阶段与启动阶段无关，这些阶段是DBLQH模块中启动的内部阶段。</p>
+<p>DBLQH中的第3阶段是读取REDO日志并将其应用于从本地检查点恢复的片段副本。 这是创建在特定全局检查点上同步的数据库状态所必需的。 因此，我们首先为所有片段安装本地检查点，接下来我们应用REDO日志将片段副本与某个全局检查点同步。</p>
+<p>在执行REDO日志之前，我们需要通过检查我们将恢复到所需全局检查点的所有片段副本的限制来计算要在REDO日志中应用的起始GCI和最后一个GCI。</p>
+<p>DBDIH已存储有关片段副本的每个本地检查点的信息，这些信息是从REDO日志运行所需的全局检查点范围，以使其进入某个全局检查点的状态。 此信息已在START_FRAGREQ信号中发送。 DBLQH会将每个片段副本的所有这些限制合并到全局范围的全局检查点，以便为此LDM实例运行。 因此每个片段副本都有自己的GCP id范围来执行，这意味着所有这些起始范围的最小值和所有结束范围的最大值是我们需要在REDO日志中执行以引入集群的全局GCP ID范围 再次在线。</p>
+<p>下一步是使用start和stop全局检查点id计算每个日志部分的REDO日志中的开始和停止兆字节。 计算这个所需的所有信息已经在内存中，所以这是一个纯粹的计算。</p>
+<p>当我们执行REDO日志时，实际上我们只在正确的全局检查点范围内应用COMMIT记录。 COMMIT记录和实际更改记录位于REDO日志中的不同位置，因此对于每兆字节的REDO日志，我们记录REDO日志中我们必须返回多长时间才能找到更改记录。</p>
+<p>在运行REDO日志时，我们维护一个相当大的REDO日志缓存，以避免在事务运行很长时间的情况下我们必须执行磁盘读取。</p>
+<p>这意味着长时间运行和大型事务可能会对重新启动时间产生负面影响。</p>
+<p>在所有日志部分完成此计算后，我们现在准备开始执行REDO日志。 在执行REDO日志完成后，我们还会在REDO日志中写入一些内容，以表明我们之前使用的任何信息都不会在以后使用。</p>
+<p>我们现在需要等待所有其他日志部分也完成其REDO日志部分的执行。 REDO日志执行的设计使我们可以在多个阶段执行REDO日志，这适用于我们可以从多个活动节点重建节点的情况。 目前绝不应使用此代码。</p>
+<p>因此，下一步是检查REDO日志部件的新头部和尾部。 这是通过使用启动和停止全局检查点来计算此数字的相同代码完成的。 代码的这一阶段还通过确保正确的REDO日志文件打开来准备REDO日志部分以编写新的REDO日志记录。 它还涉及一些相当棘手的代码，以确保正确处理已脏的页面。</p>
 
       
     </div>
@@ -614,7 +625,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">63.3k</span>
+    <span title="Site words total count">64.2k</span>
   
 </div>
 
