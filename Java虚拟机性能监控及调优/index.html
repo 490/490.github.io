@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Java,JVM,">
 
 
 
@@ -77,14 +77,21 @@
 
 
 
+<meta name="description" content="常用虚拟机性能监控工具JDK 命令行工具其中的重中之重是 jstat 命令！而它最常用的参数就是 -gcutil，使用格式如下： 1jstat -gcutil [pid] [intervel] [count] 输出如下：  S0：堆上 Survivor space 0 区已使用空间的百分比 S1：堆上 Survivor space 1 区已使用空间的百分比 E：堆上 Eden 区已使用空间的百分比">
+<meta name="keywords" content="Java,JVM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring">
-<meta property="og:url" content="https://490.github.io/Spring/index.html">
+<meta property="og:title" content="Java虚拟机性能监控及调优">
+<meta property="og:url" content="https://490.github.io/Java虚拟机性能监控及调优/index.html">
 <meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="常用虚拟机性能监控工具JDK 命令行工具其中的重中之重是 jstat 命令！而它最常用的参数就是 -gcutil，使用格式如下： 1jstat -gcutil [pid] [intervel] [count] 输出如下：  S0：堆上 Survivor space 0 区已使用空间的百分比 S1：堆上 Survivor space 1 区已使用空间的百分比 E：堆上 Eden 区已使用空间的百分比">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-09T13:39:31.032Z">
+<meta property="og:image" content="http://490.github.io/images/20190311_105149.png">
+<meta property="og:image" content="http://490.github.io/images/20190311_105436.png">
+<meta property="og:updated_time" content="2019-03-11T02:55:22.984Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring">
+<meta name="twitter:title" content="Java虚拟机性能监控及调优">
+<meta name="twitter:description" content="常用虚拟机性能监控工具JDK 命令行工具其中的重中之重是 jstat 命令！而它最常用的参数就是 -gcutil，使用格式如下： 1jstat -gcutil [pid] [intervel] [count] 输出如下：  S0：堆上 Survivor space 0 区已使用空间的百分比 S1：堆上 Survivor space 1 区已使用空间的百分比 E：堆上 Eden 区已使用空间的百分比">
+<meta name="twitter:image" content="http://490.github.io/images/20190311_105149.png">
 
 
 
@@ -114,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="https://490.github.io/Spring/">
+  <link rel="canonical" href="https://490.github.io/Java虚拟机性能监控及调优/">
 
 
 
 
 
-  <title>Spring | 我的笔记</title>
+  <title>Java虚拟机性能监控及调优 | 我的笔记</title>
   
 
 
@@ -275,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/Spring/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Java虚拟机性能监控及调优/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
@@ -292,7 +299,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring</h1>
+          <h1 class="post-title" itemprop="name headline">Java虚拟机性能监控及调优</h1>
         
 
         <div class="post-meta">
@@ -304,8 +311,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-09T21:39:31+08:00">
-                2019-03-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-11T10:51:16+08:00">
+                2019-03-11
               </time>
             
 
@@ -323,8 +330,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/Spring/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/Spring/" itemprop="commentsCount"></span>
+                <a href="/Java虚拟机性能监控及调优/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/Java虚拟机性能监控及调优/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -346,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  2k
                 </span>
               
 
@@ -362,7 +369,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  7
                 </span>
               
             </div>
@@ -383,7 +390,125 @@
       
 
       
-        
+        <h1 id="常用虚拟机性能监控工具"><a href="#常用虚拟机性能监控工具" class="headerlink" title="常用虚拟机性能监控工具"></a>常用虚拟机性能监控工具</h1><h2 id="JDK-命令行工具"><a href="#JDK-命令行工具" class="headerlink" title="JDK 命令行工具"></a>JDK 命令行工具</h2><p><img src="http://490.github.io/images/20190311_105149.png" alt="image"><br>其中的重中之重是 jstat 命令！而它最常用的参数就是 -gcutil，使用格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstat -gcutil [pid] [intervel] [count]</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<ul>
+<li><code>S0</code>：堆上 Survivor space 0 区已使用空间的百分比</li>
+<li><code>S1</code>：堆上 Survivor space 1 区已使用空间的百分比</li>
+<li><code>E</code>：堆上 Eden 区已使用空间的百分比</li>
+<li><code>O</code>：堆上 Old space 区已使用空间的百分比</li>
+<li><code>P</code>：堆上 Perm space 区已使用空间的百分比</li>
+<li><code>YGC</code>：从程序启动到采样时发生的 Minor GC 次数</li>
+<li><code>YGCT</code>：从程序启动到采样时 Minor GC 所用的时间</li>
+<li><code>FGC</code>：从程序启动到采样时发生的 Full GC 次数</li>
+<li><code>FGCT</code>：从程序启动到采样时 Full GC 所用的时间</li>
+<li><code>GCT</code>：从程序启动到采样时 GC 的总时间<h2 id="ps-命令-Linux"><a href="#ps-命令-Linux" class="headerlink" title="ps 命令 (Linux)"></a>ps 命令 (Linux)</h2>对于 <code>jps</code> 命令，其实没必要使用，一般使用 Linux 里的 <code>ps</code> 就够了，<code>ps</code> 为我们提供了当前进程状态的一次性的查看，它所提供的查看结果并不动态连续的，如果想对进程时间监控，应该用 <code>top</code> 工具。</li>
+</ul>
+<p><strong>Linux 上进程的 5 种状态</strong></p>
+<ul>
+<li>运行 [R, Runnable]：正在运行或者在运行队列中等待；</li>
+<li>中断 [S, Sleep]：休眠中, 受阻, 在等待某个条件的形成或接受到信号；</li>
+<li>不可中断 [D]：收到信号不唤醒和不可运行, 进程必须等待直到有中断发生；</li>
+<li>僵死 [Z, zombie]：进程已终止, 但进程描述符存在, 直到父进程调用 wait4() 系统调用后释放；</li>
+<li>停止 [T, Traced or stop]：进程收到 SIGSTOP, SIGSTP, SIGTIN, SIGTOU 信号后停止运行运行。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ps -A # 列出所有进程信息（非详细信息）</span><br><span class="line">ps aux  # 列出所有进程的信息</span><br><span class="line">ps aux | grep zsh</span><br><span class="line"></span><br><span class="line">ps -ef # 显示所有进程信息，连同命令行</span><br><span class="line">ps -ef | grep zsh </span><br><span class="line"></span><br><span class="line">ps -u root # 显示指定用户信息</span><br><span class="line">ps -l  # 列出这次登录bash相关信息</span><br><span class="line"></span><br><span class="line">ps axjf  # 同时列出进程树状信息</span><br></pre></td></tr></table></figure>
+<h1 id="JVM-常见参数设置"><a href="#JVM-常见参数设置" class="headerlink" title="JVM 常见参数设置"></a>JVM 常见参数设置</h1><h2 id="内存设置"><a href="#内存设置" class="headerlink" title="内存设置"></a>内存设置</h2><h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
+<li><code>-Xms</code>：初始堆大小，JVM 启动的时候，给定堆空间大小。</li>
+<li><code>-Xmx</code>：最大堆大小，如果初始堆空间不足的时候，最大可以扩展到多少。</li>
+<li><code>-Xmn</code>：设置年轻代大小。<code>整个堆大小 = 年轻代大小 + 年老代大小 + 持久代大小</code>。持久代一般固定大小为 64M，所以增大年轻代后，将会减小年老代大小。此值对系统性能影响较大，Sun 官方推荐配置为整个堆的 3/8。</li>
+<li><code>-Xss</code>： 设置每个线程的 Java 栈大小。JDK 5 后每个线程 Java 栈大小为 1M。在相同物理内存下，减小这个值能生成更多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在 3000~5000 左右。</li>
+<li><code>-XX:NewRatio=n</code>：设置年轻代和年老代的比值。如为 3，表示年轻代与年老代比值为 1:3。</li>
+<li><code>-XX:MaxTenuringThreshold</code>：设置垃圾最大年龄。如果设置为 0 的话，则年轻代对象不经过 Survivor 区，直接进入年老代。对于年老代比较多的应用（即 Minor GC 过后有大量对象存活的应用），可以提高效率。如果将此值设置为一个较大值，则年轻代对象会在 Survivor 区进行多次复制，这样可以增加对象再年轻代的存活时间，增加在年轻代即被回收的概率。</li>
+</ul>
+<h3 id="设置经验"><a href="#设置经验" class="headerlink" title="设置经验"></a>设置经验</h3><ul>
+<li>开发过程的测试应用，要求物理内存大于 4G</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-Xmx3550m</span><br><span class="line">-Xms3550m </span><br><span class="line">-Xmn2g</span><br><span class="line">-Xss128k</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>高并发本地测试使用，大对象相对较多（如 IO 流）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-Xmx3550m</span><br><span class="line">-Xms3550m</span><br><span class="line">-Xss128k</span><br><span class="line">-XX:NewRatio=4</span><br><span class="line">-XX:SurvivorRatio=4</span><br><span class="line">-XX:MaxPermSize=160m</span><br><span class="line">-XX:MaxTenuringThreshold=0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>环境： 16G 物理内存，高并发服务，重量级对象中等（线程池，连接池等），常用对象比例为 40%（即运行过程中产生的对象 40% 是生命周期较长的）</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-Xmx10G</span><br><span class="line">-Xms10G</span><br><span class="line">-Xss1M</span><br><span class="line">-XX:NewRatio=3</span><br><span class="line">-XX:SurvivorRatio=4 </span><br><span class="line">-XX:MaxPermSize=2048m</span><br><span class="line">-XX:MaxTenuringThreshold=5</span><br></pre></td></tr></table></figure>
+<h2 id="收集器设置"><a href="#收集器设置" class="headerlink" title="收集器设置"></a>收集器设置</h2><h3 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h3><ul>
+<li>收集器设置<ul>
+<li><code>-XX:+UseSerialGC</code>：设置串行收集器，年轻带收集器。</li>
+<li><code>-XX:+UseParallelGC</code>：设置并行收集器。</li>
+<li><code>-XX:+UseParNewGC</code>：设置年轻代为并行收集。可与 CMS 收集同时使用。JDK 5.0 以上，JVM 会根据系统配置自行设置，所以无需再设置此值。</li>
+<li><code>-XX:+UseParallelOldGC</code>：设置并行年老代收集器，JDK6.0 支持对年老代并行收集。</li>
+<li><code>-XX:+UseConcMarkSweepGC</code>：设置年老代并发收集器，测试中配置这个以后，<code>-XX:NewRatio</code> 的配置失效，原因不明。所以，此时年轻代大小最好用 <code>-Xmn</code> 设置。</li>
+<li><code>-XX:+UseG1GC</code>：设置 G1 收集器。</li>
+</ul>
+</li>
+<li>并行收集器参数设置<ul>
+<li><code>-XX:ParallelGCThreads=n</code>：设置并行收集器收集时最大线程数使用的 CPU 数。并行收集线程数。</li>
+<li><code>-XX:MaxGCPauseMillis=n</code>：设置并行收集最大暂停时间，单位毫秒。</li>
+<li><code>-XX:GCTimeRatio=n</code>：设置垃圾回收时间占程序运行时间的百分比。</li>
+<li><code>-XX:+UseAdaptiveSizePolicy</code>：设置此选项后，并行收集器会自动选择年轻代区大小和相应的 Survivor 区比例，以达到目标系统规定的最低相应时间或者收集频率等，此值建议使用并行收集器时，一直打开。</li>
+<li><code>-XX:CMSFullGCsBeforeCompaction=n</code>：由于 CMS 不对内存空间进行压缩、整理，所以运行一段时间以后会产生”碎片”，使得运行效率降低。此值设置运行多少次 GC 以后对内存空间进行压缩、整理。</li>
+<li><code>-XX:+UseCMSCompactAtFullCollection</code>：打开对年老代的压缩。可能会影响性能，但是可以消除碎片。<h1 id="虚拟机调优案例分析"><a href="#虚拟机调优案例分析" class="headerlink" title="虚拟机调优案例分析"></a>虚拟机调优案例分析</h1><h2 id="高性能硬件上的程序部署策略"><a href="#高性能硬件上的程序部署策略" class="headerlink" title="高性能硬件上的程序部署策略"></a>高性能硬件上的程序部署策略</h2><img src="http://490.github.io/images/20190311_105436.png" alt="image"><br><strong>补充：64 位虚拟机</strong><br>在 Java EE 方面，企业级应用经常需要使用超过 4GB 的内存，此时，32 位虚拟机将无法满足需求，可是 64 位虚拟机虽然可以设置更大的内存，却存在以下缺点：</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>内存问题：</strong> 由于指针膨胀和各种数据类型对齐补白的原因，运行于 64 位系统上的 Java 应用程序需要消耗更多的内存，通常要比 32 位系统额外增加 10% ~ 30% 的内存消耗。</li>
+<li><strong>性能问题：</strong> 64 位虚拟机的运行速度在各个测试项中几乎全面落后于 32 位虚拟机，两者大概有 15% 左右的性能差距。</li>
+</ul>
+<h2 id="服务系统经常出现卡顿（Full-GC-时间太长）"><a href="#服务系统经常出现卡顿（Full-GC-时间太长）" class="headerlink" title="服务系统经常出现卡顿（Full GC 时间太长）"></a>服务系统经常出现卡顿（Full GC 时间太长）</h2><p>首先 <code>jstat -gcutil</code> 观察 GC 的耗时，<code>jstat -gccapacity</code> 检查内存用量（也可以加上 <code>-verbose:gc</code> 参数获取 GC 的详细日志），发现卡顿是由于 Full GC 时间太长导致的，然后 <code>jinfo -v pid</code>，查看虚拟机参数设置，发现 <code>-XX:NewRatio=9</code>，这就是原因：</p>
+<ul>
+<li>新生代太小，对象提前进入老年代，触发 Full GC</li>
+<li>老年代较大，一次 Full GC 时间较长</li>
+</ul>
+<p>可以调小 NewRatio 的值，尽肯能让比较少的对象进入老年代。</p>
+<h2 id="除了-Java-堆和永久代之外，会占用较多内存的区域"><a href="#除了-Java-堆和永久代之外，会占用较多内存的区域" class="headerlink" title="除了 Java 堆和永久代之外，会占用较多内存的区域"></a>除了 Java 堆和永久代之外，会占用较多内存的区域</h2><table>
+<thead>
+<tr>
+<th>区域</th>
+<th>大小调整 / 说明</th>
+<th>内存不足时抛出的异常</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接内存</td>
+<td><code>-XX:MaxDirectMemorySize</code></td>
+<td>OutOfMemoryError: Direct buffer memory</td>
+</tr>
+<tr>
+<td>线程堆栈</td>
+<td><code>-Xss</code></td>
+<td>StackOverflowError 或 OutOfMemoryError: unable to create new native thread</td>
+</tr>
+<tr>
+<td>Socket 缓存区</td>
+<td>每个 Socket 连接都有 Receive(37KB) 和 Send(25KB) 两个缓存区</td>
+<td>IOException: Too many open files</td>
+</tr>
+<tr>
+<td>JNI 代码</td>
+<td>如果代码中使用 JNI 调用本地库，那本地库使用的内存也不在堆中</td>
+<td></td>
+</tr>
+<tr>
+<td>虚拟机和 GC</td>
+<td>虚拟机、GC 代码执行要消耗一定内存</td>
+</tr>
+</tbody>
+</table>
+<h2 id="从-GC-调优角度解决新生代存活大量对象问题（Minor-GC-时间太长）"><a href="#从-GC-调优角度解决新生代存活大量对象问题（Minor-GC-时间太长）" class="headerlink" title="从 GC 调优角度解决新生代存活大量对象问题（Minor GC 时间太长）"></a>从 GC 调优角度解决新生代存活大量对象问题（Minor GC 时间太长）</h2><ul>
+<li>将 Survivor 空间去除，让新生代中存活的对象在第一次 Minor GC 后立刻进入老年代，等到 Full GC 时再清理。</li>
+<li>参数调整方法：<ul>
+<li><code>-XX:SurvivorRatio=65536</code></li>
+<li><code>-XX:MaxTenuringThreshold=0</code></li>
+<li><code>-XX:AlwaysTenure</code></li>
+</ul>
+</li>
+</ul>
+
       
     </div>
     
@@ -398,6 +523,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+        </div>
+      
 
       
       
@@ -407,8 +540,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Redis/" rel="next" title="Redis">
-                <i class="fa fa-chevron-left"></i> Redis
+              <a href="/Java的类加载器/" rel="next" title="Java的类加载器">
+                <i class="fa fa-chevron-left"></i> Java的类加载器
               </a>
             
           </div>
@@ -416,10 +549,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/基于前缀树图文详解敏感词过滤/" rel="prev" title="基于前缀树图文详解敏感词过滤">
-                基于前缀树图文详解敏感词过滤 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -478,8 +607,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -546,6 +684,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#常用虚拟机性能监控工具"><span class="nav-number">1.</span> <span class="nav-text">常用虚拟机性能监控工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK-命令行工具"><span class="nav-number">1.1.</span> <span class="nav-text">JDK 命令行工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ps-命令-Linux"><span class="nav-number">1.2.</span> <span class="nav-text">ps 命令 (Linux)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM-常见参数设置"><span class="nav-number">2.</span> <span class="nav-text">JVM 常见参数设置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存设置"><span class="nav-number">2.1.</span> <span class="nav-text">内存设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数"><span class="nav-number">2.1.1.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置经验"><span class="nav-number">2.1.2.</span> <span class="nav-text">设置经验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#收集器设置"><span class="nav-number">2.2.</span> <span class="nav-text">收集器设置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">参数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟机调优案例分析"><span class="nav-number">3.</span> <span class="nav-text">虚拟机调优案例分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#高性能硬件上的程序部署策略"><span class="nav-number">3.1.</span> <span class="nav-text">高性能硬件上的程序部署策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务系统经常出现卡顿（Full-GC-时间太长）"><span class="nav-number">3.2.</span> <span class="nav-text">服务系统经常出现卡顿（Full GC 时间太长）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#除了-Java-堆和永久代之外，会占用较多内存的区域"><span class="nav-number">3.3.</span> <span class="nav-text">除了 Java 堆和永久代之外，会占用较多内存的区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从-GC-调优角度解决新生代存活大量对象问题（Minor-GC-时间太长）"><span class="nav-number">3.4.</span> <span class="nav-text">从 GC 调优角度解决新生代存活大量对象问题（Minor GC 时间太长）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
