@@ -80,14 +80,14 @@
 <meta name="description" content="在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL Cluster重启过程--Restart Phases in MySQL Cluster">
+<meta property="og:title" content="MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster">
 <meta property="og:url" content="https://490.github.io/Cluster重启过程/index.html">
 <meta property="og:site_name" content="我的笔记">
 <meta property="og:description" content="在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-11T13:29:15.192Z">
+<meta property="og:updated_time" content="2019-03-11T13:58:15.431Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL Cluster重启过程--Restart Phases in MySQL Cluster">
+<meta name="twitter:title" content="MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster">
 <meta name="twitter:description" content="在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。">
 
 
@@ -124,7 +124,7 @@
 
 
 
-  <title>MySQL Cluster重启过程--Restart Phases in MySQL Cluster | 我的笔记</title>
+  <title>MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster | 我的笔记</title>
   
 
 
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MySQL Cluster重启过程--Restart Phases in MySQL Cluster</h1>
+          <h1 class="post-title" itemprop="name headline">MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster</h1>
         
 
         <div class="post-meta">
@@ -350,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5.1k
+                  3.3k
                 </span>
               
 
@@ -366,7 +366,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  17
+                  11
                 </span>
               
             </div>
@@ -388,8 +388,7 @@
 
       
         <p>在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。<br><a id="more"></a></p>
-<p><a href="https://github.com/mysql/mysql-server/blob/8e797a5d6eb3a87f16498edcb7261a75897babae/storage/ndb/src/kernel/blocks/ndbcntr/NdbcntrMain.cpp" target="_blank" rel="noopener">原文</a></p>
-<h1 id="Restart-Phases-in-MySQL-Cluster"><a href="#Restart-Phases-in-MySQL-Cluster" class="headerlink" title="Restart Phases in MySQL Cluster"></a>Restart Phases in MySQL Cluster</h1><p>启动节点的第一步是创建数据节点运行时环境。数据节点进程通常使用angel进程运行，此angel进程确保数据节点万一失败时能够自动重新启动。因此，再次运行数据节点的唯一原因是在OS崩溃之后或运营商关闭之后或作为软件升级的一部分。</p>
+<p><a href="https://github.com/mysql/mysql-server/blob/8e797a5d6eb3a87f16498edcb7261a75897babae/storage/ndb/src/kernel/blocks/ndbcntr/NdbcntrMain.cpp" target="_blank" rel="noopener">原文</a><br>启动节点的第一步是创建数据节点运行时环境。数据节点进程通常使用angel进程运行，此angel进程确保数据节点万一失败时能够自动重新启动。因此，再次运行数据节点的唯一原因是在OS崩溃之后或运营商关闭之后或作为软件升级的一部分。</p>
 <p>当启动数据节点时，数据节点需要一个节点id，这是通过设置参数–ndb-nodeid在启动datanode时，或者在检索配置时由管理服务器分配。对于数据节点的所有重新启动，angel进程将确保所分配的节点id将相同。</p>
 <p>在分配数据节点进程之后，启动进程保持为angel进程并且新进程成为实际的数据节点进程。实际的数据节点进程首先从managementserver检索配置。</p>
 <p>在这个阶段我们已经阅读了选项，我们已经分配了一个节点ID，我们从管理服务器加载了配置。我们将在数据节点日志中打印一些关于我们的线程配置和其他一些重要信息。为了确保我们找到正确的文件并在正确的位置创建文件，我们设置了数据节点进程的数据文件夹。</p>
@@ -438,28 +437,7 @@
 <p>对于那些多线程的模块，STTOR和NDB_STTOR消息始终由在主线程中执行的代理模块接收。 然后，代理模块将STTOR和NDB_STTOR消息发送到模块的每个单独实例（实例数通常与线程数相同，但有时可能不同）。 它并行执行，因此所有实例并行执行STTOR。</p>
 <p>因此，有效地，模块的每个实例将在逻辑上首先接收READ_CONFIG_REQ，然后为每个启动阶段接收一组STTOR消息，并且一些模块也将按特定顺序接收NDB_STTOR。 所有这些消息都按特定顺序发送并按顺序发送。 因此，这意味着我们能够通过在正确的启动阶段执行操作来控制何时完成任务。</p>
 <p>接下来，我们将逐步描述节点重启（或节点作为集群启动/重启的一部分启动）中发生的情况。 启动目前是一个顺序过程，除非声明它并行发生。 以下描述因此描述了当前实际发生的顺序。</p>
-<h1 id="READ-CONFIG-REQ"><a href="#READ-CONFIG-REQ" class="headerlink" title="READ_CONFIG_REQ"></a>READ_CONFIG_REQ</h1><p>READ_CONFIG_REQ对所有软件模块或多或少都相同。 它分配软件模块所需的内存并初始化内存（创建各种空闲列表等）。 它还读取模块感兴趣的各种配置参数（这些参数通常会影响我们分配的内存大小）。</p>
-<p>它从CMVMI开始，分配大部分全局内存池，接下来我们有NDBFS为磁盘数据创建必要的文件目录，它还创建一次可以由一个文件使用的绑定IO线程（初始线程数可配置） 通过InitalNoOpenFiles），然后它创建了一些磁盘数据文件（用于处理磁盘数据的所有文件）使用的空闲线程（它们可通过IOThreadPool配置的数量），每个这样的线程可用于打开/读取/写入/关闭 磁盘数据文件。 最后，NDBFS还会创建从文件系统线程返回到其他线程的通信通道。</p>
-<p>所有其他模块遵循相同的标准，它们根据硬编码定义或通过配置变量计算多个大小，它们为这些变量分配内存，最后它们初始化那些分配的内存结构。</p>
-<h2 id="STTOR-Phase-0"><a href="#STTOR-Phase-0" class="headerlink" title="STTOR Phase 0"></a>STTOR Phase 0</h2><p>执行的第一个STTOR阶段是STTOR阶段0.在此阶段执行任何操作的唯一模块是NDBCNTR，如果启动是初始启动，则清除文件系统，CMVMI创建文件系统目录。</p>
-<h2 id="STTOR-Phase-1"><a href="#STTOR-Phase-1" class="headerlink" title="STTOR Phase 1"></a>STTOR Phase 1</h2><p>下一阶段执行的是STTOR阶段1，在此阶段，大多数模块初始化一些更多数据，必要时设置对相邻模块的引用。 此外，DBDIH创建了一些特殊的互斥锁，确保一次只能在代码的某些部分中涉及一个进程。</p>
-<p>NDBCNTR在阶段2开始初始化与运行NDB_STTOR相关的一些数据。如果配置为这样，CMVMI将锁定内存，此后它会安装正常的监视程序超时，因为现在执行所有大内存分配。 CMVMI还启动定期内存报告。</p>
-<p>QMGR是此阶段中最活跃的模块。 它初始化一些数据，它从DBDIH获得重启类型（初始启动或正常启动），它打开与集群中所有节点的通信，它开始检查包含节点处理的节点故障。 最后，它运行协议以将新节点包括在心跳协议中。 这可能需要一段时间，因为节点包含过程一次只能引入一个节点，并且协议包含一些延迟。<br>然后，BACKUP模块启动磁盘速度检查循环，该循环将在节点启动并运行时运行。</p>
-<h2 id="STTOR-Phase-2"><a href="#STTOR-Phase-2" class="headerlink" title="STTOR Phase 2"></a>STTOR Phase 2</h2><p>下一步是执行STTOR阶段2.在STTOR阶段2中执行任何操作的唯一模块是NDBCNTR，它要求DIH执行重启类型，它从配置中读取节点，它初始化控制多长时间的部分超时变量 在我们执行部分启动之前等待。</p>
-<p>NDBCNTR将信号CNTR_START_REQ发送到当前主节点中的NDBCNTR，该信号使主节点能够在必要时由于其他起始节点或某些其他条件而延迟该节点的启动。 对于集群启动/重启，它还使主节点有机会确保在启动节点之前等待足够的节点启动。</p>
-<p>主设备一次只接受一个接收CNTR_START_CONF的节点，下一个节点只能在前一个起始节点完成复制元数据并释放元数据锁并锁定DIH信息后接收CNTR_START_CONF，这在STTOR阶段5中发生。</p>
-<p>因此，在滚动重启中，第一个节点将获得CNTR_START_CONF，然后在DICT锁定上被阻塞，等待LCP完成，这是很常见的。 并行启动的其他节点将在CNTR_START_CONF上等待，因为一次只有一个节点可以通过它。</p>
-<p>收到CNTR_START_CONF后，NDBCNTR继续运行NDB_STTOR阶段1.此处DBLQH初始化节点记录，它启动报告服务。 它还初始化有关REDO日志的数据，这还包括在所有类型的初始启动时初始化磁盘上的REDO日志（可能非常耗时）。</p>
-<p>DBDICT初始化模式文件（包含已在集群中创建的表和其他元数据对象）。 DBTUP初始化一个默认值片段，DBTC和DBDIH初始化一些数据变量。 完成NDBCNTR中的NDB_STTOR阶段后，STTOR阶段2中没有更多工作。</p>
-<h2 id="STTOR-Phase-3"><a href="#STTOR-Phase-3" class="headerlink" title="STTOR Phase 3"></a>STTOR Phase 3</h2><p>下一步是运行STTOR阶段3.大多数需要集群中节点列表的模块在此阶段读取此信息。 DBDIH在此阶段读取节点，DBDICT设置重启类型。 下一个NDBCNTR接收此阶段并启动NDB_STTOR阶段2.在此阶段，DBLQH设置从其操作记录到DBACC和DBTUP中的操作记录的连接。 这是针对所有DBLQH模块实例并行完成的。</p>
-<p>DBDIH现在通过锁定元数据来准备节点重启过程。 这意味着我们将等待任何正在进行的元数据操作完成，并且当它完成时，我们将锁定元数据，这样在我们完成复制元数据信息的阶段之前，不能进行元数据更改。</p>
-<p>锁定的原因是所有元数据和分发信息都是完全复制的。 因此，在将数据从主节点复制到起始节点时，我们需要锁定此信息。 虽然我们保留了此锁，但我们无法通过元数据事务更改元数据。 在稍后复制元数据之前，我们还需要确保没有运行本地检查点，因为这也会更新分发信息。</p>
-<p>锁定后，我们需要请求从主节点启动节点的权限。 启动节点的许可请求由发送START_PERMREQ到主节点的起始节点处理。 如果另一个节点已在处理节点重启，则可能会收到否定答复，如果需要初始启动，则可能会失败。 如果另一个节点已经启动，我们将等待3秒钟再试一次。 这在DBDIH中作为NDB_STTOR阶段2的一部分执行。</p>
-<p>在完成NDB_STTOR阶段2之后，STTOR阶段3继续由CMVMI模块激活对扫描和密钥操作使用的发送打包数据的检查。</p>
-<p>接下来，BACKUP模块读取配置的节点。 接下来，SUMA模块设置对页面池的引用，以便它可以重用此全局内存池中的页面，然后DBTUX设置重新启动类型。 最后，PGMAN启动一个stats循环和一个清理循环，只要节点启动并运行，它就会运行。</p>
-<p>如果我们的节点仍然涉及主节点中正在进行的某些进程，我们可能会崩溃节点。 这是相当正常的，只会触发一次崩溃，然后是天使进程正常的新启动。 权限请求由主服务器向所有节点发送信息来处理。</p>
-<p>对于初始启动，权限请求可能非常耗时，因为我们必须使所有节点上元数据中所有表的所有本地检查点无效。 目前没有此失效过程的并行化，因此它将一次使一个表无效。</p>
-<h2 id="STTOR-Phase-4"><a href="#STTOR-Phase-4" class="headerlink" title="STTOR Phase 4"></a>STTOR Phase 4</h2>
+
       
     </div>
     
@@ -498,6 +476,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Cluster重启过程2/" rel="prev" title="MySQL Cluster重启过程 (2) READ_CONFIG_REQ">
+                MySQL Cluster重启过程 (2) READ_CONFIG_REQ <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -556,17 +538,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -583,7 +556,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -630,22 +603,6 @@
       </section>
 
       
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Restart-Phases-in-MySQL-Cluster"><span class="nav-number">1.</span> <span class="nav-text">Restart Phases in MySQL Cluster</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#READ-CONFIG-REQ"><span class="nav-number">2.</span> <span class="nav-text">READ_CONFIG_REQ</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#STTOR-Phase-0"><span class="nav-number">2.1.</span> <span class="nav-text">STTOR Phase 0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STTOR-Phase-1"><span class="nav-number">2.2.</span> <span class="nav-text">STTOR Phase 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STTOR-Phase-2"><span class="nav-number">2.3.</span> <span class="nav-text">STTOR Phase 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STTOR-Phase-3"><span class="nav-number">2.4.</span> <span class="nav-text">STTOR Phase 3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STTOR-Phase-4"><span class="nav-number">2.5.</span> <span class="nav-text">STTOR Phase 4</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
 
       
 
@@ -673,7 +630,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">60.9k</span>
+    <span title="Site words total count">63.3k</span>
   
 </div>
 

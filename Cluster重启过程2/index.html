@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="网络,Spring Boot,">
+  <meta name="keywords" content="数据库,">
 
 
 
@@ -77,21 +77,18 @@
 
 
 
-<meta name="description" content="几种常用的认证机制HTTP Basic Auth、OAuth、Cookie Auth、Token Auth">
-<meta name="keywords" content="网络,Spring Boot">
+<meta name="description" content="READ_CONFIG_REQ对所有软件模块或多或少都相同。 它分配软件模块所需的内存并初始化内存（创建各种空闲列表等）。 它还读取模块感兴趣的各种配置参数（这些参数通常会影响我们分配的内存大小）。">
+<meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SpringBoot实现基于Token的web后台认证机制">
-<meta property="og:url" content="https://490.github.io/SpringBoot实现基于Token的web后台认证机制/index.html">
+<meta property="og:title" content="MySQL Cluster重启过程 (2) READ_CONFIG_REQ">
+<meta property="og:url" content="https://490.github.io/Cluster重启过程2/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="几种常用的认证机制HTTP Basic Auth、OAuth、Cookie Auth、Token Auth">
+<meta property="og:description" content="READ_CONFIG_REQ对所有软件模块或多或少都相同。 它分配软件模块所需的内存并初始化内存（创建各种空闲列表等）。 它还读取模块感兴趣的各种配置参数（这些参数通常会影响我们分配的内存大小）。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://490.github.io/images/20190310_160834.png">
-<meta property="og:image" content="http://490.github.io/images/20190310_154210.png">
-<meta property="og:updated_time" content="2019-03-10T08:12:00.691Z">
+<meta property="og:updated_time" content="2019-03-11T13:59:03.264Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SpringBoot实现基于Token的web后台认证机制">
-<meta name="twitter:description" content="几种常用的认证机制HTTP Basic Auth、OAuth、Cookie Auth、Token Auth">
-<meta name="twitter:image" content="http://490.github.io/images/20190310_160834.png">
+<meta name="twitter:title" content="MySQL Cluster重启过程 (2) READ_CONFIG_REQ">
+<meta name="twitter:description" content="READ_CONFIG_REQ对所有软件模块或多或少都相同。 它分配软件模块所需的内存并初始化内存（创建各种空闲列表等）。 它还读取模块感兴趣的各种配置参数（这些参数通常会影响我们分配的内存大小）。">
 
 
 
@@ -121,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="https://490.github.io/SpringBoot实现基于Token的web后台认证机制/">
+  <link rel="canonical" href="https://490.github.io/Cluster重启过程2/">
 
 
 
 
 
-  <title>SpringBoot实现基于Token的web后台认证机制 | 我的笔记</title>
+  <title>MySQL Cluster重启过程 (2) READ_CONFIG_REQ | 我的笔记</title>
   
 
 
@@ -282,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/SpringBoot实现基于Token的web后台认证机制/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Cluster重启过程2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
@@ -299,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SpringBoot实现基于Token的web后台认证机制</h1>
+          <h1 class="post-title" itemprop="name headline">MySQL Cluster重启过程 (2) READ_CONFIG_REQ</h1>
         
 
         <div class="post-meta">
@@ -311,8 +308,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-10T15:38:48+08:00">
-                2019-03-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-11T21:54:43+08:00">
+                2019-03-11
               </time>
             
 
@@ -330,8 +327,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/SpringBoot实现基于Token的web后台认证机制/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/SpringBoot实现基于Token的web后台认证机制/" itemprop="commentsCount"></span>
+                <a href="/Cluster重启过程2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/Cluster重启过程2/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -353,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.6k
+                  2.6k
                 </span>
               
 
@@ -369,7 +366,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  8
                 </span>
               
             </div>
@@ -390,38 +387,39 @@
       
 
       
-        <h1 id="几种常用的认证机制"><a href="#几种常用的认证机制" class="headerlink" title="几种常用的认证机制"></a>几种常用的认证机制</h1><p>HTTP Basic Auth、OAuth、Cookie Auth、Token Auth</p>
-<a id="more"></a>
-<h2 id="HTTP-Basic-Auth"><a href="#HTTP-Basic-Auth" class="headerlink" title="HTTP Basic Auth"></a>HTTP Basic Auth</h2><p>HTTP Basic Auth简单点说明就是每次请求API时都提供用户的username和password，简言之，Basic Auth是配合RESTful API 使用的最简单的认证方式，只需提供用户名密码即可，但由于有把用户名密码暴露给第三方客户端的风险，在生产环境下被使用的越来越少。因此，在开发对外开放的RESTful API时，尽量避免采用HTTP Basic Auth</p>
-<h2 id="OAuth2-0"><a href="#OAuth2-0" class="headerlink" title="OAuth2.0"></a>OAuth2.0</h2><p>OAuth（开放授权）是一个开放的授权标准，允许用户让第三方应用访问该用户在某一web服务上存储的私密的资源（如照片，视频，联系人列表），而无需将用户名和密码提供给第三方应用。<br><img src="http://490.github.io/images/20190310_160834.png" alt="image"></p>
-<h2 id="Cookie-Auth"><a href="#Cookie-Auth" class="headerlink" title="Cookie Auth"></a>Cookie Auth</h2><p>Cookie认证机制就是为一次请求认证在服务端创建一个Session对象，同时在客户端的浏览器端创建了一个Cookie对象；通过客户端带上来Cookie对象来与服务器端的session对象匹配来实现状态管理的。默认的，当我们关闭浏览器的时候，cookie会被删除。但可以通过修改cookie 的expire time使cookie在一定时间内有效；</p>
-<h2 id="Token-Auth"><a href="#Token-Auth" class="headerlink" title="Token Auth"></a>Token Auth</h2><p><img src="http://490.github.io/images/20190310_154210.png" alt="image"><br>Token机制相对于Cookie机制又有什么好处呢？</p>
-<ul>
-<li><strong>支持跨域访问</strong>: Cookie是不允许垮域访问的，这一点对Token机制是不存在的，前提是传输的用户认证信息通过HTTP头传输.</li>
-<li><strong>无状态(也称：服务端可扩展行)</strong>:Token机制在服务端不需要存储session信息，因为Token 自身包含了所有登录用户的信息，只需要在客户端的cookie或本地介质存储状态信息.</li>
-<li><strong>更适用CDN</strong>: 可以通过内容分发网络请求你服务端的所有资料（如：javascript，HTML,图片等），而你的服务端只要提供API即可.</li>
-<li><strong>去耦</strong>: 不需要绑定到一个特定的身份验证方案。Token可以在任何地方生成，只要在你的API被调用的时候，你可以进行Token生成调用即可.</li>
-<li><strong>更适用于移动应用</strong>: 当你的客户端是一个原生平台（iOS, Android，Windows 8等）时，Cookie是不被支持的（你需要通过Cookie容器进行处理），这时采用Token认证机制就会简单得多。</li>
-<li><strong>CSRF</strong>:因为不再依赖于Cookie，所以你就不需要考虑对CSRF（跨站请求伪造）的防范。</li>
-<li><strong>性能</strong>: 一次网络往返时间（通过数据库查询session信息）总比做一次HMACSHA256计算 的Token验证和解析要费时得多.</li>
-<li><strong>不需要为登录页面做特殊处理</strong>: 如果你使用Protractor 做功能测试的时候，不再需要为登录页面做特殊处理.</li>
-<li><strong>基于标准化</strong>:你的API可以采用标准化的 JSON Web Token (JWT). 这个标准已经存在多个后端库（.NET, Ruby, Java,Python, PHP）和多家公司的支持（如：Firebase,Google, Microsoft）.</li>
-</ul>
-<p><strong>基于Token的身份验证流程如下</strong></p>
-<ul>
-<li>客户端使用用户名跟密码请求登录</li>
-<li>服务端收到请求，去验证用户名与密码</li>
-<li>验证成功后，服务端会签发一个 Token，再把这个 Token 发送给客户端</li>
-<li>客户端收到 Token 以后可以把它存储起来，比如放在 Cookie 里或者 Local Storage 里</li>
-<li>客户端每次向服务端请求资源的时候需要带着服务端签发的 Token</li>
-<li>服务端收到请求，然后去验证客户端请求里面带着的 Token，如果验证成功，就向客户端返回请求的数据</li>
-</ul>
-<h1 id="Spring-Boot-实现"><a href="#Spring-Boot-实现" class="headerlink" title="Spring Boot 实现"></a>Spring Boot 实现</h1><p><a href="https://github.com/490/wenda/tree/master/src/main/java/com/zhaole" target="_blank" rel="noopener">实现见UserService，LoginController，PassportInterceptor</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginTicket</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> userId;</span><br><span class="line">    <span class="keyword">private</span> Date expired;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> status;<span class="comment">//0有效</span></span><br><span class="line">    <span class="keyword">private</span> String ticket;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>用户先去请求注册或者是登陆，然后服务器去验证他的用户名和密码</p>
-<p>验证成功后userservice会生成一个Token，这里是ticket，客户端收到ticket之后呢会把ticket存在Cookie中，登录成功之后会有一个与当前用户对应的ticket</p>
-<p>每次访问服务器资源的时候需要带着这个ticket，然后怎么判断是否有呢？就要用拦截器来实现过滤，用拦截器去判断这个ticket当前的状态是什么样的？有没有过期？身份状态是不是有效的？然后根据这个来判断应该赋予什么样的权限？当验证成功之后就把ticket对应的用户的通过下面一段发送给freemaker的上下文，实现页面的正常的渲染</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zhaole.interceptor;</span><br><span class="line"><span class="keyword">import</span> com.zhaole.dao.LoginTicketDAO;</span><br><span class="line"><span class="keyword">import</span> com.zhaole.dao.UserDAO;</span><br><span class="line"><span class="keyword">import</span> com.zhaole.model.HostHolder;</span><br><span class="line"><span class="keyword">import</span> com.zhaole.model.LoginTicket;</span><br><span class="line"><span class="keyword">import</span> com.zhaole.model.User;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.HandlerInterceptor;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.ModelAndView;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.Cookie;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 拦截器</span></span><br><span class="line"><span class="comment"> * @ 用来判断用户的</span></span><br><span class="line"><span class="comment"> *1. 当preHandle方法返回false时，从当前拦截器往回执行所有拦截器的afterCompletion方法，再退出拦截器链。也就是说，请求不继续往下传了，直接沿着来的链往回跑。</span></span><br><span class="line"><span class="comment"> 2.当preHandle方法全为true时，执行下一个拦截器,直到所有拦截器执行完。再运行被拦截的Controller。然后进入拦截器链，运</span></span><br><span class="line"><span class="comment"> 行所有拦截器的postHandle方法,完后从最后一个拦截器往回执行所有拦截器的afterCompletion方法.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PasswordInterceptor</span> <span class="keyword">implements</span> <span class="title">HandlerInterceptor</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> LoginTicketDAO loginTicketDAO;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserDAO userDAO;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> HostHolder hostHolder;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">preHandle</span><span class="params">(HttpServletRequest httpServletRequest,</span></span></span><br><span class="line"><span class="function"><span class="params">                            HttpServletResponse httpServletResponse,</span></span></span><br><span class="line"><span class="function"><span class="params">                             Object o)</span> <span class="keyword">throws</span> Exception</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        String ticket = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(httpServletRequest.getCookies()!=<span class="keyword">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(Cookie cookie:httpServletRequest.getCookies())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(cookie.getName().equals(<span class="string">"ticket"</span>))</span><br><span class="line">                &#123;</span><br><span class="line">                    ticket = cookie.getValue();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(ticket!=<span class="keyword">null</span>)<span class="comment">//说明cookie不空，且name是ticket</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//去数据库里把ticket找出来看看是否有效</span></span><br><span class="line">            LoginTicket loginTicket = loginTicketDAO.selectByTicket(ticket);</span><br><span class="line">            <span class="keyword">if</span>(loginTicket==<span class="keyword">null</span> || loginTicket.getExpired().before(<span class="keyword">new</span> Date()) || loginTicket.getStatus()!=<span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//有效的话，查这个ticket对应的用户，把这个用户设置到threadlocal里。</span></span><br><span class="line">            User user = userDAO.selectById(loginTicket.getUserId());</span><br><span class="line">            hostHolder.setUser(user);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postHandle</span><span class="params">(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (modelAndView != <span class="keyword">null</span> &amp;&amp; hostHolder.getUser() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            modelAndView.addObject(<span class="string">"user"</span>, hostHolder.getUser());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterCompletion</span><span class="params">(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        hostHolder.clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当用户登出的时候就把ticket的身份状态置位为无效状态即可</p>
+        <p>READ_CONFIG_REQ对所有软件模块或多或少都相同。 它分配软件模块所需的内存并初始化内存（创建各种空闲列表等）。 它还读取模块感兴趣的各种配置参数（这些参数通常会影响我们分配的内存大小）。<br><a id="more"></a><br><a href="https://github.com/mysql/mysql-server/blob/8e797a5d6eb3a87f16498edcb7261a75897babae/storage/ndb/src/kernel/blocks/ndbcntr/NdbcntrMain.cpp" target="_blank" rel="noopener">原文</a></p>
+<p>它从CMVMI开始，分配大部分全局内存池，接下来我们有NDBFS为磁盘数据创建必要的文件目录，它还创建一次可以由一个文件使用的绑定IO线程（初始线程数可配置） 通过InitalNoOpenFiles），然后它创建了一些磁盘数据文件（用于处理磁盘数据的所有文件）使用的空闲线程（它们可通过IOThreadPool配置的数量），每个这样的线程可用于打开/读取/写入/关闭 磁盘数据文件。 最后，NDBFS还会创建从文件系统线程返回到其他线程的通信通道。</p>
+<p>所有其他模块遵循相同的标准，它们根据硬编码定义或通过配置变量计算多个大小，它们为这些变量分配内存，最后它们初始化那些分配的内存结构。</p>
+<h1 id="STTOR-Phase-0"><a href="#STTOR-Phase-0" class="headerlink" title="STTOR Phase 0"></a>STTOR Phase 0</h1><p>执行的第一个STTOR阶段是STTOR阶段0.在此阶段执行任何操作的唯一模块是NDBCNTR，如果启动是初始启动，则清除文件系统，CMVMI创建文件系统目录。</p>
+<h1 id="STTOR-Phase-1"><a href="#STTOR-Phase-1" class="headerlink" title="STTOR Phase 1"></a>STTOR Phase 1</h1><p>下一阶段执行的是STTOR阶段1，在此阶段，大多数模块初始化一些更多数据，必要时设置对相邻模块的引用。 此外，DBDIH创建了一些特殊的互斥锁，确保一次只能在代码的某些部分中涉及一个进程。</p>
+<p>NDBCNTR在阶段2开始初始化与运行NDB_STTOR相关的一些数据。如果配置为这样，CMVMI将锁定内存，此后它会安装正常的监视程序超时，因为现在执行所有大内存分配。 CMVMI还启动定期内存报告。</p>
+<p>QMGR是此阶段中最活跃的模块。 它初始化一些数据，它从DBDIH获得重启类型（初始启动或正常启动），它打开与集群中所有节点的通信，它开始检查包含节点处理的节点故障。 最后，它运行协议以将新节点包括在心跳协议中。 这可能需要一段时间，因为节点包含过程一次只能引入一个节点，并且协议包含一些延迟。<br>然后，BACKUP模块启动磁盘速度检查循环，该循环将在节点启动并运行时运行。</p>
+<h1 id="STTOR-Phase-2"><a href="#STTOR-Phase-2" class="headerlink" title="STTOR Phase 2"></a>STTOR Phase 2</h1><p>下一步是执行STTOR阶段2.在STTOR阶段2中执行任何操作的唯一模块是NDBCNTR，它要求DIH执行重启类型，它从配置中读取节点，它初始化控制多长时间的部分超时变量 在我们执行部分启动之前等待。</p>
+<p>NDBCNTR将信号CNTR_START_REQ发送到当前主节点中的NDBCNTR，该信号使主节点能够在必要时由于其他起始节点或某些其他条件而延迟该节点的启动。 对于集群启动/重启，它还使主节点有机会确保在启动节点之前等待足够的节点启动。</p>
+<p>主设备一次只接受一个接收CNTR_START_CONF的节点，下一个节点只能在前一个起始节点完成复制元数据并释放元数据锁并锁定DIH信息后接收CNTR_START_CONF，这在STTOR阶段5中发生。</p>
+<p>因此，在滚动重启中，第一个节点将获得CNTR_START_CONF，然后在DICT锁定上被阻塞，等待LCP完成，这是很常见的。 并行启动的其他节点将在CNTR_START_CONF上等待，因为一次只有一个节点可以通过它。</p>
+<p>收到CNTR_START_CONF后，NDBCNTR继续运行NDB_STTOR阶段1.此处DBLQH初始化节点记录，它启动报告服务。 它还初始化有关REDO日志的数据，这还包括在所有类型的初始启动时初始化磁盘上的REDO日志（可能非常耗时）。</p>
+<p>DBDICT初始化模式文件（包含已在集群中创建的表和其他元数据对象）。 DBTUP初始化一个默认值片段，DBTC和DBDIH初始化一些数据变量。 完成NDBCNTR中的NDB_STTOR阶段后，STTOR阶段2中没有更多工作。</p>
+<h1 id="STTOR-Phase-3"><a href="#STTOR-Phase-3" class="headerlink" title="STTOR Phase 3"></a>STTOR Phase 3</h1><p>下一步是运行STTOR阶段3.大多数需要集群中节点列表的模块在此阶段读取此信息。 DBDIH在此阶段读取节点，DBDICT设置重启类型。 下一个NDBCNTR接收此阶段并启动NDB_STTOR阶段2.在此阶段，DBLQH设置从其操作记录到DBACC和DBTUP中的操作记录的连接。 这是针对所有DBLQH模块实例并行完成的。</p>
+<p>DBDIH现在通过锁定元数据来准备节点重启过程。 这意味着我们将等待任何正在进行的元数据操作完成，并且当它完成时，我们将锁定元数据，这样在我们完成复制元数据信息的阶段之前，不能进行元数据更改。</p>
+<p>锁定的原因是所有元数据和分发信息都是完全复制的。 因此，在将数据从主节点复制到起始节点时，我们需要锁定此信息。 虽然我们保留了此锁，但我们无法通过元数据事务更改元数据。 在稍后复制元数据之前，我们还需要确保没有运行本地检查点，因为这也会更新分发信息。</p>
+<p>锁定后，我们需要请求从主节点启动节点的权限。 启动节点的许可请求由发送START_PERMREQ到主节点的起始节点处理。 如果另一个节点已在处理节点重启，则可能会收到否定答复，如果需要初始启动，则可能会失败。 如果另一个节点已经启动，我们将等待3秒钟再试一次。 这在DBDIH中作为NDB_STTOR阶段2的一部分执行。</p>
+<p>在完成NDB_STTOR阶段2之后，STTOR阶段3继续由CMVMI模块激活对扫描和密钥操作使用的发送打包数据的检查。</p>
+<p>接下来，BACKUP模块读取配置的节点。 接下来，SUMA模块设置对页面池的引用，以便它可以重用此全局内存池中的页面，然后DBTUX设置重新启动类型。 最后，PGMAN启动一个stats循环和一个清理循环，只要节点启动并运行，它就会运行。</p>
+<p>如果我们的节点仍然涉及主节点中正在进行的某些进程，我们可能会崩溃节点。 这是相当正常的，只会触发一次崩溃，然后是天使进程正常的新启动。 权限请求由主服务器向所有节点发送信息来处理。</p>
+<p>对于初始启动，权限请求可能非常耗时，因为我们必须使所有节点上元数据中所有表的所有本地检查点无效。 目前没有此失效过程的并行化，因此它将一次使一个表无效。</p>
+<h1 id="STTOR-Phase-4"><a href="#STTOR-Phase-4" class="headerlink" title="STTOR Phase 4"></a>STTOR Phase 4</h1><p>完成STTOR阶段3后，我们进入STTOR阶段4.此阶段由DBLQH在BACKUP模块中获取备份记录开始，该备份记录将用于本地检查点处理。</p>
+<p>下一个NDBCNTR启动NDB_STTOR阶段3.这也在DBLQH中开始，我们在其中读取已配置的节点。 然后我们开始阅读REDO日志以进行设置（我们将在后台设置它，它将通过稍后描述的集群重启/节点重启的另一部分进行同步），对于所有类型的初始启动，我们将等到 REDO日志的初始化已经完成，直到报告此阶段完成为止。</p>
+<p>下一个DBDICT将读取已配置的节点，然后DBTC将读取已配置的节点并启动事务计数器报告。 接下来在NDB_STTOR阶段3中，DBDIH初始化重启数据以进行初始启动。</p>
+<p>在完成STTOR第4阶段的工作之前，NDBCNTR将设置一个等待点，使所有起始节点在继续之前达到此点。 这仅适用于群集启动/重新启动，因此不适用于节点重新启动。</p>
+<p>主节点控制此等待点，并在集群重启的所有节点都达到此点时将信号NDB_STARTREQ发送到DBDIH。 稍后将详细介绍此信号。 STTOR阶段4中发生的最后一件事是DBSPJ读取配置的节点。</p>
+<h1 id="STTOR-Phase-5"><a href="#STTOR-Phase-5" class="headerlink" title="STTOR Phase 5"></a>STTOR Phase 5</h1><p>我们现在进入STTOR阶段5.这里做的第一件事是运行NDB_STTOR阶段4.只有DBDIH在这里做了一些工作，它只在节点重启时做了一些事情。 在这种情况下，它要求当前主节点通过向其发送START_MEREQ信号来启动它。</p>
+<p>START_MEREQ的工作原理是从主DBDIH节点复制分发信息，然后从主DBDICT复制元数据信息。 它一次复制一个分发信息表，这使得该过程有点慢，因为它包括将表写入起始节点中的磁盘。</p>
+<p>跟踪此事件的唯一方法是在起始节点中的DBDIH中将每个表的表分布信息写入。 我们可以跟踪在起始节点DBDICT中接收的DICTSTARTREQ的接收。</p>
+<p>当复制DBDIH和DBDICT信息时，我们需要阻止全局检查点，以便从现在开始将新节点包含在元数据和分发信息的所有更改中。 这是通过将INCL_NODEREQ发送到所有节点来执行的。 在此之后，我们可以释放由DBDIH在STTOR阶段2中设置的元数据锁。</p>
+<p>完成NDB_STTOR阶段4后，NDBCNTR以下列方式再次同步启动：</p>
+<p>如果初始集群启动和主节点然后创建系统表如果集群启动/重新启动，则等待所有节点到达此点。 等待集群启动/重启中的节点后，在主节点中运行NDB_STTOR阶段5（仅发送到DBDIH）。 如果节点重新启动，则运行NDB_STTOR阶段5（仅发送到DBDIH）。</p>
+<p>DBDIH中的NDB_STTOR阶段5正在等待本地检查点的完成（如果它是主设备）并且我们正在运行集群启动/重启。 对于节点重启，我们将信号START_COPYREQ发送到起始节点，要求将数据复制到我们的节点。</p>
 
       
     </div>
@@ -439,9 +437,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/网络/" rel="tag"># 网络</a>
-          
-            <a href="/tags/Spring-Boot/" rel="tag"># Spring Boot</a>
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
           
         </div>
       
@@ -454,8 +450,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/教你如何迅速秒杀掉：99-的海量数据处理面试题/" rel="next" title="教你如何迅速秒杀掉：99%的海量数据处理面试题">
-                <i class="fa fa-chevron-left"></i> 教你如何迅速秒杀掉：99%的海量数据处理面试题
+              <a href="/Cluster重启过程/" rel="next" title="MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster">
+                <i class="fa fa-chevron-left"></i> MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster
               </a>
             
           </div>
@@ -464,8 +460,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/Java的深拷贝与浅拷贝/" rel="prev" title="Java的深拷贝与浅拷贝">
-                Java的深拷贝与浅拷贝 <i class="fa fa-chevron-right"></i>
+              <a href="/Cluster重启过程23/" rel="prev" title="Cluster重启过程(3) START OF DATABASE RECOVERY">
+                Cluster重启过程(3) START OF DATABASE RECOVERY <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -608,7 +604,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#几种常用的认证机制"><span class="nav-number">1.</span> <span class="nav-text">几种常用的认证机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-Basic-Auth"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP Basic Auth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OAuth2-0"><span class="nav-number">1.2.</span> <span class="nav-text">OAuth2.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-Auth"><span class="nav-number">1.3.</span> <span class="nav-text">Cookie Auth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Token-Auth"><span class="nav-number">1.4.</span> <span class="nav-text">Token Auth</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-Boot-实现"><span class="nav-number">2.</span> <span class="nav-text">Spring Boot 实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-0"><span class="nav-number">1.</span> <span class="nav-text">STTOR Phase 0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-1"><span class="nav-number">2.</span> <span class="nav-text">STTOR Phase 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-2"><span class="nav-number">3.</span> <span class="nav-text">STTOR Phase 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-3"><span class="nav-number">4.</span> <span class="nav-text">STTOR Phase 3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-4"><span class="nav-number">5.</span> <span class="nav-text">STTOR Phase 4</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-5"><span class="nav-number">6.</span> <span class="nav-text">STTOR Phase 5</span></a></li></ol></div>
             
 
           </div>
