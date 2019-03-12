@@ -77,18 +77,18 @@
 
 
 
-<meta name="description" content="READ_CONFIG_REQ对所有软件模块或多或少都相同。 它分配软件模块所需的内存并初始化内存（创建各种空闲列表等）。 它还读取模块感兴趣的各种配置参数（这些参数通常会影响我们分配的内存大小）。">
+<meta name="description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL Cluster重启过程 (2) READ_CONFIG_REQ">
-<meta property="og:url" content="https://490.github.io/Cluster重启过程2/index.html">
+<meta property="og:title" content="MySQL Cluster重启过程(4)">
+<meta property="og:url" content="https://490.github.io/Cluster重启过程4/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="READ_CONFIG_REQ对所有软件模块或多或少都相同。 它分配软件模块所需的内存并初始化内存（创建各种空闲列表等）。 它还读取模块感兴趣的各种配置参数（这些参数通常会影响我们分配的内存大小）。">
+<meta property="og:description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-11T13:59:25.417Z">
+<meta property="og:updated_time" content="2019-03-12T10:59:32.656Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL Cluster重启过程 (2) READ_CONFIG_REQ">
-<meta name="twitter:description" content="READ_CONFIG_REQ对所有软件模块或多或少都相同。 它分配软件模块所需的内存并初始化内存（创建各种空闲列表等）。 它还读取模块感兴趣的各种配置参数（这些参数通常会影响我们分配的内存大小）。">
+<meta name="twitter:title" content="MySQL Cluster重启过程(4)">
+<meta name="twitter:description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到">
 
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="https://490.github.io/Cluster重启过程2/">
+  <link rel="canonical" href="https://490.github.io/Cluster重启过程4/">
 
 
 
 
 
-  <title>MySQL Cluster重启过程 (2) READ_CONFIG_REQ | 我的笔记</title>
+  <title>MySQL Cluster重启过程(4) | 我的笔记</title>
   
 
 
@@ -279,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/Cluster重启过程2/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Cluster重启过程4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MySQL Cluster重启过程 (2) READ_CONFIG_REQ</h1>
+          <h1 class="post-title" itemprop="name headline">MySQL Cluster重启过程(4)</h1>
         
 
         <div class="post-meta">
@@ -308,8 +308,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-11T21:54:43+08:00">
-                2019-03-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-12T15:26:47+08:00">
+                2019-03-12
               </time>
             
 
@@ -327,8 +327,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/Cluster重启过程2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/Cluster重启过程2/" itemprop="commentsCount"></span>
+                <a href="/Cluster重启过程4/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/Cluster重启过程4/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -350,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.6k
+                  4.4k
                 </span>
               
 
@@ -366,7 +366,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  8
+                  15
                 </span>
               
             </div>
@@ -387,39 +387,58 @@
       
 
       
-        <p>READ_CONFIG_REQ对所有软件模块或多或少都相同。 它分配软件模块所需的内存并初始化内存（创建各种空闲列表等）。 它还读取模块感兴趣的各种配置参数（这些参数通常会影响我们分配的内存大小）。<br><a id="more"></a><br><a href="https://github.com/mysql/mysql-server/blob/8e797a5d6eb3a87f16498edcb7261a75897babae/storage/ndb/src/kernel/blocks/ndbcntr/NdbcntrMain.cpp" target="_blank" rel="noopener">原文</a></p>
-<p>它从CMVMI开始，分配大部分全局内存池，接下来我们有NDBFS为磁盘数据创建必要的文件目录，它还创建一次可以由一个文件使用的绑定IO线程（初始线程数可配置） 通过InitalNoOpenFiles），然后它创建了一些磁盘数据文件（用于处理磁盘数据的所有文件）使用的空闲线程（它们可通过IOThreadPool配置的数量），每个这样的线程可用于打开/读取/写入/关闭 磁盘数据文件。 最后，NDBFS还会创建从文件系统线程返回到其他线程的通信通道。</p>
-<p>所有其他模块遵循相同的标准，它们根据硬编码定义或通过配置变量计算多个大小，它们为这些变量分配内存，最后它们初始化那些分配的内存结构。</p>
-<h1 id="STTOR-Phase-0"><a href="#STTOR-Phase-0" class="headerlink" title="STTOR Phase 0"></a>STTOR Phase 0</h1><p>执行的第一个STTOR阶段是STTOR阶段0.在此阶段执行任何操作的唯一模块是NDBCNTR，如果启动是初始启动，则清除文件系统，CMVMI创建文件系统目录。</p>
-<h1 id="STTOR-Phase-1"><a href="#STTOR-Phase-1" class="headerlink" title="STTOR Phase 1"></a>STTOR Phase 1</h1><p>下一阶段执行的是STTOR阶段1，在此阶段，大多数模块初始化一些更多数据，必要时设置对相邻模块的引用。 此外，DBDIH创建了一些特殊的互斥锁，确保一次只能在代码的某些部分中涉及一个进程。</p>
-<p>NDBCNTR在阶段2开始初始化与运行NDB_STTOR相关的一些数据。如果配置为这样，CMVMI将锁定内存，此后它会安装正常的监视程序超时，因为现在执行所有大内存分配。 CMVMI还启动定期内存报告。</p>
-<p>QMGR是此阶段中最活跃的模块。 它初始化一些数据，它从DBDIH获得重启类型（初始启动或正常启动），它打开与集群中所有节点的通信，它开始检查包含节点处理的节点故障。 最后，它运行协议以将新节点包括在心跳协议中。 这可能需要一段时间，因为节点包含过程一次只能引入一个节点，并且协议包含一些延迟。<br>然后，BACKUP模块启动磁盘速度检查循环，该循环将在节点启动并运行时运行。</p>
-<h1 id="STTOR-Phase-2"><a href="#STTOR-Phase-2" class="headerlink" title="STTOR Phase 2"></a>STTOR Phase 2</h1><p>下一步是执行STTOR阶段2.在STTOR阶段2中执行任何操作的唯一模块是NDBCNTR，它要求DIH执行重启类型，它从配置中读取节点，它初始化控制多长时间的部分超时变量 在我们执行部分启动之前等待。</p>
-<p>NDBCNTR将信号CNTR_START_REQ发送到当前主节点中的NDBCNTR，该信号使主节点能够在必要时由于其他起始节点或某些其他条件而延迟该节点的启动。 对于集群启动/重启，它还使主节点有机会确保在启动节点之前等待足够的节点启动。</p>
-<p>主设备一次只接受一个接收CNTR_START_CONF的节点，下一个节点只能在前一个起始节点完成复制元数据并释放元数据锁并锁定DIH信息后接收CNTR_START_CONF，这在STTOR阶段5中发生。</p>
-<p>因此，在滚动重启中，第一个节点将获得CNTR_START_CONF，然后在DICT锁定上被阻塞，等待LCP完成，这是很常见的。 并行启动的其他节点将在CNTR_START_CONF上等待，因为一次只有一个节点可以通过它。</p>
-<p>收到CNTR_START_CONF后，NDBCNTR继续运行NDB_STTOR阶段1.此处DBLQH初始化节点记录，它启动报告服务。 它还初始化有关REDO日志的数据，这还包括在所有类型的初始启动时初始化磁盘上的REDO日志（可能非常耗时）。</p>
-<p>DBDICT初始化模式文件（包含已在集群中创建的表和其他元数据对象）。 DBTUP初始化一个默认值片段，DBTC和DBDIH初始化一些数据变量。 完成NDBCNTR中的NDB_STTOR阶段后，STTOR阶段2中没有更多工作。</p>
-<h1 id="STTOR-Phase-3"><a href="#STTOR-Phase-3" class="headerlink" title="STTOR Phase 3"></a>STTOR Phase 3</h1><p>下一步是运行STTOR阶段3.大多数需要集群中节点列表的模块在此阶段读取此信息。 DBDIH在此阶段读取节点，DBDICT设置重启类型。 下一个NDBCNTR接收此阶段并启动NDB_STTOR阶段2.在此阶段，DBLQH设置从其操作记录到DBACC和DBTUP中的操作记录的连接。 这是针对所有DBLQH模块实例并行完成的。</p>
-<p>DBDIH现在通过锁定元数据来准备节点重启过程。 这意味着我们将等待任何正在进行的元数据操作完成，并且当它完成时，我们将锁定元数据，这样在我们完成复制元数据信息的阶段之前，不能进行元数据更改。</p>
-<p>锁定的原因是所有元数据和分发信息都是完全复制的。 因此，在将数据从主节点复制到起始节点时，我们需要锁定此信息。 虽然我们保留了此锁，但我们无法通过元数据事务更改元数据。 在稍后复制元数据之前，我们还需要确保没有运行本地检查点，因为这也会更新分发信息。</p>
-<p>锁定后，我们需要请求从主节点启动节点的权限。 启动节点的许可请求由发送START_PERMREQ到主节点的起始节点处理。 如果另一个节点已在处理节点重启，则可能会收到否定答复，如果需要初始启动，则可能会失败。 如果另一个节点已经启动，我们将等待3秒钟再试一次。 这在DBDIH中作为NDB_STTOR阶段2的一部分执行。</p>
-<p>在完成NDB_STTOR阶段2之后，STTOR阶段3继续由CMVMI模块激活对扫描和密钥操作使用的发送打包数据的检查。</p>
-<p>接下来，BACKUP模块读取配置的节点。 接下来，SUMA模块设置对页面池的引用，以便它可以重用此全局内存池中的页面，然后DBTUX设置重新启动类型。 最后，PGMAN启动一个stats循环和一个清理循环，只要节点启动并运行，它就会运行。</p>
-<p>如果我们的节点仍然涉及主节点中正在进行的某些进程，我们可能会崩溃节点。 这是相当正常的，只会触发一次崩溃，然后是天使进程正常的新启动。 权限请求由主服务器向所有节点发送信息来处理。</p>
-<p>对于初始启动，权限请求可能非常耗时，因为我们必须使所有节点上元数据中所有表的所有本地检查点无效。 目前没有此失效过程的并行化，因此它将一次使一个表无效。</p>
-<h1 id="STTOR-Phase-4"><a href="#STTOR-Phase-4" class="headerlink" title="STTOR Phase 4"></a>STTOR Phase 4</h1><p>完成STTOR阶段3后，我们进入STTOR阶段4.此阶段由DBLQH在BACKUP模块中获取备份记录开始，该备份记录将用于本地检查点处理。</p>
-<p>下一个NDBCNTR启动NDB_STTOR阶段3.这也在DBLQH中开始，我们在其中读取已配置的节点。 然后我们开始阅读REDO日志以进行设置（我们将在后台设置它，它将通过稍后描述的集群重启/节点重启的另一部分进行同步），对于所有类型的初始启动，我们将等到 REDO日志的初始化已经完成，直到报告此阶段完成为止。</p>
-<p>下一个DBDICT将读取已配置的节点，然后DBTC将读取已配置的节点并启动事务计数器报告。 接下来在NDB_STTOR阶段3中，DBDIH初始化重启数据以进行初始启动。</p>
-<p>在完成STTOR第4阶段的工作之前，NDBCNTR将设置一个等待点，使所有起始节点在继续之前达到此点。 这仅适用于群集启动/重新启动，因此不适用于节点重新启动。</p>
-<p>主节点控制此等待点，并在集群重启的所有节点都达到此点时将信号NDB_STARTREQ发送到DBDIH。 稍后将详细介绍此信号。 STTOR阶段4中发生的最后一件事是DBSPJ读取配置的节点。</p>
-<h1 id="STTOR-Phase-5"><a href="#STTOR-Phase-5" class="headerlink" title="STTOR Phase 5"></a>STTOR Phase 5</h1><p>我们现在进入STTOR阶段5.这里做的第一件事是运行NDB_STTOR阶段4.只有DBDIH在这里做了一些工作，它只在节点重启时做了一些事情。 在这种情况下，它要求当前主节点通过向其发送START_MEREQ信号来启动它。</p>
-<p>START_MEREQ的工作原理是从主DBDIH节点复制分发信息，然后从主DBDICT复制元数据信息。 它一次复制一个分发信息表，这使得该过程有点慢，因为它包括将表写入起始节点中的磁盘。</p>
-<p>跟踪此事件的唯一方法是在起始节点中的DBDIH中将每个表的表分布信息写入。 我们可以跟踪在起始节点DBDICT中接收的DICTSTARTREQ的接收。</p>
-<p>当复制DBDIH和DBDICT信息时，我们需要阻止全局检查点，以便从现在开始将新节点包含在元数据和分发信息的所有更改中。 这是通过将INCL_NODEREQ发送到所有节点来执行的。 在此之后，我们可以释放由DBDIH在STTOR阶段2中设置的元数据锁。</p>
-<p>完成NDB_STTOR阶段4后，NDBCNTR以下列方式再次同步启动：</p>
-<p>如果初始集群启动和主节点然后创建系统表如果集群启动/重新启动，则等待所有节点到达此点。 等待集群启动/重启中的节点后，在主节点中运行NDB_STTOR阶段5（仅发送到DBDIH）。 如果节点重新启动，则运行NDB_STTOR阶段5（仅发送到DBDIH）。</p>
-<p>DBDIH中的NDB_STTOR阶段5正在等待本地检查点的完成（如果它是主设备）并且我们正在运行集群启动/重启。 对于节点重启，我们将信号START_COPYREQ发送到起始节点，要求将数据复制到我们的节点。</p>
+        <a id="more"></a>
+<h1 id="COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE"><a href="#COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE" class="headerlink" title="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE"></a>COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE</h1><p>完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到DBDIH。</p>
+<p>此时，在DBLQH实例中，我们已恢复节点中所有数据的一致但旧的变体。 仍然没有有序索引，仍然有很多工作要让节点再次与其他节点同步。 对于群集重新启动，可能是节点已完全准备就绪，但是可能某些节点仍需要与已恢复更新的全局检查点的节点同步。</p>
+<p>然后，起始节点的DBDIH将启动接管过程，因为起始节点具有一致的片段副本。 我们将通过为我们将复制的每个片段副本发送PREPARE_COPY_FRAG_REQ来为复制阶段准备起始节点的DBLQH。 这是一个可以并行化的顺序过程。</p>
+<p>接管片段副本的过程非常复杂。 它首先将PREPARE_COPY_FRAGREQ / CONF发送到起始DBLQH，然后我们将UPDATE_TOREQ / CONF发送到主DBDIH，以确保我们在接管开始之前锁定片段信息。 在接收到该片段锁定的确认之后，起始节点向所有节点发送UPDATE_FRAG_STATEREQ / CONF以将新节点包括在片段上的所有操作中。</p>
+<p>完成此操作后，我们再次向主节点发送UPDATE_TOREQ / CONF以通知新状态并解锁片段信息上的锁定。 然后我们准备执行片段的实际复制。 这是通过将COPY_FRAGREQ / CONF发送到将复制数据的节点来完成的。 完成此复制后，我们将COPY_ACTIVEREQ / CONF发送到起始节点以激活片段副本。</p>
+<p>接下来，我们再次向主服务器发送UPDATE_TOREQ / CONF，通知我们即将安装接管新片段副本的提交。 接下来，我们通过向所有节点发送UPDATE_FRAG_STATEREQ / CONF来提交新的片段副本，通知它们片段副本的复制完成。 最后，我们使用UPDATE_TOREQ / CONF向主节点发送另一个更新。 现在我们终于完成了这个片段的复制。</p>
+<p>这个方案的想法是第一个UPDATE_FRAG_STATEREQ确保我们是片段上所有事务的一部分。 在执行COPY_FRAGREQ以逐行地将起始节点的片段副本与活动节点的片段副本同步之后，我们确信两个片段副本完全同步，我们可以执行新的UPDATE_FRAG_STATEREQ以确保所有节点都知道我们 完成了同步。</p>
+<h1 id="COMPLETED-RESTORING-ON-LINE-NOT-RECOVERABLE-DATABASE"><a href="#COMPLETED-RESTORING-ON-LINE-NOT-RECOVERABLE-DATABASE" class="headerlink" title="COMPLETED RESTORING ON-LINE NOT RECOVERABLE DATABASE"></a>COMPLETED RESTORING ON-LINE NOT RECOVERABLE DATABASE</h1><p>此时，我们通过在线一次添加一个片段来恢复数据库的在线变体。 数据库仍然无法恢复，因为我们尚未启用日志记录，并且起始节点中没有数据的本地检查点。</p>
+<p>下一步是启用所有片段的日志记录，完成此步骤后，我们将END_TOREQ发送到主DBDIH。 此时，我们将等到本地检查点完成，其中涉及此节点。 最后，当本地检查点完成后，我们将END_TOCONF发送到起始节点，然后我们将发送START_COPYCONF，这将完成重启的这个阶段。</p>
+<h1 id="COMPLETED-RESTORING-ON-LINE-RECOVERABLE-DATABASE"><a href="#COMPLETED-RESTORING-ON-LINE-RECOVERABLE-DATABASE" class="headerlink" title="COMPLETED RESTORING ON-LINE RECOVERABLE DATABASE"></a>COMPLETED RESTORING ON-LINE RECOVERABLE DATABASE</h1><p>此时我们已经设法恢复所有数据，并且我们已经将它带到了在线状态，现在我们还在启用日志记录时执行了本地检查点，因此现在起始节点中的数据也是可恢复的。 所以这意味着数据库现在再次完全联机。</p>
+<p>完成NDB_STTOR阶段5之后，此处等待点中已同步的所有节点将再次启动，NDBCNTR将继续运行NDB_STTOR的阶段6。</p>
+<p>在此阶段DBLQH，DBDICT和DBTC设置一些状态变量，指示现在启动已完成（它尚未完全完成，但这些模块运行所需的所有服务都已完成.DBDIH还启动全局检查点协议以进行集群启动/重启 它已成为主节点。</p>
+<p>现在，在群集启动/重启的情况下，所有节点还有一个等待点。 STTOR阶段5的最后一步是SUMA，它读取已配置的节点，获取节点组成员，如果有节点重新启动，它会要求另一个节点重新创建它的订阅。</p>
+<h1 id="STTOR-Phase-6"><a href="#STTOR-Phase-6" class="headerlink" title="STTOR Phase 6"></a>STTOR Phase 6</h1><p>我们现在进入STTOR阶段6.在此阶段，NDBCNTR获取节点的节点组，DBUTIL获取systable id，准备一组操作供以后使用，并连接到TC以使其能够代表其他模块运行关键操作 稍后的。</p>
+<h1 id="STTOR-Phase-7"><a href="#STTOR-Phase-7" class="headerlink" title="STTOR Phase 7"></a>STTOR Phase 7</h1><p>接下来我们进入STTOR阶段7.DBDICT现在启动索引统计循环，该循环将在节点存在时运行。</p>
+<p>QMGR将启动仲裁处理，以处理我们面临网络分区风险的情况。</p>
+<p>BACKUP将更新磁盘检查点速度（重启期间有一个配置变量用于速度，一个用于正常操作，这里我们安装正常运行速度）。 如果初始启动BACKUP也将通过DBUTIL创建备份序列。</p>
+<p>如果SUMA在主节点中运行并且它是初始启动，它将创建一个序列。 SUMA还将始终计算它负责处理的桶。 最后，DBTUX将开始监控有序索引。</p>
+<h1 id="STTOR-Phase-8"><a href="#STTOR-Phase-8" class="headerlink" title="STTOR Phase 8"></a>STTOR Phase 8</h1><p>然后我们转到STTOR阶段8.这里首先要运行NDB_STTOR的第7阶段，其中DBDICT启用外键。 如果我们正在进行集群启动/重启，下一个NDBCNTR也将等待所有节点到达此处。 下一个CMVMI将状态设置为STARTED，QMGR将启用与所有API节点的通信。</p>
+<h1 id="STTOR-Phase-101"><a href="#STTOR-Phase-101" class="headerlink" title="STTOR Phase 101"></a>STTOR Phase 101</h1><p>在此阶段之后，唯一剩下的阶段是STTOR阶段101，其中SUMA接管它负责异步复制处理的桶的责任。</p>
+<p>目前为止主要的潜在消费者：<br>内存分配中的所有步骤（READ_CONFIG_REQ的所有步骤）。 CMVMI STTOR第1阶段可以锁定内存。 运行节点包含协议的QMGR阶段1。</p>
+<p>NDBCNTR STTOR阶段2等待CNTR_START_REQ，DBLQH REDO日志初始化为STTOR阶段2中发生的初始启动类型。鉴于每次只有一个节点可以处于此阶段，这可能会被另一个节点的本地检查点等待停顿 开始。 所以这等待可能相当长。</p>
+<p>DBLQH建立与DBACC和DBTUP的连接，这是NDB_STTOR阶段2.NDB_STTOR阶段2中的DBDIH也可以等待元数据被锁定，它可以等待对START_PERMREQ的响应。</p>
+<p>对于初始启动，等待DBLQH完成NDB_STTOR阶段3，在此阶段初始化REDO日志的设置。 完成NDB_STTOR阶段3后，在STTOR阶段4中用于集群启动/重启的NDBCNTR必须等待所有节点到达此点，然后它必须等待NDB_STARTREQ完成。</p>
+<p>对于节点重启，我们在等待对START_MEREQ信号和START_COPYREQ的响应时有延迟，这实际上是重启的大部分实际工作完成的地方。 重新订阅订阅的SUMA STTOR第5阶段是另一个潜在的时间消费者。</p>
+<p>所有等待点都是潜在的时间消费者。 这些主要位于NDBCNTR（等待点5.2,5,1和6）。</p>
+<p><strong>Historical anecdotes:</strong></p>
+<p>1）NDB内核运行时环境最初是为AX虚拟机设计的。在AX中，开始使用模块MISSRA来驱动各种启动阶段的STTOR / STTORRY信号。 MISSRA后来被并入NDBCNTR，现在是NDBCNTR的子模块。 STTOR和STTORRY的名称在早期的AX系统命名信号方式中有一些基础，但现在已经被遗忘了。 ST至少可以通过启动/重启来完成任务。</p>
+<p>2）引入NDB_STTOR的原因是我们设想了一个系统，其中NDB内核只是运行时环境中的一个子系统。因此，我们为NDB子系统引入了单独的启动阶段。随着时间的推移，对这种子系统启动阶段的需求不再存在，但软件已经为此设计，因此它以这种方式保存。</p>
+<p>3）数据库启动的分布式部分的责任也是分开的。 QMGR负责发现节点何时上下。 NDBCNTR维护用于故障处理和节点配置的其他更改的协议。最后，DBDIH负责数据库部分的分布式启动。它与DBLQH交互很多，DBLQH负责按照DBDIH的指示启动一个节点数据库部分。</p>
+<h1 id="Local-checkpoint-processing-in-MySQL-Cluster"><a href="#Local-checkpoint-processing-in-MySQL-Cluster" class="headerlink" title="Local checkpoint processing in MySQL Cluster"></a>Local checkpoint processing in MySQL Cluster</h1><p>此注释试图描述MySQL Cluster中发生的检查点处理。 它还阐明了潜在的瓶颈所在。 此注释主要用作MySQL Cluster开源代码的内部文档。</p>
+<p>MySQL Cluster中本地检查点的原因是为了确保我们在磁盘上有数据副本，可用于运行REDO日志以在崩溃后恢复MySQL Cluster中的数据。</p>
+<p>我们首先在MySQL Cluster中引入不同的重启变体。第一个变体是正常节点重启，这意味着节点已经短时间丢失，但现在又重新上线。我们首先安装所有表的检查点版本（包括执行REDO日志的正确部分）。下一步是使用仍在线的副本使检查点版本保持最新。副本始终按节点组进行组织，节点组的最常见大小是两个节点。因此，当节点启动时，它使用同一节点组中的另一个节点来使在线版本的表重新联机。在正常的节点重启中，我们首先恢复了所有表的稍微旧版本，然后再使用其他节点进行同步。这意味着我们只需要发送自节点重启之前节点失败以来已更新的最新版本的行。我们还有初始节点重启的情况，其中所有数据都必须从另一个节点恢复，因为起始节点中的检查点太旧而无法重用，或者当一个全新的节点启动时它根本不存在。</p>
+<p>重新启动的第三个变体是所谓的系统重启，这意味着整个群集在群集崩溃后或在群集受控停止后启动。 在此重新启动类型中，我们首先在运行REDO日志之前在所有节点上恢复检查点，以使系统处于一致且最新的状态。 如果任何节点还原到较旧的全局检查点而不是重新启动的节点，则必须使用节点重新启动中使用的相同代码将这些节点置于联机状态。</p>
+<p>系统重启将恢复所谓的全局检查点。 一组事务被组合在一起成为一个全局检查点，当这个全局检查点完成后，属于它的事务是安全的并且将在集群崩溃后继续存在。 我们在第二级运行全局检查点，本地检查点将整个数据集写入磁盘，并且是一个耗时至少几分钟的较长过程。</p>
+<p>在可以将起始节点声明为完全恢复之前，它必须参与本地检查点。 崩溃节点错过了恢复群集所需的一组REDO日志记录，因此节点未完全恢复，直到它可用于恢复系统重启时拥有的所有数据。</p>
+<p>因此，当执行滚动节点重新启动时，群集中的所有节点都重新启动（例如，升级MySQL群集中的软件），一次重启一组节点是有意义的，因为我们只能在一个节点重新启动一组节点。 时间。</p>
+<p>这是了解本地检查站需求的一个先决条件。 我们现在转到如何处理本地检查点的描述。</p>
+<p>本地检查点是一个分布式进程。 它由名为DBDIH（简称DIH，DIstribution Handler）的软件模块控制。 DIH包含有关每个片段（与分区的同义词）的各种副本放置在何处以及这些副本上的各种数据的所有信息。 DIH将分发信息存储在每个表的一个文件中。 这个文件实际上是两个文件，这是为了确保我们可以仔细编写文件。 我们首先写文件0，当这个完成后，我们写文件1，这样我们就可以在编写表描述时轻松处理任何崩溃。</p>
+<p>当本地检查点完成后，DIH立即启动该过程以启动下一个检查点。 自从我们启动新的本地检查点之前启动本地检查点以来，必须至少完成一个全局检查点。</p>
+<p>下一个本地检查点的第一步是检查我们是否已准备好运行它。 这是通过将消息TCGETOPSIZEREQ发送到集群中的所有TC来执行的。 这将通过检查TC中收到的所有写入事务的信息来报告生成的REDO日志信息量。 该消息将由主DIH发送。 主服务器的角色被分配给最旧的幸存数据节点，这使得当目前充当主数据节点的数据节点死亡时，可以轻松选择新主服务器。 所有节点都同意进入群集的节点的顺序，因此节点的年龄在群集中的所有节点中都是一致的。</p>
+<p>当所有消息都将REDO日志写入大小返回到主DIH时，我们将它与配置变量TimeBetweenLocalCheckpoints进行比较（此变量以大小的对数设置，因此例如25表示我们等待2 ^ 25个单词的REDO日志已创建于 该集群是128 MByte的REDO日志信息）。<br>当生成足够数量的REDO日志时，我们启动下一个本地检查点，第一步是清除所有TC计数器，这是通过将TC_CLOPSIZEREQ发送到集群中的所有TC来完成的。</p>
+<p>下一步是计算保持GCI（这是需要在REDO日志中保留的最早的全局检查点ID）。 这个数字非常重要，因为我们可以向前移动REDO日志的尾部。 如果我们用完REDO日志空间，我们将无法运行任何写入事务，直到我们启动下一个本地检查点，从而向前移动REDO日志尾部。</p>
+<p>我们通过检查每个片段需要恢复的GCI来计算这个数字。 我们目前保留两个旧的本地检查点仍然有效，因此我们不会将GCI移回以使每个片段的两个最旧的本地检查点无效。 完成此计算后可恢复的GCI是循环遍历所有片段时发现的最小GCI。</p>
+<p>接下来，我们在集群中所有节点的Sysfile中写下此编号和新的本地检查点ID以及其他一些信息。 在系统重新启动时开始恢复群集时，我们首先看到此Sysfile，因此在此文件中使此类信息正确非常重要。</p>
+<p>完成此操作后，我们将计算将参与本地检查点的节点（当前执行重启的早期部分的节点不是本地检查点的一部分，显然也不是死节点）。</p>
+<p>我们将有关起始本地检查点的信息发送给系统中的所有其他DIH。我们必须始终保持所有其他DIH的最新状态，以确保在主DIH崩溃或在本地检查点过程中停止时也很容易继续本地检查点。每个DIH记录参与本地检查点的节点集。他们还在每个副本记录上设置一个标志，指示本地检查点正在进行中，在每个片段记录上我们还设置了作为此本地检查点一部分的副本数。</p>
+<p>现在我们已经完成了本地检查点的准备工作，现在是时候开始实际检查点写入实际数据了。主DIH通过为应检查点的每个片段副本发送LCP_FRAG_ORD来控制此过程。 DIH目前每个节点有2个这样的LCP_FRAG_ORD未完成，排队的2个片段副本。每个LDM线程可以一次处理一个片段副本的写入，并且可以对排队的下一个片段副本有一个请求。扩展此数字非常简单，以便可以并行写入更多的片段副本，并且可以对更多片段副本进行排队。</p>
+<p>当片段副本的本地检查点完成时，LCP_FRAG_REP被发送到所有DIH。 当DIH发现表的所有片段副本都已完成本地检查点时，则应该将表描述写入文件系统。 这将记录所有片段副本的有趣的本地检查点信息。 有两件事可以导致这种情况等待。 首先编写和读取整个表描述只能一次发生一次，这主要发生在正在处理本地检查点时正在进行某些节点故障处理的情况。</p>
+<p>可以阻止写表描述的第二件事是，目前最多可以并行写入4个表描述。 这可能很容易成为瓶颈，因为每次写入文件可能需要大约50毫秒。 所以这意味着我们目前每秒只能写出大约80个这样的表。 在具有许多表和少量数据的系统中，这可能成为瓶颈。 然而，它应该不是一个困难的瓶颈。</p>
+<p>当主DIH已将所有请求发送到检查点所有片段副本时，它将向所有节点发送一个特殊的LCP_FRAG_ORD，指示不再发送任何片段副本。</p>
 
       
     </div>
@@ -450,8 +469,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Cluster重启过程1/" rel="next" title="MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster">
-                <i class="fa fa-chevron-left"></i> MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster
+              <a href="/trie/" rel="next" title="字典树简介(Trie)">
+                <i class="fa fa-chevron-left"></i> 字典树简介(Trie)
               </a>
             
           </div>
@@ -460,8 +479,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/Cluster重启过程3/" rel="prev" title="MySQL Cluster重启过程(3) START OF DATABASE RECOVERY">
-                MySQL Cluster重启过程(3) START OF DATABASE RECOVERY <i class="fa fa-chevron-right"></i>
+              <a href="/模拟退火算法简介/" rel="prev" title="模拟退火算法简介">
+                模拟退火算法简介 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -604,7 +623,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-0"><span class="nav-number">1.</span> <span class="nav-text">STTOR Phase 0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-1"><span class="nav-number">2.</span> <span class="nav-text">STTOR Phase 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-2"><span class="nav-number">3.</span> <span class="nav-text">STTOR Phase 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-3"><span class="nav-number">4.</span> <span class="nav-text">STTOR Phase 3</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-4"><span class="nav-number">5.</span> <span class="nav-text">STTOR Phase 4</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-5"><span class="nav-number">6.</span> <span class="nav-text">STTOR Phase 5</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE"><span class="nav-number">1.</span> <span class="nav-text">COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#COMPLETED-RESTORING-ON-LINE-NOT-RECOVERABLE-DATABASE"><span class="nav-number">2.</span> <span class="nav-text">COMPLETED RESTORING ON-LINE NOT RECOVERABLE DATABASE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#COMPLETED-RESTORING-ON-LINE-RECOVERABLE-DATABASE"><span class="nav-number">3.</span> <span class="nav-text">COMPLETED RESTORING ON-LINE RECOVERABLE DATABASE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-6"><span class="nav-number">4.</span> <span class="nav-text">STTOR Phase 6</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-7"><span class="nav-number">5.</span> <span class="nav-text">STTOR Phase 7</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-8"><span class="nav-number">6.</span> <span class="nav-text">STTOR Phase 8</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-101"><span class="nav-number">7.</span> <span class="nav-text">STTOR Phase 101</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Local-checkpoint-processing-in-MySQL-Cluster"><span class="nav-number">8.</span> <span class="nav-text">Local checkpoint processing in MySQL Cluster</span></a></li></ol></div>
             
 
           </div>
