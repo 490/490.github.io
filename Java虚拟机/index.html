@@ -96,10 +96,16 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_103620.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_103639.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104137.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_082309.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104308.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104326.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104340.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104350.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_082808.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_082849.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_083030.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_083042.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_083119.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104400.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104412.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104421.png">
@@ -109,7 +115,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_104449.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104457.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104643.png">
-<meta property="og:updated_time" content="2019-03-12T00:22:15.677Z">
+<meta property="og:updated_time" content="2019-03-12T00:36:51.410Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机内存管理机制">
 <meta name="twitter:description" content="整体结构参考原文">
@@ -375,7 +381,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  7k
+                  7.7k
                 </span>
               
 
@@ -391,7 +397,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  24
+                  27
                 </span>
               
             </div>
@@ -612,9 +618,10 @@
 <ul>
 <li><p><strong>弱引用：</strong> 被弱引用引用的对象只能生存到下一次垃圾收集前，一旦发生垃圾收集，被弱引用所引用的对象就会被清掉。实现类：<code>WeakReference</code>。Tomcat 中的 ConcurrentCache 就使用了 WeakHashMap 来实现缓存功能。</p>
 </li>
-<li><p><strong>虚引用：</strong> 幽灵引用，对对象没有半毛钱影响，甚至不能用来取得一个对象的实例。它唯一的用途就是：当被一个虚引用引用的对象被回收时，系统会收到这个对象被回收了的通知。实现类：<code>PhantomReference</code>。</p>
+<li><p><strong>虚引用：</strong> 又称为幽灵引用或者幻影引用。一个对象是否有虚引用的存在，完全不会对其生存时间构成影响，也无法通过虚引用取得一个对象实例。它唯一的用途就是：当被一个虚引用引用的对象被回收时，系统会收到这个对象被回收了的通知。实现类：<code>PhantomReference</code>。</p>
 </li>
 </ul>
+<p><img src="http://490.github.io/images/20190312_082309.png" alt="image"></p>
 <h3 id="宣告对象死亡的两次标记过程"><a href="#宣告对象死亡的两次标记过程" class="headerlink" title="宣告对象死亡的两次标记过程"></a>宣告对象死亡的两次标记过程</h3><ul>
 <li>当发现对象不可达后，该对象被第一次标记，并进行是否有必要执行 <code>finalize()</code> 方法的判断；<ul>
 <li>不需要执行：对象没有覆盖 <code>finalize()</code> 方法，或者 <code>finalize()</code> 方法已被执行过（<code>finalize()</code> 只被执行一次）；</li>
@@ -624,7 +631,7 @@
 <li><code>finalize()</code> 方法是对象逃脱死亡的最后一次机会，不过虚拟机不保证等待 <code>finalize()</code> 方法执行结束，也就是说，虚拟机只触发 <code>finalize()</code> 方法的执行，如果这个方法要执行超久，那么虚拟机并不等待它执行结束，所以最好不要用这个方法。</li>
 <li><code>finalize()</code> 方法能做的，try-finally 都能做，所以忘了这个方法吧！</li>
 </ul>
-<h3 id="方法区的回收"><a href="#方法区的回收" class="headerlink" title="方法区的回收"></a>方法区的回收</h3><p>永久代的 GC 主要回收：<strong>废弃常量</strong> 和 <strong>无用的类</strong>。</p>
+<h3 id="方法区的回收"><a href="#方法区的回收" class="headerlink" title="方法区的回收"></a>方法区的回收</h3><p>因为方法区主要存放永久代对象，而永久代对象的回收率比新生代差很多，因此在方法区上进行回收性价比不高。主要是对常量池的回收和对类的卸载。<br>永久代的 GC 主要回收：<strong>废弃常量</strong> 和 <strong>无用的类</strong>。</p>
 <ul>
 <li>废弃常量：例如一个字符串 “abc”，当没有任何引用指向 “abc” 时，它就是废弃常量了。</li>
 <li>无用的类：同时满足以下 3 个条件的类。<ul>
@@ -675,11 +682,28 @@
 <li>标记完后，将所有存活对象向一端移动，然后直接清理掉边界以外的内存。</li>
 </ul>
 </li>
-<li><p><strong>不足：</strong> 存在效率问题，适合老年代。<br><img src="http://490.github.io/images/20190311_104350.png" alt="image"></p>
-<h3 id="进化：分代收集算法"><a href="#进化：分代收集算法" class="headerlink" title="进化：分代收集算法"></a>进化：分代收集算法</h3></li>
-<li><p><strong>新生代：</strong> GC 过后只有少量对象存活 —— <strong>复制算法</strong></p>
-</li>
-<li><strong>老年代：</strong> GC 过后对象存活率高 —— <strong>标记 - 整理算法</strong></li>
+<li><strong>不足：</strong> 存在效率问题，适合老年代。<br><img src="http://490.github.io/images/20190311_104350.png" alt="image"></li>
+</ul>
+<h3 id="进化：分代收集算法"><a href="#进化：分代收集算法" class="headerlink" title="进化：分代收集算法"></a>进化：分代收集算法</h3><ul>
+<li>新生代： GC 过后只有少量对象存活 —— 复制算法</li>
+<li>老年代： GC 过后对象存活率高 —— 标记 - 整理算法</li>
+</ul>
+<p><img src="http://490.github.io/images/20190312_082808.png" alt="image"></p>
+<p>当系统创建一个对象的时候，总是在Eden区操作，当这个区满了，那么就会触发一次Minor GC，也就是年轻代的垃圾回收。一般来说这时候不是所有的对象都没用了，所以就会把还能用的对象复制到From区。<br><img src="http://490.github.io/images/20190312_082849.png" alt="image"></p>
+<p>这样整个Eden区就被清理干净了，可以继续创建新的对象，当Eden区再次被用完，就再触发一次Minor GC，然后呢，注意，这个时候跟刚才稍稍有点区别。这次触发Minor GC后，会将Eden区与From区还在被使用的对象复制到To区，<br><img src="http://490.github.io/images/20190312_083030.png" alt="image"><br>再下一次Minor GC的时候，则是将Eden区与To区中的还在被使用的对象复制到From区。<br><img src="http://490.github.io/images/20190312_083042.png" alt="image"><br>经过若干次Minor GC后，有些对象在From与To之间来回游荡，这时候From区与To区亮出了底线（阈值），这些家伙要是到现在还没挂掉，对不起，一起滚到（复制）老年代吧。<br><img src="http://490.github.io/images/20190312_083119.png" alt="image"><br>老年代经过这么几次折腾，也就扛不住了（空间被用完），好，那就来次集体大扫除（Full GC），也就是全量回收，一起滚蛋吧。全量回收就好比我们刚才比作的大扫除，毕竟动做比较大，成本高，不能跟平时的小型值日（Minor GC）相比，所以如果Full GC使用太频繁的话，无疑会对系统性能产生很大的影响。所以要合理设置年轻代与老年代的大小，尽量减少Full GC的操作</p>
+<p><strong>Minor GC触发机制</strong>： </p>
+<ul>
+<li>当年轻代满时就会触发Minor GC，这里的年轻代满指的是Eden代满，Survivor满不会引发GC。 </li>
+</ul>
+<p><strong>Full GC触发机制</strong>： </p>
+<ul>
+<li>调用System.gc()时，系统建议执行Full GC，但是不必然执行 </li>
+<li>老年代空间不足 </li>
+<li>永久代空间不足 </li>
+<li>通过Minor GC后进入老年代的平均大小大于老年代的可用内存 </li>
+<li>由Eden区、survivor space1（From Space）区向survivor space2（To Space）区复制时，对象大小大于To Space可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象大小</li>
+<li>使用RMI来进行RPC或管理的JDK应用，每小时执行一次Full GC</li>
+<li>CMS GC时出现promotion failed, concurrent mode failure</li>
 </ul>
 <h2 id="HotSpot-中-GC-算法的实现"><a href="#HotSpot-中-GC-算法的实现" class="headerlink" title="HotSpot 中 GC 算法的实现"></a>HotSpot 中 GC 算法的实现</h2><p>通过前两小节对于判断对象生死和垃圾收集算法的介绍，我们已经对虚拟机进行 GC 的流程有了一个大致的了解。但是，在 HotSpot 虚拟机中，高效的实现这些算法也是一个需要考虑的问题。所以，接下来，我们将研究一下 HotSpot 虚拟机到底是如何高效的实现这些算法的，以及在实现中有哪些需要注意的问题。</p>
 <p><img src="http://490.github.io/images/20190311_104400.png" alt="image"></p>
@@ -1006,7 +1030,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">64.3k</span>
+    <span title="Site words total count">65k</span>
   
 </div>
 
