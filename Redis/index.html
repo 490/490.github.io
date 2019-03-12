@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_133906.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_134003.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_134009.png">
-<meta property="og:updated_time" content="2019-03-11T05:45:31.561Z">
+<meta property="og:updated_time" content="2019-03-12T03:05:29.780Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基础知识">
 <meta name="twitter:description" content="简单来说 Redis 就是一个数据库，不过与传统数据库不同的是 Redis 的数据是存在内存中的，所以存写速度非常快，因此 Redis 被广泛应用于缓存方向。此外，redis 也经常用来做分布式锁。">
@@ -409,7 +409,7 @@
 <p>使用 Redis 之类的称为分布式缓存，在多实例的情况下，各实例共用一份缓存数据，缓存具有一致性。缺点是需要保持 Redis 服务的高可用，会使整个程序的架构变的较为复杂。</p>
 <h1 id="Redis-常见数据结构以及使用场景分析"><a href="#Redis-常见数据结构以及使用场景分析" class="headerlink" title="Redis 常见数据结构以及使用场景分析"></a>Redis 常见数据结构以及使用场景分析</h1><h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><p>String 数据结构是简单的 key-value 类型，value 其实不仅可以是 String，也可以是数字。常规 key-value 缓存应用；常规计数：微博数，粉丝数等。</p>
 <h2 id="List"><a href="#List" class="headerlink" title="List"></a>List</h2><p>双向链表，应用场景：微博的关注列表，粉丝列表，消息列表等。</p>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">lpush</span><br><span class="line">rpush</span><br><span class="line">lpop</span><br><span class="line">rpop</span><br><span class="line">blpop   # 阻塞 pop，bl：block</span><br><span class="line">lrange  # LRANGE mylist 0 1，取出 list 0~1 的元素</span><br><span class="line">llen</span><br><span class="line">lrem</span><br><span class="line">lindex  # 按 index get list 种的元素</span><br><span class="line">linsert # LINSERT mylist BEFORE &quot;World&quot; &quot;There&quot;</span><br><span class="line">lset    # LSET mylist 0 &quot;four&quot;，把第 0 个位置改成 &quot;four&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">lpush   #在key对应list的头部添加</span><br><span class="line">rpush   #尾部</span><br><span class="line">lpop</span><br><span class="line">rpop</span><br><span class="line">blpop   # 阻塞 pop，bl：block</span><br><span class="line">lrange  # LRANGE mylist 0 1，取出 list 0~1 的元素</span><br><span class="line">llen</span><br><span class="line">lrem    #lrem key count value从key对应 list 中删除 count(&gt;0从头到尾,=0所有) 个和 value 相同的元素</span><br><span class="line">lindex  # 按 index get list 种的元素</span><br><span class="line">linsert # LINSERT mylist BEFORE &quot;World&quot; &quot;There&quot;</span><br><span class="line">lset    # LSET mylist 0 &quot;four&quot;，把第 0 个位置改成 &quot;four&quot;</span><br></pre></td></tr></table></figure>
 <h3 id="底层实现"><a href="#底层实现" class="headerlink" title="底层实现"></a>底层实现</h3><p>链表。</p>
 <h2 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h2><p>Hash 是一个 string 类型的 field 和 value 的映射表，又名字典，hash 特别适合用于存储对象，后续操作的时候，你可以直接仅仅修改这个对象中的某个字段的值。 比如我们可以Hash数据结构来存储用户信息，商品信息等等。</p>
 <p>比如可以用 hash 类型存放：</p>
@@ -441,13 +441,13 @@
 <p>首先说一下我们的需求，我们要一个有序的列表，因为一个有序的列表搜索起来可以用二分法，快啊！</p>
 <p>所以当我们要插入新元素的时候，就不能直接往表尾一放，我们需要保证把这个节点放进去之后，这个表还是有序的，所以我们的插入操作要分两步来进行：</p>
 <ol>
-<li>找：把新节点插哪我们的表还是有序滴</li>
+<li>找：把新节点插哪我们的表还有序</li>
 <li>插：把新节点插到我们上一步找到的位置处</li>
 </ol>
 <p>这需求一看就是平衡树了，可是红黑树之流实现起来有多复杂，大家也是有目共睹的，所以，Redis 用了一种叫跳跃表的数据结构。我们先来介绍一下 <a href="http://blog.jobbole.com/111731/" target="_blank" rel="noopener">跳跃表</a>（这个小灰讲的超好，我就是在下面挑我关心的重点复述一下）：</p>
 <p>首先，本质上来讲，跳跃表还是一个链表的，这样插入和删除就很快啦！不过存链表的查找很慢呀，根本用不了二分法之流，只能从头到尾一个一个的遍历，也就是说，它的查找移动步长只能是 1，那么怎么解决这个问题呢？我们首先想到的方法应该就是想尽一切办法能让查找操作以比较大的步长移动。</p>
 <p>那么如何实现大步长移动呢？这就想到了 MySQL 的 InnoDB 的索引的实现方式，我们知道 InnoDB 的一个数据页中的数据和一个链表差不多，不过它有一个叫页目录的东西，这个页目录就是从它所在的页中，以一定的间隔抽出一些节点，作为这个页的目录，这样我们就能大跨度的在单链表中进行查找了。</p>
-<p>跳跃表就是基于这个方法实现的大跨度的查找，它从真正的数据中抽出了一些作为一级索引，又从一级索引中抽出一部分作为二级索引，就这样抽抽抽，知道最高层只有两个节点为止（就剩俩了也没有必要继续抽了……）。抽完之后大概是这样的：</p>
+<p>跳跃表就是基于这个方法实现的大跨度的查找，它从真正的数据中抽出了一些作为一级索引，又从一级索引中抽出一部分作为二级索引，就这样抽抽抽，直到最高层只有两个节点为止（就剩俩了也没有必要继续抽了……）。抽完之后大概是这样的：</p>
 <p><img src="http://490.github.io/images/20190311_133640.png" alt="image"></p>
 <p>那么我们抽索引的时候，抽谁呢？跳跃表是个选择障碍症患者，所以它抛硬币，每插入一个新节点，它都有 50% 的概率被选为索引，所以跳跃表的插入操作的是这样滴，比如我们要在上面的那个表里插个 9：</p>
 <p><img src="http://490.github.io/images/20190311_133650.png" alt="image"></p>
@@ -748,7 +748,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -838,7 +838,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">65k</span>
+    <span title="Site words total count">77.3k</span>
   
 </div>
 

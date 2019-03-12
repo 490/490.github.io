@@ -77,18 +77,18 @@
 
 
 
-<meta name="description" content="在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。">
+<meta name="description" content="LCP：本地检查点，在NDB中，这意味着主内存中的所有数据都写入磁盘，我们还将更改的磁盘页写入磁盘，以确保磁盘上某个点之前的所有更改都可用。 执行REDO日志：这意味着我们一次读取REDO日志一条REDO日志记录，并在需要时执行REDO日志记录中的操作。">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster">
-<meta property="og:url" content="https://490.github.io/Cluster重启过程/index.html">
+<meta property="og:title" content="MySQL Cluster重启过程(3) START OF DATABASE RECOVERY">
+<meta property="og:url" content="https://490.github.io/Cluster重启过程3/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。">
+<meta property="og:description" content="LCP：本地检查点，在NDB中，这意味着主内存中的所有数据都写入磁盘，我们还将更改的磁盘页写入磁盘，以确保磁盘上某个点之前的所有更改都可用。 执行REDO日志：这意味着我们一次读取REDO日志一条REDO日志记录，并在需要时执行REDO日志记录中的操作。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-11T13:59:11.718Z">
+<meta property="og:updated_time" content="2019-03-11T15:20:16.452Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster">
-<meta name="twitter:description" content="在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。">
+<meta name="twitter:title" content="MySQL Cluster重启过程(3) START OF DATABASE RECOVERY">
+<meta name="twitter:description" content="LCP：本地检查点，在NDB中，这意味着主内存中的所有数据都写入磁盘，我们还将更改的磁盘页写入磁盘，以确保磁盘上某个点之前的所有更改都可用。 执行REDO日志：这意味着我们一次读取REDO日志一条REDO日志记录，并在需要时执行REDO日志记录中的操作。">
 
 
 
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="https://490.github.io/Cluster重启过程/">
+  <link rel="canonical" href="https://490.github.io/Cluster重启过程3/">
 
 
 
 
 
-  <title>MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster | 我的笔记</title>
+  <title>MySQL Cluster重启过程(3) START OF DATABASE RECOVERY | 我的笔记</title>
   
 
 
@@ -279,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/Cluster重启过程/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Cluster重启过程3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MySQL Cluster重启过程 (1) Restart Phases in MySQL Cluster</h1>
+          <h1 class="post-title" itemprop="name headline">MySQL Cluster重启过程(3) START OF DATABASE RECOVERY</h1>
         
 
         <div class="post-meta">
@@ -308,7 +308,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-11T19:22:08+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-11T21:56:45+08:00">
                 2019-03-11
               </time>
             
@@ -327,8 +327,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/Cluster重启过程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/Cluster重启过程/" itemprop="commentsCount"></span>
+                <a href="/Cluster重启过程3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/Cluster重启过程3/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -350,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3.3k
+                  2.5k
                 </span>
               
 
@@ -366,7 +366,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  11
+                  8
                 </span>
               
             </div>
@@ -387,56 +387,55 @@
       
 
       
-        <p>在MySQL Cluster中，重新启动是分阶段处理的，节点的重启由一组阶段驱动。此外，节点重启也与已启动的节点以及与我们的节点并行启动的其他节点同步。此注释将描述所使用的各个阶段。<br><a id="more"></a></p>
-<p><a href="https://github.com/mysql/mysql-server/blob/8e797a5d6eb3a87f16498edcb7261a75897babae/storage/ndb/src/kernel/blocks/ndbcntr/NdbcntrMain.cpp" target="_blank" rel="noopener">原文</a><br>启动节点的第一步是创建数据节点运行时环境。数据节点进程通常使用angel进程运行，此angel进程确保数据节点万一失败时能够自动重新启动。因此，再次运行数据节点的唯一原因是在OS崩溃之后或运营商关闭之后或作为软件升级的一部分。</p>
-<p>当启动数据节点时，数据节点需要一个节点id，这是通过设置参数–ndb-nodeid在启动datanode时，或者在检索配置时由管理服务器分配。对于数据节点的所有重新启动，angel进程将确保所分配的节点id将相同。</p>
-<p>在分配数据节点进程之后，启动进程保持为angel进程并且新进程成为实际的数据节点进程。实际的数据节点进程首先从managementserver检索配置。</p>
-<p>在这个阶段我们已经阅读了选项，我们已经分配了一个节点ID，我们从管理服务器加载了配置。我们将在数据节点日志中打印一些关于我们的线程配置和其他一些重要信息。为了确保我们找到正确的文件并在正确的位置创建文件，我们设置了数据节点进程的数据文件夹。</p>
-<p>接下来我们必须启动看门狗线程，因为我们现在开始执行操作，我们希望确保我们不要由于某些软件错误而卡住了。</p>
-<p>接下来我们将分配全局内存池的内存，这是分配最多内存的地方，我们仍然有相当多的内存分配，作为NDB内核中各种软件模块初始化的部分，但是我们正在逐步使用全局内存池。</p>
-<p>分配内存可能是一个相当耗时的过程，其中操作系统可以为每个分配的GByte内存提供长达一秒的时间（自然是OS依赖的并且会随着时间的推移而变化）。</p>
-<p>实际上在这里消耗时间实际上是我们还触摸每个页面以确保分配的内存也被映射到真实物理内存以避免在我们运行该过程时页面未命中。为了加快这个过程，我们已经触及了内存多线程。实际上，大多数内存的分配是可配置的，配置变量<code>LateAlloc</code>可用于延迟大多数内存分配到重启的早期阶段。</p>
-<p>分配全局内存池后，我们初始化运行时环境使用的所有数据。 这可确保我们准备好在数据节点进程启动后立即在线程之间发送和接收数据。</p>
-<p>在这一点上，我们只启动了看门狗进程并且线程在创建进程的过程中启动（如果我们运行ndbmtd，这个线程稍后将被转换为第一个接收线程，如果我们正在运行，则该线程将被转换为唯一的执行线程NDBD）。 下一步是加载所有软件模块并初始化它们，以确保在消息开始到达执行时正确设置它们。</p>
-<p>在我们启动运行时环境之前，我们还需要激活发送和接收服务。 这涉及创建一个套接字客户端线程，该线程试图连接到集群中其他节点的套接字服务器部分，并创建一个线程来监听用于我们作为套接字服务器通信的那些数据节点的套接字服务器。</p>
-<p>默认行为是nodeid最低的节点是通信设置中的套接字服务器。 这可以在数据节点配置中更改。</p>
-<p>在我们继续并启动数据节点环境之前，我们将运行时环境的启动信号放在其正确的作业缓冲区中。 实际上，为了启动系统，需要在作业缓冲区中放置两个相等的信号。 第一个启动信号开始与其他节点的通信，并设置状态以等待下一个信号实际启动系统。 第二个将开始运行启动阶段。</p>
-<p>最后，我们启动运行时环境的所有线程。 这些当前可以包括主线程，代表线程，多个tc线程，多个发送线程，多个接收线程和多个ldm线程。 鉴于已预先分配了所有线程的通信缓冲区，我们可以在这些线程启动时立即开始发送信号。 接收线程一旦到达其线程启动代码中的那一点就会开始处理其接收到的信号。</p>
-<p>有两个相同的启动信号，第一个启动定期发送的重复信号，以跟踪数据节点中的时间。 只有第二个开始执行各种启动阶段。</p>
-<hr>
-<p>数据节点的启动在一组阶段中处理。 第一阶段是将信号READ_CONFIG_REQ发送到内核中的所有软件模块，然后将STTOR类似地发送到256个阶段的所有软件模块，编号从0到255.这些模块的编号从0到255，我们不使用全部 这些阶段，但代码是灵活的，以便任何这些阶段可以现在使用或在将来的某个时间使用。</p>
-<p>此外，我们还有6个模块，这些模块涉及另外一组启动阶段。 在这些阶段发送的信号称为NDB_STTOR。 最初的想法是将此消息视为NDB子系统的本地启动。 这些信号由NDBCNTR发送和处理，并作为NDBCNTR中STTOR处理的一部分发送。 这意味着它成为启动阶段的连续部分。</p>
-<p>在开始阶段之前，我们确保任何管理节点都可以连接到我们的节点，并且所有其他节点都已断开连接，并且它们只能向QMGR模块发送消息。 管理服务器接收关于数据节点中的各种事件的报告，并且QMGR模块负责将数据节点包括在集群中。 在我们被包含在集群中之前，我们无法以任何方式与其他节点通信。</p>
-<p>开始总是从主线程开始，其中每个软件模块至少由所有多线程模块包含的代理模块表示。 代理模块使用一条消息和一条回复，可以轻松地向一组相同类型的模块发送和接收消息。</p>
-<p>READ_CONFIG_REQ信号始终以相同的顺序发送。 它首先发送到CMVMI，这是接收启动顺序的块，它执行许多功能，软件模块可以从这些功能影响运行时环境。 它通常会分配进程的大部分内存并触及所有内存。 它是主线程的一部分。</p>
-<p>接收READ_CONFIG_REQ的下一个模块是NDBFS，这是控制文件系统线程的模块，该模块位于主线程中。</p>
-<p>下一个模块是DBINFO，该模块支持ndbinfo数据库，用于以表格格式获取有关数据节点内部的信息，该模块位于主线程中。</p>
-<p>接下来是DBTUP，这是存储实际数据的模块。 </p>
-<p>下一个DBACC，存储主键和唯一键哈希索引的模块以及我们控制行锁的位置。 这两个块都包含在ldm线程中。</p>
-<p>接下来是DBTC，即管理事务协调的模块，该模块是tc线程的一部分。 接下来是DBLQH，该模块通过键操作和扫描控制对数据的操作，并且还处理REDO日志。 这是ldm线程的主要模块。</p>
-<p>接下来是DBTUX，它操作有序索引重用页面，用于在DBTUP中存储行，也是ldm线程的一部分。 接下来是DBDICT，这是一个字典模块，用于存储和处理有关表和列，表空间，日志文件等的所有元数据信息。 DICT是主线程的一部分。</p>
-<p>接下来是DBDIH，用于存储和处理有关所有表，表分区和每个分区的所有副本的分发信息的模块。 它控制本地检查点进程，全局检查点进程并控制重新启动处理的主要部分。 DIH模块是主线程的一部分。</p>
-<p>接下来是控制重启阶段的NDBCNTR，它是主线程的一部分。 接下来是QMGR，它负责处理心跳协议以及包含和排除集群中的节点。 它是主线程的一部分。</p>
-<p>接下来是TRIX，它执行与有序索引和其他基于触发器的服务相关的一些服务。 它是tc线程的一部分。 接下来是BACKUP，它用于备份和本地检查点，是ldm线程的一部分。</p>
-<p>接下来是DBUTIL，它提供了许多服务，例如代表模块中的代码执行密钥操作。 它是主线程的一部分。</p>
-<p>接下来是负责复制事件的SUMA模块，这是由rep线程处理的模块。</p>
-<p>接下来是TSMAN，然后是LGMAN，然后是PGMAN，它们都是磁盘数据处理的一部分，负责处理表空间，UNDO日志记录和页面管理。 它们都是ldm线程的一部分。</p>
-<p>RESTORE是一个用于在启动时恢复本地检查点的模块。 该模块也是ldm线程的一部分。</p>
-<p>最后，我们有DBSPJ模块来处理向下推送到数据节点的连接查询，它作为tc线程的一部分执行。</p>
-<hr>
-<p>DBTUP，DBACC，DBLQH，DBTUX，BACKUP，TSMAN，LGMAN，PGMAN，RESTORE都是紧密集成的模块，它们在每个节点中本地处理数据和索引。 这组模块形成一个LDM实例，每个节点可以有多个LDM实例，这些实例可以分布在一组线程上。</p>
-<p>每个LDM实例都拥有自己的数据分区。 我们还有两个不属于重启处理的模块，这是TRPMAN模块，它执行许多与传输相关的功能（与其他节点通信）。 它在接收线程中执行。 最后，我们有THRMAN在每个线程中执行并执行一些线程管理功能。</p>
-<p>所有模块都接收READ_CONFIG_REQ，所有模块也接收STTOR用于阶段0和阶段1.在阶段1中，他们报告他们希望获得更多信息的起始阶段。</p>
-<p>在READ_CONFIG_REQ期间，线程可以在模块中执行很长时间，因为我们可以分配和触摸大尺寸的存储器。 这意味着我们的监视程序线程在此阶段有一个特殊的超时，以确保我们不会因为长时间初始化内存而导致进程崩溃。 在正常操作中，每个信号应仅执行少量微秒。</p>
-<p>通过将消息STTOR发送到所有模块来同步启动阶段，逻辑上每个模块从0到255获得每个启动阶段的该信号。然而，响应消息STTORRY包含模块真正感兴趣的启动阶段列表。</p>
-<p>处理起始相位信号的NDBCNTR模块可以优化掉不需要的任何信号。 模块接收STTOR消息的顺序对于所有阶段都是相同的：</p>
-<p>1) NDBFS<br>2) DBTC<br>3) DBDIH<br>4) DBLQH<br>5) DBACC<br>6) DBTUP<br>7) DBDICT<br>8) NDBCNTR<br>9) CMVMI<br>10) QMGR<br>11) TRIX<br>12) BACKUP<br>13) DBUTIL<br>14) SUMA<br>15) DBTUX<br>16) TSMAN<br>17) LGMAN<br>18) PGMAN<br>19) RESTORE<br>20) DBINFO<br>21) DBSPJ</p>
-<p>此外，还有一个由NDBCNTR控制的特殊启动阶段处理，因此当NDBCNTR收到自己的STTOR消息时，它会启动涉及模块的本地启动阶段处理，DBLQH，DBDICT，DBTUP，DBACC，DBTC和DBDIH。</p>
-<p>对于阶段2到8，会发生这种情况。在这些启动阶段发送的消息是NDB_STTOR和NDB_STTORRY，它们的处理方式与STTOR和STTORRY类似。 模块还以相同的顺序接收所有阶段的启动阶段，此顺序为：</p>
-<p>1) DBLQH<br>2) DBDICT<br>3) DBTUP<br>4) DBACC<br>5) DBTC<br>6) DBDIH</p>
-<p>对于那些多线程的模块，STTOR和NDB_STTOR消息始终由在主线程中执行的代理模块接收。 然后，代理模块将STTOR和NDB_STTOR消息发送到模块的每个单独实例（实例数通常与线程数相同，但有时可能不同）。 它并行执行，因此所有实例并行执行STTOR。</p>
-<p>因此，有效地，模块的每个实例将在逻辑上首先接收READ_CONFIG_REQ，然后为每个启动阶段接收一组STTOR消息，并且一些模块也将按特定顺序接收NDB_STTOR。 所有这些消息都按特定顺序发送并按顺序发送。 因此，这意味着我们能够通过在正确的启动阶段执行操作来控制何时完成任务。</p>
-<p>接下来，我们将逐步描述节点重启（或节点作为集群启动/重启的一部分启动）中发生的情况。 启动目前是一个顺序过程，除非声明它并行发生。 以下描述因此描述了当前实际发生的顺序。</p>
+        <ul>
+<li><code>LCP</code>：本地检查点，在NDB中，这意味着主内存中的所有数据都写入磁盘，我们还将更改的磁盘页写入磁盘，以确保磁盘上某个点之前的所有更改都可用。 执行REDO日志：这意味着我们一次读取REDO日志一条REDO日志记录，并在需要时执行REDO日志记录中的操作。<a id="more"></a></li>
+<li><p><code>Apply the REDO log</code>：执行REDO日志的同义词。</p>
+</li>
+<li><p><code>Prepare REDO log record</code>: 这是一个REDO日志记录，包含有关数据库更改的信息（插入/删除/更新/写入）。</p>
+</li>
+<li><p><code>COMMIT REDO log</code>：这是一个REDO日志记录，指定要实际执行Prepare REDO日志记录。 COMMIT REDO日志记录包含Prepare REDO日志记录的后向引用。</p>
+</li>
+<li><p><code>ABORT REDO log record</code>：与COMMIT REDO日志记录类似，但此处事务已中止，因此无需应用REDO日志记录。</p>
+</li>
+<li><p><code>Database</code>:在此上下文中表示当节点重新启动时驻留在集群或节点中的所有数据。</p>
+</li>
+<li><p><code>Off-line Database</code>:意味着我们节点中的数据库不在线，因此不能用于读取。 这是恢复LCP后但在应用REDO日志之前的数据库状态。</p>
+</li>
+<li><p><code>Off-line Consistent database</code>:这是一个数据库状态，它与最新的更改不是最新的，但它表示先前存在的数据库中的旧状态。 恢复LCP并执行REDO日志后，即可实现此状态。</p>
+</li>
+<li><code>On-line Database</code>:这是一个最新的数据库状态，任何可用于读取数据的节点都有其数据库在线（实际上片段是逐个联机的）。</li>
+<li><code>On-line Recoverable Database</code>:这是一个也可以恢复的在线数据库。 在节点重启中，我们首先到达状态在线数据库，但是我们需要运行LCP，然后数据库也可以恢复到其当前状态。 可恢复的数据库也是持久的，这意味着当我们达到此状态时，我们将ACID中的D添加到数据库中。</li>
+<li><code>Node</code>:有API节点，数据节点和管理服务器节点。 数据节点是ndbd / ndbmtd进程，它运行所有数据库逻辑并包含数据库数据。 管理服务器节点是运行包含群集配置的ndb_mgmd并且还执行许多管理服务的进程。 API节点是应用程序进程的一部分，在mysqld中。 每个应用程序进程可以有多个API节点。 每个API节点通过套接字（或其他通信介质）连接到每个数据节点和管理服务器节点。 当一个人引用本文中的节点时，我们主要暗示的是我们在谈论一个数据节点。</li>
+<li><code>Node Group</code>:一组数据节点，它们都包含相同的数据。 节点组中的节点数等于我们在集群中使用的副本数。</li>
+<li><code>Fragment</code>:表的一部分，完全存储在一个节点组中。</li>
+<li><code>Partition</code>:Synonym of fragment.</li>
+<li><code>Fragment replica</code>:这是一个节点中的一个片段。 一个片段最多可以有4个副本（因此节点组中最多可以有4个节点）。</li>
+<li><code>Distribution information</code>: 这是有关表的分区（片段的同义词）以及它们驻留在哪些节点上的信息，以及有关在每个片段副本上执行的LCP的信息。</li>
+<li><code>Metadata</code>:这是有关表，索引，触发器，外键，哈希映射，文件，日志文件组，表空间的信息。 字典信息：元数据的同义词。</li>
+<li><code>LDM</code>:代表本地数据管理器，这些是执行处理一个数据节点内处理的数据的代码的块。 它包含处理元组存储的块，哈希索引，T树索引，页面缓冲区管理器，表空间管理器，写入LCP的块和恢复LCP的块，磁盘数据的日志管理器。</li>
+</ul>
+<blockquote>
+<p>作为<code>START_COPYREQ</code>的一部分，真正的数据库恢复过程是什么。 这里执行大多数重要的数据库恢复算法以使数据库再次联机。 仍需要早期阶段来恢复元数据和设置通信，设置内存并将起始节点作为数据节点集群中的完整公民。</p>
+</blockquote>
+<p>START_COPYREQ遍历所有分发信息，并将START_FRAGREQ发送到拥有的DBLQH模块实例，以便在节点上恢复每个片段副本。 DBLQH将立即启动以恢复这些片段副本，它将对片段副本进行排队并一次恢复一个。 这发生在两个阶段，首先需要恢复本地检查点的所有片段副本开始这样做。</p>
+<p>在发送了所有要恢复的片段副本之后，我们已经从存储在磁盘上的本地检查点恢复了所有片段（或者有时通过从活动节点获取整个片段），然后是运行磁盘数据UNDO日志的时候了。 最后，在运行此UNDO日志之后，我们已准备好通过应用REDO日志将片段副本恢复到最新的磁盘持久状态。</p>
+<p>DBDIH将所有片段副本的所有必需信息发送到DBLQH，然后它将START_RECREQ发送到DBLQH以指示现在已发送所有片段副本信息。</p>
+<p>START_RECREQ通过DBLQH代理模块发送，并且该部分被并行化，以便所有LDM实例并行执行以下部分。</p>
+<p>如果我们正在进行初始节点重启，我们不需要恢复任何本地检查点，因为初始节点重启意味着我们在没有文件系统的情况下启动。 所以这意味着我们必须从节点组中的其他节点恢复所有数据。 在这种情况下，当我们收到START_FRAGREQ时，我们立即开始在DBLQH中应用片段副本的复制。 在这种情况下，我们不需要运行任何撤消或重做日志，因为没有本地检查点来恢复片段。</p>
+<p>完成此操作后，DBDIH报告已通过将START_RECREQ发送到DBLQH发送了所有要启动的片段副本，我们将向TSMAN发送START_RECREQ，之后我们将完成数据的恢复。</p>
+<p>我们将指定要作为REDO日志执行的一部分进行恢复的所有片段副本。 这是通过信号EXEC_FRAGREQ完成的。 当所有这些信号都被发送后，我们发送EXEC_SRREQ表示我们已经准备好在DBLQH中执行下一个REDO日志执行阶段。</p>
+<p>当发送所有这些信号时，我们已经完成了所谓的DBLQH的第2阶段，DBLQH中的阶段1是在NDB_STTOR阶段3中开始准备REDO日志以进行读取。 因此，当这两个阶段都完成时，我们就可以开始在DBLQH中开始所谓的阶段3。</p>
+<p>这些DBLQH阶段与启动阶段无关，这些阶段是DBLQH模块中启动的内部阶段。</p>
+<p>DBLQH中的第3阶段是读取REDO日志并将其应用于从本地检查点恢复的片段副本。 这是创建在特定全局检查点上同步的数据库状态所必需的。 因此，我们首先为所有片段安装本地检查点，接下来我们应用REDO日志将片段副本与某个全局检查点同步。</p>
+<p>在执行REDO日志之前，我们需要通过检查我们将恢复到所需全局检查点的所有片段副本的限制来计算要在REDO日志中应用的起始GCI和最后一个GCI。</p>
+<p>DBDIH已存储有关片段副本的每个本地检查点的信息，这些信息是从REDO日志运行所需的全局检查点范围，以使其进入某个全局检查点的状态。 此信息已在START_FRAGREQ信号中发送。 DBLQH会将每个片段副本的所有这些限制合并到全局范围的全局检查点，以便为此LDM实例运行。 因此每个片段副本都有自己的GCP id范围来执行，这意味着所有这些起始范围的最小值和所有结束范围的最大值是我们需要在REDO日志中执行以引入集群的全局GCP ID范围 再次在线。</p>
+<p>下一步是使用start和stop全局检查点id计算每个日志部分的REDO日志中的开始和停止兆字节。 计算这个所需的所有信息已经在内存中，所以这是一个纯粹的计算。</p>
+<p>当我们执行REDO日志时，实际上我们只在正确的全局检查点范围内应用COMMIT记录。 COMMIT记录和实际更改记录位于REDO日志中的不同位置，因此对于每兆字节的REDO日志，我们记录REDO日志中我们必须返回多长时间才能找到更改记录。</p>
+<p>在运行REDO日志时，我们维护一个相当大的REDO日志缓存，以避免在事务运行很长时间的情况下我们必须执行磁盘读取。</p>
+<p>这意味着长时间运行和大型事务可能会对重新启动时间产生负面影响。</p>
+<p>在所有日志部分完成此计算后，我们现在准备开始执行REDO日志。 在执行REDO日志完成后，我们还会在REDO日志中写入一些内容，以表明我们之前使用的任何信息都不会在以后使用。</p>
+<p>我们现在需要等待所有其他日志部分也完成其REDO日志部分的执行。 REDO日志执行的设计使我们可以在多个阶段执行REDO日志，这适用于我们可以从多个活动节点重建节点的情况。 目前绝不应使用此代码。</p>
+<p>因此，下一步是检查REDO日志部件的新头部和尾部。 这是通过使用启动和停止全局检查点来计算此数字的相同代码完成的。 代码的这一阶段还通过确保正确的REDO日志文件打开来准备REDO日志部分以编写新的REDO日志记录。 它还涉及一些相当棘手的代码，以确保正确处理已脏的页面。</p>
 
       
     </div>
@@ -467,8 +466,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/数据库中的undo日志、redo日志、检查点/" rel="next" title="数据库中的undo日志、redo日志、检查点">
-                <i class="fa fa-chevron-left"></i> 数据库中的undo日志、redo日志、检查点
+              <a href="/Cluster重启过程2/" rel="next" title="MySQL Cluster重启过程 (2) READ_CONFIG_REQ">
+                <i class="fa fa-chevron-left"></i> MySQL Cluster重启过程 (2) READ_CONFIG_REQ
               </a>
             
           </div>
@@ -477,8 +476,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/Cluster重启过程2/" rel="prev" title="MySQL Cluster重启过程 (2) READ_CONFIG_REQ">
-                MySQL Cluster重启过程 (2) READ_CONFIG_REQ <i class="fa fa-chevron-right"></i>
+              <a href="/trie/" rel="prev" title="字典树简介(Trie)">
+                字典树简介(Trie) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -556,7 +555,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -630,7 +629,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">65k</span>
+    <span title="Site words total count">77.3k</span>
   
 </div>
 
