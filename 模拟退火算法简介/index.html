@@ -86,7 +86,7 @@
 <meta property="og:description" content="爬山算法 ( Hill Climbing )介绍模拟退火前，先介绍爬山算法。爬山算法是一种简单的贪心搜索算法，该算法每次从当前解的临近解空间中选择一个最优解作为当前解，直到达到一个局部最优解。 爬山算法实现很简单，其主要缺点是会陷入局部最优解，而不一定能搜索到全局最优解。如图1所示：假设C点为当前解，爬山算法搜索到A点这个局部最优解就会停止搜索，因为在A点无论向那个方向小幅度移动都不能得到更优的解">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190312_162719.png">
-<meta property="og:updated_time" content="2019-03-12T08:27:40.140Z">
+<meta property="og:updated_time" content="2019-03-12T10:46:08.499Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="模拟退火算法简介">
 <meta name="twitter:description" content="爬山算法 ( Hill Climbing )介绍模拟退火前，先介绍爬山算法。爬山算法是一种简单的贪心搜索算法，该算法每次从当前解的临近解空间中选择一个最优解作为当前解，直到达到一个局部最优解。 爬山算法实现很简单，其主要缺点是会陷入局部最优解，而不一定能搜索到全局最优解。如图1所示：假设C点为当前解，爬山算法搜索到A点这个局部最优解就会停止搜索，因为在A点无论向那个方向小幅度移动都不能得到更优的解">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  851
+                  1.5k
                 </span>
               
 
@@ -368,7 +368,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  5
                 </span>
               
             </div>
@@ -391,23 +391,42 @@
       
         <h1 id="爬山算法-Hill-Climbing"><a href="#爬山算法-Hill-Climbing" class="headerlink" title="爬山算法 ( Hill Climbing )"></a>爬山算法 ( Hill Climbing )</h1><p>介绍模拟退火前，先介绍爬山算法。爬山算法是一种简单的贪心搜索算法，该算法每次从当前解的临近解空间中选择一个最优解作为当前解，直到达到一个局部最优解。</p>
 <p>爬山算法实现很简单，其主要缺点是会陷入局部最优解，而不一定能搜索到全局最优解。如图1所示：假设C点为当前解，爬山算法搜索到A点这个局部最优解就会停止搜索，因为在A点无论向那个方向小幅度移动都不能得到更优的解。<br><a id="more"></a><br><img src="http://490.github.io/images/20190312_162719.png" alt="image"></p>
-<h1 id="模拟退火-SA-Simulated-Annealing-思想"><a href="#模拟退火-SA-Simulated-Annealing-思想" class="headerlink" title="模拟退火(SA,Simulated Annealing)思想"></a>模拟退火(SA,Simulated Annealing)思想</h1><pre><code>爬山法是完完全全的贪心法，每次都鼠目寸光的选择一个当前最优解，因此只能搜索到局部的最优值。模拟退火其实也是一种贪心算法，但是它的搜索过程引入了随机因素。模拟退火算法**以一定的概率**来接受一个比当前解要差的解，因此**有可能**会跳出这个局部的最优解，达到全局的最优解。以图1为例，模拟退火算法在搜索到局部最优解A后，会**以一定的概率**接受到E的移动。也许经过几次这样的不是局部最优的移动后会到达D点，于是就跳出了局部最大值A。
-
-模拟退火算法描述：
-
-若J( Y(i+1) )&gt;= J( Y(i) )  (即移动后得到更优解)，则总是接受该移动
-
-若J( Y(i+1) )&lt; J( Y(i) )  (即移动后的解比当前解要差)，则**以一定的概率接受移动，而且这个概率随着时间推移逐渐降低（逐渐降低才能趋向稳定）**
-</code></pre><p>　　这里的“一定的概率”的计算参考了金属冶炼的退火过程，这也是模拟退火算法名称的由来。</p>
-<p>　　根据热力学的原理，在温度为T时，出现能量差为dE的降温的概率为P(dE)，表示为：</p>
-<p><strong>　　　　P(dE) = exp( dE/(kT) )</strong></p>
-<p>　　其中k是一个常数，exp表示自然指数，且dE&lt;0。这条公式说白了就是：温度越高，出现一次能量差为dE的降温的概率就越大；温度越低，则出现降温的概率就越小。又由于dE总是小于0（否则就不叫退火了），因此dE/kT &lt; 0 ，所以P(dE)的函数取值范围是(0,1) 。</p>
-<p>　　随着温度T的降低，P(dE)会逐渐降低。</p>
-<p>　　我们将一次向较差解的移动看做一次温度跳变过程，我们以概率P(dE)来接受这样的移动。</p>
-<p>　　关于爬山算法与模拟退火，有一个有趣的比喻：</p>
-<p>　　爬山算法：兔子朝着比现在高的地方跳去。它找到了不远处的最高山峰。但是这座山不一定是珠穆朗玛峰。这就是爬山算法，它不能保证局部最优值就是全局最优值。</p>
-<p>　　模拟退火：兔子喝醉了。它随机地跳了很长时间。这期间，它可能走向高处，也可能踏入平地。但是，它渐渐清醒了并朝最高方向跳去。这就是模拟退火。</p>
+<h1 id="模拟退火-SA-Simulated-Annealing-思想"><a href="#模拟退火-SA-Simulated-Annealing-思想" class="headerlink" title="模拟退火(SA,Simulated Annealing)思想"></a>模拟退火(SA,Simulated Annealing)思想</h1><p>爬山法是完完全全的贪心法，每次都鼠目寸光的选择一个当前最优解，因此只能搜索到局部的最优值。模拟退火其实也是一种贪心算法，但是它的搜索过程引入了随机因素。模拟退火算法<strong>以一定的概率</strong>来接受一个比当前解要差的解，因此<strong>有可能</strong>会跳出这个局部的最优解，达到全局的最优解。以图1为例，模拟退火算法在搜索到局部最优解A后，会<strong>以一定的概率</strong>接受到E的移动。也许经过几次这样的不是局部最优的移动后会到达D点，于是就跳出了局部最大值A。</p>
+<p>模拟退火算法描述：</p>
+<p>若<code>J( Y(i+1) )&gt;= J( Y(i) )</code> (即移动后得到更优解)，则总是接受该移动</p>
+<p>若<code>J( Y(i+1) )&lt; J( Y(i) )</code> (即移动后的解比当前解要差)，则<strong>以一定的概率接受移动，而且这个概率随着时间推移逐渐降低（逐渐降低才能趋向稳定）</strong></p>
+<p>这里的“一定的概率”的计算参考了金属冶炼的退火过程，这也是模拟退火算法名称的由来。</p>
+<p>根据热力学的原理，在温度为T时，出现能量差为dE的降温的概率为P(dE)，表示为：<code>P(dE) = exp( dE/(kT) )</code></p>
+<p>其中k是一个常数，exp表示自然指数，且dE&lt;0。这条公式说白了就是：温度越高，出现一次能量差为dE的降温的概率就越大；温度越低，则出现降温的概率就越小。又由于dE总是小于0（否则就不叫退火了），因此dE/kT &lt; 0 ，所以P(dE)的函数取值范围是(0,1) 。</p>
+<p>随着温度T的降低，P(dE)会逐渐降低。</p>
+<p>我们将一次向较差解的移动看做一次温度跳变过程，我们以概率P(dE)来接受这样的移动。</p>
+<p>关于爬山算法与模拟退火，有一个有趣的比喻：</p>
+<p>爬山算法：兔子朝着比现在高的地方跳去。它找到了不远处的最高山峰。但是这座山不一定是珠穆朗玛峰。这就是爬山算法，它不能保证局部最优值就是全局最优值。</p>
+<p>模拟退火：兔子喝醉了。它随机地跳了很长时间。这期间，它可能走向高处，也可能踏入平地。但是，它渐渐清醒了并朝最高方向跳去。这就是模拟退火。</p>
 <p>下面给出模拟退火的伪代码表示。</p>
+<h1 id="模拟退火算法伪代码"><a href="#模拟退火算法伪代码" class="headerlink" title="模拟退火算法伪代码"></a>模拟退火算法伪代码</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">代码</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* J(y)：在状态y时的评价函数值</span></span><br><span class="line"><span class="comment">* Y(i)：表示当前状态</span></span><br><span class="line"><span class="comment">* Y(i+1)：表示新的状态</span></span><br><span class="line"><span class="comment">* r： 用于控制降温的快慢</span></span><br><span class="line"><span class="comment">* T： 系统的温度，系统初始应该要处于一个高温的状态</span></span><br><span class="line"><span class="comment">* T_min ：温度的下限，若温度T达到T_min，则停止搜索</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">while</span>( T &gt; T_min )</span><br><span class="line">&#123;</span><br><span class="line">　　dE = J( Y(i+<span class="number">1</span>) ) - J( Y(i) ) ; </span><br><span class="line"></span><br><span class="line">　　<span class="keyword">if</span> ( dE &gt;=<span class="number">0</span> ) <span class="comment">//表达移动后得到更优解，则总是接受移动</span></span><br><span class="line">Y(i+<span class="number">1</span>) = Y(i) ; <span class="comment">//接受从Y(i)到Y(i+1)的移动</span></span><br><span class="line">　　<span class="keyword">else</span></span><br><span class="line">　　&#123;</span><br><span class="line"><span class="comment">// 函数exp( dE/T )的取值范围是(0,1) ，dE/T越大，则exp( dE/T )也</span></span><br><span class="line"><span class="keyword">if</span> ( <span class="built_in">exp</span>( dE/T ) &gt; random( <span class="number">0</span> , <span class="number">1</span> ) )</span><br><span class="line">Y(i+<span class="number">1</span>) = Y(i) ; <span class="comment">//接受从Y(i)到Y(i+1)的移动</span></span><br><span class="line">　　&#125;</span><br><span class="line">　　T = r * T ; <span class="comment">//降温退火 ，0&lt;r&lt;1 。r越大，降温越慢；r越小，降温越快</span></span><br><span class="line">　　<span class="comment">/*</span></span><br><span class="line"><span class="comment">　　* 若r过大，则搜索到全局最优解的可能会较高，但搜索的过程也就较长。若r过小，则搜索的过程会很快，但最终可能会达到一个局部最优值</span></span><br><span class="line"><span class="comment">　　*/</span></span><br><span class="line">　　i ++ ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="使用模拟退火算法解决旅行商问题"><a href="#使用模拟退火算法解决旅行商问题" class="headerlink" title="使用模拟退火算法解决旅行商问题"></a>使用模拟退火算法解决旅行商问题</h1><p>　　旅行商问题 ( TSP , Traveling Salesman Problem ) ：有N个城市，要求从其中某个问题出发，唯一遍历所有城市，再回到出发的城市，求最短的路线。</p>
+<p>　　旅行商问题属于所谓的NP完全问题，精确的解决TSP只能通过穷举所有的路径组合，其时间复杂度是O(N!) 。</p>
+<p>　　使用模拟退火算法可以比较快的求出TSP的一条近似最优路径。（使用遗传算法也是可以的，我将在下一篇文章中介绍）模拟退火解决TSP的思路：</p>
+<ol>
+<li><p>产生一条新的遍历路径P(i+1)，计算路径P(i+1)的长度L( P(i+1) )</p>
+</li>
+<li><p>若L(P(i+1)) &lt; L(P(i))，则接受P(i+1)为新的路径，否则以模拟退火的那个概率接受P(i+1) ，然后降温</p>
+</li>
+<li><p>重复步骤1，2直到满足退出条件</p>
+</li>
+</ol>
+<p>产生新的遍历路径的方法有很多，下面列举其中3种：</p>
+<ol>
+<li><p>随机选择2个节点，交换路径中的这2个节点的顺序。</p>
+</li>
+<li><p>随机选择2个节点，将路径中这2个节点间的节点顺序逆转。</p>
+</li>
+<li><p>随机选择3个节点m，n，k，然后将节点m与n间的节点移位到节点k后面。</p>
+</li>
+</ol>
+<h1 id="算法评价"><a href="#算法评价" class="headerlink" title="算法评价"></a>算法评价</h1><p>模拟退火算法是一种随机算法，并不一定能找到全局的最优解，可以比较快的找到问题的近似最优解。 如果参数设置得当，模拟退火算法搜索效率比穷举法要高。</p>
+<p> <a href="http://www.cnblogs.com/heaad/" target="_blank" rel="noopener">原文</a>   </p>
 
       
     </div>
@@ -592,7 +611,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#爬山算法-Hill-Climbing"><span class="nav-number">1.</span> <span class="nav-text">爬山算法 ( Hill Climbing )</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模拟退火-SA-Simulated-Annealing-思想"><span class="nav-number">2.</span> <span class="nav-text">模拟退火(SA,Simulated Annealing)思想</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#爬山算法-Hill-Climbing"><span class="nav-number">1.</span> <span class="nav-text">爬山算法 ( Hill Climbing )</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模拟退火-SA-Simulated-Annealing-思想"><span class="nav-number">2.</span> <span class="nav-text">模拟退火(SA,Simulated Annealing)思想</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模拟退火算法伪代码"><span class="nav-number">3.</span> <span class="nav-text">模拟退火算法伪代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用模拟退火算法解决旅行商问题"><span class="nav-number">4.</span> <span class="nav-text">使用模拟退火算法解决旅行商问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法评价"><span class="nav-number">5.</span> <span class="nav-text">算法评价</span></a></li></ol></div>
             
 
           </div>
@@ -626,7 +645,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">78.3k</span>
+    <span title="Site words total count">79k</span>
   
 </div>
 
