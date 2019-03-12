@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190312_141042.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140836.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140842.png">
-<meta property="og:updated_time" content="2019-03-12T07:21:16.794Z">
+<meta property="og:updated_time" content="2019-03-12T12:48:32.048Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java容器">
 <meta name="twitter:description" content="|Collection|　　├List|　　│-├LinkedList|　　│-├ArrayList|　　│-└Vector|　　│　└Stack|　　├Set|　　│├HashSet|　　│├TreeSet|　　│└LinkedSet||Map　　├Hashtable　　├HashMap　　└WeakHashMap">
@@ -358,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5.6k
+                  6.3k
                 </span>
               
 
@@ -374,7 +374,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  22
+                  25
                 </span>
               
             </div>
@@ -439,7 +439,7 @@
 <ul>
 <li><strong>HashTable：</strong> 线程安全，不支持 null 作为键或值，它的线程安全是通过在所有存在线程安全问题的方法上加 synchronized 实现的，所以性能很差，很少使用。</li>
 <li><strong>HashMap：</strong> 不是线程安全的，但是支持 null 作为键或值，是绝大部分利用键值对存取场景的首选，put 和 get 基本可以达到常数级别的时间复杂度。</li>
-<li><strong>TreeMap：</strong> 基于红黑是的一种提供顺序访问的 Map，它的 get，put，remove 等操作是 O(log(n)) 级别的时间复杂度的（因为要保证顺序），具体的排序规则可以由 Comparator 指定：<code>public TreeMap(Comparator&lt;? super K&gt; comparator)</code>。</li>
+<li><strong>TreeMap：</strong> 基于红黑树的一种提供顺序访问的 Map，它的 get，put，remove 等操作是 O(log(n)) 级别的时间复杂度的（因为要保证顺序），具体的排序规则可以由 Comparator 指定：<code>public TreeMap(Comparator&lt;? super K&gt; comparator)</code>。</li>
 </ul>
 <blockquote>
 <p><strong>HashMap 和 HashTable 的区别总结：</strong></p>
@@ -452,7 +452,7 @@
 </li>
 <li><p><strong>初始容量大小和每次扩充容量大小的不同：</strong> </p>
 <ul>
-<li><p>创建时不指定容量初始值：Hashtable 默认的初始大小为 11，之后每次扩充，容量变为原来的 2n+1。HashMap  默认的初始化大小为 16。之后每次扩充，容量变为原来的 2 倍。</p>
+<li><p>创建时不指定容量初始值：HashTable 默认的初始大小为 11，之后每次扩充，容量变为原来的 2n+1。HashMap  默认的初始化大小为 16。之后每次扩充，容量变为原来的 2 倍。</p>
 </li>
 <li><p>创建时给定了容量初始值：Hashtable 会直接使用你给定的大小，而 HashMap 会使用 tableSizeFor 方法将其扩充为 2 的幂次方大小。</p>
 </li>
@@ -460,10 +460,10 @@
 </li>
 </ul>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line"> 	<span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line"> 	<span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <ul>
-<li><strong>底层数据结构：</strong> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。</li>
+<li><strong>底层数据结构：</strong> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）时，将链表转化为红黑树，以减少搜索时间。HashTable 没有这样的机制。</li>
 </ul>
 </blockquote>
 <blockquote>
@@ -477,6 +477,23 @@
 <li>equals 判断相等的对象的 hashCode 一定相等</li>
 <li>重写了 hashCode 必须重写 equals</li>
 </ul>
+<p><a href="https://www.cnblogs.com/skywang12345/p/3324958.html" target="_blank" rel="noopener">Java hashCode() 和 equals()的若干问题解答</a></p>
+<p><strong>equals</strong>() ：定义在JDK的Object.java中。通过判断两个对象的地址是否相等(即，是否是同一个对象)来区分它们是否相等。</p>
+<ol>
+<li>若某个类没有覆盖equals()方法，当它的通过equals()比较两个对象时，实际上是比较两个对象是不是同一个对象。这时，等价于通过“==”去比较这两个对象。</li>
+<li>我们可以覆盖类的equals()方法，来让equals()通过其它方式比较两个对象是否相等。通常的做法是：若两个对象的内容相等，则equals()方法返回true；否则，返回fasle。</li>
+</ol>
+<p><strong>== :</strong> 作用是判断两个对象的地址是不是相等。即，判断两个对象是不试同一个对象。</p>
+<p><strong>hashCode</strong>() ：作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置。“将该对象的内部地址转换成一个整数返回”。散列表的本质是通过数组实现的。当我们要获取散列表中的某个“值”时，实际上是要获取数组中的某个位置的元素。而数组的位置，就是通过“键”来获取的；更进一步说，数组的位置，是通过“键”对应的散列码计算得到的。</p>
+<ol>
+<li>若重写了equals(Object obj)方法，则有必要重写hashCode()方法。（不然虽然equals认为相等，但是HashSet在添加p1和p2的时候，认为它们不相等）</li>
+<li>若两个对象equals(Object obj)返回true，则hashCode（）有必要也返回相同的int数。</li>
+<li>若两个对象equals(Object obj)返回false，则hashCode（）不一定返回不同的int数。  （不会在HashSet, Hashtable, HashMap等等这些本质是散列表的数据结构中用到该类，在这种情况下，该类的“hashCode() 和 equals() ”没有半毛钱关系的！）</li>
+<li>若两个对象hashCode（）返回相同int数，则equals（Object obj）不一定返回true。（在散列表中，hashCode()相等，即两个键值对的哈希值相等。然而哈希值相等，并不一定能得出键值对相等。补充说一句：“两个不同的键值对，哈希值相等”，这就是哈希冲突。）</li>
+<li>若两个对象hashCode（）返回不同int数，则equals（Object obj）一定返回false。</li>
+<li>同一对象在执行期间若已经存储在集合中，则不能修改影响hashCode值的相关信息，否则会导致内存泄露问题。</li>
+</ol>
+<p>一般一个类的对象如果会存储在HashTable，HashSet,HashMap等散列存储结构中，那么重写equals后最好也重写hashCode，否则会导致存储数据的不唯一性（存储了两个equals相等的数据）。而如果确定不会存储在这些散列结构中，则可以不重写hashCode。</p>
 <p>我们注意到，除了 TreeMap，LinkedHashMap 也可以保证某种顺序，它们的 <strong>区别</strong> 如下：</p>
 <ul>
 <li>LinkedHashMap：提供的遍历顺序符合插入顺序，是通过为 HashEntry 维护一个双向链表实现的。</li>
@@ -827,7 +844,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">83.4k</span>
+    <span title="Site words total count">85.4k</span>
   
 </div>
 
@@ -876,6 +893,8 @@
   
 
 
+  
+
 
 
 
@@ -914,6 +933,11 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
 
