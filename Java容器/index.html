@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190312_141042.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140836.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140842.png">
-<meta property="og:updated_time" content="2019-03-12T06:12:57.693Z">
+<meta property="og:updated_time" content="2019-03-12T07:21:16.794Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java容器">
 <meta name="twitter:description" content="|Collection|　　├List|　　│-├LinkedList|　　│-├ArrayList|　　│-└Vector|　　│　└Stack|　　├Set|　　│├HashSet|　　│├TreeSet|　　│└LinkedSet||Map　　├Hashtable　　├HashMap　　└WeakHashMap">
@@ -358,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5.5k
+                  5.6k
                 </span>
               
 
@@ -403,25 +403,26 @@
 </ul>
 </li>
 <li><strong>不同点：</strong><ul>
-<li><strong>底层实现：</strong> ArrayList 底层使用的是 Object 数组；</li>
+<li>底层实现： ArrayList 底层使用的是 Object 数组；LinkedList 底层使用的是双向链表数据结构，维护一个 head 指针和一个 tail 指针。（JDK 1.6 之前为循环链表。为啥要改：因为在链表头 / 尾进行插入 / 删除操作时，循环链表需要处理两头的指针，而非循环链表只需要处理一边，更高效，同时在两头（链头 / 链尾）操作是最普遍的。）</li>
+<li>基本操作的时间复杂度：ArrayList 可以高效的访问元素 O(1)，但是不能高效的插入和删除元素 O(n)；LinkedList 可以高效的插入和删除元素 O(1)，但是不能高效访问的元素 O(n)。</li>
+<li>内存空间占用：ArrayList 的空间浪费主要体现在在 list 列表的结尾会预留一定的容量空间；而 LinkedList 的空间花费则体现在它的每一个元素都需要消耗比 ArrayList 更多的空间。</li>
 </ul>
 </li>
 </ul>
-<p>LinkedList 底层使用的是双向链表数据结构，维护一个 head 指针和一个 tail 指针（JDK 1.6 之前为循环链表）。</p>
-<pre><code>- 为啥要改？因为在链表头 / 尾进行插入 / 删除操作时，循环链表需要处理两头的指针，而非循环链表只需要处理一边，更高效，同时在两头（链头 / 链尾）操作是最普遍的。
-- **基本操作的时间复杂度：** ArrayList 可以高效的访问元素 O(1)，但是不能高效的插入和删除元素 O(n)；LinkedList 可以高效的插入和删除元素 O(1)，但是不能高效访问的元素 O(n)。
-- **内存空间占用：** ArrayList 的空间浪费主要体现在在 list 列表的结尾会预留一定的容量空间；而 LinkedList 的空间花费则体现在它的每一个元素都需要消耗比 ArrayList 更多的空间。
-</code></pre><blockquote>
+<p>LinkedList包含两个重要的成员：header 和 size。<br>header是双向链表的表头，它是双向链表节点所对应的类Entry的实例。Entry中包含成员变量： previous, next, element。其中，previous是该节点的上一个节点，next是该节点的下一个节点，element是该节点所包含的值。<br>size是双向链表中节点的个数。</p>
+<blockquote>
 <p><strong>补充：RandomAccess 接口</strong></p>
 <p>RandomAccess 接口里啥都没有，和 Serializable 接口一样，是个标识接口。它标识实现这个接口的类具有随机访问功能。</p>
 <p>这个标识有啥用？在 <code>Collections.binarySearch()</code> 方法里有用：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">int</span> <span class="title">binarySearch</span><span class="params">(List&lt;? extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; list, T key)</span> </span>&#123;</span><br><span class="line">&gt;     <span class="keyword">if</span> (list <span class="keyword">instanceof</span> RandomAccess || list.size()&lt;BINARYSEARCH_THRESHOLD)</span><br><span class="line">&gt;         <span class="keyword">return</span> Collections.indexedBinarySearch(list, key);</span><br><span class="line">&gt;     <span class="keyword">else</span></span><br><span class="line">&gt;         <span class="keyword">return</span> Collections.iteratorBinarySearch(list, key);</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
 </blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">int</span> <span class="title">binarySearch</span><span class="params">(List&lt;? extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; list, T key)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (list <span class="keyword">instanceof</span> RandomAccess || list.size()&lt;BINARYSEARCH_THRESHOLD)</span><br><span class="line">         <span class="keyword">return</span> Collections.indexedBinarySearch(list, key);</span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">         <span class="keyword">return</span> Collections.iteratorBinarySearch(list, key);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>在 <code>binarySearch()</code> 方法中，它要判断传入的 list 是否 RamdomAccess 的实例，如果是，调用 <code>indexedBinarySearch()</code> 方法，如果不是，那么调用 <code>iteratorBinarySearch()</code> 方法</p>
-<p><code>indexedBinarySearch()</code> 方法和 <code>iteratorBinarySearch()</code> 方法的区别在于：需要使用 <code>iteratorBinarySearch()</code> 方法的集合，是直接通过索引 i 取变量的，而需要使用 <code>iteratorBinarySearch()</code> 方法的集合要取到这个集合的迭代器用来取元素：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; ListIterator&lt;? extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; i = list.listIterator();</span><br><span class="line">&gt; <span class="keyword">while</span> (low &lt;= high) &#123;</span><br><span class="line">&gt;     <span class="keyword">int</span> mid = (low + high) &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">&gt;     Comparable&lt;? <span class="keyword">super</span> T&gt; midVal = get(i, mid); <span class="comment">// 取元素</span></span><br><span class="line">&gt;     ...</span><br><span class="line">&gt; &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
 </blockquote>
+<blockquote>
+<p><code>indexedBinarySearch()</code> 方法和 <code>iteratorBinarySearch()</code> 方法的区别在于：需要使用 <code>iteratorBinarySearch()</code> 方法的集合，是直接通过索引 i 取变量的，而需要使用 <code>iteratorBinarySearch()</code> 方法的集合要取到这个集合的迭代器用来取元素：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ListIterator&lt;? extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; i = list.listIterator();</span><br><span class="line"><span class="keyword">while</span> (low &lt;= high) &#123;</span><br><span class="line">     <span class="keyword">int</span> mid = (low + high) &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">     Comparable&lt;? <span class="keyword">super</span> T&gt; midVal = get(i, mid); <span class="comment">// 取元素</span></span><br><span class="line">     ...</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <h2 id="ArrayList-与-Vector-区别"><a href="#ArrayList-与-Vector-区别" class="headerlink" title="ArrayList 与 Vector 区别"></a>ArrayList 与 Vector 区别</h2><p>Vector 类是线程安全的，不过它保证线程安全的方法十分的简单粗暴，就是给所有会出现线程安全问题的方法都加上 <code>synchronized</code> 修饰，所以超慢的……</p>
 <h1 id="HashMap、HashTable、TreeMap"><a href="#HashMap、HashTable、TreeMap" class="headerlink" title="HashMap、HashTable、TreeMap"></a>HashMap、HashTable、TreeMap</h1><blockquote>
 <p><strong>hash 算法</strong></p>
@@ -454,12 +455,12 @@
 <li><p>创建时不指定容量初始值：Hashtable 默认的初始大小为 11，之后每次扩充，容量变为原来的 2n+1。HashMap  默认的初始化大小为 16。之后每次扩充，容量变为原来的 2 倍。</p>
 </li>
 <li><p>创建时给定了容量初始值：Hashtable 会直接使用你给定的大小，而 HashMap 会使用 tableSizeFor 方法将其扩充为 2 的幂次方大小。</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt; 		<span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">&gt; 		    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">&gt; 		    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">&gt; 		    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">&gt; 		    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">&gt; 		    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">&gt; 		    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">&gt; 		    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&gt; 		&#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
 </ul>
 </blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <ul>
 <li><strong>底层数据结构：</strong> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。</li>
@@ -467,6 +468,8 @@
 </blockquote>
 <blockquote>
 <p><strong>HashMap 的长度为什么要是 2 的幂次方呢？</strong></p>
+</blockquote>
+<blockquote>
 <p>因为 hashCode 是 -2147483648 到 2147483647 的，超大的，在决定一个元素在哈希表中的真正位置时是要进行 <code>hashCode % n</code> 的运算的（n 是存元素的哈希数组的长度），如果 n 是 2 的幂次方的话，这个操作是可以用位运算来解决的：<code>(n - 1) &amp; hash</code>，位运算快啊！</p>
 </blockquote>
 <p>在对 Map 的顺序没有要求的情况下，HashMap 基本是最好的选择，不过 HashMap 的性能十分依赖于 hashCode 的有效性，所以必须满足：</p>
@@ -734,7 +737,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -824,7 +827,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">77.3k</span>
+    <span title="Site words total count">78.3k</span>
   
 </div>
 
