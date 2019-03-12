@@ -86,7 +86,12 @@
 <meta property="og:description" content="开闭原则 依赖倒置原则 单一职责原则 接口隔离原则 迪米特法则（最少知道原则） 里氏替换原则 合成/复用原则">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190309_212539.png">
-<meta property="og:updated_time" content="2019-03-12T14:00:35.732Z">
+<meta property="og:image" content="http://490.github.io/images/20190312_220521.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_221539.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_222739.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_224323.png">
+<meta property="og:image" content="http://490.github.io/images/20190312_224815.png">
+<meta property="og:updated_time" content="2019-03-12T15:13:11.150Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="软件设计模式七大原则">
 <meta name="twitter:description" content="开闭原则 依赖倒置原则 单一职责原则 接口隔离原则 迪米特法则（最少知道原则） 里氏替换原则 合成/复用原则">
@@ -352,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  55
+                  524
                 </span>
               
 
@@ -399,8 +404,21 @@
 <li>合成/复用原则</li>
 </ul>
 <a id="more"></a>
-<h1 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h1><p><img src="http://490.github.io/images/20190309_212539.png" alt="image"></p>
-<h1 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h1>
+<h1 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h1><p><img src="http://490.github.io/images/20190309_212539.png" alt="image"><br>类应该对扩展开放，对修改关闭。</p>
+<p>扩展就是添加新功能的意思，因此该原则要求在添加新功能时不需要修改代码。</p>
+<p>符合开闭原则最典型的设计模式是装饰者模式，它可以动态地将责任附加到对象上，而不用去修改类的代码。</p>
+<h1 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h1><p>高层次模块不应该依赖于低层的<br><img src="http://490.github.io/images/20190312_220521.png" alt="image"></p>
+<p>例如扩展的时候是<strong>面向ICourse接口</strong>的，而不是在Geely类中添加study方法，main函数也不需要调用Geely的对象的具体课程方法。</p>
+<p>大概是：不要写很多不同名字的实现方法，而是去写很多类去继承接口，然后传不同的参数来调用不同类，这些类里的方法名字相同，但实现不同。</p>
+<h1 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h1><p>修改一个类的原因应该只有一个。<br>换句话说就是让一个类只负责一件事，当这个类需要做过多事情的时候，就需要分解这个类。<br>如果一个类承担的职责过多，就等于把这些职责耦合在了一起，一个职责的变化可能会削弱这个类完成其它职责的能力。</p>
+<p><img src="http://490.github.io/images/20190312_221539.png" alt="image"></p>
+<h1 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h1><p>不应该强迫客户依赖于它们不用的方法。<br>因此使用多个专门的接口比使用单一的总接口要好。</p>
+<p><img src="http://490.github.io/images/20190312_222739.png" alt="image"></p>
+<h1 id="迪米特原则"><a href="#迪米特原则" class="headerlink" title="迪米特原则"></a>迪米特原则</h1><p>对象对其他对象保持最少的了解，所以少用public<br>尽量降低类之间的耦合<br>只和朋友交流（入参出参、成员变量。。其他内部出现的类不是朋友，尽量搞出去）</p>
+<h1 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h1><p><img src="http://490.github.io/images/20190312_224323.png" alt="image"></p>
+<p><img src="http://490.github.io/images/20190312_224815.png" alt="image"></p>
+<p>子类能够替换父类。<br>重载时，子类的入参要比父类宽松。<br>返回 时，子类要更严格。</p>
+<h1 id="合成-复用原则"><a href="#合成-复用原则" class="headerlink" title="合成/复用原则"></a>合成/复用原则</h1>
       
     </div>
     
@@ -584,7 +602,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开闭原则"><span class="nav-number">1.</span> <span class="nav-text">开闭原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#依赖倒置原则"><span class="nav-number">2.</span> <span class="nav-text">依赖倒置原则</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开闭原则"><span class="nav-number">1.</span> <span class="nav-text">开闭原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#依赖倒置原则"><span class="nav-number">2.</span> <span class="nav-text">依赖倒置原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单一职责原则"><span class="nav-number">3.</span> <span class="nav-text">单一职责原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接口隔离原则"><span class="nav-number">4.</span> <span class="nav-text">接口隔离原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迪米特原则"><span class="nav-number">5.</span> <span class="nav-text">迪米特原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#里氏替换原则"><span class="nav-number">6.</span> <span class="nav-text">里氏替换原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#合成-复用原则"><span class="nav-number">7.</span> <span class="nav-text">合成/复用原则</span></a></li></ol></div>
             
 
           </div>
@@ -618,7 +636,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">85.4k</span>
+    <span title="Site words total count">85.8k</span>
   
 </div>
 
