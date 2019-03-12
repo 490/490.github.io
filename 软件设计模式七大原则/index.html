@@ -80,7 +80,7 @@
 <meta name="description" content="开闭原则 依赖倒置原则 单一职责原则 接口隔离原则 迪米特法则（最少知道原则） 里氏替换原则 合成/复用原则">
 <meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="软件设计模式七大原则">
+<meta property="og:title" content="设计模式：七大原则">
 <meta property="og:url" content="https://490.github.io/软件设计模式七大原则/index.html">
 <meta property="og:site_name" content="我的笔记">
 <meta property="og:description" content="开闭原则 依赖倒置原则 单一职责原则 接口隔离原则 迪米特法则（最少知道原则） 里氏替换原则 合成/复用原则">
@@ -94,9 +94,9 @@
 <meta property="og:image" content="http://490.github.io/images/20190312_231333.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_232335.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_232349.png">
-<meta property="og:updated_time" content="2019-03-12T15:24:11.160Z">
+<meta property="og:updated_time" content="2019-03-12T15:26:04.579Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="软件设计模式七大原则">
+<meta name="twitter:title" content="设计模式：七大原则">
 <meta name="twitter:description" content="开闭原则 依赖倒置原则 单一职责原则 接口隔离原则 迪米特法则（最少知道原则） 里氏替换原则 合成/复用原则">
 <meta name="twitter:image" content="http://490.github.io/images/20190309_212539.png">
 
@@ -134,7 +134,7 @@
 
 
 
-  <title>软件设计模式七大原则 | 我的笔记</title>
+  <title>设计模式：七大原则 | 我的笔记</title>
   
 
 
@@ -306,7 +306,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">软件设计模式七大原则</h1>
+          <h1 class="post-title" itemprop="name headline">设计模式：七大原则</h1>
         
 
         <div class="post-meta">
@@ -360,7 +360,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  810
+                  772
                 </span>
               
 
@@ -425,8 +425,6 @@
 <p>黑箱复用。</p>
 <p>下面类图中描述的例子。“人”被继承到“学生”、“经理”和“雇员”等子类。而实际上，学生”、“经理”和“雇员”分别描述一种角色，而“人”可以同时有几种不同的角色。比如，一个人既然是“经理”，就必然是“雇员”；而“人”可能同时还参加MBA课程，从而也是一个“学生”。使用继承来实现角色，则只能使每一个“人”具有Is-A角色，而且继承是静态的，这会使得一个“人”在成为“雇员”身份后，就永远为“雇员”，不能成为“学生”和“经理”，而这显然是不合理的。<br><img src="http://490.github.io/images/20190312_232335.png" alt="image"></p>
 <p>这一错误的设计源自于把“角色”的等级结构和“人”的等级结构混淆起来，把“Has-A”角色误解为“Is -A”角色。因此要纠正这种错误，关键是区分“人”与“角色”的区别。下图所示的的设计就正确的做到了这一点。<br><img src="http://490.github.io/images/20190312_232349.png" alt="image"></p>
-<hr>
-<p>作者：SpiritView<br>来源：CSDN<br>原文：<a href="https://blog.csdn.net/u010832572/article/details/45007933" target="_blank" rel="noopener">https://blog.csdn.net/u010832572/article/details/45007933</a><br>版权声明：本文为博主原创文章，转载请附上博文链接！</p>
 
       
     </div>
