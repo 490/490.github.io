@@ -115,7 +115,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_104449.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104457.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104643.png">
-<meta property="og:updated_time" content="2019-03-13T07:52:31.304Z">
+<meta property="og:updated_time" content="2019-03-13T08:33:31.342Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机内存管理机制">
 <meta name="twitter:description" content="整体结构参考原文">
@@ -464,9 +464,6 @@
 <li>永久代（Permanent Generation）</li>
 </ul>
 <p><img src="http://490.github.io/images/20190312_081725.png" alt="image"></p>
-<p>元空间是方法区的在HotSpot jvm 中的实现，方法区主要用于存储类的信息、常量池、方法数据、方法代码等。方法区逻辑上属于堆的一部分，但是为了与堆进行区分，通常又叫“非堆”。</p>
-<p>元空间的本质和永久代类似，都是对JVM规范中方法区的实现。不过<strong>元空间与永久代之间最大的区别在于：元空间并不在虚拟机中，而是使用本地内存。</strong>，理论上取决于32位/64位系统可虚拟的内存大小。可见也不是无限制的，需要配置参数。</p>
-<p>==元空间和永久代都是方法区的实现==</p>
 <h1 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h1><ul>
 <li>存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据；<ul>
 <li>类信息：即 Class 类，如类名、访问修饰符、常量池、字段描述、方法描述等。</li>
@@ -804,7 +801,10 @@
 </li>
 <li>不过 JDK 6 Update 24 后，HandlePromotionFailure 参数就没有用了，规则变为只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小就会进行 Minor GC，否则将进行 Full GC。</li>
 </ul>
-<h2 id="Metaspace-元空间与-PermGem-永久代"><a href="#Metaspace-元空间与-PermGem-永久代" class="headerlink" title="Metaspace 元空间与 PermGem 永久代"></a>Metaspace 元空间与 PermGem 永久代</h2><p>Java 8 彻底将永久代 (PermGen) 移除出了 HotSpot JVM，将其原有的数据迁移至 Java Heap 或 Metaspace。</p>
+<h2 id="Metaspace-元空间与-PermGem-永久代"><a href="#Metaspace-元空间与-PermGem-永久代" class="headerlink" title="Metaspace 元空间与 PermGem 永久代"></a>Metaspace 元空间与 PermGem 永久代</h2><p>元空间是方法区的在HotSpot jvm 中的实现，方法区主要用于存储类的信息、常量池、方法数据、方法代码等。方法区逻辑上属于堆的一部分，但是为了与堆进行区分，通常又叫“非堆”。</p>
+<p>元空间的本质和永久代类似，都是对JVM规范中方法区的实现。不过<strong>元空间与永久代之间最大的区别在于：元空间并不在虚拟机中，而是使用本地内存。</strong>，理论上取决于32位/64位系统可虚拟的内存大小。可见也不是无限制的，需要配置参数。</p>
+<p>==元空间和永久代都是方法区的实现==</p>
+<p>Java 8 彻底将永久代 (PermGen) 移除出了 HotSpot JVM，将其原有的数据迁移至 Java Heap 或 Metaspace。</p>
 <p><strong>移除 PermGem 的原因：</strong></p>
 <ul>
 <li>PermGen 内存经常会溢出，引发恼人的 java.lang.OutOfMemoryError: PermGen，因此 JVM 的开发者希望这一块内存可以更灵活地被管理，不要再经常出现这样的 OOM；</li>
