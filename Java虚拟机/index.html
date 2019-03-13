@@ -107,15 +107,19 @@
 <meta property="og:image" content="http://490.github.io/images/20190312_083042.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_083119.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104400.png">
+<meta property="og:image" content="http://490.github.io/images/20190313_194442.png">
+<meta property="og:image" content="http://490.github.io/images/20190313_194425.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104412.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104421.png">
+<meta property="og:image" content="http://490.github.io/images/20190313_194840.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104432.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104436.png">
+<meta property="og:image" content="http://490.github.io/images/20190313_195400.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104443.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104449.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104457.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104643.png">
-<meta property="og:updated_time" content="2019-03-13T08:33:31.342Z">
+<meta property="og:updated_time" content="2019-03-13T11:55:32.607Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机内存管理机制">
 <meta name="twitter:description" content="整体结构参考原文">
@@ -381,7 +385,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  7.8k
+                  8k
                 </span>
               
 
@@ -397,7 +401,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  27
+                  28
                 </span>
               
             </div>
@@ -598,15 +602,16 @@
 </li>
 <li><strong>Java 中可作为 “GC Root” 的对象：</strong><ul>
 <li>栈中（本地变量表中的reference）<ul>
-<li>虚拟机栈中，栈帧中的本地变量表引用的对象；</li>
+<li>虚拟机栈中，栈帧中的本地变量表引用的对象；（a = new Obj()，a销毁之前，obj就是gc root）</li>
 <li>本地方法栈中，JNI 引用的对象（native方法）；</li>
 </ul>
 </li>
 <li>方法区中<ul>
 <li>类的静态属性引用的对象；</li>
-<li>常量引用的对象；<br>即便如此，一个对象也不是一旦被判为不可达，就立即死去的，宣告一个的死亡需要经过两次标记过程。</li>
+<li>常量引用的对象；（常量保存的是某个对象的地址）</li>
 </ul>
 </li>
+<li>活跃线程引用的对象<br>即便如此，一个对象也不是一旦被判为不可达，就立即死去的，宣告一个的死亡需要经过两次标记过程。</li>
 </ul>
 </li>
 </ul>
@@ -693,7 +698,12 @@
 </ul>
 <p><img src="http://490.github.io/images/20190312_082808.png" alt="image"></p>
 <p>当系统创建一个对象的时候，总是在Eden区操作，当这个区满了，那么就会触发一次Minor GC，也就是年轻代的垃圾回收。一般来说这时候不是所有的对象都没用了，所以就会把还能用的对象复制到From区。<br><img src="http://490.github.io/images/20190312_082849.png" alt="image"></p>
-<p>这样整个Eden区就被清理干净了，可以继续创建新的对象，当Eden区再次被用完，就再触发一次Minor GC，然后呢，注意，这个时候跟刚才稍稍有点区别。这次触发Minor GC后，会将Eden区与From区还在被使用的对象复制到To区，<br><img src="http://490.github.io/images/20190312_083030.png" alt="image"><br>再下一次Minor GC的时候，则是将Eden区与To区中的还在被使用的对象复制到From区。<br><img src="http://490.github.io/images/20190312_083042.png" alt="image"><br>经过若干次Minor GC后，有些对象在From与To之间来回游荡，这时候From区与To区亮出了底线（阈值），这些家伙要是到现在还没挂掉，对不起，一起滚到（复制）老年代吧。<br><img src="http://490.github.io/images/20190312_083119.png" alt="image"><br>老年代经过这么几次折腾，也就扛不住了（空间被用完），好，那就来次集体大扫除（Full GC），也就是全量回收，一起滚蛋吧。全量回收就好比我们刚才比作的大扫除，毕竟动做比较大，成本高，不能跟平时的小型值日（Minor GC）相比，所以如果Full GC使用太频繁的话，无疑会对系统性能产生很大的影响。所以要合理设置年轻代与老年代的大小，尽量减少Full GC的操作</p>
+<p>这样整个Eden区就被清理干净了，可以继续创建新的对象，当Eden区再次被用完，就再触发一次Minor GC，然后呢，注意，这个时候跟刚才稍稍有点区别。这次触发Minor GC后，会将Eden区与From区还在被使用的对象复制到To区，<br><img src="http://490.github.io/images/20190312_083030.png" alt="image"><br>再下一次Minor GC的时候，则是将Eden区与To区中的还在被使用的对象复制到From区。<br><img src="http://490.github.io/images/20190312_083042.png" alt="image"><br>经过若干次Minor GC后，有些对象在From与To之间来回游荡，这时候From区与To区亮出了底线（阈值），这些家伙要是到现在还没挂掉，对不起，一起滚到（复制）老年代吧。 </p>
+<ol>
+<li>经历一定minor次数依然存活的对象</li>
+<li>survivor区放不下的对象</li>
+<li>新生成的大对象（-XX:+PretenuerSizeThreshold）<br><img src="http://490.github.io/images/20190312_083119.png" alt="image"><br>老年代经过这么几次折腾，也就扛不住了（空间被用完），好，那就来次集体大扫除（Full GC），也就是全量回收，一起滚蛋吧。全量回收就好比我们刚才比作的大扫除，毕竟动做比较大，成本高，不能跟平时的小型值日（Minor GC）相比，所以如果Full GC使用太频繁的话，无疑会对系统性能产生很大的影响。所以要合理设置年轻代与老年代的大小，尽量减少Full GC的操作</li>
+</ol>
 <p><strong>Minor GC触发机制</strong>： </p>
 <ul>
 <li>当年轻代满时就会触发Minor GC，这里的年轻代满指的是Eden代满，Survivor满不会引发GC。 </li>
@@ -708,6 +718,7 @@
 <li>使用RMI来进行RPC或管理的JDK应用，每小时执行一次Full GC</li>
 <li>CMS GC时出现promotion failed, concurrent mode failure</li>
 </ul>
+<p><strong>常用调优参数</strong><br>-XX:SurvivorRatio:Eden和Survivor比值，默认8<br>-XX:NewRatio:老年代和年轻代内存大小比例<br>-XX:MaxTenuringThreshold:对象从年轻代晋升到老年代经过gc次数的最大阈值</p>
 <h2 id="HotSpot-中-GC-算法的实现"><a href="#HotSpot-中-GC-算法的实现" class="headerlink" title="HotSpot 中 GC 算法的实现"></a>HotSpot 中 GC 算法的实现</h2><p>通过前两小节对于判断对象生死和垃圾收集算法的介绍，我们已经对虚拟机进行 GC 的流程有了一个大致的了解。但是，在 HotSpot 虚拟机中，高效的实现这些算法也是一个需要考虑的问题。所以，接下来，我们将研究一下 HotSpot 虚拟机到底是如何高效的实现这些算法的，以及在实现中有哪些需要注意的问题。</p>
 <p><img src="http://490.github.io/images/20190311_104400.png" alt="image"></p>
 <p>通过之前的分析，GC 算法的实现流程简单的来说分为以下两步：</p>
@@ -719,6 +730,8 @@
 <p>也就是说，进行可达性分析的第一步，就是要枚举 GC Roots，这就需要虚拟机知道哪些地方存放着对象应用。如果每一次枚举 GC Roots 都需要把整个栈上位置都遍历一遍，那可就费时间了，毕竟并不是所有位置都存放在引用呀。所以为了提高 GC 的效率，HotSpot 使用了一种 OopMap 的数据结构，<strong>OopMap 记录了栈上本地变量到堆上对象的引用关系</strong>，也就是说，GC 的时候就不用遍历整个栈只遍历每个栈的 OopMap 就行了。</p>
 <p>在 OopMap 的帮助下，HotSpot 可以快速准确的完成 GC 枚举了，不过，OopMap 也不是万年不变的，它也是需要被更新的，当内存中的对象间的引用关系发生变化时，就需要改变 OopMap 中的相应内容。可是能导致引用关系发生变化的指令非常之多，如果我们执行完一条指令就改下 OopMap，这 GC 成本实在太高了。</p>
 <p>因此，HotSpot 采用了一种在 “安全点” 更新 OopMap 的方法，安全点的选取既不能让 GC 等待的时间过长，也不能过于频繁增加运行负担，也就是说，我们既要让程序运行一段时间，又不能让这个时间太长。我们知道，JVM 中每条指令执行的是很快的，所以一个超级长的指令流也可能很快就执行完了，所以 <strong>真正会出现 “长时间执行” 的一般是指令的复用，例如：方法调用、循环跳转、异常跳转等</strong>，虚拟机一般会将这些地方设置为安全点更新 OopMap 并判断是否需要进行 GC 操作。</p>
+<p><img src="http://490.github.io/images/20190313_194442.png" alt="image"></p>
+<p><img src="http://490.github.io/images/20190313_194425.png" alt="image"></p>
 <p>此外，在进行枚举根节点的这个操作时，为了保证准确性，我们需要在一段时间内 “冻结” 整个应用，即 Stop The World（传说中的 GC 停顿），因为如果在我们分析可达性的过程中，对象的引用关系还在变来变去，那是不可能得到正确的分析结果的。即便是在号称几乎不会发生停顿的 CMS 垃圾收集器中，枚举根节点时也是必须要停顿的。这里就涉及到了一个问题：</p>
 <p><strong>我们让所有线程跑到最近的安全点再停顿下来进行 GC 操作呢？</strong></p>
 <p>主要有以下两种方式：</p>
@@ -738,27 +751,30 @@
 <p><strong>安全区域是指在一段代码片段之中，引用关系不会发生变化，因此在这个区域中的任意位置开始 GC 都是安全的。</strong></p>
 <p>当线程执行到安全区域时，它会把自己标识为 Safe Region，这样 JVM 发起 GC 时是不会理会这个线程的。当这个线程要离开安全区域时，它会检查系统是否在 GC 中，如果不在，它就继续执行，如果在，它就等 GC 结束再继续执行。</p>
 <p>本小节我们主要讲述 HotSpot 虚拟机是如何发起内存回收的，也就是如何找到死掉的对象，至于如何清掉这些个对象，HotSpot 将其交给了一堆叫做 ”GC 收集器“ 的东西，这东西又有好多种，不同的 GC 收集器的处理方式不同，适用的场景也不同，我们将在下一小节进行详细讲述。</p>
+<p>JVM 运行模式<br>Server<br>Client</p>
 <h2 id="7-个垃圾收集器"><a href="#7-个垃圾收集器" class="headerlink" title="7 个垃圾收集器"></a>7 个垃圾收集器</h2><p>垃圾收集器就是内存回收操作的具体实现，HotSpot 里足足有 7 种，为啥要弄这么多，因为它们各有各的适用场景。有的属于新生代收集器，有的属于老年代收集器，所以一般是搭配使用的（除了万能的 G1）。关于它们的简单介绍以及分类请见下图。<br><img src="http://490.github.io/images/20190311_104412.png" alt="image"></p>
 <h3 id="Serial-ParNew-搭配-Serial-Old-收集器"><a href="#Serial-ParNew-搭配-Serial-Old-收集器" class="headerlink" title="Serial / ParNew 搭配 Serial Old 收集器"></a>Serial / ParNew 搭配 Serial Old 收集器</h3><p><img src="http://490.github.io/images/20190311_104421.png" alt="image"></p>
+<p><img src="http://490.github.io/images/20190313_194840.png" alt="image"></p>
 <p>Serial 收集器是虚拟机在 Client 模式下的默认新生代收集器，它的优势是简单高效，在单 CPU 模式下很牛。<br>ParNew 收集器就是 Serial 收集器的多线程版本，虽然除此之外没什么创新之处，但它却是许多运行在 Server 模式下的虚拟机中的首选新生代收集器，因为除了 Serial 收集器外，只有它能和 CMS 收集器搭配使用。</p>
 <h3 id="Parallel-搭配-Parallel-Scavenge-收集器"><a href="#Parallel-搭配-Parallel-Scavenge-收集器" class="headerlink" title="Parallel 搭配 Parallel Scavenge 收集器"></a>Parallel 搭配 Parallel Scavenge 收集器</h3><p>首先，这俩货肯定是要搭配使用的，不仅仅如此，它俩还贼特别，它们的关注点与其他收集器不同，其他收集器关注于尽可能缩短垃圾收集时用户线程的停顿时间，而 Parallel Scavenge 收集器的目的是达到一个可控的吞吐量。</p>
-<blockquote>
-<p>吞吐量 = 运行用户代码时间 / ( 运行用户代码时间 + 垃圾收集时间 )</p>
-</blockquote>
+<p><code>吞吐量 = 运行用户代码时间 / ( 运行用户代码时间 + 垃圾收集时间 )</code></p>
 <p>因此，Parallel Scavenge 收集器不管是新生代还是老年代都是多个线程同时进行垃圾收集，十分适合于应用在注重吞吐量以及 CPU 资源敏感的场合。<br>可调节的虚拟机参数：</p>
 <ul>
+<li><code>-XX:+UserParallelGC</code></li>
 <li><code>-XX:MaxGCPauseMillis</code>：最大 GC 停顿的秒数；</li>
 <li><code>-XX:GCTimeRatio</code>：吞吐量大小，一个 0 ~ 100 的数，<code>最大 GC 时间占总时间的比率 = 1 / (GCTimeRatio + 1)</code>；</li>
 <li><code>-XX:+UseAdaptiveSizePolicy</code>：一个开关参数，打开后就无需手工指定 <code>-Xmn</code>，<code>-XX:SurvivorRatio</code> 等参数了，虚拟机会根据当前系统的运行情况收集性能监控信息，自行调整。</li>
 </ul>
 <h3 id="CMS-收集器"><a href="#CMS-收集器" class="headerlink" title="CMS 收集器"></a>CMS 收集器</h3><p><img src="http://490.github.io/images/20190311_104432.png" alt="image"></p>
 <p><img src="http://490.github.io/images/20190311_104436.png" alt="image"></p>
+<p><img src="http://490.github.io/images/20190313_195400.png" alt="image"></p>
 <p><strong>参数设置：</strong></p>
 <ul>
 <li><code>-XX:+UseCMSCompactAtFullCollection</code>：在 CMS 要进行 Full GC 时进行内存碎片整理（默认开启）</li>
 <li><code>-XX:CMSFullGCsBeforeCompaction</code>：在多少次 Full GC 后进行一次空间整理（默认是 0，即每一次 Full GC 后都进行一次空间整理）</li>
 </ul>
-<h3 id="G1-收集器"><a href="#G1-收集器" class="headerlink" title="G1 收集器"></a>G1 收集器</h3><p><img src="http://490.github.io/images/20190311_104443.png" alt="image"></p>
+<h3 id="G1-收集器"><a href="#G1-收集器" class="headerlink" title="G1 收集器"></a>G1 收集器</h3><p><code>-XX：UserG1GC 复制+标记-整理算法</code></p>
+<p><img src="http://490.github.io/images/20190311_104443.png" alt="image"></p>
 <p><img src="http://490.github.io/images/20190311_104449.png" alt="image"></p>
 <h2 id="GC-日志解读"><a href="#GC-日志解读" class="headerlink" title="GC 日志解读"></a>GC 日志解读</h2><p><img src="http://490.github.io/images/20190311_104457.png" alt="image"></p>
 <h1 id="Java-内存分配策略"><a href="#Java-内存分配策略" class="headerlink" title="Java 内存分配策略"></a>Java 内存分配策略</h1><p><img src="http://490.github.io/images/20190311_104643.png" alt="image"></p>
@@ -1036,7 +1052,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">89.1k</span>
+    <span title="Site words total count">89.3k</span>
   
 </div>
 
