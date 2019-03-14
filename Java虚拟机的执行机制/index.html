@@ -91,11 +91,13 @@
 <meta property="og:image" content="http://490.github.io/images/20190314_085909.png">
 <meta property="og:image" content="http://490.github.io/images/20190314_090048.png">
 <meta property="og:image" content="http://490.github.io/images/20190314_090101.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_090227.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_090246.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_083801.png">
 <meta property="og:image" content="http://490.github.io/images/20190314_084016.png">
 <meta property="og:image" content="http://490.github.io/images/20190314_084054.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_083329.png">
-<meta property="og:updated_time" content="2019-03-14T01:02:05.108Z">
+<meta property="og:updated_time" content="2019-03-14T01:03:05.106Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机的执行机制">
 <meta name="twitter:description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。">
@@ -361,7 +363,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8.6k
+                  8.8k
                 </span>
               
 
@@ -377,7 +379,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  31
+                  32
                 </span>
               
             </div>
@@ -449,7 +451,12 @@
 <p>其中的字段和方法的描述符，对于字段来说用来描述<strong>字段的数据类型</strong>；而对于方法来说，描述的就是<strong>方法的参数列表（包括数量、类型以及顺序）和返回值</strong>，这个描述顺序也是固定的，必须是参数列表在前，返回值在后，参数列表必须放在一组小括号内。同时为了节省空间，各种数据类型都使用规定的一个字母来表示，具体如下：</p>
 <p><img src="http://490.github.io/images/20190314_090101.png" alt="image"></p>
 <p>对象使用L加上对象的全限定名来表示，而数组则是在每一个维度前添加一个<code>&quot;[&quot;</code>来描述。属性表在之后进行介绍。</p>
-<h2 id="方法表集合"><a href="#方法表集合" class="headerlink" title="方法表集合"></a>方法表集合</h2><h2 id="属性表集合"><a href="#属性表集合" class="headerlink" title="属性表集合"></a>属性表集合</h2><h1 id="虚拟机的类加载机制"><a href="#虚拟机的类加载机制" class="headerlink" title="虚拟机的类加载机制"></a>虚拟机的类加载机制</h1><h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p>JVM 会在程序第一次主动引用类的时候，加载该类，被动引用时并不会引发类加载的操作。也就是说，JVM 并不是在一开始就把一个程序就所有的类都加载到内存中，而是到不得不用的时候才把它加载进来，而且只加载一次。那么什么是主动引用，什么是被动引用呢？</p>
+<h2 id="方法表集合"><a href="#方法表集合" class="headerlink" title="方法表集合"></a>方法表集合</h2><p>class文件中对方法的描述与以前对字段的描述几乎采用了完全一致的方式，唯一的区别就是访问类型不完全一致。</p>
+<h2 id="属性表集合"><a href="#属性表集合" class="headerlink" title="属性表集合"></a>属性表集合</h2><p>java7中预定义了21项属性，具体内容限于篇幅不再列出。对于每个属性的结构，没有特别严格的要求，并且可以自定义属性信息，jvm运行时会忽略不认识的属性。符合规范的属性表基本结构如下：</p>
+<p><img src="http://490.github.io/images/20190314_090227.png" alt="image"></p>
+<p>其中前两个字节为指向常量池中的CONSTANT_Utf8_info类型的属性名称，之后4个字节表示属性值所占用的位数，最后就是具体属性了。 其中有一个比较重要的名称为「Code」的属性为方法的代码，即字节码指令。Code属性表结构如下：</p>
+<p><img src="http://490.github.io/images/20190314_090246.png" alt="image"></p>
+<h1 id="虚拟机的类加载机制"><a href="#虚拟机的类加载机制" class="headerlink" title="虚拟机的类加载机制"></a>虚拟机的类加载机制</h1><h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p>JVM 会在程序第一次主动引用类的时候，加载该类，被动引用时并不会引发类加载的操作。也就是说，JVM 并不是在一开始就把一个程序就所有的类都加载到内存中，而是到不得不用的时候才把它加载进来，而且只加载一次。那么什么是主动引用，什么是被动引用呢？</p>
 <ul>
 <li><strong>主动引用</strong><ul>
 <li>遇到 new、getstatic、putstatic、invokestatic 字节码指令，例如：<ul>
@@ -933,8 +940,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/Java虚拟机性能监控及调优/" rel="prev" title="Java虚拟机性能监控及调优">
-                Java虚拟机性能监控及调优 <i class="fa fa-chevron-right"></i>
+              <a href="/计算机网络基础知识/" rel="prev" title="计算机网络基础知识">
+                计算机网络基础知识 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1111,7 +1118,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">97k</span>
+    <span title="Site words total count">97.2k</span>
   
 </div>
 
