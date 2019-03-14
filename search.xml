@@ -101,7 +101,7 @@
   <entry>
     <title><![CDATA[Java的 I/O机制]]></title>
     <url>%2FJava%E7%9A%84IO%2F</url>
-    <content type="text"><![CDATA[Java 的 I/O 大概可以分成以下几类： 磁盘操作：File 字节操作：InputStream 和 OutputStream 字符操作：Reader 和 Writer 对象操作：Serializable：序列化就是将一个对象转换成字节序列，方便存储和传输。 网络操作：Socket 新的输入/输出：NIO Java I/O 使用了装饰者模式来实现 深入分析 Java I/O 的工作机制]]></content>
+    <content type="text"><![CDATA[Java 的 I/O 大概可以分成以下几类： 磁盘操作：File 字节操作：InputStream 和 OutputStream 字符操作：Reader 和 Writer 对象操作：Serializable：序列化就是将一个对象转换成字节序列，方便存储和传输。 网络操作：Socket 新的输入/输出：NIO Java I/O 使用了装饰者模式来实现 深入分析 Java I/O 的工作机制Linux 网络 I/O 模型简介（图文） Linux 的内核将所有外部设备都看做一个文件来操作（一切皆文件），对一个文件的读写操作会调用内核提供的系统命令，返回一个file descriptor（fd，文件描述符）。而对一个socket的读写也会有响应的描述符，称为socket fd（socket文件描述符），描述符就是一个数字，指向内核中的一个结构体（文件路径，数据区等一些属性）。 根据UNIX网络编程对I/O模型的分类，UNIX提供了5种I/O模型。 进程是无法直接操作I/O设备的，其必须通过系统调用请求内核来协助完成I/O动作，而内核会为每个I/O设备维护一个buffer。]]></content>
       <tags>
         <tag>Java</tag>
       </tags>
