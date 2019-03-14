@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Java,">
+  <meta name="keywords" content="Java,JVM,">
 
 
 
@@ -77,22 +77,24 @@
 
 
 
-<meta name="description" content="JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类">
-<meta name="keywords" content="Java">
+<meta name="description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。  无符号数： 无符号数属于基本数据类型，以 u1、u2、u4、u8 分别">
+<meta name="keywords" content="Java,JVM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java的类加载器">
+<meta property="og:title" content="Java虚拟机的执行机制">
 <meta property="og:url" content="https://490.github.io/Java的类加载器/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类">
+<meta property="og:description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。  无符号数： 无符号数属于基本数据类型，以 u1、u2、u4、u8 分别">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://490.github.io/images/20190311_083801.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_084016.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_084054.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_083329.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_083907.png">
-<meta property="og:image" content="http://490.github.io/images/20190311_083801.png">
-<meta property="og:updated_time" content="2019-03-11T00:39:31.252Z">
+<meta property="og:updated_time" content="2019-03-14T00:50:40.288Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java的类加载器">
-<meta name="twitter:description" content="JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类">
-<meta name="twitter:image" content="http://490.github.io/images/20190311_083329.png">
+<meta name="twitter:title" content="Java虚拟机的执行机制">
+<meta name="twitter:description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。  无符号数： 无符号数属于基本数据类型，以 u1、u2、u4、u8 分别">
+<meta name="twitter:image" content="http://490.github.io/images/20190311_083801.png">
 
 
 
@@ -128,7 +130,7 @@
 
 
 
-  <title>Java的类加载器 | 我的笔记</title>
+  <title>Java虚拟机的执行机制 | 我的笔记</title>
   
 
 
@@ -300,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Java的类加载器</h1>
+          <h1 class="post-title" itemprop="name headline">Java虚拟机的执行机制</h1>
         
 
         <div class="post-meta">
@@ -354,7 +356,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  861
+                  8.2k
                 </span>
               
 
@@ -370,7 +372,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  30
                 </span>
               
             </div>
@@ -391,18 +393,483 @@
       
 
       
-        <p>JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类<br><a id="more"></a><br>类加载的动态性体现:一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是节省了内存的开销，因为java最早就是为嵌入式系统而设计的，内存宝贵，这是一种可以理解的机制，而用到时再加载这也是java动态性的一种体现.<br><img src="http://490.github.io/images/20190311_083329.png" alt="image"></p>
+        <h1 id="类文件结构"><a href="#类文件结构" class="headerlink" title="类文件结构"></a>类文件结构</h1><p>Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。</p>
+<ul>
+<li><strong>无符号数：</strong> 无符号数属于基本数据类型，以 u1、u2、u4、u8 分别代表 1 个字节、2 个字节、4 个字节和 8 个字节的无符号数，可以用它来描述数字、索引引用、数量值或 utf-8 编码的字符串值。</li>
+<li><strong>表：</strong> 表是由多个无符号数或其他表为数据项构成的复合数据类型，名称上都以 <code>_info</code> 结尾。</li>
+</ul>
+<h2 id="Class-文件的头-8-个字节"><a href="#Class-文件的头-8-个字节" class="headerlink" title="Class 文件的头 8 个字节"></a>Class 文件的头 8 个字节</h2><p>Class 文件的头 8 个字节是魔数和版本号，其中头 4 个字节是魔数，也就是 <code>0xCAFEBABE</code>，它可以用来确定这个文件是否为一个能被虚拟机接受的 Class 文件（这通过扩展名来识别文件类型要安全，毕竟扩展名是可以随便修改的）。</p>
+<p>后 4 个字节则是当前 Class 文件的版本号，其中第 5、6 个字节是次版本号，第 7、8 个字节是主版本号。</p>
+<h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h2><p>从第 9 个字节开始，就是常量池的入口，常量池是 Class 文件中：</p>
+<ul>
+<li>与其他项目关联最多的的数据类型；</li>
+<li>占用 Class 文件空间最大的数据项目；</li>
+<li>Class 文件中第一个出现的表类型数据项目。</li>
+</ul>
+<p>常量池的开始的两个字节，也就是第 9、10 个字节，放置一个 u2 类型的数据，标识常量池中常量的数量 cpc (constant_pool_count)，这个计数值有一个十分特殊的地方，就是它是从 1 开始而不是从 0 开始的，也就是说如果 cpc = 22，那么代表常量池中有 21 项常量，索引值为 1 ~ 21，第 0 项常量被空出来，为了满足后面某些指向常量池的索引值的数据在特定情况下需要表达“不引用任何一个常量池项目”时，将让这个索引值指向 0 即可。</p>
+<p>常量池中记录的是代码出现过的所有 token（类名，成员变量名等，也是我们接下来要修改的地方）以及符号引用（方法引用，成员变量引用等），主要包括以下两大类常量：</p>
+<ul>
+<li><strong>字面量：</strong> 接近于 Java 语言层面的常量概念，包括<ul>
+<li>文本字符串</li>
+<li>声明为 final 的常量值</li>
+</ul>
+</li>
+<li><strong>符号引用：</strong> 以一组符号来描述所引用的目标，包括<ul>
+<li>类和接口的全限定名</li>
+<li>字段的名称和描述符</li>
+<li>方法的名称和描述符</li>
+</ul>
+</li>
+</ul>
+<p>常量池中的每一项常量都通过一个表来存储。目前一共有 14 种常量，不过麻烦的地方就在于，这 14 种常量类型每一种都有自己的结构，我们在这里只详细介绍两种：CONSTANT_Class_info 和 CONSTANT_Utf8_info。</p>
+<p>CONSTANT_Class_info 的存储结构为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">... [ tag=<span class="number">7</span> ] [ name_index ] ...</span><br><span class="line">... [  <span class="number">1</span>位  ] [     <span class="number">2</span>位    ] ...</span><br></pre></td></tr></table></figure>
+<p>其中，tag 是标志位，用来区分常量类型的，tag = 7 就表示接下来的这个表是一个 CONSTANT_Class_info，name_index 是一个索引值，指向常量池中的一个 CONSTANT_Utf8_info 类型的常量所在的索引值，CONSTANT_Utf8_info 类型常量一般被用来描述类的全限定名、方法名和字段名。它的存储结构如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">... [ tag=<span class="number">1</span> ] [ 当前常量的长度 len ] [ 常量的符号引用的字符串值 ] ...</span><br><span class="line">... [  <span class="number">1</span>位  ] [        <span class="number">2</span>位        ] [         len位         ] ...</span><br></pre></td></tr></table></figure>
+<h1 id="虚拟机的类加载机制"><a href="#虚拟机的类加载机制" class="headerlink" title="虚拟机的类加载机制"></a>虚拟机的类加载机制</h1><h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p>JVM 会在程序第一次主动引用类的时候，加载该类，被动引用时并不会引发类加载的操作。也就是说，JVM 并不是在一开始就把一个程序就所有的类都加载到内存中，而是到不得不用的时候才把它加载进来，而且只加载一次。那么什么是主动引用，什么是被动引用呢？</p>
+<ul>
+<li><strong>主动引用</strong><ul>
+<li>遇到 new、getstatic、putstatic、invokestatic 字节码指令，例如：<ul>
+<li>使用 new 实例化对象；</li>
+<li>读取或设置一个类的 static 字段（被 final 修饰的除外）；</li>
+<li>调用类的静态方法。</li>
+</ul>
+</li>
+<li>对类进行反射调用；</li>
+<li>初始化一个类时，其父类还没初始化（需先初始化父类）；<ul>
+<li>这点类与接口具有不同的表现，接口初始化时，不要求其父接口完成初始化，只有真正使用父接口时才初始化，如引用父接口中定义的常量。</li>
+</ul>
+</li>
+<li>虚拟机启动，先初始化包含 main() 函数的主类；</li>
+<li>JDK 1.7 动态语言支持：一个 java.lang.invoke.MethodHandle 的解析结果为 REF_getStatic、REF_putStatic、REF_invokeStatic。</li>
+</ul>
+</li>
+<li><strong>被动引用</strong><ul>
+<li>通过子类引用父类静态字段，不会导致子类初始化；</li>
+<li><code>Array[] arr = new Array[10];</code> 不会触发 Array 类初始化；</li>
+<li><code>static final VAR</code> 在编译阶段会存入调用类的常量池，通过 <code>ClassName.VAR</code> 引用不会触发 ClassName 初始化。</li>
+</ul>
+</li>
+</ul>
+<p>也就是说，只有发生主动引用所列出的 5 种情况，一个类才会被加载到内存中，也就是说类的加载是 lazy-load 的，不到必要时刻是不会提前加载的，毕竟如果将程序运行中永远用不到的类加载进内存，会占用方法区中的内存，浪费系统资源。</p>
+<h2 id="类的显式加载和隐式加载"><a href="#类的显式加载和隐式加载" class="headerlink" title="类的显式加载和隐式加载"></a>类的显式加载和隐式加载</h2><ul>
+<li><strong>显示加载：</strong><ul>
+<li>调用 <code>ClassLoader#loadClass(className)</code> 或 <code>Class.forName(className)</code>。</li>
+<li>两种显示加载 .class 文件的区别：<ul>
+<li><code>Class.forName(className)</code> 加载 class 的同时会初始化静态域，<code>ClassLoader#loadClass(className)</code> 不会初始化静态域；</li>
+<li>Class.forName 借助当前调用者的 class 的 ClassLoader 完成 class 的加载。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>隐式加载：</strong><ul>
+<li>new 类对象；</li>
+<li>使用类的静态域；</li>
+<li>创建子类对象；</li>
+<li>使用子类的静态域；</li>
+<li>其他的隐式加载，在 JVM 启动时：<ul>
+<li>BootStrapLoader 会加载一些 JVM 自身运行所需的 Class；</li>
+<li>ExtClassLoader 会加载指定目录下一些特殊的 Class；</li>
+<li>AppClassLoader 会加载 classpath 路径下的 Class，以及 main 函数所在的类的 Class 文件。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="类加载的过程"><a href="#类加载的过程" class="headerlink" title="类加载的过程"></a>类加载的过程</h2><h3 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">加载 --&gt; 验证 --&gt; 准备 --&gt; 解析 --&gt; 初始化 --&gt; 使用 --&gt; 卸载</span><br><span class="line">       |&lt;------- 连接 -------&gt;|</span><br><span class="line">|&lt;------------- 类加载 ----------------&gt;|</span><br></pre></td></tr></table></figure>
+<p>类的生命周期一共有 7 个阶段，其中前五个阶段较为重要，统称为类加载，第 2 ~ 4 阶段统称为连接，加载和连接中的三个过程开始的顺序是固定的，但是执行过程中是可以交叉执行的。接下来，我们将对类加载的 5 个阶段进行一一讲解。</p>
+<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><h4 id="加载的-3-个阶段"><a href="#加载的-3-个阶段" class="headerlink" title="加载的 3 个阶段"></a>加载的 3 个阶段</h4><ul>
+<li>通过类的全限定名获取二进制字节流（将 .class 文件读进内存）；</li>
+<li>将字节流的静态存储结构转化为运行时的数据结构；</li>
+<li>在内存中生成该类的 Class 对象；<ul>
+<li>HotSpot 虚拟机把这个对象放在方法区，非 Java 堆。</li>
+</ul>
+</li>
+</ul>
+<h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><ul>
+<li><strong>非数组类</strong><ul>
+<li>系统提供的引导类加载器</li>
+<li>用户自定义的类加载器</li>
+</ul>
+</li>
+<li><strong>数组类</strong><ul>
+<li>不通过类加载器，由 Java 虚拟机直接创建</li>
+<li>创建动作由 newarray 指令触发，new 实际上触发了 <code>[L全类名</code> 对象的初始化</li>
+<li>规则<ul>
+<li>数组元素是引用类型<ul>
+<li>加载：递归加载其组件</li>
+<li>可见性：与引用类型一致</li>
+</ul>
+</li>
+<li>数组元素是非引用类型<ul>
+<li>加载：与引导类加载器关联</li>
+<li>可见性：public</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><ul>
+<li><strong>目的：</strong> 确保 .class 文件中的字节流信息符合虚拟机的要求。</li>
+<li><strong>4 个验证过程：</strong><ul>
+<li>文件格式验证：是否符合 Class 文件格式规范，验证文件开头 4 个字节是不是 “魔数” <code>0xCAFEBABE</code></li>
+<li>元数据验证：保证字节码描述信息符号 Java 规范（语义分析）</li>
+<li>字节码验证：程序语义、逻辑是否正确（通过数据流、控制流分析）</li>
+<li>符号引用验证：对类自身以外的信息（常量池中的符号引用）进行匹配性校验</li>
+</ul>
+</li>
+<li>这个操作虽然重要，但不是必要的，可以通过 <code>-Xverify:none</code> 关掉。</li>
+</ul>
+<h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><ul>
+<li><strong>描述：</strong> 为 static 变量在方法区分配内存。</li>
+<li>static 变量准备后的初始值：<ul>
+<li><code>public static int value = 123;</code><ul>
+<li>准备后为 0，value 的赋值指令 putstatic 会被放在 <code>&lt;client&gt;()</code> 方法中，<code>&lt;client&gt;()</code>方法会在初始化时执行，也就是说，value 变量只有在初始化后才等于 123。</li>
+</ul>
+</li>
+<li><code>public static final int value = 123;</code><ul>
+<li>准备后为 123，因为被 <code>static final</code> 赋值之后 value 就不能再修改了，所以在这里进行了赋值之后，之后不可能再出现赋值操作，所以可以直接在准备阶段就把 value 的值初始化好。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><ul>
+<li><strong>描述：</strong> 将常量池中的 “符号引用” 替换为 “直接引用”。<ul>
+<li>在此之前，常量池中的引用是不一定存在的，解析过之后，可以保证常量池中的引用在内存中一定存在。</li>
+<li>什么是 “符号引用” 和 “直接引用” ？<ul>
+<li>符号引用：以一组符号描述所引用的对象（如对象的全类名），引用的目标不一定存在于内存中。</li>
+<li>直接引用：直接指向被引用目标在内存中的位置的指针等，也就是说，引用的目标一定存在于内存中。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li><strong>描述：</strong> 执行类构造器 <code>&lt;client&gt;()</code> 方法的过程。</li>
+<li><strong><code>&lt;client&gt;()</code> 方法</strong><ul>
+<li>包含的内容：<ul>
+<li>所有 static 的赋值操作；</li>
+<li>static 块中的语句；</li>
+</ul>
+</li>
+<li><code>&lt;client&gt;()</code> 方法中的语句顺序：<ul>
+<li>基本按照语句在源文件中出现的顺序排列；</li>
+<li>静态语句块只能访问定义在它前面的变量，定义在它后面的变量，可以赋值，但不能访问。</li>
+</ul>
+</li>
+<li>与 <code>&lt;init&gt;()</code> 的不同：<ul>
+<li>不需要显示调用父类的 <code>&lt;client&gt;()</code> 方法；</li>
+<li>虚拟机保证在子类的 <code>&lt;client&gt;()</code> 方法执行前，父类的 <code>&lt;client&gt;()</code> 方法一定执行完毕。<ul>
+<li>也就是说，父类的 static 块和 static 字段的赋值操作是要先于子类的。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>接口与类的不同：<ul>
+<li>执行子接口的 <code>&lt;client&gt;()</code> 方法前不需要先执行父接口的 <code>&lt;client&gt;()</code> 方法（除非用到了父接口中定义的 public static final 变量）；</li>
+</ul>
+</li>
+<li>执行过程中加锁：<ul>
+<li>同一时刻只能有一个线程在执行 <code>&lt;client&gt;()</code> 方法，因为虚拟机要保证在同一个类加载器下，一个类只被加载一次。</li>
+</ul>
+</li>
+<li>非必要性：<ul>
+<li>一个类如果没有任何 static 的内容就不需要执行 <code>&lt;client&gt;()</code> 方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><em>注：初始化时，才真正开始执行类中定义的 Java 代码。</em></p>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><h3 id="如何判断两个类-“相等”"><a href="#如何判断两个类-“相等”" class="headerlink" title="如何判断两个类 “相等”"></a>如何判断两个类 “相等”</h3><ul>
+<li><strong>“相等” 的要求</strong><ul>
+<li>同一个 .class 文件</li>
+<li>被同一个虚拟机加载</li>
+<li>被同一个类加载器加载</li>
+</ul>
+</li>
+<li><strong>判断 “相等” 的方法</strong><ul>
+<li><code>instanceof</code> 关键字</li>
+<li>Class 对象中的方法：<ul>
+<li><code>equals()</code></li>
+<li><code>isInstance()</code></li>
+<li><code>isAssignableFrom()</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="类加载器的分类"><a href="#类加载器的分类" class="headerlink" title="类加载器的分类"></a>类加载器的分类</h3><ul>
+<li><p><strong>启动类加载器（Bootstrap）</strong>：Bootstrp加载器是用C++语言写的，它是在Java虚拟机启动后初始化的，它主要负责加载<code>%JAVA_HOME%/jre/lib</code>,<code>-Xbootclasspath</code>参数指定的路径以及<code>%JAVA_HOME%/jre/classes</code>中的类。</p>
+</li>
+<li><p><strong>扩展类加载器（Extension）</strong>：<code>&lt;JAVA_HOME&gt;/lib/ext</code>、<code>java.ext.dirs</code>系统变量指定的路径</p>
+</li>
+<li><strong>应用程序类加载器（Application）</strong>： <code>-classpath</code> 参数</li>
+</ul>
+<h3 id="双亲委派模型"><a href="#双亲委派模型" class="headerlink" title="双亲委派模型"></a>双亲委派模型</h3><ul>
+<li><strong>工作过程</strong><ul>
+<li>当前类加载器收到类加载的请求后，先不自己尝试加载类，而是先将请求委派给父类加载器<ul>
+<li>因此，所有的类加载请求，都会先被传送到启动类加载器</li>
+</ul>
+</li>
+<li>只有当父类加载器加载失败时，当前类加载器才会尝试自己去自己负责的区域加载</li>
+</ul>
+</li>
+<li><strong>实现</strong><ul>
+<li>检查该类是否已经被加载</li>
+<li>将类加载请求委派给父类<ul>
+<li>如果父类加载器为 null，默认使用启动类加载器</li>
+<li><code>parent.loadClass(name, false)</code></li>
+</ul>
+</li>
+<li>当父类加载器加载失败时<ul>
+<li>catch ClassNotFoundException 但不做任何处理</li>
+<li>调用自己的 findClass() 去加载<ul>
+<li>我们在实现自己的类加载器时只需要 <code>extends ClassLoader</code>，然后重写 <code>findClass()</code> 方法而不是 <code>loadClass()</code> 方法，这样就不用重写 <code>loadClass()</code> 中的双亲委派机制了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>优点</strong><ul>
+<li>Java类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。其次是考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心Java API发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的java.lang.Integer，而直接返回已加载过的Integer.class，这样便可以防止核心API库被随意篡改。<br><img src="http://490.github.io/images/20190311_083801.png" alt="image"></li>
+</ul>
+</li>
+</ul>
+<h1 id="虚拟机字节码执行引擎"><a href="#虚拟机字节码执行引擎" class="headerlink" title="虚拟机字节码执行引擎"></a>虚拟机字节码执行引擎</h1><h2 id="运行时栈帧结构"><a href="#运行时栈帧结构" class="headerlink" title="运行时栈帧结构"></a>运行时栈帧结构</h2><p><img src="http://490.github.io/images/20190314_084016.png" alt="image"></p>
+<h3 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h3><ul>
+<li>存放方法参数和方法内部定义的局部变量；<ul>
+<li>Java 程序编译为 class 文件时，就确定了每个方法需要分配的局部变量表的最大容量。</li>
+</ul>
+</li>
+<li>最小单位：Slot；<ul>
+<li>一个 Slot 中可以存放：boolean，byte，char，short，int，float，reference，returnAddress (少见)；</li>
+<li>虚拟机可通过局部变量表中的 reference 做到：<ul>
+<li>查找 Java 堆中的实例对象的起始地址；</li>
+<li>查找方法区中的 Class 对象。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="局部变量表的空间分配"><a href="#局部变量表的空间分配" class="headerlink" title="局部变量表的空间分配"></a>局部变量表的空间分配</h4><p><img src="http://490.github.io/images/20190314_084054.png" alt="image"></p>
+<h4 id="Slot-的复用"><a href="#Slot-的复用" class="headerlink" title="Slot 的复用"></a>Slot 的复用</h4><p><strong>定义：</strong> 如果当前位置已经超过某个变量的作用域时，例如出了定义这个变量的代码块，这个变量对应的 Slot 就可以给其他变量使用了。但同时也说明，只要其他变量没有使用这部分 Slot 区域，这个变量就还保存在那里，这会对 GC 操作产生影响。</p>
+<p><strong>对 GC 操作的影响：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="keyword">byte</span>[] placeholder = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    System.gc();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>-verbose:gc</code> 输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[GC (System.gc())  68813K-&gt;66304K(123904K), 0.0034797 secs]</span><br><span class="line">[Full GC (System.gc())  66304K-&gt;66204K(123904K), 0.0086225 secs]  // 没有被回收</span><br></pre></td></tr></table></figure>
+<p>进行如下修改：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="keyword">byte</span>[] placeholder = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">64</span> * <span class="number">1024</span> * <span class="number">1024</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>; <span class="comment">// 新加一个赋值操作</span></span><br><span class="line">    System.gc();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>-verbose:gc</code> 输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[GC (System.gc())  68813K-&gt;66320K(123904K), 0.0017394 secs]</span><br><span class="line">[Full GC (System.gc())  66320K-&gt;668K(123904K), 0.0084337 secs]  // 被回收了</span><br></pre></td></tr></table></figure>
+<p><strong>第二次修改后，placeholder 能被回收的原因？</strong></p>
+<ul>
+<li>placeholder 能否被回收的关键：局部变量表中的 Slot 是否还存在关于 placeholder 的引用；</li>
+<li>出了 placeholder 所在的代码块后，还没有进行其他操作，所以 placeholder 所在的 Slot 还没有被其他变量复用，也就是说，局部变量表的 Slot 中依然存在着 placeholder 的引用；</li>
+<li>第二次修改后，int a 占用了原来 placeholder 所在的 Slot，所以可以被 GC 掉了。</li>
+</ul>
+<h3 id="操作数栈"><a href="#操作数栈" class="headerlink" title="操作数栈"></a>操作数栈</h3><ul>
+<li>元素可以是任意 Java 类型，32 位数据占 1 个栈容量，64 位数据占 2 个栈容量；</li>
+<li>Java 虚拟机的解释执行称为：基于栈的执行引擎，其中 “栈” 指的就是操作数栈；</li>
+</ul>
+<h3 id="动态连接"><a href="#动态连接" class="headerlink" title="动态连接"></a>动态连接</h3><ul>
+<li>指向运行时常量池中该栈帧所属方法的引用；</li>
+<li>为了支持方法调用过程中的动态连接，什么是动态连接会在下一篇文章进行讲解，先知道有这么个东西就行。</li>
+</ul>
+<h3 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h3><ul>
+<li><strong>两种退出方法的方式：</strong><ul>
+<li>遇到 return；</li>
+<li>遇到异常。</li>
+</ul>
+</li>
+<li><strong>退出方法时可能执行的操作：</strong><ul>
+<li>恢复上层方法的局部变量表和操作数栈；</li>
+<li>把返回值压入调用者栈帧的操作数栈；</li>
+<li>调整 PC 计数器指向方法调用后面的指令。</li>
+</ul>
+</li>
+</ul>
+<h2 id="方法调用"><a href="#方法调用" class="headerlink" title="方法调用"></a>方法调用</h2><p>Java 的方法的执行分为两个部分：</p>
+<ul>
+<li>方法调用：确定被调用的方法是哪一个；</li>
+<li>基于栈的解释执行：真正的执行方法的字节码。</li>
+</ul>
+<p>在本节中我们将对方法调用进行详细的讲解，我们知道，一切方法的调用在 Class 文件中存储的都是常量池中的符号引用，而不是方法实际运行时的入口地址（直接引用），直到类加载的时候，甚至是实际运行的时候才回去会去确定要被运行的方法的直接引用，而确定要被运行的方法的直接引用的过程就叫做方法调用。</p>
+<h3 id="方法调用字节码指令"><a href="#方法调用字节码指令" class="headerlink" title="方法调用字节码指令"></a>方法调用字节码指令</h3><p>Java 虚拟机提供了 5 个职责不同的方法调用字节码指令：</p>
+<ul>
+<li><code>invokestatic</code>：调用静态方法；</li>
+<li><code>invokespecial</code>：调用构造器方法、私有方法、父类方法；</li>
+<li><code>invokevirtual</code>：调用所有虚方法，除了静态方法、构造器方法、私有方法、父类方法、final 方法的其他方法叫虚方法；</li>
+<li><code>invokeinterface</code>：调用接口方法，会在运行时确定一个该接口的实现对象；</li>
+<li><code>invokedynamic</code>：在运行时动态解析出调用点限定符引用的方法，再执行该方法。</li>
+</ul>
+<p>除了 <code>invokedynamic</code>，其他 4 种方法的第一个参数都是被调用的方法的符号引用，是在编译时确定的，所以它们缺乏动态类型语言支持，因为动态类型语言只有在运行期才能确定接收者的类型，即变量的类型检查的主体过程在运行期，而非编译期。</p>
+<blockquote>
+<p>final 方法虽然是通过 <code>invokevirtual</code> 调用的，但是其无法被覆盖，没有其他版本，无需对接收者进行多态选择，或者说多态选择的结果是唯一的，所以属于非虚方法。</p>
+</blockquote>
+<h3 id="解析调用"><a href="#解析调用" class="headerlink" title="解析调用"></a>解析调用</h3><p>解析调用，正如其名，就是 <strong>在类加载的解析阶段，就确定了方法的调用版本</strong> 。我们知道类加载的解析阶段会将一部分符号引用转化为直接引用，这一过程就叫做解析调用。因为是在程序真正运行前就确定了要调用哪一个方法，所以 <strong>解析调用能成立的前提就是：方法在程序真正运行前就有一个明确的调用版本了，并且这个调用版本不会在运行期发生改变。</strong></p>
+<p>符合这两个要求的只有以下两类方法：</p>
+<ul>
+<li>通过 <code>invokestatic</code> 调用的方法：静态方法；</li>
+<li>通过 <code>invokespecial</code> 调用的方法：私有方法、构造器方法、父类方法；</li>
+</ul>
+<p>这两类方法根本不可能通过继承或者别的方式重写出来其他版本，也就是说，在运行前就可以确定调用版本了，十分适合在类加载阶段就解析好。它们会在类加载的解析阶被解析为直接引用，即确定调用版本。</p>
+<h3 id="分派调用"><a href="#分派调用" class="headerlink" title="分派调用"></a>分派调用</h3><p>在介绍分派调用前，我们先来介绍一下 Java 所具备的面向对象的 3 个基本特征：封装，继承，多态。</p>
+<p>其中多态最基本的体现就是重载和重写了，重载和重写的一个重要特征就是方法名相同，其他各种不同：</p>
+<ul>
+<li>重载：发生在同一个类中，入参必须不同，返回类型、访问修饰符、抛出的异常都可以不同；</li>
+<li>重写：发生在子父类中，入参和返回类型必须相同，访问修饰符大于等于被重写的方法，不能抛出新的异常。</li>
+</ul>
+<p>相同的方法名实际上给虚拟机的调用带来了困惑，因为虚拟机需要判断，它到底应该调用哪个方法，而这个过程会在分派调用中体现出来。其中：</p>
+<ul>
+<li>方法重载 —— 静态分派</li>
+<li>方法重写 —— 动态分派</li>
+</ul>
+<h4 id="静态分派（方法重载）"><a href="#静态分派（方法重载）" class="headerlink" title="静态分派（方法重载）"></a>静态分派（方法重载）</h4><p>在介绍静态分派前，我们先来介绍一下什么是变量的静态类型和实际类型。</p>
+<p><strong> 变量的静态类型和实际类型</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticDispatch</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Woman</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">(Human guy)</span> </span>&#123;</span><br><span class="line">    	System.out.println(<span class="string">"Hello guy!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">(Man man)</span> </span>&#123;</span><br><span class="line">    	System.out.println(<span class="string">"Hello man!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">(Woman woman)</span> </span>&#123;</span><br><span class="line">    	System.out.println(<span class="string">"Hello woman!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Human man = <span class="keyword">new</span> Man();</span><br><span class="line">        Human woman = <span class="keyword">new</span> Woman();</span><br><span class="line">        StaticDispatch sr = <span class="keyword">new</span> StaticDispatch();</span><br><span class="line">        sr.sayHello(man);</span><br><span class="line">        sr.sayHello(woman);</span><br><span class="line">        <span class="comment">/* 输出：</span></span><br><span class="line"><span class="comment">        Hello guy!</span></span><br><span class="line"><span class="comment">        Hello guy!</span></span><br><span class="line"><span class="comment">        因为是根据变量的静态类型，也就是左面的类型：Human 来判断调用哪个方法，</span></span><br><span class="line"><span class="comment">        所以调用的都是 public void sayHello(Human guy)</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 简单讲解 */</span></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line">Human man = <span class="keyword">new</span> Man();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实际类型发生变化</span></span><br><span class="line">Human man = <span class="keyword">new</span> Man();</span><br><span class="line">man = <span class="keyword">new</span> Woman();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态类型发生变化</span></span><br><span class="line">sr.sayHello((Man) man);   <span class="comment">// 输出：Hello man!</span></span><br><span class="line">sr.sayHello((Woman) man); <span class="comment">// 输出：Hello woman!</span></span><br></pre></td></tr></table></figure>
+<p>其中 <code>Human</code> 称为变量的静态类型，<code>Man</code> 称为变量的实际类型。</p>
+<p>在重载时，编译器是通过方法参数的静态类型，而不是实际类型，来判断应该调用哪个方法的。</p>
+<p><strong>通俗的讲，静态分派就是通过方法的参数（类型 &amp; 个数 &amp; 顺序）这种静态的东西来判断到底调用哪个方法的过程。</strong></p>
+<p><strong>重载方法匹配优先级，例如一个字符 ‘a’ 作为入参</strong></p>
+<ul>
+<li>基本类型<ul>
+<li>char</li>
+<li>int</li>
+<li>long</li>
+<li>float</li>
+<li>double</li>
+</ul>
+</li>
+<li>Character</li>
+<li>Serializable（Character 实现的接口）<ul>
+<li>同时出现两个优先级相同的接口，如 Serializable 和 Comparable，会提示类型模糊，拒绝编译。</li>
+</ul>
+</li>
+<li>Object</li>
+<li>char…（变长参数优先级最低）</li>
+</ul>
+<h4 id="动态分派（方法重写）"><a href="#动态分派（方法重写）" class="headerlink" title="动态分派（方法重写）"></a>动态分派（方法重写）</h4><p>动态分派就是在运行时，根据实际类型确定方法执行版本的分派过程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicDispatch</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">  	  <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        	System.out.println(<span class="string">"Hello man"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Woman</span> <span class="keyword">extends</span> <span class="title">Human</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        	System.out.println(<span class="string">"Hello woman"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Human man = <span class="keyword">new</span> Man();</span><br><span class="line">        Human woman = <span class="keyword">new</span> Woman();</span><br><span class="line">        man.sayHello();</span><br><span class="line">        woman.sayHello();</span><br><span class="line">        man = woman;</span><br><span class="line">        man.sayHello();</span><br><span class="line">        <span class="comment">/* 输出</span></span><br><span class="line"><span class="comment">        Hello man</span></span><br><span class="line"><span class="comment">        Hello woman</span></span><br><span class="line"><span class="comment">        Hello woman</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>字节码分析：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]);</span><br><span class="line">    descriptor: ([Ljava/lang/String;)V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">    Code:</span><br><span class="line">        stack=2, locals=3, args_size=1</span><br><span class="line">        0: new           #2      // class com/jvm/ch8/DynamicDispatch$Man</span><br><span class="line">        3: dup</span><br><span class="line">        4: invokespecial #3      // Method com/jvm/ch8/DynamicDispatch$Man.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">        7: astore_1</span><br><span class="line">        8: new           #4      // class com/jvm/ch8/DynamicDispatch$Woman</span><br><span class="line">        11: dup</span><br><span class="line">        12: invokespecial #5     // Method com/jvm/ch8/DynamicDispatch$Woman.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">        15: astore_2</span><br><span class="line">        16: aload_1		        // 把刚创建的对象的引用压到操作数栈顶，</span><br><span class="line">        					   // 供之后执行sayHello时确定是执行哪个对象的sayHello</span><br><span class="line">        17: invokevirtual #6    // 方法调用</span><br><span class="line">        20: aload_2             // 把刚创建的对象的引用压到操作数栈顶，</span><br><span class="line">                                // 供之后执行sayHello时确定是执行哪个对象的sayHello</span><br><span class="line">        21: invokevirtual #6    // 方法调用</span><br><span class="line">        24: aload_2</span><br><span class="line">        25: astore_1</span><br><span class="line">        26: aload_1</span><br><span class="line">        27: invokevirtual #6    // Method com/jvm/ch8/DynamicDispatch$Human.sayHello:()V</span><br><span class="line">        30: return</span><br></pre></td></tr></table></figure>
+<p>通过字节码分析可以看出，<code>invokevirtual</code> 指令的运行过程大致为：</p>
+<ul>
+<li>去操作数栈顶取出将要执行的方法的所有者，记作 C；</li>
+<li>查找此方法：<ul>
+<li>在 C 中查找此方法；</li>
+<li>在 C 的各个父类中查找；</li>
+<li>查找过程：<ul>
+<li>查找与常量的描述符和简单名称都相同的方法；</li>
+<li>进行访问权限验证，不通过抛出：IllegalAccessError 异常；</li>
+<li>通过访问权限验证则返回直接引用；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>没找到则抛出：AbstractMethodError 异常，即该方法没被实现。</li>
+</ul>
+<p>动态分派在虚拟机种执行的非常频繁，而且方法查找的过程要在类的方法元数据中搜索合适的目标，从性能上考虑，不太可能进行如此频繁的搜索，需要进行性能上的优化。</p>
+<p><strong>常用优化手段：</strong> 在类的方法区中建立一个虚方法表。</p>
+<ul>
+<li>虚方法表中存放着各个方法的实际入口地址，如果某个方法没有被子类方法重写，那子类方法表中该方法的入口地址 = 父类方法表中该方法的入口地址；</li>
+<li>使用这个方法表索引代替在元数据中查找；</li>
+<li>该方法表会在类加载的连接阶段初始化好。</li>
+</ul>
+<p><strong>通俗的讲，动态分派就是通过方法的接收者这种动态的东西来判断到底调用哪个方法的过程。</strong></p>
+<blockquote>
+<p>总结一下：静态分派看左面，动态分派看右面。</p>
+</blockquote>
+<h4 id="单分派与多分派"><a href="#单分派与多分派" class="headerlink" title="单分派与多分派"></a>单分派与多分派</h4><p>除了静态分派和动态分派这种分派分类方式，还有一种根据宗量分类的方式，可以将方法分派分为单分派和多分派。</p>
+<blockquote>
+<p>宗量：方法的接收者 &amp; 方法的参数。</p>
+</blockquote>
+<p>Java 语言的静态分派属于多分派，根据 <strong>方法接收者的静态类型</strong> 和 <strong>方法参数类型</strong> 两个宗量进行选择。</p>
+<p>Java 语言的动态分派属于单分派，只根据 <strong>方法接收者的实际类型</strong> 一个宗量进行选择。</p>
+<h3 id="动态类型语言支持"><a href="#动态类型语言支持" class="headerlink" title="动态类型语言支持"></a>动态类型语言支持</h3><p><strong>什么是动态类型语言？</strong> </p>
+<p>就是类型检查的主体过程在运行期，而非编译期的编程语言。</p>
+<p><strong>动/静态类型语言各自的优点？</strong></p>
+<ul>
+<li>动态类型语言：灵活性高，开发效率高。</li>
+<li>静态类型语言：编译器提供了严谨的类型检查，类型相关的问题能在编码的时候就发现。</li>
+</ul>
+<p><strong>Java虚拟机层面提供的动态类型支持：</strong></p>
+<ul>
+<li><code>invokedynamic</code> 指令</li>
+<li>java.lang.invoke 包</li>
+</ul>
+<h4 id="java-lang-invoke-包"><a href="#java-lang-invoke-包" class="headerlink" title="java.lang.invoke 包"></a>java.lang.invoke 包</h4><p><strong>目的：</strong> 在之前的依靠符号引用确定调用的目标方法的方式之外，提供了 MethodHandle 这种动态确定目标方法的调用机制。</p>
+<p> <strong>MethodHandle 的使用</strong></p>
+<ul>
+<li>获得方法的参数描述，第一个参数是方法返回值的类型，之后的参数是方法的入参：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MethodType mt = MethodType.methodType(<span class="keyword">void</span>.class, String.class);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>获取一个普通方法的调用：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 需要的参数：</span></span><br><span class="line"><span class="comment"> * 1. 被调用方法所属类的类对象</span></span><br><span class="line"><span class="comment"> * 2. 方法名</span></span><br><span class="line"><span class="comment"> * 3. MethodType 对象 mt</span></span><br><span class="line"><span class="comment"> * 4. 调用该方法的对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">MethodHandle.lookup().findVirtual(receiver.getClass(), <span class="string">"方法名"</span>, mt).bindTo(receiver);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>获取一个父类方法的调用：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 需要的参数：</span></span><br><span class="line"><span class="comment"> * 1. 被调用方法所属类的类对象</span></span><br><span class="line"><span class="comment"> * 2. 方法名</span></span><br><span class="line"><span class="comment"> * 3. MethodType 对象 mt</span></span><br><span class="line"><span class="comment"> * 4. 调用这个方法的类的类对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">MethodHandle.lookup().findSpecial(GrandFather.class, <span class="string">"方法名"</span>, mt, getClass());</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过 <code>MethodHandle mh</code> 执行方法：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">invoke() 和 invokeExact() 的区别：</span></span><br><span class="line"><span class="comment">- invokeExact() 要求更严格，要求严格的类型匹配，方法的返回值类型也在考虑范围之内</span></span><br><span class="line"><span class="comment">- invoke() 允许更加松散的调用方式</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">mh.invoke(<span class="string">"Hello world"</span>);</span><br><span class="line">mh.invokeExact(<span class="string">"Hello world"</span>);</span><br></pre></td></tr></table></figure>
+<p>使用示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MethodHandleTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassA</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">println</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            System.out.println(s);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        obj的静态类型是Object，是没有println方法的，所以尽管obj的实际类型都包含println方法，</span></span><br><span class="line"><span class="comment">        它还是不能调用println方法</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Object obj = System.currentTimeMillis() % <span class="number">2</span> == <span class="number">0</span> ? System.out : <span class="keyword">new</span> ClassA();</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        invoke()和invokeExact()的区别：</span></span><br><span class="line"><span class="comment">        - invokeExact()要求更严格，要求严格的类型匹配，方法的返回值类型也在考虑范围之内</span></span><br><span class="line"><span class="comment">        - invoke()允许更加松散的调用方式</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        getPrintlnMH(obj).invoke(<span class="string">"Hello world"</span>);</span><br><span class="line">        getPrintlnMH(obj).invokeExact(<span class="string">"Hello world"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> MethodHandle <span class="title">getPrintlnMH</span><span class="params">(Object receiver)</span> </span></span><br><span class="line"><span class="function">        	<span class="keyword">throws</span> NoSuchMethodException, IllegalAccessException </span>&#123;</span><br><span class="line">        <span class="comment">/* MethodType代表方法类型，第一个参数是方法返回值的类型，之后的参数是方法的入参 */</span></span><br><span class="line">        MethodType mt = MethodType.methodType(<span class="keyword">void</span>.class, String.class);</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        lookup()方法来自于MethodHandles.lookup，</span></span><br><span class="line"><span class="comment">        这句的作用是在指定类中查找符合给定的方法名称、方法类型，并且符合调用权限的方法句柄</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        因为这里调用的是一个虚方法，按照Java语言的规则，方法第一个参数是隐式的，代表该方法的接收者，</span></span><br><span class="line"><span class="comment">        也即是this指向的对象，这个参数以前是放在参数列表中进行传递，现在提供了bindTo()方法来完成这件事情</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">return</span> MethodHandles.lookup().findVirtual(receiver.getClass(), <span class="string">"println"</span>, mt).bindTo(receiver);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>MethodHandles.lookup 中 3 个方法对应的字节码指令：</strong></p>
+<ul>
+<li><code>findStatic()</code>：对应 invokestatic</li>
+<li><code>findVirtual()</code>：对应 invokevirtual &amp; invokeinterface</li>
+<li><code>findSpecial()</code>：对应 invokespecial</li>
+</ul>
+<p><strong>MethodHandle 和 Reflection 的区别</strong></p>
+<ul>
+<li>本质区别：它们都在模拟方法调用，但是<ul>
+<li>Reflection 模拟的是 Java 代码层次的调用；</li>
+<li>MethodHandle 模拟的是字节码层次的调用。</li>
+</ul>
+</li>
+<li>包含信息的区别：<ul>
+<li>Reflection 的 Method 对象包含的信息多，包括：方法签名、方法描述符、方法的各种属性的Java端表达方式、方法执行权限等；</li>
+<li>MethodHandle 对象包含的信息比较少，既包含与执行该方法相关的信息。</li>
+</ul>
+</li>
+</ul>
+<h4 id="invokedynamic-指令"><a href="#invokedynamic-指令" class="headerlink" title="invokedynamic 指令"></a><code>invokedynamic</code> 指令</h4><p>Lambda 表达式就是通过 <code>invokedynamic</code> 指令实现的。</p>
+<p>JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类<br><a id="more"></a><br>类加载的动态性体现:一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是节省了内存的开销，因为java最早就是为嵌入式系统而设计的，内存宝贵，这是一种可以理解的机制，而用到时再加载这也是java动态性的一种体现.<br><img src="http://490.github.io/images/20190311_083329.png" alt="image"></p>
+<h1 id="基于栈的字节码解释执行引擎"><a href="#基于栈的字节码解释执行引擎" class="headerlink" title="基于栈的字节码解释执行引擎"></a>基于栈的字节码解释执行引擎</h1><p>这个栈，就是栈帧中的操作数栈。</p>
+<h2 id="解释执行"><a href="#解释执行" class="headerlink" title="解释执行"></a>解释执行</h2><p>先通过 javac 将代码编译成字节码，虚拟机再通过加载字节码文件，解释执行字节码文件生成机器码，解释执行的流程如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">词法分析 -&gt; 语法分析 -&gt; 形成抽象语法树 -&gt; 遍历语法树生成线性字节码指令流</span><br></pre></td></tr></table></figure>
+<h2 id="指令集分类"><a href="#指令集分类" class="headerlink" title="指令集分类"></a>指令集分类</h2><h3 id="基于栈的指令集"><a href="#基于栈的指令集" class="headerlink" title="基于栈的指令集"></a>基于栈的指令集</h3><ul>
+<li><p><strong>优点：</strong></p>
+<ul>
+<li>可移植：寄存器由硬件直接提供，程序如果直接依赖这些硬件寄存器，会不可避免的受到硬件的约束；</li>
+<li>代码更紧凑：字节码中每个字节对应一条指令，多地址指令集中还需要存放参数；</li>
+<li>编译器实现更简单：不需要考虑空间分配问题，所需的空间都在栈上操作。</li>
+</ul>
+</li>
+<li><p><strong>缺点：</strong> 执行速度稍慢</p>
+<ul>
+<li>完成相同的功能，需要更多的指令，因为出入栈本身就产生相当多的指令；</li>
+<li>频繁的栈访问导致频繁的内存访问，对于处理器而言，内存是执行速度的瓶颈。</li>
+</ul>
+</li>
+<li><p><strong>示例：</strong> 两数相加</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">iconst_1  // 把常量1入栈</span><br><span class="line">iconst_1</span><br><span class="line">iadd      // 把栈顶两元素出栈相加，结果入栈</span><br><span class="line">istore_0  // 把栈顶值存入第0个Slot中</span><br></pre></td></tr></table></figure>
+<h3 id="基于寄存器的指令集"><a href="#基于寄存器的指令集" class="headerlink" title="基于寄存器的指令集"></a>基于寄存器的指令集</h3><p><strong>示例：</strong> 两数相加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov  eax, 1</span><br><span class="line">add  eax, 1</span><br></pre></td></tr></table></figure>
+<h2 id="执行过程分析"><a href="#执行过程分析" class="headerlink" title="执行过程分析"></a>执行过程分析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Architecture</span> </span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    calc函数的字节码分析：</span></span><br><span class="line"><span class="comment">    public int calc();</span></span><br><span class="line"><span class="comment">    descriptor: ()I</span></span><br><span class="line"><span class="comment">    flags: ACC_PUBLIC</span></span><br><span class="line"><span class="comment">    Code:</span></span><br><span class="line"><span class="comment">    stack=2, locals=4, args_size=1 // stack=2，说明需要深度为2的操作数栈</span></span><br><span class="line"><span class="comment">                                   // locals=4，说明需要4个Slot的局部变量表</span></span><br><span class="line"><span class="comment">    0: bipush 100                  // 将单字节的整型常数值push到操作数栈</span></span><br><span class="line"><span class="comment">    2: istore_1                    // 将操作数栈顶的整型值出栈并存放到第一个局部变量Slot中</span></span><br><span class="line"><span class="comment">    3: sipush 200</span></span><br><span class="line"><span class="comment">    6: istore_2</span></span><br><span class="line"><span class="comment">    7: sipush 300</span></span><br><span class="line"><span class="comment">    10: istore_3</span></span><br><span class="line"><span class="comment">    11: iload_1                    // 将局部变量表第一个Slot中的整型值复制到操作数栈顶</span></span><br><span class="line"><span class="comment">    12: iload_2</span></span><br><span class="line"><span class="comment">    13: iadd                       // 将操作数栈中头两个元素出栈并相加，将结果重新入栈</span></span><br><span class="line"><span class="comment">    14: iload_3</span></span><br><span class="line"><span class="comment">    15: imul                       // 将操作数栈中头两个元素出栈并相乘，将结果重新入栈</span></span><br><span class="line"><span class="comment">    16: ireturn                    // 返回指令，结束方法执行，将操作数栈顶的整型值返回给此方法的调用者</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">calc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">100</span>;</span><br><span class="line">        <span class="keyword">int</span> b = <span class="number">200</span>;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">300</span>;</span><br><span class="line">        <span class="keyword">return</span> (a + b) * c;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Architecture architecture = <span class="keyword">new</span> Architecture();</span><br><span class="line">        architecture.calc();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h1><p>JDK 默认提供了如下几种ClassLoader</p>
-<ol>
-<li><p>Bootstrp loader<br>Bootstrp加载器是用C++语言写的，它是在Java虚拟机启动后初始化的，它主要负责加载%JAVA_HOME%/jre/lib,-Xbootclasspath参数指定的路径以及%JAVA_HOME%/jre/classes中的类。</p>
-</li>
-<li><p>ExtClassLoader<br>Bootstrp loader加载ExtClassLoader,并且将ExtClassLoader的父加载器设置为Bootstrp loader.ExtClassLoader是用Java写的，具体来说就是 sun.misc.Launcher$ExtClassLoader，ExtClassLoader主要加载%JAVA_HOME%/jre/lib/ext，此路径下的所有classes目录以及java.ext.dirs系统变量指定的路径中类库。</p>
-</li>
-<li><p>AppClassLoader<br>Bootstrp loader加载完ExtClassLoader后，就会加载AppClassLoader,并且将AppClassLoader的父加载器指定为 ExtClassLoader。AppClassLoader也是用Java写成的，它的实现类是 sun.misc.Launcher$AppClassLoader，另外我们知道ClassLoader中有个getSystemClassLoader方法,此方法返回的正是AppclassLoader.AppClassLoader主要负责加载classpath所指定的位置的类或者是jar文档，它也是Java程序默认的类加载器。负责加载用户类路径（classpath）上的指定类库，我们可以直接使用这个类加载器。一般情况，如果我们没有自定义类加载器默认就是用这个加载器。<br><img src="http://490.github.io/images/20190311_083907.png" alt="image"><br>class.forname得到的class是已经初始化完成的<br>classloder.loadclass得到的class是还没有链接的</p>
+<p><img src="http://490.github.io/images/20190311_083907.png" alt="image"><br>class.forname得到的class是已经初始化完成的<br>classloder.loadclass得到的class是还没有链接的</p>
 <h1 id="类加载器的双亲委派机制"><a href="#类加载器的双亲委派机制" class="headerlink" title="类加载器的双亲委派机制"></a>类加载器的双亲委派机制</h1><p>双亲委派模型工作过程是：如果一个类加载器收到类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器完成。每个类加载器都是如此，只有当父加载器在自己的搜索范围内找不到指定的类时（即ClassNotFoundException），子加载器才会尝试自己去加载。</p>
-<p>采用双亲委派模式的是好处是Java类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。其次是考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心Java API发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的java.lang.Integer，而直接返回已加载过的Integer.class，这样便可以防止核心API库被随意篡改。<br><img src="http://490.github.io/images/20190311_083801.png" alt="image"></p>
-</li>
-</ol>
 
       
     </div>
@@ -422,6 +889,8 @@
           
             <a href="/tags/Java/" rel="tag"># Java</a>
           
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
         </div>
       
 
@@ -433,8 +902,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/Servlet的生命周期与工作原理/" rel="next" title="Servlet的生命周期与工作原理">
-                <i class="fa fa-chevron-left"></i> Servlet的生命周期与工作原理
+              <a href="/Java虚拟机的执行机制/" rel="next" title="Java虚拟机的执行机制">
+                <i class="fa fa-chevron-left"></i> Java虚拟机的执行机制
               </a>
             
           </div>
@@ -443,8 +912,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/计算机网络基础知识/" rel="prev" title="计算机网络基础知识">
-                计算机网络基础知识 <i class="fa fa-chevron-right"></i>
+              <a href="/Java虚拟机性能监控及调优/" rel="prev" title="Java虚拟机性能监控及调优">
+                Java虚拟机性能监控及调优 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -531,7 +1000,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -587,7 +1056,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ClassLoader"><span class="nav-number">1.</span> <span class="nav-text">ClassLoader</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类加载器的双亲委派机制"><span class="nav-number">2.</span> <span class="nav-text">类加载器的双亲委派机制</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类文件结构"><span class="nav-number">1.</span> <span class="nav-text">类文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-文件的头-8-个字节"><span class="nav-number">1.1.</span> <span class="nav-text">Class 文件的头 8 个字节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量池"><span class="nav-number">1.2.</span> <span class="nav-text">常量池</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟机的类加载机制"><span class="nav-number">2.</span> <span class="nav-text">虚拟机的类加载机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载的时机"><span class="nav-number">2.1.</span> <span class="nav-text">类加载的时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类的显式加载和隐式加载"><span class="nav-number">2.2.</span> <span class="nav-text">类的显式加载和隐式加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载的过程"><span class="nav-number">2.3.</span> <span class="nav-text">类加载的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的生命周期"><span class="nav-number">2.3.1.</span> <span class="nav-text">类的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载"><span class="nav-number">2.3.2.</span> <span class="nav-text">加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#加载的-3-个阶段"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">加载的 3 个阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分类"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证"><span class="nav-number">2.3.3.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备"><span class="nav-number">2.3.4.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析"><span class="nav-number">2.3.5.</span> <span class="nav-text">解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">2.3.6.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器"><span class="nav-number">2.4.</span> <span class="nav-text">类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何判断两个类-“相等”"><span class="nav-number">2.4.1.</span> <span class="nav-text">如何判断两个类 “相等”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器的分类"><span class="nav-number">2.4.2.</span> <span class="nav-text">类加载器的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">2.4.3.</span> <span class="nav-text">双亲委派模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟机字节码执行引擎"><span class="nav-number">3.</span> <span class="nav-text">虚拟机字节码执行引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时栈帧结构"><span class="nav-number">3.1.</span> <span class="nav-text">运行时栈帧结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#局部变量表"><span class="nav-number">3.1.1.</span> <span class="nav-text">局部变量表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#局部变量表的空间分配"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">局部变量表的空间分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Slot-的复用"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">Slot 的复用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作数栈"><span class="nav-number">3.1.2.</span> <span class="nav-text">操作数栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态连接"><span class="nav-number">3.1.3.</span> <span class="nav-text">动态连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法返回地址"><span class="nav-number">3.1.4.</span> <span class="nav-text">方法返回地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法调用"><span class="nav-number">3.2.</span> <span class="nav-text">方法调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法调用字节码指令"><span class="nav-number">3.2.1.</span> <span class="nav-text">方法调用字节码指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析调用"><span class="nav-number">3.2.2.</span> <span class="nav-text">解析调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分派调用"><span class="nav-number">3.2.3.</span> <span class="nav-text">分派调用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态分派（方法重载）"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">静态分派（方法重载）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态分派（方法重写）"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">动态分派（方法重写）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单分派与多分派"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">单分派与多分派</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态类型语言支持"><span class="nav-number">3.2.4.</span> <span class="nav-text">动态类型语言支持</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java-lang-invoke-包"><span class="nav-number">3.2.4.1.</span> <span class="nav-text">java.lang.invoke 包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#invokedynamic-指令"><span class="nav-number">3.2.4.2.</span> <span class="nav-text">invokedynamic 指令</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于栈的字节码解释执行引擎"><span class="nav-number">4.</span> <span class="nav-text">基于栈的字节码解释执行引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解释执行"><span class="nav-number">4.1.</span> <span class="nav-text">解释执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指令集分类"><span class="nav-number">4.2.</span> <span class="nav-text">指令集分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于栈的指令集"><span class="nav-number">4.2.1.</span> <span class="nav-text">基于栈的指令集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于寄存器的指令集"><span class="nav-number">4.2.2.</span> <span class="nav-text">基于寄存器的指令集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行过程分析"><span class="nav-number">4.3.</span> <span class="nav-text">执行过程分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ClassLoader"><span class="nav-number">5.</span> <span class="nav-text">ClassLoader</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类加载器的双亲委派机制"><span class="nav-number">6.</span> <span class="nav-text">类加载器的双亲委派机制</span></a></li></ol></div>
             
 
           </div>
@@ -621,7 +1090,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">89.3k</span>
+    <span title="Site words total count">97.5k</span>
   
 </div>
 

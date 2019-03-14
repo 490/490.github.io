@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="设计模式,">
+  <meta name="keywords" content="Java,JVM,">
 
 
 
@@ -77,28 +77,22 @@
 
 
 
-<meta name="description" content="开闭原则 依赖倒置原则 单一职责原则 接口隔离原则 迪米特法则（最少知道原则） 里氏替换原则 合成/复用原则">
-<meta name="keywords" content="设计模式">
+<meta name="description" content="JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类">
+<meta name="keywords" content="Java,JVM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="设计模式：七大原则">
-<meta property="og:url" content="https://490.github.io/软件设计模式七大原则/index.html">
+<meta property="og:title" content="Java虚拟机的执行机制">
+<meta property="og:url" content="https://490.github.io/Java虚拟机的执行机制/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="开闭原则 依赖倒置原则 单一职责原则 接口隔离原则 迪米特法则（最少知道原则） 里氏替换原则 合成/复用原则">
+<meta property="og:description" content="JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://490.github.io/images/20190309_212539.png">
-<meta property="og:image" content="http://490.github.io/images/20190312_220521.png">
-<meta property="og:image" content="http://490.github.io/images/20190312_221539.png">
-<meta property="og:image" content="http://490.github.io/images/20190312_222739.png">
-<meta property="og:image" content="http://490.github.io/images/20190312_224323.png">
-<meta property="og:image" content="http://490.github.io/images/20190312_224815.png">
-<meta property="og:image" content="http://490.github.io/images/20190312_231333.png">
-<meta property="og:image" content="http://490.github.io/images/20190312_232335.png">
-<meta property="og:image" content="http://490.github.io/images/20190312_232349.png">
-<meta property="og:updated_time" content="2019-03-12T15:26:04.579Z">
+<meta property="og:image" content="http://490.github.io/images/20190311_083329.png">
+<meta property="og:image" content="http://490.github.io/images/20190311_083907.png">
+<meta property="og:image" content="http://490.github.io/images/20190311_083801.png">
+<meta property="og:updated_time" content="2019-03-14T00:33:40.114Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="设计模式：七大原则">
-<meta name="twitter:description" content="开闭原则 依赖倒置原则 单一职责原则 接口隔离原则 迪米特法则（最少知道原则） 里氏替换原则 合成/复用原则">
-<meta name="twitter:image" content="http://490.github.io/images/20190309_212539.png">
+<meta name="twitter:title" content="Java虚拟机的执行机制">
+<meta name="twitter:description" content="JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类">
+<meta name="twitter:image" content="http://490.github.io/images/20190311_083329.png">
 
 
 
@@ -128,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://490.github.io/软件设计模式七大原则/">
+  <link rel="canonical" href="https://490.github.io/Java虚拟机的执行机制/">
 
 
 
 
 
-  <title>设计模式：七大原则 | 我的笔记</title>
+  <title>Java虚拟机的执行机制 | 我的笔记</title>
   
 
 
@@ -289,7 +283,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://490.github.io/软件设计模式七大原则/">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Java虚拟机的执行机制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="le">
@@ -306,7 +300,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">设计模式：七大原则</h1>
+          <h1 class="post-title" itemprop="name headline">Java虚拟机的执行机制</h1>
         
 
         <div class="post-meta">
@@ -318,8 +312,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-09T20:20:44+08:00">
-                2019-03-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-10T23:17:20+08:00">
+                2019-03-10
               </time>
             
 
@@ -337,8 +331,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/软件设计模式七大原则/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/软件设计模式七大原则/" itemprop="commentsCount"></span>
+                <a href="/Java虚拟机的执行机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/Java虚拟机的执行机制/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -360,7 +354,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  772
+                  861
                 </span>
               
 
@@ -376,7 +370,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  3
                 </span>
               
             </div>
@@ -397,34 +391,18 @@
       
 
       
-        <ul>
-<li>开闭原则</li>
-<li>依赖倒置原则</li>
-<li>单一职责原则</li>
-<li>接口隔离原则</li>
-<li>迪米特法则（最少知道原则）</li>
-<li>里氏替换原则</li>
-<li>合成/复用原则</li>
-</ul>
-<a id="more"></a>
-<h1 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h1><p><img src="http://490.github.io/images/20190309_212539.png" alt="image"><br>类应该对扩展开放，对修改关闭。</p>
-<p>扩展就是添加新功能的意思，因此该原则要求在添加新功能时不需要修改代码。</p>
-<p>符合开闭原则最典型的设计模式是装饰者模式，它可以动态地将责任附加到对象上，而不用去修改类的代码。</p>
-<h1 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h1><p>高层次模块不应该依赖于低层的<br><img src="http://490.github.io/images/20190312_220521.png" alt="image"></p>
-<p>例如扩展的时候是<strong>面向ICourse接口</strong>的，而不是在Geely类中添加study方法，main函数也不需要调用Geely的对象的具体课程方法。</p>
-<p>大概是：不要写很多不同名字的实现方法，而是去写很多类去继承接口，然后传不同的参数来调用不同类，这些类里的方法名字相同，但实现不同。</p>
-<h1 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h1><p>修改一个类的原因应该只有一个。<br>换句话说就是让一个类只负责一件事，当这个类需要做过多事情的时候，就需要分解这个类。<br>如果一个类承担的职责过多，就等于把这些职责耦合在了一起，一个职责的变化可能会削弱这个类完成其它职责的能力。</p>
-<p><img src="http://490.github.io/images/20190312_221539.png" alt="image"></p>
-<h1 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h1><p>不应该强迫客户依赖于它们不用的方法。<br>因此使用多个专门的接口比使用单一的总接口要好。</p>
-<p><img src="http://490.github.io/images/20190312_222739.png" alt="image"></p>
-<h1 id="迪米特原则"><a href="#迪米特原则" class="headerlink" title="迪米特原则"></a>迪米特原则</h1><p>对象对其他对象保持最少的了解，所以少用public<br>尽量降低类之间的耦合<br>只和朋友交流（入参出参、成员变量。。其他内部出现的类不是朋友，尽量搞出去）</p>
-<h1 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h1><p><img src="http://490.github.io/images/20190312_224323.png" alt="image"></p>
-<p><img src="http://490.github.io/images/20190312_224815.png" alt="image"></p>
-<p>子类能够替换父类。<br>重载时，子类的入参要比父类宽松。<br>返回 时，子类要更严格。</p>
-<h1 id="合成-复用原则"><a href="#合成-复用原则" class="headerlink" title="合成/复用原则"></a>合成/复用原则</h1><p><img src="http://490.github.io/images/20190312_231333.png" alt="image"></p>
-<p>黑箱复用。</p>
-<p>下面类图中描述的例子。“人”被继承到“学生”、“经理”和“雇员”等子类。而实际上，学生”、“经理”和“雇员”分别描述一种角色，而“人”可以同时有几种不同的角色。比如，一个人既然是“经理”，就必然是“雇员”；而“人”可能同时还参加MBA课程，从而也是一个“学生”。使用继承来实现角色，则只能使每一个“人”具有Is-A角色，而且继承是静态的，这会使得一个“人”在成为“雇员”身份后，就永远为“雇员”，不能成为“学生”和“经理”，而这显然是不合理的。<br><img src="http://490.github.io/images/20190312_232335.png" alt="image"></p>
-<p>这一错误的设计源自于把“角色”的等级结构和“人”的等级结构混淆起来，把“Has-A”角色误解为“Is -A”角色。因此要纠正这种错误，关键是区分“人”与“角色”的区别。下图所示的的设计就正确的做到了这一点。<br><img src="http://490.github.io/images/20190312_232349.png" alt="image"></p>
+        <p>JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类<br><a id="more"></a><br>类加载的动态性体现:一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是节省了内存的开销，因为java最早就是为嵌入式系统而设计的，内存宝贵，这是一种可以理解的机制，而用到时再加载这也是java动态性的一种体现.<br><img src="http://490.github.io/images/20190311_083329.png" alt="image"></p>
+<h1 id="ClassLoader"><a href="#ClassLoader" class="headerlink" title="ClassLoader"></a>ClassLoader</h1><p>JDK 默认提供了如下几种ClassLoader</p>
+<ol>
+<li><p>Bootstrp loader<br>Bootstrp加载器是用C++语言写的，它是在Java虚拟机启动后初始化的，它主要负责加载%JAVA_HOME%/jre/lib,-Xbootclasspath参数指定的路径以及%JAVA_HOME%/jre/classes中的类。</p>
+</li>
+<li><p>ExtClassLoader<br>Bootstrp loader加载ExtClassLoader,并且将ExtClassLoader的父加载器设置为Bootstrp loader.ExtClassLoader是用Java写的，具体来说就是 sun.misc.Launcher$ExtClassLoader，ExtClassLoader主要加载%JAVA_HOME%/jre/lib/ext，此路径下的所有classes目录以及java.ext.dirs系统变量指定的路径中类库。</p>
+</li>
+<li><p>AppClassLoader<br>Bootstrp loader加载完ExtClassLoader后，就会加载AppClassLoader,并且将AppClassLoader的父加载器指定为 ExtClassLoader。AppClassLoader也是用Java写成的，它的实现类是 sun.misc.Launcher$AppClassLoader，另外我们知道ClassLoader中有个getSystemClassLoader方法,此方法返回的正是AppclassLoader.AppClassLoader主要负责加载classpath所指定的位置的类或者是jar文档，它也是Java程序默认的类加载器。负责加载用户类路径（classpath）上的指定类库，我们可以直接使用这个类加载器。一般情况，如果我们没有自定义类加载器默认就是用这个加载器。<br><img src="http://490.github.io/images/20190311_083907.png" alt="image"><br>class.forname得到的class是已经初始化完成的<br>classloder.loadclass得到的class是还没有链接的</p>
+<h1 id="类加载器的双亲委派机制"><a href="#类加载器的双亲委派机制" class="headerlink" title="类加载器的双亲委派机制"></a>类加载器的双亲委派机制</h1><p>双亲委派模型工作过程是：如果一个类加载器收到类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器完成。每个类加载器都是如此，只有当父加载器在自己的搜索范围内找不到指定的类时（即ClassNotFoundException），子加载器才会尝试自己去加载。</p>
+<p>采用双亲委派模式的是好处是Java类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。其次是考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心Java API发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的java.lang.Integer，而直接返回已加载过的Integer.class，这样便可以防止核心API库被随意篡改。<br><img src="http://490.github.io/images/20190311_083801.png" alt="image"></p>
+</li>
+</ol>
 
       
     </div>
@@ -442,7 +420,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
           
         </div>
       
@@ -455,8 +435,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/UML类图/" rel="next" title="UML类图">
-                <i class="fa fa-chevron-left"></i> UML类图
+              <a href="/Servlet的生命周期与工作原理/" rel="next" title="Servlet的生命周期与工作原理">
+                <i class="fa fa-chevron-left"></i> Servlet的生命周期与工作原理
               </a>
             
           </div>
@@ -465,8 +445,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/Java虚拟机内存管理机制/" rel="prev" title="Java虚拟机内存管理机制">
-                Java虚拟机内存管理机制 <i class="fa fa-chevron-right"></i>
+              <a href="/Java的类加载器/" rel="prev" title="Java虚拟机的执行机制">
+                Java虚拟机的执行机制 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -609,7 +589,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#开闭原则"><span class="nav-number">1.</span> <span class="nav-text">开闭原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#依赖倒置原则"><span class="nav-number">2.</span> <span class="nav-text">依赖倒置原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单一职责原则"><span class="nav-number">3.</span> <span class="nav-text">单一职责原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接口隔离原则"><span class="nav-number">4.</span> <span class="nav-text">接口隔离原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迪米特原则"><span class="nav-number">5.</span> <span class="nav-text">迪米特原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#里氏替换原则"><span class="nav-number">6.</span> <span class="nav-text">里氏替换原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#合成-复用原则"><span class="nav-number">7.</span> <span class="nav-text">合成/复用原则</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ClassLoader"><span class="nav-number">1.</span> <span class="nav-text">ClassLoader</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类加载器的双亲委派机制"><span class="nav-number">2.</span> <span class="nav-text">类加载器的双亲委派机制</span></a></li></ol></div>
             
 
           </div>
