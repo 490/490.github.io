@@ -77,23 +77,29 @@
 
 
 
-<meta name="description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。  无符号数： 无符号数属于基本数据类型，以 u1、u2、u4、u8 分别">
+<meta name="description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。">
 <meta name="keywords" content="Java,JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java虚拟机的执行机制">
 <meta property="og:url" content="https://490.github.io/Java虚拟机的执行机制/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。  无符号数： 无符号数属于基本数据类型，以 u1、u2、u4、u8 分别">
+<meta property="og:description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://490.github.io/images/20190314_085611.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_085651.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_085746.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_085909.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_090048.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_090101.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_083801.png">
 <meta property="og:image" content="http://490.github.io/images/20190314_084016.png">
 <meta property="og:image" content="http://490.github.io/images/20190314_084054.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_083329.png">
-<meta property="og:updated_time" content="2019-03-14T00:51:40.321Z">
+<meta property="og:updated_time" content="2019-03-14T01:02:05.108Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机的执行机制">
-<meta name="twitter:description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。  无符号数： 无符号数属于基本数据类型，以 u1、u2、u4、u8 分别">
-<meta name="twitter:image" content="http://490.github.io/images/20190311_083801.png">
+<meta name="twitter:description" content="类文件结构Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。">
+<meta name="twitter:image" content="http://490.github.io/images/20190314_085611.png">
 
 
 
@@ -355,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8.1k
+                  8.6k
                 </span>
               
 
@@ -371,7 +377,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  30
+                  31
                 </span>
               
             </div>
@@ -392,14 +398,17 @@
       
 
       
-        <h1 id="类文件结构"><a href="#类文件结构" class="headerlink" title="类文件结构"></a>类文件结构</h1><p>Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。</p>
+        <h1 id="类文件结构"><a href="#类文件结构" class="headerlink" title="类文件结构"></a>类文件结构</h1><p>Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目严格按照顺序紧凑地排列在 Class 文件中，中间没有任何分隔符。Java 虚拟机规范规定 Class 文件采用一种类似 C 语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：无符号数和表，我们之后也主要对这两种类型的数据类型进行解析。<br><a id="more"></a></p>
 <ul>
 <li><strong>无符号数：</strong> 无符号数属于基本数据类型，以 u1、u2、u4、u8 分别代表 1 个字节、2 个字节、4 个字节和 8 个字节的无符号数，可以用它来描述数字、索引引用、数量值或 utf-8 编码的字符串值。</li>
 <li><strong>表：</strong> 表是由多个无符号数或其他表为数据项构成的复合数据类型，名称上都以 <code>_info</code> 结尾。</li>
 </ul>
-<h2 id="Class-文件的头-8-个字节"><a href="#Class-文件的头-8-个字节" class="headerlink" title="Class 文件的头 8 个字节"></a>Class 文件的头 8 个字节</h2><p>Class 文件的头 8 个字节是魔数和版本号，其中头 4 个字节是魔数，也就是 <code>0xCAFEBABE</code>，它可以用来确定这个文件是否为一个能被虚拟机接受的 Class 文件（这通过扩展名来识别文件类型要安全，毕竟扩展名是可以随便修改的）。</p>
+<p><img src="http://490.github.io/images/20190314_085611.png" alt="image"></p>
+<h2 id="魔数与版本号"><a href="#魔数与版本号" class="headerlink" title="魔数与版本号"></a>魔数与版本号</h2><p>Class 文件的头 8 个字节是魔数和版本号，其中头 4 个字节是魔数，也就是 <code>0xCAFEBABE</code>，它可以用来确定这个文件是否为一个能被虚拟机接受的 Class 文件（这通过扩展名来识别文件类型要安全，毕竟扩展名是可以随便修改的）。</p>
 <p>后 4 个字节则是当前 Class 文件的版本号，其中第 5、6 个字节是次版本号，第 7、8 个字节是主版本号。</p>
-<h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h2><p>从第 9 个字节开始，就是常量池的入口，常量池是 Class 文件中：</p>
+<h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h2><p><img src="http://490.github.io/images/20190314_085651.png" alt="image"></p>
+<p><img src="http://490.github.io/images/20190314_085746.png" alt="image"></p>
+<p>从第 9 个字节开始，就是常量池的入口，常量池是 Class 文件中：</p>
 <ul>
 <li>与其他项目关联最多的的数据类型；</li>
 <li>占用 Class 文件空间最大的数据项目；</li>
@@ -425,7 +434,22 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">... [ tag=<span class="number">7</span> ] [ name_index ] ...</span><br><span class="line">... [  <span class="number">1</span>位  ] [     <span class="number">2</span>位    ] ...</span><br></pre></td></tr></table></figure>
 <p>其中，tag 是标志位，用来区分常量类型的，tag = 7 就表示接下来的这个表是一个 CONSTANT_Class_info，name_index 是一个索引值，指向常量池中的一个 CONSTANT_Utf8_info 类型的常量所在的索引值，CONSTANT_Utf8_info 类型常量一般被用来描述类的全限定名、方法名和字段名。它的存储结构如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">... [ tag=<span class="number">1</span> ] [ 当前常量的长度 len ] [ 常量的符号引用的字符串值 ] ...</span><br><span class="line">... [  <span class="number">1</span>位  ] [        <span class="number">2</span>位        ] [         len位         ] ...</span><br></pre></td></tr></table></figure>
-<h1 id="虚拟机的类加载机制"><a href="#虚拟机的类加载机制" class="headerlink" title="虚拟机的类加载机制"></a>虚拟机的类加载机制</h1><h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p>JVM 会在程序第一次主动引用类的时候，加载该类，被动引用时并不会引发类加载的操作。也就是说，JVM 并不是在一开始就把一个程序就所有的类都加载到内存中，而是到不得不用的时候才把它加载进来，而且只加载一次。那么什么是主动引用，什么是被动引用呢？</p>
+<h2 id="访问标志"><a href="#访问标志" class="headerlink" title="访问标志"></a>访问标志</h2><p> 常量池之后的两个字节代表访问标志，即这个class是类还是接口，是否为public等的信息。不同的含义有不同的标志值（没有用到的标志位一律为0。），具体信息如下：</p>
+<p> <img src="http://490.github.io/images/20190314_085909.png" alt="image"></p>
+<h2 id="类索引、父类索引、接口索引集合"><a href="#类索引、父类索引、接口索引集合" class="headerlink" title="类索引、父类索引、接口索引集合"></a>类索引、父类索引、接口索引集合</h2><ul>
+<li>类索引占两个字节，分别指向常量池中的CONSTANT_Class_info类型的常量，这个类型的常量结构见常量池中的图表，其中包含一个指向全限定名常量项的索引。</li>
+<li>因为java只允许单继承，所以只有一个父类，具体内容同上-类索引。</li>
+</ul>
+<ul>
+<li>接口索引开始两个字节用来表示接口的数量，之后的每两个字节表示一个接口索引，用法同类索引与父类索引。</li>
+</ul>
+<h2 id="字段表集合"><a href="#字段表集合" class="headerlink" title="字段表集合"></a>字段表集合</h2><p>字段用于描述接口或者类中声明的变量，包括类级变量以及实例变量，但不包括局部变量。</p>
+<p>字段域的开始两个字节表示字段数量，之后为紧密排列的字段结构体数据，其结构如下：</p>
+<p><img src="http://490.github.io/images/20190314_090048.png" alt="image"></p>
+<p>其中的字段和方法的描述符，对于字段来说用来描述<strong>字段的数据类型</strong>；而对于方法来说，描述的就是<strong>方法的参数列表（包括数量、类型以及顺序）和返回值</strong>，这个描述顺序也是固定的，必须是参数列表在前，返回值在后，参数列表必须放在一组小括号内。同时为了节省空间，各种数据类型都使用规定的一个字母来表示，具体如下：</p>
+<p><img src="http://490.github.io/images/20190314_090101.png" alt="image"></p>
+<p>对象使用L加上对象的全限定名来表示，而数组则是在每一个维度前添加一个<code>&quot;[&quot;</code>来描述。属性表在之后进行介绍。</p>
+<h2 id="方法表集合"><a href="#方法表集合" class="headerlink" title="方法表集合"></a>方法表集合</h2><h2 id="属性表集合"><a href="#属性表集合" class="headerlink" title="属性表集合"></a>属性表集合</h2><h1 id="虚拟机的类加载机制"><a href="#虚拟机的类加载机制" class="headerlink" title="虚拟机的类加载机制"></a>虚拟机的类加载机制</h1><h2 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h2><p>JVM 会在程序第一次主动引用类的时候，加载该类，被动引用时并不会引发类加载的操作。也就是说，JVM 并不是在一开始就把一个程序就所有的类都加载到内存中，而是到不得不用的时候才把它加载进来，而且只加载一次。那么什么是主动引用，什么是被动引用呢？</p>
 <ul>
 <li><strong>主动引用</strong><ul>
 <li>遇到 new、getstatic、putstatic、invokestatic 字节码指令，例如：<ul>
@@ -842,7 +866,7 @@
 </li>
 </ul>
 <h4 id="invokedynamic-指令"><a href="#invokedynamic-指令" class="headerlink" title="invokedynamic 指令"></a><code>invokedynamic</code> 指令</h4><p>Lambda 表达式就是通过 <code>invokedynamic</code> 指令实现的。</p>
-<p>JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类<br><a id="more"></a><br>类加载的动态性体现:一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是节省了内存的开销，因为java最早就是为嵌入式系统而设计的，内存宝贵，这是一种可以理解的机制，而用到时再加载这也是java动态性的一种体现.<br><img src="http://490.github.io/images/20190311_083329.png" alt="image"></p>
+<p>JAVA类装载方式，有两种:1.隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 2.显式装载， 通过class.forname()等方法，显式加载需要的类<br><!--more--><br>类加载的动态性体现:一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是节省了内存的开销，因为java最早就是为嵌入式系统而设计的，内存宝贵，这是一种可以理解的机制，而用到时再加载这也是java动态性的一种体现.<br><img src="http://490.github.io/images/20190311_083329.png" alt="image"></p>
 <h1 id="基于栈的字节码解释执行引擎"><a href="#基于栈的字节码解释执行引擎" class="headerlink" title="基于栈的字节码解释执行引擎"></a>基于栈的字节码解释执行引擎</h1><p>这个栈，就是栈帧中的操作数栈。</p>
 <h2 id="解释执行"><a href="#解释执行" class="headerlink" title="解释执行"></a>解释执行</h2><p>先通过 javac 将代码编译成字节码，虚拟机再通过加载字节码文件，解释执行字节码文件生成机器码，解释执行的流程如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">词法分析 -&gt; 语法分析 -&gt; 形成抽象语法树 -&gt; 遍历语法树生成线性字节码指令流</span><br></pre></td></tr></table></figure>
@@ -909,8 +933,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/计算机网络基础知识/" rel="prev" title="计算机网络基础知识">
-                计算机网络基础知识 <i class="fa fa-chevron-right"></i>
+              <a href="/Java虚拟机性能监控及调优/" rel="prev" title="Java虚拟机性能监控及调优">
+                Java虚拟机性能监控及调优 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -1053,7 +1077,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类文件结构"><span class="nav-number">1.</span> <span class="nav-text">类文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Class-文件的头-8-个字节"><span class="nav-number">1.1.</span> <span class="nav-text">Class 文件的头 8 个字节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量池"><span class="nav-number">1.2.</span> <span class="nav-text">常量池</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟机的类加载机制"><span class="nav-number">2.</span> <span class="nav-text">虚拟机的类加载机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载的时机"><span class="nav-number">2.1.</span> <span class="nav-text">类加载的时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类的显式加载和隐式加载"><span class="nav-number">2.2.</span> <span class="nav-text">类的显式加载和隐式加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载的过程"><span class="nav-number">2.3.</span> <span class="nav-text">类加载的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的生命周期"><span class="nav-number">2.3.1.</span> <span class="nav-text">类的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载"><span class="nav-number">2.3.2.</span> <span class="nav-text">加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#加载的-3-个阶段"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">加载的 3 个阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分类"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证"><span class="nav-number">2.3.3.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备"><span class="nav-number">2.3.4.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析"><span class="nav-number">2.3.5.</span> <span class="nav-text">解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">2.3.6.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器"><span class="nav-number">2.4.</span> <span class="nav-text">类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何判断两个类-“相等”"><span class="nav-number">2.4.1.</span> <span class="nav-text">如何判断两个类 “相等”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器的分类"><span class="nav-number">2.4.2.</span> <span class="nav-text">类加载器的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">2.4.3.</span> <span class="nav-text">双亲委派模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟机字节码执行引擎"><span class="nav-number">3.</span> <span class="nav-text">虚拟机字节码执行引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时栈帧结构"><span class="nav-number">3.1.</span> <span class="nav-text">运行时栈帧结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#局部变量表"><span class="nav-number">3.1.1.</span> <span class="nav-text">局部变量表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#局部变量表的空间分配"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">局部变量表的空间分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Slot-的复用"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">Slot 的复用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作数栈"><span class="nav-number">3.1.2.</span> <span class="nav-text">操作数栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态连接"><span class="nav-number">3.1.3.</span> <span class="nav-text">动态连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法返回地址"><span class="nav-number">3.1.4.</span> <span class="nav-text">方法返回地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法调用"><span class="nav-number">3.2.</span> <span class="nav-text">方法调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法调用字节码指令"><span class="nav-number">3.2.1.</span> <span class="nav-text">方法调用字节码指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析调用"><span class="nav-number">3.2.2.</span> <span class="nav-text">解析调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分派调用"><span class="nav-number">3.2.3.</span> <span class="nav-text">分派调用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态分派（方法重载）"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">静态分派（方法重载）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态分派（方法重写）"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">动态分派（方法重写）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单分派与多分派"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">单分派与多分派</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态类型语言支持"><span class="nav-number">3.2.4.</span> <span class="nav-text">动态类型语言支持</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java-lang-invoke-包"><span class="nav-number">3.2.4.1.</span> <span class="nav-text">java.lang.invoke 包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#invokedynamic-指令"><span class="nav-number">3.2.4.2.</span> <span class="nav-text">invokedynamic 指令</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于栈的字节码解释执行引擎"><span class="nav-number">4.</span> <span class="nav-text">基于栈的字节码解释执行引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解释执行"><span class="nav-number">4.1.</span> <span class="nav-text">解释执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指令集分类"><span class="nav-number">4.2.</span> <span class="nav-text">指令集分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于栈的指令集"><span class="nav-number">4.2.1.</span> <span class="nav-text">基于栈的指令集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于寄存器的指令集"><span class="nav-number">4.2.2.</span> <span class="nav-text">基于寄存器的指令集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行过程分析"><span class="nav-number">4.3.</span> <span class="nav-text">执行过程分析</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类文件结构"><span class="nav-number">1.</span> <span class="nav-text">类文件结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#魔数与版本号"><span class="nav-number">1.1.</span> <span class="nav-text">魔数与版本号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量池"><span class="nav-number">1.2.</span> <span class="nav-text">常量池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问标志"><span class="nav-number">1.3.</span> <span class="nav-text">访问标志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类索引、父类索引、接口索引集合"><span class="nav-number">1.4.</span> <span class="nav-text">类索引、父类索引、接口索引集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字段表集合"><span class="nav-number">1.5.</span> <span class="nav-text">字段表集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法表集合"><span class="nav-number">1.6.</span> <span class="nav-text">方法表集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性表集合"><span class="nav-number">1.7.</span> <span class="nav-text">属性表集合</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟机的类加载机制"><span class="nav-number">2.</span> <span class="nav-text">虚拟机的类加载机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载的时机"><span class="nav-number">2.1.</span> <span class="nav-text">类加载的时机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类的显式加载和隐式加载"><span class="nav-number">2.2.</span> <span class="nav-text">类的显式加载和隐式加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载的过程"><span class="nav-number">2.3.</span> <span class="nav-text">类加载的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类的生命周期"><span class="nav-number">2.3.1.</span> <span class="nav-text">类的生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载"><span class="nav-number">2.3.2.</span> <span class="nav-text">加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#加载的-3-个阶段"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">加载的 3 个阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分类"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证"><span class="nav-number">2.3.3.</span> <span class="nav-text">验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备"><span class="nav-number">2.3.4.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析"><span class="nav-number">2.3.5.</span> <span class="nav-text">解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">2.3.6.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器"><span class="nav-number">2.4.</span> <span class="nav-text">类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何判断两个类-“相等”"><span class="nav-number">2.4.1.</span> <span class="nav-text">如何判断两个类 “相等”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器的分类"><span class="nav-number">2.4.2.</span> <span class="nav-text">类加载器的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委派模型"><span class="nav-number">2.4.3.</span> <span class="nav-text">双亲委派模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟机字节码执行引擎"><span class="nav-number">3.</span> <span class="nav-text">虚拟机字节码执行引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时栈帧结构"><span class="nav-number">3.1.</span> <span class="nav-text">运行时栈帧结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#局部变量表"><span class="nav-number">3.1.1.</span> <span class="nav-text">局部变量表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#局部变量表的空间分配"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">局部变量表的空间分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Slot-的复用"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">Slot 的复用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作数栈"><span class="nav-number">3.1.2.</span> <span class="nav-text">操作数栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态连接"><span class="nav-number">3.1.3.</span> <span class="nav-text">动态连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法返回地址"><span class="nav-number">3.1.4.</span> <span class="nav-text">方法返回地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法调用"><span class="nav-number">3.2.</span> <span class="nav-text">方法调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法调用字节码指令"><span class="nav-number">3.2.1.</span> <span class="nav-text">方法调用字节码指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析调用"><span class="nav-number">3.2.2.</span> <span class="nav-text">解析调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分派调用"><span class="nav-number">3.2.3.</span> <span class="nav-text">分派调用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态分派（方法重载）"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">静态分派（方法重载）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态分派（方法重写）"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">动态分派（方法重写）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单分派与多分派"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">单分派与多分派</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态类型语言支持"><span class="nav-number">3.2.4.</span> <span class="nav-text">动态类型语言支持</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#java-lang-invoke-包"><span class="nav-number">3.2.4.1.</span> <span class="nav-text">java.lang.invoke 包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#invokedynamic-指令"><span class="nav-number">3.2.4.2.</span> <span class="nav-text">invokedynamic 指令</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于栈的字节码解释执行引擎"><span class="nav-number">4.</span> <span class="nav-text">基于栈的字节码解释执行引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解释执行"><span class="nav-number">4.1.</span> <span class="nav-text">解释执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指令集分类"><span class="nav-number">4.2.</span> <span class="nav-text">指令集分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于栈的指令集"><span class="nav-number">4.2.1.</span> <span class="nav-text">基于栈的指令集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于寄存器的指令集"><span class="nav-number">4.2.2.</span> <span class="nav-text">基于寄存器的指令集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行过程分析"><span class="nav-number">4.3.</span> <span class="nav-text">执行过程分析</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1087,7 +1111,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">96.5k</span>
+    <span title="Site words total count">97k</span>
   
 </div>
 
