@@ -77,13 +77,13 @@
 
 
 
-<meta name="description" content="|Collection|　　├List|　　│-├LinkedList|　　│-├ArrayList|　　│-└Vector|　　│　└Stack|　　├Set|　　│├HashSet|　　│├TreeSet|　　│└LinkedSet||Map　　├Hashtable　　├HashMap　　└WeakHashMap">
+<meta name="description" content="Collection  List Arraylist： Object数组 Vector： Object数组 LinkedList： 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环)    Set HashSet（无序，唯一）: 基于 HashMap 实现的，底层采用 HashMap 来保存元素 LinkedHashSet： LinkedHashSet 继承与 HashSet，并且其">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java容器">
 <meta property="og:url" content="https://490.github.io/Java容器/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="|Collection|　　├List|　　│-├LinkedList|　　│-├ArrayList|　　│-└Vector|　　│　└Stack|　　├Set|　　│├HashSet|　　│├TreeSet|　　│└LinkedSet||Map　　├Hashtable　　├HashMap　　└WeakHashMap">
+<meta property="og:description" content="Collection  List Arraylist： Object数组 Vector： Object数组 LinkedList： 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环)    Set HashSet（无序，唯一）: 基于 HashMap 实现的，底层采用 HashMap 来保存元素 LinkedHashSet： LinkedHashSet 继承与 HashSet，并且其">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190312_134856.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_134907.png">
@@ -91,12 +91,15 @@
 <meta property="og:image" content="http://490.github.io/images/20190313_075242.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_141028.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_141042.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_152203.png">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/1024555/201705/1024555-20170514174100832-1891630860.png">
+<meta property="og:image" content="http://490.github.io/images/20190314_152431.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140836.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140842.png">
-<meta property="og:updated_time" content="2019-03-13T00:23:03.179Z">
+<meta property="og:updated_time" content="2019-03-14T07:28:53.136Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java容器">
-<meta name="twitter:description" content="|Collection|　　├List|　　│-├LinkedList|　　│-├ArrayList|　　│-└Vector|　　│　└Stack|　　├Set|　　│├HashSet|　　│├TreeSet|　　│└LinkedSet||Map　　├Hashtable　　├HashMap　　└WeakHashMap">
+<meta name="twitter:description" content="Collection  List Arraylist： Object数组 Vector： Object数组 LinkedList： 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环)    Set HashSet（无序，唯一）: 基于 HashMap 实现的，底层采用 HashMap 来保存元素 LinkedHashSet： LinkedHashSet 继承与 HashSet，并且其">
 <meta name="twitter:image" content="http://490.github.io/images/20190312_134856.png">
 
 
@@ -359,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6.8k
+                  7.8k
                 </span>
               
 
@@ -375,7 +378,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  26
+                  30
                 </span>
               
             </div>
@@ -396,14 +399,41 @@
       
 
       
-        <p><strong>|Collection</strong><br>|　　├List<br>|　　│-├LinkedList<br>|　　│-├ArrayList<br>|　　│-└Vector<br>|　　│　└Stack<br>|　　├Set<br>|　　│├HashSet<br>|　　│├TreeSet<br>|　　│└LinkedSet<br>|<br>|<strong>Map</strong><br>　　├Hashtable<br>　　├HashMap<br>　　└WeakHashMap<br><a id="more"></a><br><img src="http://490.github.io/images/20190312_134856.png" alt="image"><br><img src="http://490.github.io/images/20190312_134907.png" alt="image"></p>
+        <ul>
+<li><p>Collection</p>
+<ul>
+<li>List<ul>
+<li>Arraylist： Object数组</li>
+<li>Vector： Object数组</li>
+<li>LinkedList： 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环) </li>
+</ul>
+</li>
+<li>Set<ul>
+<li>HashSet（无序，唯一）: 基于 HashMap 实现的，底层采用 HashMap 来保存元素</li>
+<li>LinkedHashSet： LinkedHashSet 继承与 HashSet，并且其内部是通过 LinkedHashMap 来实现的。有点类似于我们之前说的LinkedHashMap 其内部是基于 Hashmap 实现一样，不过还是有一点点区别的。</li>
+<li>TreeSet（有序，唯一）： 红黑树(自平衡的排序二叉树。)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Map</p>
+<ul>
+<li>HashMap： JDK1.8之前HashMap由数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的（“拉链法”解决冲突）.JDK1.8以后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间</li>
+<li>LinkedHashMap: LinkedHashMap 继承自 HashMap，所以它的底层仍然是基于拉链式散列结构即由数组和链表或红黑树组成。另外，LinkedHashMap 在上面结构的基础上，增加了一条双向链表，使得上面的结构可以保持键值对的插入顺序。同时通过对链表进行相应的操作，实现了访问顺序相关逻辑。</li>
+<li>HashTable: 数组+链表组成的，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的</li>
+<li>TreeMap: 红黑树（自平衡的排序二叉树）</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<p><img src="http://490.github.io/images/20190312_134856.png" alt="image"><br><img src="http://490.github.io/images/20190312_134907.png" alt="image"></p>
 <h1 id="ArrayList、LinkedList-、Vector"><a href="#ArrayList、LinkedList-、Vector" class="headerlink" title="ArrayList、LinkedList 、Vector"></a>ArrayList、LinkedList 、Vector</h1><h2 id="ArrayList-与-LinkedList-异同"><a href="#ArrayList-与-LinkedList-异同" class="headerlink" title="ArrayList 与 LinkedList 异同"></a>ArrayList 与 LinkedList 异同</h2><ul>
-<li><strong>相同点：</strong><ul>
+<li>相同点：<ul>
 <li>都实现了 List 接口。</li>
 <li>都是线程不安全的。</li>
 </ul>
 </li>
-<li><strong>不同点：</strong><ul>
+<li>不同点：<ul>
 <li>底层实现： ArrayList 底层使用的是 Object 数组；LinkedList 底层使用的是双向链表数据结构，维护一个 head 指针和一个 tail 指针。（JDK 1.6 之前为循环链表。为啥要改：因为在链表头 / 尾进行插入 / 删除操作时，循环链表需要处理两头的指针，而非循环链表只需要处理一边，更高效，同时在两头（链头 / 链尾）操作是最普遍的。）</li>
 <li>基本操作的时间复杂度：ArrayList 可以高效的访问元素 O(1)，但是不能高效的插入和删除元素 O(n)；LinkedList 可以高效的插入和删除元素 O(1)，但是不能高效访问的元素 O(n)。</li>
 <li>内存空间占用：ArrayList 的空间浪费主要体现在在 list 列表的结尾会预留一定的容量空间；而 LinkedList 的空间花费则体现在它的每一个元素都需要消耗比 ArrayList 更多的空间。</li>
@@ -412,21 +442,22 @@
 </ul>
 <p>LinkedList包含两个重要的成员：header 和 size。<br>header是双向链表的表头，它是双向链表节点所对应的类Entry的实例。Entry中包含成员变量： previous, next, element。其中，previous是该节点的上一个节点，next是该节点的下一个节点，element是该节点所包含的值。<br>size是双向链表中节点的个数。</p>
 <blockquote>
-<p><strong>补充：RandomAccess 接口</strong></p>
-<p>RandomAccess 接口里啥都没有，和 Serializable 接口一样，是个标识接口。它标识实现这个接口的类具有随机访问功能。</p>
+<p><strong>补充：RandomAccess 接口</strong><br><code>public interface RandomAccess {}</code><br>RandomAccess 接口里啥都没有，和 Serializable 接口一样，是个标识接口。它标识实现这个接口的类具有随机访问功能。</p>
 <p>这个标识有啥用？在 <code>Collections.binarySearch()</code> 方法里有用：</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">int</span> <span class="title">binarySearch</span><span class="params">(List&lt;? extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; list, T key)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span> (list <span class="keyword">instanceof</span> RandomAccess || list.size()&lt;BINARYSEARCH_THRESHOLD)</span><br><span class="line">         <span class="keyword">return</span> Collections.indexedBinarySearch(list, key);</span><br><span class="line">     <span class="keyword">else</span></span><br><span class="line">         <span class="keyword">return</span> Collections.iteratorBinarySearch(list, key);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>在 <code>binarySearch()</code> 方法中，它要判断传入的 list 是否 RamdomAccess 的实例，如果是，调用 <code>indexedBinarySearch()</code> 方法，如果不是，那么调用 <code>iteratorBinarySearch()</code> 方法</p>
-</blockquote>
-<blockquote>
-<p><code>indexedBinarySearch()</code> 方法和 <code>iteratorBinarySearch()</code> 方法的区别在于：需要使用 <code>iteratorBinarySearch()</code> 方法的集合，是直接通过索引 i 取变量的，而需要使用 <code>iteratorBinarySearch()</code> 方法的集合要取到这个集合的迭代器用来取元素：</p>
+<p>在 <code>binarySearch()</code> 方法中，它要判断传入的 list 是否 RamdomAccess 的实例，如果是，调用 <code>indexedBinarySearch()</code> 方法，如果不是，那么调用 <code>iteratorBinarySearch()</code> 方法<br><code>indexedBinarySearch()</code> 方法和 <code>iteratorBinarySearch()</code> 方法的区别在于：需要使用 <code>indexedBinarySearch()</code> 方法的集合，是直接通过索引 i 取变量的，而需要使用 <code>iteratorBinarySearch()</code> 方法的集合要取到这个集合的迭代器用来取元素：</p>
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ListIterator&lt;? extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; i = list.listIterator();</span><br><span class="line"><span class="keyword">while</span> (low &lt;= high) &#123;</span><br><span class="line">     <span class="keyword">int</span> mid = (low + high) &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line">     Comparable&lt;? <span class="keyword">super</span> T&gt; midVal = get(i, mid); <span class="comment">// 取元素</span></span><br><span class="line">     ...</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="ArrayList-与-Vector-区别"><a href="#ArrayList-与-Vector-区别" class="headerlink" title="ArrayList 与 Vector 区别"></a>ArrayList 与 Vector 区别</h2><p>Vector 类是线程安全的，不过它保证线程安全的方法十分的简单粗暴，就是给所有会出现线程安全问题的方法都加上 <code>synchronized</code> 修饰，所以超慢的……</p>
+<p>ArrayList 实现了 RandomAccess 接口，就表明了他具有快速随机访问功能。 RandomAccess 接口只是标识，并不是说 ArrayList 实现 RandomAccess 接口才具有快速随机访问功能的。</p>
+<ul>
+<li>实现了RandomAccess接口的list，优先选择普通for循环 ，其次foreach</li>
+<li>未实现RandomAccess接口的list， 优先选择iterator遍历（foreach遍历底层也是通过iterator实现的），大 size的数据，千万不要使用普通for循环</li>
+</ul>
+<h2 id="ArrayList-与-Vector-区别"><a href="#ArrayList-与-Vector-区别" class="headerlink" title="ArrayList 与 Vector 区别"></a>ArrayList 与 Vector 区别</h2><p>Vector 类是线程安全的，给所有会出现线程安全问题的方法都加上 <code>synchronized</code> 修饰，所以很慢。</p>
 <h1 id="HashMap、HashTable、TreeMap"><a href="#HashMap、HashTable、TreeMap" class="headerlink" title="HashMap、HashTable、TreeMap"></a>HashMap、HashTable、TreeMap</h1><blockquote>
-<p><strong>hash 算法</strong></p>
+<p>Hash 算法</p>
 <ul>
 <li>加法 Hash：把输入元素一个一个的加起来构成最后的结果。</li>
 <li>位运算 Hash：这类型 Hash 函做通过利用各种位运算（常见的是移位和异或）来充分的混合输入元素。</li>
@@ -442,43 +473,29 @@
 <li><strong>HashMap：</strong> 不是线程安全的，但是支持 null 作为键或值，是绝大部分利用键值对存取场景的首选，put 和 get 基本可以达到常数级别的时间复杂度。</li>
 <li><strong>TreeMap：</strong> 基于红黑树的一种提供顺序访问的 Map，它的 get，put，remove 等操作是 O(log(n)) 级别的时间复杂度的（因为要保证顺序），具体的排序规则可以由 Comparator 指定：<code>public TreeMap(Comparator&lt;? super K&gt; comparator)</code>。</li>
 </ul>
-<blockquote>
-<p><strong>HashMap 和 HashTable 的区别总结：</strong></p>
-<ul>
-<li><p><strong>线程是否安全：</strong> HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过 synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；</p>
-</li>
-<li><p><strong>效率：</strong> HashMap 要比 HashTable 效率高。</p>
-</li>
-<li><p><strong>对 null key 和 null value 的支持：</strong> HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。</p>
-</li>
-<li><p><strong>初始容量大小和每次扩充容量大小的不同：</strong> </p>
-<ul>
-<li><p>创建时不指定容量初始值：HashTable 默认的初始大小为 11，之后每次扩充，容量变为原来的 2n+1。HashMap  默认的初始化大小为 16。之后每次扩充，容量变为原来的 2 倍。</p>
-</li>
-<li><p>创建时给定了容量初始值：Hashtable 会直接使用你给定的大小，而 HashMap 会使用 tableSizeFor 方法将其扩充为 2 的幂次方大小。</p>
+<h2 id="HashMap-和-HashTable-的区别总结"><a href="#HashMap-和-HashTable-的区别总结" class="headerlink" title="HashMap 和 HashTable 的区别总结"></a>HashMap 和 HashTable 的区别总结</h2><ul>
+<li><strong>线程是否安全：</strong> HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过 synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；<ul>
+<li><strong>效率：</strong> HashMap 要比 HashTable 效率高。</li>
+<li><strong>对 null key 和 null value 的支持：</strong> HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。</li>
+<li><strong>初始容量大小和每次扩充容量大小的不同：</strong> <ol>
+<li>创建时不指定容量初始值：HashTable 默认的初始大小为 11，之后每次扩充，容量变为原来的 2n+1。HashMap  默认的初始化大小为 16。之后每次扩充，容量变为原来的 2 倍。</li>
+<li>创建时给定了容量初始值：Hashtable 会直接使用你给定的大小，而 HashMap 会使用 tableSizeFor 方法将其扩充为 2 的幂次方大小。</li>
+</ol>
 </li>
 </ul>
 </li>
 </ul>
-</blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line"> 	<span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line"> 	<span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
 <ul>
 <li><strong>底层数据结构：</strong> JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）时，将链表转化为红黑树，以减少搜索时间。HashTable 没有这样的机制。</li>
 </ul>
-</blockquote>
-<blockquote>
-<p><strong>HashMap 的长度为什么要是 2 的幂次方呢？</strong></p>
-</blockquote>
-<blockquote>
-<p>因为 hashCode 是 -2147483648 到 2147483647 的，超大的，在决定一个元素在哈希表中的真正位置时是要进行 <code>hashCode % n</code> 的运算的（n 是存元素的哈希数组的长度），如果 n 是 2 的幂次方的话，这个操作是可以用位运算来解决的：<code>(n - 1) &amp; hash</code>，位运算快啊！</p>
-</blockquote>
+<h2 id="HashMap-的长度为什么要是-2-的幂次方"><a href="#HashMap-的长度为什么要是-2-的幂次方" class="headerlink" title="HashMap 的长度为什么要是 2 的幂次方"></a>HashMap 的长度为什么要是 2 的幂次方</h2><p> 因为 hashCode 是 -2147483648 到 2147483647 的，只要哈希函数映射得比较均匀松散，一般应<br>用是很难出现碰撞的。但问题是一个40亿长度的数组，内存是放不下的。在决定一个元素在哈希表中的真正位置时是要进行 <code>hashCode % n</code> 的运算的（n 是存元素的哈希数组的长度），得到的余数才能用来要存放的位置也就是对应的数组下标，如果 n 是 2 的幂次方的话，这个操作是可以用位运算来解决的：<code>(n - 1) &amp; hash</code>，快.</p>
 <p>在对 Map 的顺序没有要求的情况下，HashMap 基本是最好的选择，不过 HashMap 的性能十分依赖于 hashCode 的有效性，所以必须满足：</p>
 <ul>
 <li>equals 判断相等的对象的 hashCode 一定相等</li>
 <li>重写了 hashCode 必须重写 equals</li>
 </ul>
-<p><a href="https://www.cnblogs.com/skywang12345/p/3324958.html" target="_blank" rel="noopener">Java hashCode() 和 equals()的若干问题解答</a></p>
+<h2 id="hashCode-、equals-、-问题"><a href="#hashCode-、equals-、-问题" class="headerlink" title="hashCode()、equals()、==问题"></a>hashCode()、equals()、==问题</h2><p><a href="https://www.cnblogs.com/skywang12345/p/3324958.html" target="_blank" rel="noopener">Java hashCode() 和 equals()的若干问题解答</a></p>
 <p><strong>equals</strong>() ：定义在JDK的Object.java中。通过判断两个对象的地址是否相等(即，是否是同一个对象)来区分它们是否相等。</p>
 <ol>
 <li>若某个类没有覆盖equals()方法，当它的通过equals()比较两个对象时，实际上是比较两个对象是不是同一个对象。这时，等价于通过“==”去比较这两个对象。</li>
@@ -500,6 +517,7 @@
 <li>LinkedHashMap：提供的遍历顺序符合插入顺序，是通过为 HashEntry 维护一个双向链表实现的。</li>
 <li>TreeMap：顺序由键的顺序决定，依赖于 Comparator。</li>
 </ul>
+<h2 id="HashMap-多线程操作导致死循环问题"><a href="#HashMap-多线程操作导致死循环问题" class="headerlink" title="HashMap 多线程操作导致死循环问题"></a>HashMap 多线程操作导致死循环问题</h2><p>在多线程下，进行 put 操作会导致 HashMap 死循环，原因在于 HashMap 的扩容 resize()方法。由于扩容是新建一个数组，复制原数据到数组。由于数组下标挂有链表，所以需要复制链表，但是多线程操作有可能导致环形链表。jdk1.8已经解决了死循环的问题。</p>
 <h2 id="HashMap-源码分析"><a href="#HashMap-源码分析" class="headerlink" title="HashMap 源码分析"></a>HashMap 源码分析</h2><p>HashMap 的内部结构如下：</p>
 <p><img src="http://490.github.io/images/20190313_075204.png" alt="image"></p>
 <p>Java8以后，数组+链表+红黑树。。O(n)-&gt;O(logn)</p>
@@ -544,6 +562,8 @@
 </ul>
 <p><strong>那么为什么哈希数组的一个位置挂的链表的长度超过 8 要树化呢？</strong></p>
 <p>这本质上是一个安全问题，我们知道如果同一个哈希值对应位置的链表太长，会极大的影响性能，而在现实世界中，构造哈希冲突的数据并不是十分复杂的事情，恶意代码可以利用这些数据与服务端进行交互，会导致服务端 CPU 大量占用，形成哈希碰撞拒绝服务攻击。</p>
+<h1 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h1><p>HashSet 底层就是基于 HashMap 实现的。add 的元素会被放在 HashMap 的放 key 的地方，HashMap 放 value 的地方放了一个 <code>private static final Object PRESENT = new Object();</code>。</p>
+<p>除了 <code>clone()</code> 方法、<code>writeObject()</code> 方法、<code>readObject()</code> 方法是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法实现的。</p>
 <h2 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h2><p>TreeSet 的底层实现是一颗红黑树，那么什么是红黑树呢？</p>
 <p>红黑树是一颗自平衡的二叉查找树，它从根节点到叶子节点的最长路径不会超过最短路径的 2 倍。除此之外，它还具有如下 5 个特点：</p>
 <ul>
@@ -579,7 +599,7 @@
 <li>Segment 是基于 ReentrantLock 的扩展实现的，在 put 的时候，会对修改的区域加锁。</li>
 </ul>
 <p><img src="http://490.github.io/images/20190312_141042.png" alt="image"><br>JDK1.8的实现已经摒弃了Segment的概念，而是直接用Node数组+链表+红黑树的数据结构来实现，并发控制使用Synchronized和CAS来操作，整个看起来就像是优化过且线程安全的HashMap，虽然在JDK1.8中还能看到Segment的数据结构，但是已经简化了属性，只是为了兼容旧版本</p>
-<h2 id="锁分段实现原理"><a href="#锁分段实现原理" class="headerlink" title="锁分段实现原理"></a>锁分段实现原理</h2><p><strong>锁分段：</strong><br>不同线程在同一数据的不同部分上不会互相干扰，例如，ConcurrentHashMap 支持 16 个并发的写入器，是用 16 个锁来实现的。它的实现原理如下：</p>
+<h2 id="锁分段实现原理"><a href="#锁分段实现原理" class="headerlink" title="锁分段实现原理"></a>锁分段实现原理</h2><p>不同线程在同一数据的不同部分上不会互相干扰，例如，ConcurrentHashMap 支持 16 个并发的写入器，是用 16 个锁来实现的。它的实现原理如下：</p>
 <ul>
 <li>使用了一个包含 16 个锁的数组，每个锁保护所有散列桶的 1/16，其中第 N 个散列桶由第（N % 16）个锁来保护；</li>
 <li>这大约能把对于锁的请求减少到原来的 1/16，也是 ConcurrentHashMap 最多能支持 16 个线程同时写入的原因；</li>
@@ -609,14 +629,23 @@
 </ul>
 <h2 id="JDK-1-8-的改变"><a href="#JDK-1-8-的改变" class="headerlink" title="JDK 1.8 的改变"></a>JDK 1.8 的改变</h2><p>ConcurrentHashMap 取消了 Segment 分段锁，采用 CAS 和 synchronized 来保证并发安全。数据结构跟 HashMap1.8 的结构类似，数组 + 链表 / 红黑二叉树。</p>
 <p>synchronized 只锁定当前链表或红黑二叉树的首节点，这样只要 hash 不冲突，就不会产生并发，效率又提升 N 倍。</p>
+<h2 id="ConcurrentHashMap和HashTable的区别"><a href="#ConcurrentHashMap和HashTable的区别" class="headerlink" title="ConcurrentHashMap和HashTable的区别"></a>ConcurrentHashMap和HashTable的区别</h2><ul>
+<li><strong>底层数据结构</strong>： JDK1.7的 ConcurrentHashMap 底层采用 分段的数组+链表 实现，JDK1.8 采用的数据结构跟 HashMap1.8的结构一样，数组+链表/红黑二叉树。Hashtable 和 JDK1.8 之前的 HashMap 的底层数据结构类似都是采用 数组+链表 的形式，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的；</li>
+<li><strong>实现线程安全的方式（重要）</strong>：<ol>
+<li>ConcurrentHashMap（分段锁）：在JDK1.7的时候， 对整个桶数组进行了分割分段(Segment)，每一把锁只锁容器其中一部分数据，多线程访问容器里不同数据段的数据，就不会存在锁竞争，提高并发访问率。<br>到了 JDK1.8 的时候已经摒弃了Segment的概念，而是直接用 Node 数组+链表+红黑树的数据结构来实现，并发控制使用 synchronized 和 CAS 来操作。（JDK1.6以后 对 synchronized锁做了很多优化） 整个看起来就像是优化过且线程安全的 HashMap，虽然在JDK1.8中还能看到 Segment 的数据结构，但是已经简化了属性，只是为了兼容旧版本；</li>
+<li>Hashtable(同一把锁) ：使用 synchronized 来保证线程安全，效率非常低下。当一个线程访问同步方法时，其他线程也访问同步方法，可能会进入阻塞或轮询状态，如使用 put 添加元素，另一个线程不能使用 put 添加元素，也不能使用 get，竞争会越来越激烈效率越低</li>
+</ol>
+</li>
+</ul>
+<p><img src="http://490.github.io/images/20190314_152203.png" alt="image"></p>
+<p><img src="https://images2015.cnblogs.com/blog/1024555/201705/1024555-20170514174100832-1891630860.png" alt></p>
+<p><img src="http://490.github.io/images/20190314_152431.png" alt="image"></p>
 <h1 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h1><p>简单的来说，LinkedHashMap 就是在 HashMap 的基础上加了一条双向链表用来维护 LinkedHashMap 中元素的插入顺序。</p>
 <p><code>LinkedHashMap extends HashMap</code> 且 <code>LinkedHashMap.Entry&lt;K,V&gt; extends HashMap.Node&lt;K,V&gt;</code>，它们的结构图如下：</p>
 <p><code>LinkedHashMap.Entry&lt;K,V&gt;</code> 的结构：</p>
 <p><img src="http://490.github.io/images/20190312_140836.png" alt="image"></p>
 <p><code>LinkedHashMap</code> 的结构：</p>
 <p><img src="http://490.github.io/images/20190312_140842.png" alt="image"></p>
-<h1 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h1><p>HashSet 底层就是基于 HashMap 实现的。add 的元素会被放在 HashMap 的放 key 的地方，HashMap 放 value 的地方放了一个 <code>private static final Object PRESENT = new Object();</code>。</p>
-<p>除了 <code>clone()</code> 方法、<code>writeObject()</code> 方法、<code>readObject()</code> 方法是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法实现的。</p>
 <h1 id="迭代器-Iterator"><a href="#迭代器-Iterator" class="headerlink" title="迭代器 Iterator"></a>迭代器 Iterator</h1><p>对容器进行迭代操作时，我们要考虑它是不是会被其他的线程修改，如果是我们自己写代码，可以考虑通过如下方式对容器的迭代操作加锁：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span> (vector) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; vector.size(); i++)</span><br><span class="line">        doSomething(vector.get(i));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>不过 Java 自己的同步容器类并没有考虑并发修改的问题，它主要采用了一种 <strong>快速失败 (fail-fast)</strong> 的方法，即一旦容器被其他线程修改，它就会抛出异常，例如 Vector 类，它的内部实现是这样的：</p>
@@ -817,7 +846,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ArrayList、LinkedList-、Vector"><span class="nav-number">1.</span> <span class="nav-text">ArrayList、LinkedList 、Vector</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList-与-LinkedList-异同"><span class="nav-number">1.1.</span> <span class="nav-text">ArrayList 与 LinkedList 异同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList-与-Vector-区别"><span class="nav-number">1.2.</span> <span class="nav-text">ArrayList 与 Vector 区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HashMap、HashTable、TreeMap"><span class="nav-number">2.</span> <span class="nav-text">HashMap、HashTable、TreeMap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本区别"><span class="nav-number">2.1.</span> <span class="nav-text">基本区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap-源码分析"><span class="nav-number">2.2.</span> <span class="nav-text">HashMap 源码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TreeSet"><span class="nav-number">2.3.</span> <span class="nav-text">TreeSet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">3.</span> <span class="nav-text">ConcurrentHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">3.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁分段实现原理"><span class="nav-number">3.2.</span> <span class="nav-text">锁分段实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意"><span class="nav-number">3.3.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK-1-8-的改变"><span class="nav-number">3.4.</span> <span class="nav-text">JDK 1.8 的改变</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LinkedHashMap"><span class="nav-number">4.</span> <span class="nav-text">LinkedHashMap</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HashSet"><span class="nav-number">5.</span> <span class="nav-text">HashSet</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迭代器-Iterator"><span class="nav-number">6.</span> <span class="nav-text">迭代器 Iterator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容器中的设计模式"><span class="nav-number">7.</span> <span class="nav-text">容器中的设计模式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ArrayList、LinkedList-、Vector"><span class="nav-number">1.</span> <span class="nav-text">ArrayList、LinkedList 、Vector</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList-与-LinkedList-异同"><span class="nav-number">1.1.</span> <span class="nav-text">ArrayList 与 LinkedList 异同</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayList-与-Vector-区别"><span class="nav-number">1.2.</span> <span class="nav-text">ArrayList 与 Vector 区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HashMap、HashTable、TreeMap"><span class="nav-number">2.</span> <span class="nav-text">HashMap、HashTable、TreeMap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本区别"><span class="nav-number">2.1.</span> <span class="nav-text">基本区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap-和-HashTable-的区别总结"><span class="nav-number">2.2.</span> <span class="nav-text">HashMap 和 HashTable 的区别总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap-的长度为什么要是-2-的幂次方"><span class="nav-number">2.3.</span> <span class="nav-text">HashMap 的长度为什么要是 2 的幂次方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hashCode-、equals-、-问题"><span class="nav-number">2.4.</span> <span class="nav-text">hashCode()、equals()、==问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap-多线程操作导致死循环问题"><span class="nav-number">2.5.</span> <span class="nav-text">HashMap 多线程操作导致死循环问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap-源码分析"><span class="nav-number">2.6.</span> <span class="nav-text">HashMap 源码分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HashSet"><span class="nav-number">3.</span> <span class="nav-text">HashSet</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TreeSet"><span class="nav-number">3.1.</span> <span class="nav-text">TreeSet</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">4.</span> <span class="nav-text">ConcurrentHashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">4.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#锁分段实现原理"><span class="nav-number">4.2.</span> <span class="nav-text">锁分段实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意"><span class="nav-number">4.3.</span> <span class="nav-text">注意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDK-1-8-的改变"><span class="nav-number">4.4.</span> <span class="nav-text">JDK 1.8 的改变</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap和HashTable的区别"><span class="nav-number">4.5.</span> <span class="nav-text">ConcurrentHashMap和HashTable的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LinkedHashMap"><span class="nav-number">5.</span> <span class="nav-text">LinkedHashMap</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迭代器-Iterator"><span class="nav-number">6.</span> <span class="nav-text">迭代器 Iterator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容器中的设计模式"><span class="nav-number">7.</span> <span class="nav-text">容器中的设计模式</span></a></li></ol></div>
             
 
           </div>
@@ -851,7 +880,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">99.5k</span>
+    <span title="Site words total count">100.5k</span>
   
 </div>
 
