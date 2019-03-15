@@ -97,7 +97,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_133001.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_133009.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_133015.png">
-<meta property="og:updated_time" content="2019-03-11T05:56:46.368Z">
+<meta property="og:updated_time" content="2019-03-15T01:19:02.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机网络基础知识">
 <meta name="twitter:description" content="一次完整的 HTTP 请求所经历的步骤即在浏览器中输入 URL 地址 &amp;gt;&amp;gt; 显示主页的过程。总体来说分为以下几个过程：  DNS 解析 TCP 连接 发送 HTTP 请求 服务器处理请求并返回 HTTP 报文 浏览器解析渲染页面 连接结束">
@@ -363,7 +363,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8.4k
+                  8.5k
                 </span>
               
 
@@ -675,8 +675,8 @@
 <p>从网址 A 做一个 302 重定向到网址 B 时，主机服务器的隐含意思是网址 A 随时有可能改主意，重新显示本身的内容或转向其他的地方。大部分的搜索引擎在大部分情况下，当收到 302 重定向时，一般只要去抓取目标网址就可以了，也就是说网址 B。如果搜索引擎在遇到 302 转向时，百分之百的都抓取目标网址 B 的话，就不用担心网址 URL 劫持了。问题就在于，有的时候搜索引擎，尤其是 Google，并不能总是抓取目标网址。比如说，有的时候 A 网址很短，但是它做了一个 302 重定向到 B 网址，而 B 网址是一个很长的乱七八糟的 URL 网址，甚至还有可能包含一些问号之类的参数。很自然的，A 网址更加用户友好，而 B 网址既难看，又不用户友好。这时 Google 很有可能会仍然显示网址A。</p>
 <p>这就造成了网址 URL 劫持的可能性。也就是说，一个不道德的人在他自己的网址 A 做一个 302 重定向到你的网址 B，出于某种原因， Google 搜索结果所显示的仍然是网址 A，但是所用的网页内容却是你的网址 B 上的内容，这种情况就叫做网址 URL 劫持。你辛辛苦苦所写的内容就这样被别人偷走了。</p>
 <p>302 重定向很容易被搜索引擎误认为是利用多个域名指向同一网站，那么你的网站就会被封掉，罪名是 “利用重复的内容来干扰 Google 搜索结果的网站排名”。</p>
-<h1 id="URL-和-URI"><a href="#URL-和-URI" class="headerlink" title="URL 和 URI"></a>URL 和 URI</h1><p>URI 叫做统一资源标志符，就是在某一规则下能把一个资源独一无二地标识出来。</p>
-<p>URL 叫做统一资源定位符，是以描述资源的位置来唯一确定一个资源的。所以URL 是 URI 的子集。</p>
+<h1 id="URL-和-URI"><a href="#URL-和-URI" class="headerlink" title="URL 和 URI"></a>URL 和 URI</h1><p>“URI可以分为URL,URN或同时具备locators 和names特性的一个东西。URN作用就好像一个人的名字，URL就像一个人的地址。换句话说：URN确定了东西的身份，URL提供了找到它的方式。”</p>
+<p>通过这些描述我们可以得到一些结论：</p>
 <h1 id="NAT网络地址转换"><a href="#NAT网络地址转换" class="headerlink" title="NAT网络地址转换"></a>NAT网络地址转换</h1><p>常用于私有地址与公有地址的转换，以解决 IP 地址匮乏的问题。</p>
 <p>NAT 的基本工作原理是：当私有网主机和公共网主机通信的 IP 包经过 NAT 网关时，将 IP 包中的源 IP 或目的 IP 在私有 IP 和 NAT 的公共 IP 之间进行转换。</p>
 
