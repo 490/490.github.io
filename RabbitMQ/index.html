@@ -77,13 +77,13 @@
 
 
 
-<meta name="description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.N">
+<meta name="description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。  通过异步处理提高系统性能（削峰、减少响应所需时间） 在不使用消息队列服务器的时候，用户的请求数据直接写入数据库，在高并发的情况下数据库压力剧增，使得响应速度变慢。但是在使用消息队列之后，用户的请求数据发送给消息队列之后立即 返回，再由消息队列的消费者进程从消息队列中获取数据，异步写入">
 <meta name="keywords" content="消息队列,系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RabbitMQ基础知识简介">
+<meta property="og:title" content="消息队列 RabbitMQ基础知识">
 <meta property="og:url" content="https://490.github.io/RabbitMQ/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.N">
+<meta property="og:description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。  通过异步处理提高系统性能（削峰、减少响应所需时间） 在不使用消息队列服务器的时候，用户的请求数据直接写入数据库，在高并发的情况下数据库压力剧增，使得响应速度变慢。但是在使用消息队列之后，用户的请求数据发送给消息队列之后立即 返回，再由消息队列的消费者进程从消息队列中获取数据，异步写入">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190310_080814.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_080835.png">
@@ -91,10 +91,10 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_081109.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081116.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081253.png">
-<meta property="og:updated_time" content="2019-03-11T00:31:14.789Z">
+<meta property="og:updated_time" content="2019-03-15T04:33:26.604Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RabbitMQ基础知识简介">
-<meta name="twitter:description" content="AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.N">
+<meta name="twitter:title" content="消息队列 RabbitMQ基础知识">
+<meta name="twitter:description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。  通过异步处理提高系统性能（削峰、减少响应所需时间） 在不使用消息队列服务器的时候，用户的请求数据直接写入数据库，在高并发的情况下数据库压力剧增，使得响应速度变慢。但是在使用消息队列之后，用户的请求数据发送给消息队列之后立即 返回，再由消息队列的消费者进程从消息队列中获取数据，异步写入">
 <meta name="twitter:image" content="http://490.github.io/images/20190310_080814.png">
 
 
@@ -131,7 +131,7 @@
 
 
 
-  <title>RabbitMQ基础知识简介 | 我的笔记</title>
+  <title>消息队列 RabbitMQ基础知识 | 我的笔记</title>
   
 
 
@@ -303,7 +303,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">RabbitMQ基础知识简介</h1>
+          <h1 class="post-title" itemprop="name headline">消息队列 RabbitMQ基础知识</h1>
         
 
         <div class="post-meta">
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.3k
+                  2.2k
                 </span>
               
 
@@ -373,7 +373,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  7
                 </span>
               
             </div>
@@ -394,7 +394,26 @@
       
 
       
-        <p>AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。<br>AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。<br>RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，具有很高的易用性和可用性。<br><a id="more"></a></p>
+        <a id="more"></a>
+<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>使用消息队列主要有两点好处：</p>
+<ol>
+<li>通过异步处理提高系统性能（削峰、减少响应所需时间）;</li>
+<li>降低系统耦合性。</li>
+</ol>
+<p><strong>通过异步处理提高系统性能（削峰、减少响应所需时间）</strong></p>
+<p>在不使用消息队列服务器的时候，用户的请求数据直接写入数据库，在高并发的情况下数据库压力剧增，使得响应速度变慢。但是在使用消息队列之后，用户的请求数据发送给消息队列之后立即 返回，再由消息队列的消费者进程从消息队列中获取数据，异步写入数据库。由于消息队列服务器处理速度快于数据库（消息队列也比数据库有更好的伸缩性），因此响应速度得到大幅改善。</p>
+<p>因为用户请求数据写入消息队列之后就立即返回给用户了，但是请求数据在后续的业务校验、写数据库等操作中可能失败。因此使用消息队列进行异步处理之后，需要适当修改业务流程进行配合，比如用户在提交订单之后，订单数据写入消息队列，不能立即返回用户订单提交成功，需要在消息队列的订单消费者进程真正处理完该订单之后，甚至出库后，再通过电子邮件或短信通知用户订单成功，以免交易纠纷。这就类似我们平时手机订火车票和电影票。</p>
+<p><strong>降低系统耦合性</strong></p>
+<p>对新增业务，只要对该类消息感兴趣，即可订阅该消息，对原有系统和业务没有任何影响，从而实现网站业务的可扩展性设计。</p>
+<p>另外为了避免消息队列服务器宕机造成消息丢失，会将成功发送到消息队列的消息存储在消息生产者服务器上，等消息真正被消费者服务器处理后才删除消息。在消息队列服务器宕机后，生产者服务器会选择分布式消息队列服务器集群中的其他服务器发布消息。</p>
+<p>备注： 不要认为消息队列只能利用发布-订阅模式工作，只不过在解耦这个特定业务环境下是使用发布-订阅模式的。除了发布-订阅模式，还有点对点订阅模式（一个消息只有一个消费者），我们比较常用的是发布-订阅模式。 另外，这两种消息模型是 JMS 提供的，AMQP 协议还提供了 5 种消息模型</p>
+<p><strong>使用消息队列带来的一些问题</strong></p>
+<ul>
+<li>系统可用性降低： 系统可用性在某种程度上降低，为什么这样说呢？在加入MQ之前，你不用考虑消息丢失或者说MQ挂掉等等的情况，但是，引入MQ之后你就需要去考虑了！</li>
+<li>系统复杂性提高： 加入MQ之后，你需要保证消息没有被重复消费、处理消息丢失的情况、保证消- 息传递的顺序性等等问题！</li>
+<li>一致性问题： 我上面讲了消息队列可以实现异步，消息队列带来的异步确实可以提高系统响应速度。但是，万一消息的真正消费者并没有正确消费消息怎么办？这样就会导致数据不一致的情况了!</li>
+</ul>
+<h1 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h1><p>AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。<br>AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。<br>RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，具有很高的易用性和可用性。</p>
 <p><strong>ConnectionFactory、Connection、Channel </strong> 都是RabbitMQ对外提供的API中最基本的对象。</p>
 <p>ConnectionFactory：ConnectionFactory为Connection的制造工厂。</p>
 <p>Connection：Connection是RabbitMQ的socket链接，它封装了socket协议相关部分逻辑。</p>
@@ -516,8 +535,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -581,6 +609,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列"><span class="nav-number">1.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">2.</span> <span class="nav-text">RabbitMQ</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -608,7 +652,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">109.1k</span>
+    <span title="Site words total count">110k</span>
   
 </div>
 
