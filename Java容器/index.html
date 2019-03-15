@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190314_152431.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140836.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140842.png">
-<meta property="og:updated_time" content="2019-03-15T00:25:46.152Z">
+<meta property="og:updated_time" content="2019-03-15T00:26:46.153Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java容器">
 <meta name="twitter:description" content="Collection  List Arraylist： Object数组 Vector： Object数组 LinkedList： 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环)    Set HashSet（无序，唯一）: 基于 HashMap 实现的，底层采用 HashMap 来保存元素 LinkedHashSet： LinkedHashSet 继承与 HashSet，并且其">
@@ -666,7 +666,7 @@
 <p>Iterator 接口添加了一个可选的移除操作，并使用较短的方法名。新的实现应该优先考虑使用 Iterator 接口而不是 Enumeration 接口。</p>
 <p>区别：Enumeration速度是Iterator的2倍，同时占用更少的内存。但是，Iterator远远比Enumeration安全，因为其他线程不能够修改正在被iterator遍历的集合里面的对象。同时，Iterator允许调用者删除底层集合里面的元素，这对Enumeration来说是不可能的。</p>
 <p>Iterator 接口的用法：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Iterator it = list.iterator();</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line"></span><br><span class="line">System.out.println(it.next());</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Iterator it = list.iterator();</span><br><span class="line"><span class="keyword">while</span>(it.hasNext())&#123;</span><br><span class="line">    System.out.println(it.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="容器中的设计模式"><a href="#容器中的设计模式" class="headerlink" title="容器中的设计模式"></a>容器中的设计模式</h1><p>迭代器模式：Collection 实现了 Iterable 接口，其中的 iterator() 方法能够产生一个 Iterator 对象，通过这个对象就可以迭代遍历 Collection 中的元素。</p>
 <p>适配器模式：java.util.Arrays#asList() 可以把数组类型转换为 List 类型。</p>
 
