@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190314_152431.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140836.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140842.png">
-<meta property="og:updated_time" content="2019-03-15T00:26:46.153Z">
+<meta property="og:updated_time" content="2019-03-15T11:48:27.169Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java容器">
 <meta name="twitter:description" content="Collection  List Arraylist： Object数组 Vector： Object数组 LinkedList： 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环)    Set HashSet（无序，唯一）: 基于 HashMap 实现的，底层采用 HashMap 来保存元素 LinkedHashSet： LinkedHashSet 继承与 HashSet，并且其">
@@ -474,15 +474,13 @@
 <li><strong>TreeMap：</strong> 基于红黑树的一种提供顺序访问的 Map，它的 get，put，remove 等操作是 O(log(n)) 级别的时间复杂度的（因为要保证顺序），具体的排序规则可以由 Comparator 指定：<code>public TreeMap(Comparator&lt;? super K&gt; comparator)</code>。</li>
 </ul>
 <h2 id="HashMap-和-HashTable-的区别总结"><a href="#HashMap-和-HashTable-的区别总结" class="headerlink" title="HashMap 和 HashTable 的区别总结"></a>HashMap 和 HashTable 的区别总结</h2><ul>
-<li><strong>线程是否安全：</strong> HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过 synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；<ul>
+<li><strong>线程是否安全：</strong> HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过 synchronized 修饰。（如果你要保证线程安全的话就使用 ConcurrentHashMap 吧！）；</li>
 <li><strong>效率：</strong> HashMap 要比 HashTable 效率高。</li>
 <li><strong>对 null key 和 null value 的支持：</strong> HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。但是在 HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。</li>
 <li><strong>初始容量大小和每次扩充容量大小的不同：</strong> <ol>
 <li>创建时不指定容量初始值：HashTable 默认的初始大小为 11，之后每次扩充，容量变为原来的 2n+1。HashMap  默认的初始化大小为 16。之后每次扩充，容量变为原来的 2 倍。</li>
 <li>创建时给定了容量初始值：Hashtable 会直接使用你给定的大小，而 HashMap 会使用 tableSizeFor 方法将其扩充为 2 的幂次方大小。</li>
 </ol>
-</li>
-</ul>
 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line"> 	<span class="keyword">int</span> n = cap - <span class="number">1</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">1</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">2</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">4</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">8</span>;</span><br><span class="line"> 	n |= n &gt;&gt;&gt; <span class="number">16</span>;</span><br><span class="line"> 	<span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -887,7 +885,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">110.4k</span>
+    <span title="Site words total count">112.6k</span>
   
 </div>
 
