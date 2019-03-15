@@ -86,7 +86,12 @@
 <meta property="og:description" content="Java 的 I/O 大概可以分成以下几类：  磁盘操作：File 字节操作：InputStream 和 OutputStream 字符操作：Reader 和 Writer 对象操作：Serializable：序列化就是将一个对象转换成字节序列，方便存储和传输。 网络操作：Socket 新的输入/输出：NIO  Java I/O 使用了装饰者模式来实现">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190314_213445.png">
-<meta property="og:updated_time" content="2019-03-14T13:35:07.100Z">
+<meta property="og:image" content="http://490.github.io/images/20190315_075932.png">
+<meta property="og:image" content="http://490.github.io/images/20190315_075950.png">
+<meta property="og:image" content="http://490.github.io/images/20190315_080655.png">
+<meta property="og:image" content="http://490.github.io/images/20190315_080801.png">
+<meta property="og:image" content="http://490.github.io/images/20190315_080817.png">
+<meta property="og:updated_time" content="2019-03-15T00:09:35.569Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java的 I&#x2F;O机制">
 <meta name="twitter:description" content="Java 的 I/O 大概可以分成以下几类：  磁盘操作：File 字节操作：InputStream 和 OutputStream 字符操作：Reader 和 Writer 对象操作：Serializable：序列化就是将一个对象转换成字节序列，方便存储和传输。 网络操作：Socket 新的输入/输出：NIO  Java I/O 使用了装饰者模式来实现">
@@ -352,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  303
+                  2.1k
                 </span>
               
 
@@ -368,7 +373,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  7
                 </span>
               
             </div>
@@ -400,10 +405,50 @@
 </ul>
 <p>Java I/O 使用了装饰者模式来实现<br><a id="more"></a></p>
 <p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-javaio/index.html" target="_blank" rel="noopener">深入分析 Java I/O 的工作机制</a><br><a href="https://blog.csdn.net/anxpp/article/details/51503329" target="_blank" rel="noopener">Linux 网络 I/O 模型简介（图文）</a></p>
-<p>Linux 的内核将所有外部设备都看做一个文件来操作（一切皆文件），对一个文件的读写操作会调用内核提供的系统命令，返回一个file descriptor（fd，文件描述符）。而对一个socket的读写也会有响应的描述符，称为socket fd（socket文件描述符），描述符就是一个数字，指向内核中的一个结构体（文件路径，数据区等一些属性）。</p>
+<h1 id="UNIX网络编程对I-O模型的分类"><a href="#UNIX网络编程对I-O模型的分类" class="headerlink" title="UNIX网络编程对I/O模型的分类"></a>UNIX网络编程对I/O模型的分类</h1><p>Linux 的内核将所有外部设备都看做一个文件来操作（一切皆文件），对一个文件的读写操作会调用内核提供的系统命令，返回一个file descriptor（fd，文件描述符）。而对一个socket的读写也会有响应的描述符，称为socket fd（socket文件描述符），描述符就是一个数字，指向内核中的一个结构体（文件路径，数据区等一些属性）。</p>
 <p>根据UNIX网络编程对I/O模型的分类，UNIX提供了5种I/O模型。</p>
 <p>进程是无法直接操作I/O设备的，其必须通过系统调用请求内核来协助完成I/O动作，而内核会为每个I/O设备维护一个buffer。</p>
 <p><img src="http://490.github.io/images/20190314_213445.png" alt="image"></p>
+<p>整个请求过程为： 用户进程发起请求，内核接受到请求后，从I/O设备中获取数据到buffer中，再将buffer中的数据copy到用户进程的地址空间，该用户进程获取到数据后再响应客户端。</p>
+<h2 id="阻塞I-O模型"><a href="#阻塞I-O模型" class="headerlink" title="阻塞I/O模型"></a>阻塞I/O模型</h2><p>最常用的I/O模型，默认情况下，所有文件操作都是阻塞的。</p>
+<p>比如I/O模型下的套接字接口：在进程空间中调用recvfrom，其系统调用直到数据包到达（比如，还没有收到一个完整的UDP包）且被复制到应用进程的缓冲区中或者发生错误时才返回，而在用户进程这边，整个进程会被阻塞。当内核一直等到数据准备好了，它就会将数据从内核中拷贝到用户内存，然后内核返回结果，用户进程才解除block的状态，重新运行起来。</p>
+<p>进程在调用recvfrom开始到它返回的整段时间内都是被阻塞的，所以叫阻塞I/O模型。所以，blocking IO的特点就是在IO执行的两个阶段都被block了。</p>
+<p><img src="http://490.github.io/images/20190315_075932.png" alt="image"></p>
+<h2 id="非阻塞I-O模型"><a href="#非阻塞I-O模型" class="headerlink" title="非阻塞I/O模型"></a>非阻塞I/O模型</h2><p>当用户进程调用recvfrom时，系统不会阻塞用户进程，而是立刻返回一个ewouldblock错误，从用户进程角度讲 ，并不需要等待，而是马上就得到了一个结果。用户进程判断标志是ewouldblock时，就知道数据还没准备好，于是它就可以去做其他的事了，于是它可以再次发送recvfrom，一旦内核中的数据准备好了。并且又再次收到了用户进程的system call，那么它马上就将数据拷贝到了用户内存，然后返回。</p>
+<p>当一个应用程序在一个循环里对一个非阻塞调用recvfrom，我们称为轮询。应用程序不断轮询内核，看看是否已经准备好了某些操作。这通常是浪费CPU时间，但这种模式偶尔会遇到。</p>
+<p><img src="http://490.github.io/images/20190315_075950.png" alt="image"></p>
+<h2 id="I-O复用模型"><a href="#I-O复用模型" class="headerlink" title="I/O复用模型"></a>I/O复用模型</h2><p>单个process就可以同时处理多个网络连接的IO。它的基本原理就是select/epoll这个function会不断的轮询所负责的所有socket，当某个socket有数据到达了，就通知用户进程。</p>
+<p>Linux提供select/poll，进程通过将一个或多个fd（文件描述符）传递给select或poll系统调用，阻塞在select操作上，这样，select/poll可以帮我们侦测多个fd是否处于就绪状态。</p>
+<p>select/poll是顺序扫描fd是否就绪，而且支持的fd数量有限，因此它的使用受到了一些制约。</p>
+<p>Linux还提供一个epoll系统调用，epoll使用基于事件驱动方式代替顺序扫描，因此性能更高。当有fd就绪时，立即回调函数rollback。</p>
+<p><img src="http://490.github.io/images/20190315_080655.png" alt="image"></p>
+<p>I/O多路复用就是通过一种机制，一个进程可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。但select，pselect，poll，epoll本质上都是同步I/O，因为他们都需要在读写事件就绪后自己负责进行读写，也就是说这个读写过程是阻塞的，而异步I/O则无需自己负责进行读写，异步I/O的实现会负责把数据从内核拷贝到用户空间。</p>
+<p>与多进程和多线程技术相比，I/O多路复用技术的最大优势是系统开销小，系统不必创建进程/线程，也不必维护这些进程/线程，从而大大减小了系统的开销。</p>
+<p><a href="https://www.cnblogs.com/jeakeven/p/5435916.html" target="_blank" rel="noopener">IO多路复用之select、poll、epoll详解</a></p>
+<p>当用户进程调用了select，那么整个进程会被block，而同时，内核会“监视”所有select负责的socket，当任何一个socket中的数据准备好了，select就会返回。这个时候用户进程再调用read操作，将数据从内核拷贝到用户进程。</p>
+<p>这个图和blocking IO的图其实并没有太大的不同，事实上，还更差一些。因为这里需要使用两个system call (select 和 recvfrom)，而blocking IO只调用了一个system call (recvfrom)。但是，用select的优势在于它可以同时处理多个connection。（多说一句。所以，如果处理的连接数不是很高的话，使用select/epoll的web server不一定比使用multi-threading + blocking IO的web server性能更好，可能延迟还更大。select/epoll的优势并不是对于单个连接能处理得更快，而是在于能处理更多的连接。）</p>
+<p>在IO multiplexing Model中，实际中，对于每一个socket，一般都设置成为non-blocking，但是，如上图所示，整个用户的process其实是一直被block的。只不过process是被select这个函数block，而不是被socket IO给block。</p>
+<h2 id="信号驱动I-O模型"><a href="#信号驱动I-O模型" class="headerlink" title="信号驱动I/O模型"></a>信号驱动I/O模型</h2><p>首先开启套接口信号驱动I/O功能，并通过系统调用sigaction执行一个信号处理函数（此系统调用立即返回，进程继续工作，非阻塞）。当数据准备就绪时，就为改进程生成一个SIGIO信号，通过信号回调通知应用程序调用recvfrom来读取数据，并通知主循环函数处理树立。</p>
+<p><img src="http://490.github.io/images/20190315_080801.png" alt="image"></p>
+<h2 id="异步I-O"><a href="#异步I-O" class="headerlink" title="异步I/O"></a>异步I/O</h2><p>告知内核启动某个操作，并让内核在整个操作完成后（包括数据的复制）通知进程。</p>
+<p>信号驱动I/O模型通知的是何时可以开始一个I/O操作，异步I/O模型有内核通知I/O操作何时已经完成。</p>
+<p><img src="http://490.github.io/images/20190315_080817.png" alt="image"></p>
+<h1 id="I-O多路复用技术"><a href="#I-O多路复用技术" class="headerlink" title="I/O多路复用技术"></a>I/O多路复用技术</h1><p>I/O编程中，需要处理多个客户端接入请求时，可以利用多线程或者I/O多路复用技术进行处理。</p>
+<p>正如前面的简介，I/O多路复用技术通过把多个I/O的阻塞复用到同一个select的阻塞上，从而使得系统在单线程的情况下可以同时处理多个客户端请求。</p>
+<p>与传统的多线程模型相比，I/O多路复用的最大优势就是系统开销小，系统不需要创建新的额外线程，也不需要维护这些线程的运行，降低了系统的维护工作量，节省了系统资源。</p>
+<p>主要的应用场景：</p>
+<ul>
+<li>服务器需要同时处理多个处于监听状态或多个连接状态的套接字。</li>
+<li>服务器需要同时处理多种网络协议的套接字。</li>
+<li>支持I/O多路复用的系统调用主要有select、pselect、poll、epoll。</li>
+</ul>
+<p>而当前推荐使用的是epoll，优势如下：</p>
+<ul>
+<li>支持一个进程打开的socket fd不受限制。</li>
+<li>I/O效率不会随着fd数目的增加而线性下将。</li>
+<li>使用mmap加速内核与用户空间的消息传递。</li>
+<li>epoll拥有更加简单的API。</li>
+</ul>
 
       
     </div>
@@ -505,8 +550,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -570,6 +624,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UNIX网络编程对I-O模型的分类"><span class="nav-number">1.</span> <span class="nav-text">UNIX网络编程对I/O模型的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞I-O模型"><span class="nav-number">1.1.</span> <span class="nav-text">阻塞I/O模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞I-O模型"><span class="nav-number">1.2.</span> <span class="nav-text">非阻塞I/O模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O复用模型"><span class="nav-number">1.3.</span> <span class="nav-text">I/O复用模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信号驱动I-O模型"><span class="nav-number">1.4.</span> <span class="nav-text">信号驱动I/O模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步I-O"><span class="nav-number">1.5.</span> <span class="nav-text">异步I/O</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I-O多路复用技术"><span class="nav-number">2.</span> <span class="nav-text">I/O多路复用技术</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -597,7 +667,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">106.8k</span>
+    <span title="Site words total count">108.5k</span>
   
 </div>
 
