@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190314_152431.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140836.png">
 <meta property="og:image" content="http://490.github.io/images/20190312_140842.png">
-<meta property="og:updated_time" content="2019-03-15T11:48:27.169Z">
+<meta property="og:updated_time" content="2019-03-16T12:11:20.678Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java容器">
 <meta name="twitter:description" content="Collection  List Arraylist： Object数组 Vector： Object数组 LinkedList： 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环)    Set HashSet（无序，唯一）: 基于 HashMap 实现的，底层采用 HashMap 来保存元素 LinkedHashSet： LinkedHashSet 继承与 HashSet，并且其">
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8k
+                  8.5k
                 </span>
               
 
@@ -378,7 +378,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  30
+                  32
                 </span>
               
             </div>
@@ -658,6 +658,20 @@
 <li>retainAll</li>
 </ul>
 <p>Iterator 的 <strong>安全失败 (fail-safe)</strong> 是基于对底层集合做拷贝实现的，因此，它不受源集合上修改的影响。</p>
+<p><strong>快速失败（fail—fast）</strong></p>
+<p> 在用迭代器遍历一个集合对象时，如果遍历过程中对集合对象的结构进行了修改（增加、删除），则会抛出Concurrent Modification Exception。</p>
+<ul>
+<li>原理：迭代器在遍历时直接访问集合中的内容，并且在遍历过程中使用一个 modCount 变量。集合在被遍历期间如果结构发生变化，就会改变modCount的值。每当迭代器使用hashNext()/next()遍历下一个元素之前，都会检测modCount变量是否为expectedmodCount值，是的话就返回遍历；否则抛出异常，终止遍历。</li>
+<li>注意：这里异常的抛出条件是检测到 modCount！=expectedmodCount 这个条件。如果集合发生变化时修改modCount值刚好又设置为了expectedmodCount值，则异常不会抛出。因此，不能依赖于这个异常是否抛出而进行并发操作的编程，这个异常只建议用于检测并发修改的bug。</li>
+<li>场景：java.util包下的集合类都是快速失败的，不能在多线程下发生并发修改（迭代过程中被修改）。</li>
+</ul>
+<p><strong>安全失败（fail—safe）</strong></p>
+<pre><code>采用安全失败机制的集合容器，在遍历时不是直接在集合内容上访问的，而是先复制原有集合内容，在拷贝的集合上进行遍历。
+</code></pre><ul>
+<li>由于迭代时是对原集合的拷贝进行遍历，所以在遍历过程中对原集合所作的修改并不能被迭代器检测到，所以不会触发Concurrent Modification Exception。</li>
+<li>基于拷贝内容的优点是避免了Concurrent Modification Exception，但同样地，迭代器并不能访问到修改后的内容，即：迭代器遍历的是开始遍历那一刻拿到的集合拷贝，在遍历期间原集合发生的修改迭代器是不知道的。</li>
+<li>java.util.concurrent包下的容器都是安全失败，可以在多线程下并发使用，并发修改。</li>
+</ul>
 <h1 id="Enumeration接口"><a href="#Enumeration接口" class="headerlink" title="Enumeration接口"></a>Enumeration接口</h1><p>Enumeration 接口的作用与 Iterator 接口类似，但只提供了遍历 Vector 和 Hashtable 类型集合元素的功能，不支持元素的移除操作。</p>
 <p>例如：遍历Vector<e> v中的元素：</e></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (Enumeration&lt;E&gt; e = v.elements();e.hasMoreElements();)</span><br><span class="line">System.out.println(e.nextElement());</span><br></pre></td></tr></table></figure>
@@ -885,7 +899,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">118.2k</span>
+    <span title="Site words total count">119.6k</span>
   
 </div>
 
