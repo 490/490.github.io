@@ -77,18 +77,18 @@
 
 
 
-<meta name="description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到">
+<meta name="description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE">
 <meta name="keywords" content="数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL Cluster重启过程(4)">
 <meta property="og:url" content="https://490.github.io/Cluster重启过程4/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到">
+<meta property="og:description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-14T08:18:54.970Z">
+<meta property="og:updated_time" content="2019-03-16T11:09:00.416Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL Cluster重启过程(4)">
-<meta name="twitter:description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到">
+<meta name="twitter:description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE">
 
 
 
@@ -387,8 +387,8 @@
       
 
       
-        <a id="more"></a>
-<h1 id="COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE"><a href="#COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE" class="headerlink" title="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE"></a>COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE</h1><p>完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到DBDIH。</p>
+        <h1 id="COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE"><a href="#COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE" class="headerlink" title="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE"></a>COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE</h1><a id="more"></a>
+<p>完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到DBDIH。</p>
 <p>此时，在DBLQH实例中，我们已恢复节点中所有数据的一致但旧的变体。 仍然没有有序索引，仍然有很多工作要让节点再次与其他节点同步。 对于群集重新启动，可能是节点已完全准备就绪，但是可能某些节点仍需要与已恢复更新的全局检查点的节点同步。</p>
 <p>然后，起始节点的DBDIH将启动接管过程，因为起始节点具有一致的片段副本。 我们将通过为我们将复制的每个片段副本发送PREPARE_COPY_FRAG_REQ来为复制阶段准备起始节点的DBLQH。 这是一个可以并行化的顺序过程。</p>
 <p>接管片段副本的过程非常复杂。 它首先将PREPARE_COPY_FRAGREQ / CONF发送到起始DBLQH，然后我们将UPDATE_TOREQ / CONF发送到主DBDIH，以确保我们在接管开始之前锁定片段信息。 在接收到该片段锁定的确认之后，起始节点向所有节点发送UPDATE_FRAG_STATEREQ / CONF以将新节点包括在片段上的所有操作中。</p>
@@ -657,7 +657,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">118k</span>
+    <span title="Site words total count">118.2k</span>
   
 </div>
 
