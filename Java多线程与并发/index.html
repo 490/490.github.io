@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_133232.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_133238.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_133316.png">
-<meta property="og:updated_time" content="2019-03-16T12:49:05.097Z">
+<meta property="og:updated_time" content="2019-03-16T12:50:05.100Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程与并发">
 <meta name="twitter:description" content="线程池基本组成1、线程池管理器（ThreadPool）：用于创建并管理线程池，包括 创建线程池，销毁线程池，添加新任务；2、工作线程（PoolWorker）：线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；3、任务接口（Task）：每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务的入口，任务执行完后的收尾工作，任务的执行状态等；4、任务队列（taskQueue）：用">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  12.8k
+                  12.9k
                 </span>
               
 
@@ -487,7 +487,10 @@
 </ul>
 <h2 id="实现Runnable接口和Callable接口的区别"><a href="#实现Runnable接口和Callable接口的区别" class="headerlink" title="实现Runnable接口和Callable接口的区别"></a>实现Runnable接口和Callable接口的区别</h2><p>如果想让线程池执行任务的话需要实现的Runnable接口或Callable接口。</p>
 <p> Runnable接口或Callable接口实现类都可以被ThreadPoolExecutor或ScheduledThreadPoolExecutor执行。两者的区别在于 Runnable 接口不会返回结果但是 Callable 接口可以返回结果。</p>
-<p>备注： 工具类 Executors 可以实现 Runnable 对象和 Callable 对象之间的相互转换。<br>（<code>Executors.callable（Runnable task</code> 或<br><code>Executors.callable（Runnable task，Object resule）</code> ）。</p>
+<p>备注： 工具类 Executors 可以实现 Runnable 对象和 Callable 对象之间的相互转换。<br>（`Executors.callable（Runnable task)也就是说Future提供了三种功能：</p>
+<p>　　1）判断任务是否完成；</p>
+<p>　　2）能够中断任务；</p>
+<p>　　3）能够获取任务执行结果。<code>或</code>Executors.callable（Runnable task，Object resule）` ）。</p>
 <h1 id="volatile关键字"><a href="#volatile关键字" class="headerlink" title="volatile关键字"></a>volatile关键字</h1><p>如果一个变量在多个CPU中都存在缓存（一般在多线程编程时才会出现），那么就可能存在缓存不一致的问题。为了解决缓存不一致性问题，通常来说有以下2种解决方法：</p>
 <ol>
 <li>通过在总线加LOCK#锁的方式</li>
@@ -976,7 +979,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">119.6k</span>
+    <span title="Site words total count">121.8k</span>
   
 </div>
 

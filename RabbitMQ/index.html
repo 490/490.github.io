@@ -77,13 +77,13 @@
 
 
 
-<meta name="description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。  通过异步处理提高系统性能（削峰、减少响应所需时间） 在不使用消息队列服务器的时候，用户的请求数据直接写入数据库，在高并发的情况下数据库压力剧增，使得响应速度变慢。但是在使用消息队列之后，用户的请求数据发送给消息队列之后立即 返回，再由消息队列的消费者进程从消息队列中获取数据，异步写入">
+<meta name="description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。">
 <meta name="keywords" content="消息队列,系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="消息队列 RabbitMQ基础知识">
 <meta property="og:url" content="https://490.github.io/RabbitMQ/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。  通过异步处理提高系统性能（削峰、减少响应所需时间） 在不使用消息队列服务器的时候，用户的请求数据直接写入数据库，在高并发的情况下数据库压力剧增，使得响应速度变慢。但是在使用消息队列之后，用户的请求数据发送给消息队列之后立即 返回，再由消息队列的消费者进程从消息队列中获取数据，异步写入">
+<meta property="og:description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190310_080814.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_080835.png">
@@ -91,10 +91,10 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_081109.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081116.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081253.png">
-<meta property="og:updated_time" content="2019-03-15T04:33:26.604Z">
+<meta property="og:updated_time" content="2019-03-16T23:09:47.722Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="消息队列 RabbitMQ基础知识">
-<meta name="twitter:description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。  通过异步处理提高系统性能（削峰、减少响应所需时间） 在不使用消息队列服务器的时候，用户的请求数据直接写入数据库，在高并发的情况下数据库压力剧增，使得响应速度变慢。但是在使用消息队列之后，用户的请求数据发送给消息队列之后立即 返回，再由消息队列的消费者进程从消息队列中获取数据，异步写入">
+<meta name="twitter:description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。">
 <meta name="twitter:image" content="http://490.github.io/images/20190310_080814.png">
 
 
@@ -394,12 +394,12 @@
       
 
       
-        <a id="more"></a>
-<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>使用消息队列主要有两点好处：</p>
+        <h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><p>使用消息队列主要有两点好处：</p>
 <ol>
 <li>通过异步处理提高系统性能（削峰、减少响应所需时间）;</li>
 <li>降低系统耦合性。</li>
 </ol>
+<a id="more"></a>
 <p><strong>通过异步处理提高系统性能（削峰、减少响应所需时间）</strong></p>
 <p>在不使用消息队列服务器的时候，用户的请求数据直接写入数据库，在高并发的情况下数据库压力剧增，使得响应速度变慢。但是在使用消息队列之后，用户的请求数据发送给消息队列之后立即 返回，再由消息队列的消费者进程从消息队列中获取数据，异步写入数据库。由于消息队列服务器处理速度快于数据库（消息队列也比数据库有更好的伸缩性），因此响应速度得到大幅改善。</p>
 <p>因为用户请求数据写入消息队列之后就立即返回给用户了，但是请求数据在后续的业务校验、写数据库等操作中可能失败。因此使用消息队列进行异步处理之后，需要适当修改业务流程进行配合，比如用户在提交订单之后，订单数据写入消息队列，不能立即返回用户订单提交成功，需要在消息队列的订单消费者进程真正处理完该订单之后，甚至出库后，再通过电子邮件或短信通知用户订单成功，以免交易纠纷。这就类似我们平时手机订火车票和电影票。</p>
@@ -652,7 +652,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">119.6k</span>
+    <span title="Site words total count">121.8k</span>
   
 </div>
 
