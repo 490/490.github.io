@@ -93,7 +93,10 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_084553.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_084559.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_084634.png">
-<meta property="og:updated_time" content="2019-03-11T08:10:29.735Z">
+<meta property="og:image" content="http://490.github.io/images/20190317_094503.png">
+<meta property="og:image" content="http://490.github.io/images/20190317_094555.png">
+<meta property="og:image" content="http://490.github.io/images/20190317_094656.png">
+<meta property="og:updated_time" content="2019-03-17T01:48:54.409Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -359,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3.3k
+                  6.8k
                 </span>
               
 
@@ -375,7 +378,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  11
+                  24
                 </span>
               
             </div>
@@ -462,6 +465,108 @@
 <p><img src="http://490.github.io/images/20190310_084553.png" alt="image"><br><img src="http://490.github.io/images/20190310_084559.png" alt="image"></p>
 <p><img src="http://490.github.io/images/20190310_084634.png" alt="image"></p>
 <p><strong>使用MySQL客户端管理mycat</strong><br>动态加载配置文件：reload @@config;<br>查看数据节点：show @@datanode;<br>查看后端数据库：show @@datasource;</p>
+<h1 id="复制（replication）和集群（cluster）-读写分离"><a href="#复制（replication）和集群（cluster）-读写分离" class="headerlink" title="复制（replication）和集群（cluster）/读写分离"></a>复制（replication）和集群（cluster）/读写分离</h1><h2 id="Replication"><a href="#Replication" class="headerlink" title="Replication"></a>Replication</h2><p> Replication的思想是将<strong>数据在集群的多个节点同步、备份</strong>，以提高集群数据的<strong>可用性</strong>（HA）；Mysql使用Replication架构来实现上述目的，同时可以<strong>提升了集群整体的并发能力</strong>。。</p>
+<p>Replication具有如下优点：</p>
+<ul>
+<li><strong>扩展</strong>：将负载分布在多个slaves上以提高性能，所有的<strong>writes</strong>以及事务中的<strong>read</strong>操作都将有master处理，其他reads将转发给slaves；对于“读写比”较高的应用，replication可以通过<strong>增加slaves节点来提高并发能力</strong>；因为write只能在master上提交，因此架构扩展对提升write并发能力并不明显，对于writes密集性应用我们应该考虑其他架构。</li>
+<li><strong>数据安全</strong>：slave可以中断自己的replication进程，这不会打断master上的数据请求，所以可以在slave上运行<strong>backup</strong>服务，定期全量backup是保护数据的手段之一。（如果在master上执行backup，需要让master处于readonly状态，这也意味这所有的write请求需要阻塞）。</li>
+<li><strong>分析</strong>：数据在master上创建，那么数据分析可以在slave上进行，这将不会影响master的性能。利用mysql做<strong>数据分析</strong>（或者数据分析平台的源数据），通常都是将某个slave作为数据输入端。</li>
+<li><strong>远距数据分布</strong>：如果master的物理位置较远，你可以在临近需求的地方部署slaves，以便就近使用数据，而不需要总是访问远端的master，这在数据分析、数据备份与容灾等方面有很大帮助。</li>
+</ul>
+<h2 id="Sharding和Replication"><a href="#Sharding和Replication" class="headerlink" title="Sharding和Replication"></a>Sharding和Replication</h2><ol>
+<li>replication机制的优缺点</li>
+</ol>
+<ul>
+<li>优点：负载高时可以通过replication机制来提高读写的吞吐和性能。</li>
+<li>缺点：首先它的有效很依赖于读操作的比例，Master往往会成为瓶颈所在，写操作需要顺序排队来执行，过载的话Master首先扛不住，Slaves的数据同步的延迟也可能比较大，而且会大大耗费CPU的计算能力，因为write操作在Master上执行以后还是需要在每台slave机器上都跑一次。</li>
+</ul>
+<ol start="2">
+<li>sharding技术的优缺点</li>
+</ol>
+<ul>
+<li>优点：sharding技术可以弥补replication机制的缺点。因为sharding可以很好的扩展，我们知道每台机器无论配置多么好它都有自身的物理上限，所以当我们应用已经能触及或远远超出单台机器的某个上限的时候，我们惟有寻找别的机器的帮助或者继续升级的我们的硬件，但常见的方案还是横向扩展, 通过添加更多的机器来共同承担压力。我们还得考虑当我们的业务逻辑不断增长，我们的机器能不能通过线性增长就能满足需求？Sharding可以轻松的将计算，存储，I/O并行分发到多台机器上，这样可以充分利用多台机器各种处理能力，同时可以避免单点失败，提供系统的可用性，进行很好的错误隔离。 </li>
+</ul>
+<h2 id="Mysql主从复制的原理"><a href="#Mysql主从复制的原理" class="headerlink" title="Mysql主从复制的原理"></a>Mysql主从复制的原理</h2><p>主从复制通过三个过程实现，其一个过程发生在主服务器上，另外两个过程发生在从服务器上。具体情况如下：</p>
+<p>主服务器将用户对数据库的<strong>写操作</strong>以二进制格式保存到<strong>Binary Log</strong>（二进制日志）文件中， 然后由<strong>Binlog Dump</strong>线程将二进制日志文件传输给从服务器。</p>
+<p>从服务器通过<strong>一个 I/O 线程将主服务器的二进制日志文件中的写操作复制到一个叫 Relay Log 的中继日志文件</strong>中。</p>
+<p>从服务器通过<strong>另一个 SQL 线程将 Relay Log 中继日志文件中的写操作依次在本地执行</strong>，从而实现主从服务器之间的数据的同步。</p>
+<ol>
+<li>BinLog Dump线程</li>
+</ol>
+<p>该线程运行在主服务器上，主要工作是把 Binary Log 二进制日志文件的数据发送给从服务器。</p>
+<p>使用<code>SHOW PROCESSLIST</code>语句，可查看该线程是否正在运行。</p>
+<ol start="2">
+<li>I/O线程</li>
+</ol>
+<p>从服务器执行 <code>START SLAVE</code> 语句后，会创建一个 I/O 线程。此线程运行在从服务器上，与主服务器建立连接，然后向主服务器发出同步请求。之后，I/O 线程将主服务器发送的写操作复制到本地 Relay Log 日志文件中。</p>
+<p>使用<code>SHOW SLAVE STATUS</code>语句，可查看 I/O 线程状态。</p>
+<ol start="3">
+<li>SQL线程</li>
+</ol>
+<p>该线程运行在从服务器上，主要工作是读取 Relay Log 日志文件中的更新操作，并将这些操作依次执行，从而使主从服务器的数据保持同步。</p>
+<p><strong>复制级别</strong></p>
+<ol>
+<li><p><strong>基于语句的复制</strong>：  在主服务器上执行的SQL语句，在从服务器上执行同样的语句。MySQL默认采用基于语句的复制，效率比较高。  一旦发现没法精确复制时，会自动选着基于行的复制。    </p>
+</li>
+<li><p><strong>基于行的复制</strong>：把改变的内容复制过去，而不是把命令在从服务器上执行一遍. 从mysql5.0开始支持</p>
+</li>
+<li><p><strong>混合类型的复制</strong>: 默认采用基于语句的复制，一旦发现基于语句的无法精确的复制时，就会采用基于行的复制。</p>
+</li>
+</ol>
+<h2 id="Replication的三种常用架构"><a href="#Replication的三种常用架构" class="headerlink" title="Replication的三种常用架构"></a>Replication的三种常用架构</h2><ol>
+<li>Master - Slaves</li>
+</ol>
+<p>在实际应用场景中，MySQL复制90%以上都是一个Master复制到一个或者多个Slave的架构模式，主要用于<strong>读压力比较大的应用的数据库端廉价扩展解决方案</strong>。因为只要Master和Slave的压力不是太大（尤其是Slave端压力）的话，异步复制的延时一般都很少很少。尤其是自从Slave端的复制方式改成两个线程处理之后，更是减小了Slave端的延时问题。而带来的效益是，对于数据实时性要求不是特别严格的应用，只需要通过廉价的pcserver来扩展Slave的数量，将读压力分散到多台Slave的机器上面，即可通过分散单台数据库服务器的读压力来解决数据库端的读性能瓶颈，毕竟在大多数数据库应用系统中的读压力还是要比写压力大很多。这在很大程度上解决了目前很多中小型网站的数据库压力瓶颈问题，甚至有些大型网站也在使用类似方案解决数据库瓶颈。</p>
+<p><img src="http://490.github.io/images/20190317_094503.png" alt="image"></p>
+<ol start="2">
+<li>Master - Master</li>
+</ol>
+<p>有些时候，简单的从一个MySQL复制到另外一个MySQL的基本Replication架构，可能还会需要在一些特定的场景下进行Master的切换。如在Master端需要进行一些特别的维护操作的时候，可能需要停MySQL的服务。这时候，为了尽可能减少应用系统写服务的停机时间，最佳的做法就是<strong>将我们的Slave节点切换成Master来提供写入的服务</strong>。</p>
+<p>但是这样一来，我们原来Master节点的数据就会和实际的数据不一致了。为了解决这个问题，我们可以通过搭建<strong>DualMaster</strong>环境来避免很多的问题。何谓DualMaster环境？实际上就是两个MySQLServer互相将对方作为自己的Master，自己作为对方的Slave来进行复制。这样，任何一方所做的变更，都会通过复制应用到另外一方的数据库中。</p>
+<p>可能有些读者朋友会有一个担心，这样搭建复制环境之后，难道不会造成两台MySQL之间的循环复制么？实际上MySQL自己早就想到了这一点，所以在MySQL的<strong>BinaryLog</strong>中记录了当前MySQL的server-id，而且这个参数也是我们搭建MySQLReplication的时候必须明确指定，而且Master和Slave的server-id参数值比需要不一致才能使MySQLReplication搭建成功。一旦有了server-id的值之后，MySQL就很容易判断某个变更是从哪一个MySQLServer最初产生的，所以就很容易避免出现循环复制的情况。而且，如果我们不打开记录Slave的BinaryLog的选项（–log-slave-update）的时候，MySQL根本就不会记录复制过程中的变更到BinaryLog中，就更不用担心可能会出现循环复制的情形了。下如将更清晰的展示DualMaster复制架构组成：</p>
+<p><img src="http://490.github.io/images/20190317_094555.png" alt="image"></p>
+<p>通过DualMaster复制架构，我们不仅能够避免因为正常的常规维护操作需要的停机所带来的重新搭建Replication环境的操作，因为我们任何一端都记录了自己当前复制到对方的什么位置了，当系统起来之后，就会自动开始从之前的位置重新开始复制，而不需要人为去进行任何干预，大大节省了维护成本。</p>
+<p>不仅仅如此，DualMaster复制架构和一些第三方的HA管理软件结合，还可以在我们<strong>当前正在使用的Master出现异常无法提供服务之后，非常迅速的自动切换另外一端来提供相应的服务，减少异常情况下带来的停机时间</strong>，并且完全不需要人工干预。</p>
+<p>当然，我们搭建成一个DualMaster环境，并不是为了让两端都提供写的服务。在正常情况下，我们都只会将其中一端开启写服务，另外一端仅仅只是提供读服务，或者完全不提供任何服务，仅仅只是作为一个备用的机器存在。为什么我们一般都只开启其中的一端来提供写服务呢？主要还是为了<strong>避免数据的冲突，防止造成数据的不一致性</strong>。因为即使在两边执行的修改有先后顺序，但由于Replication是<strong>异步的实现机制（CAP）</strong>，同样会导致即使晚做的修改也可能会被早做的修改所覆盖。</p>
+<ol start="3">
+<li>Master –Slaves - Slaves</li>
+</ol>
+<p>在有些应用场景中，可能读写压力差别比较大，读压力特别的大，一个Master可能需要上10台甚至更多的Slave才能够支撑注读的压力。这时候，Master就会比较吃力了，因为仅仅连上来的SlaveIO线程就比较多了，这样写的压力稍微大一点的时候，Master端因为复制就会消耗较多的资源，很容易造成复制的延时。</p>
+<p>遇到这种情况如何解决呢？这时候我们就可以利用MySQL可以在Slave端记录复制所产生变更的BinaryLog信息的功能，也就是打开—log-slave-update选项。然后，通<strong>过二级（或者是更多级别）复制来减少Master端因为复制所带来的压力</strong>。也就是说，我们首先通过少数几台MySQL从Master来进行复制，这几台机器我们姑且称之为<strong>第一级Slave集群</strong>，然后其他的Slave再从第一级Slave集群来进行复制。从第一级Slave进行复制的Slave，我称之为<strong>第二级Slave集群</strong>。如果有需要，我们可以继续往下增加更多层次的复制。这样，我们很容易就控制了每一台MySQL上面所附属Slave的数量。这种架构我称之为Master-Slaves-Slaves架构</p>
+<p>这种多层级联复制的架构，很容易就解决了Master端因为附属Slave太多而成为瓶颈的风险。下图展示了多层级联复制的Replication架构。</p>
+<p><img src="http://490.github.io/images/20190317_094656.png" alt="image"></p>
+<h2 id="读写分离"><a href="#读写分离" class="headerlink" title="读写分离"></a>读写分离</h2><p>读写分离，基本的原理是让主数据库处理事务性增、改、删操作（INSERT、UPDATE、DELETE），而从数据库处理SELECT查询操作。数据库复制被用来把事务性操作导致的变更同步到集群中的从数据库。</p>
+<p>读写分离的好处：</p>
+<ol>
+<li>增加冗余</li>
+<li>增加了机器的处理能力</li>
+<li>对于读操作为主的应用，使用读写分离是最好的场景，因为可以确保写的服务器压力更小，而读又可以接受点时间上的延迟。</li>
+</ol>
+<p>读写分离在实现上一般采用复制的方式，读在Slave端，写和事务在Master端，按照其实现可分为如下两种大类：</p>
+<ol>
+<li>程序修改mysql操作类</li>
+</ol>
+<p>在数据库操作时直接指定读写库的位置，这种方式</p>
+<ul>
+<li>优点：直接和数据库通信，简单快捷的读写分离和随机的方式实现的负载均衡，权限独立分配</li>
+<li>缺点：数据段和程序的耦合度太高，自己维护更新，增减服务器在代码处理。</li>
+</ul>
+<ol start="2">
+<li>数据库代理</li>
+</ol>
+<p>使用mysql官方（mysql proxy）或者第三方数据库代理（如mycat）将数据库连接抽象和屏蔽，</p>
+<ul>
+<li>优点：直接实现读写分离和负载均衡，不用修改代码，</li>
+<li>缺点：增加额外耗时和性能损耗。</li>
+</ul>
+<h2 id="Replication的常用方案"><a href="#Replication的常用方案" class="headerlink" title="Replication的常用方案"></a>Replication的常用方案</h2><ol>
+<li>master-master架构</li>
+</ol>
+<p>两台服务器装mysql，各自作为对方的从机接受对方发来的数据，做到数据的同步备份，感觉和master-slave基本实现原理是一样的。这样保证了数据的一致性，如何保证其中一台服务器故障，自动切换到另外的一个master上呢，<a href="http://liuyu.blog.51cto.com/183345/98867/" target="_blank" rel="noopener">使用MMM(MySQL Master-Master Replication Manager)来管理</a>。</p>
+<ol start="2">
+<li>heartbeat+drbd+mysql主从复制</li>
+</ol>
+<p>基本原理与1相似，这里需要做一个master库的冗余备份，使用<strong>drbd</strong>来保证不同服务器中两个master库的数据一致性。利用<strong>heartbeat</strong>来完成其中一台服务器发生故障后的自动切换。结构如下图：</p>
 
       
     </div>
@@ -646,7 +751,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务的隔离级别、锁"><span class="nav-number">2.</span> <span class="nav-text">事务的隔离级别、锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">2.1.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未提交读-Read-uncommitted"><span class="nav-number">2.2.</span> <span class="nav-text">未提交读(Read uncommitted)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交读-Read-committed"><span class="nav-number">2.3.</span> <span class="nav-text">提交读(Read committed)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重复读-Repeatable-reads"><span class="nav-number">2.4.</span> <span class="nav-text">可重复读(Repeatable reads)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可序列化-Serializable"><span class="nav-number">2.5.</span> <span class="nav-text">可序列化(Serializable)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-JOIN"><span class="nav-number">3.</span> <span class="nav-text">SQL JOIN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Innodb与Myisam引擎"><span class="nav-number">4.</span> <span class="nav-text">Innodb与Myisam引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-区别："><span class="nav-number">4.1.</span> <span class="nav-text">1. 区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-为什么MyISAM会比Innodb-的查询速度快。"><span class="nav-number">4.2.</span> <span class="nav-text">2. 为什么MyISAM会比Innodb 的查询速度快。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-应用场景"><span class="nav-number">4.3.</span> <span class="nav-text">3. 应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-number">4.4.</span> <span class="nav-text">MVCC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyCAT"><span class="nav-number">5.</span> <span class="nav-text">MyCAT</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务的隔离级别、锁"><span class="nav-number">2.</span> <span class="nav-text">事务的隔离级别、锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">2.1.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未提交读-Read-uncommitted"><span class="nav-number">2.2.</span> <span class="nav-text">未提交读(Read uncommitted)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交读-Read-committed"><span class="nav-number">2.3.</span> <span class="nav-text">提交读(Read committed)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重复读-Repeatable-reads"><span class="nav-number">2.4.</span> <span class="nav-text">可重复读(Repeatable reads)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可序列化-Serializable"><span class="nav-number">2.5.</span> <span class="nav-text">可序列化(Serializable)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-JOIN"><span class="nav-number">3.</span> <span class="nav-text">SQL JOIN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Innodb与Myisam引擎"><span class="nav-number">4.</span> <span class="nav-text">Innodb与Myisam引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-区别："><span class="nav-number">4.1.</span> <span class="nav-text">1. 区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-为什么MyISAM会比Innodb-的查询速度快。"><span class="nav-number">4.2.</span> <span class="nav-text">2. 为什么MyISAM会比Innodb 的查询速度快。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-应用场景"><span class="nav-number">4.3.</span> <span class="nav-text">3. 应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-number">4.4.</span> <span class="nav-text">MVCC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyCAT"><span class="nav-number">5.</span> <span class="nav-text">MyCAT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复制（replication）和集群（cluster）-读写分离"><span class="nav-number">6.</span> <span class="nav-text">复制（replication）和集群（cluster）/读写分离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication"><span class="nav-number">6.1.</span> <span class="nav-text">Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sharding和Replication"><span class="nav-number">6.2.</span> <span class="nav-text">Sharding和Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql主从复制的原理"><span class="nav-number">6.3.</span> <span class="nav-text">Mysql主从复制的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的三种常用架构"><span class="nav-number">6.4.</span> <span class="nav-text">Replication的三种常用架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读写分离"><span class="nav-number">6.5.</span> <span class="nav-text">读写分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的常用方案"><span class="nav-number">6.6.</span> <span class="nav-text">Replication的常用方案</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -680,7 +785,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">121.8k</span>
+    <span title="Site words total count">125.3k</span>
   
 </div>
 
