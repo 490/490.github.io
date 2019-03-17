@@ -96,7 +96,9 @@
 <meta property="og:image" content="http://490.github.io/images/20190317_094503.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_094555.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_094656.png">
-<meta property="og:updated_time" content="2019-03-17T01:48:54.409Z">
+<meta property="og:image" content="http://490.github.io/images/20190317_094901.png">
+<meta property="og:image" content="http://490.github.io/images/20190317_094926.png">
+<meta property="og:updated_time" content="2019-03-17T01:49:54.400Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -567,6 +569,12 @@
 <li>heartbeat+drbd+mysql主从复制</li>
 </ol>
 <p>基本原理与1相似，这里需要做一个master库的冗余备份，使用<strong>drbd</strong>来保证不同服务器中两个master库的数据一致性。利用<strong>heartbeat</strong>来完成其中一台服务器发生故障后的自动切换。结构如下图：</p>
+<p><img src="http://490.github.io/images/20190317_094901.png" alt="image"></p>
+<ol start="3">
+<li>Mysql + keepalived 实现双主热备读写分离</li>
+</ol>
+<p>keepalived主要用于实现故障切换和热备，作为mysql的补充。</p>
+<p><img src="http://490.github.io/images/20190317_094926.png" alt="image"></p>
 
       
     </div>
