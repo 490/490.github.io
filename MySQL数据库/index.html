@@ -98,7 +98,9 @@
 <meta property="og:image" content="http://490.github.io/images/20190317_094656.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_094901.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_094926.png">
-<meta property="og:updated_time" content="2019-03-17T01:49:54.400Z">
+<meta property="og:image" content="http://490.github.io/images/20190318_083546.png">
+<meta property="og:image" content="http://490.github.io/images/20190318_133536.png">
+<meta property="og:updated_time" content="2019-03-18T05:35:53.020Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -364,7 +366,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6.8k
+                  9.4k
                 </span>
               
 
@@ -380,7 +382,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  24
+                  33
                 </span>
               
             </div>
@@ -575,6 +577,49 @@
 </ol>
 <p>keepalived主要用于实现故障切换和热备，作为mysql的补充。</p>
 <p><img src="http://490.github.io/images/20190317_094926.png" alt="image"></p>
+<h1 id="NDB-Cluster"><a href="#NDB-Cluster" class="headerlink" title="NDB Cluster"></a>NDB Cluster</h1><p>MySQL NDB Cluster是一个适用于分布式计算环境的高可用性、高冗余版本的MySQL。<br>NDB集群由一组计算机组成，称为主机，每个计算机运行一个或多个进程。这些进程称为节点，可能包括MySQL服务器（用于访问NDB数据）、数据节点（用于存储数据）、一个或多个管理服务器，以及可能的其他专门的数据访问程序。在NDB集群中这些组件的关系如下所示：</p>
+<p><img src="http://490.github.io/images/20190318_083546.png" alt="image"></p>
+<p>所有这些程序一起工作来形成一个NDB集群。当数据被NDB存储引擎存储时，表（和表数据）存储在数据节点中。这样的表可以直接从集群中的所有MySQL服务器（SQL节点）访问。因此，在一个将数据存储在集群中的工资单应用程序中，如果一个应用程序更新了雇员的工资，那么查询这些数据的所有其他MySQL服务器都可以立即看到这个变化。</p>
+<p>作者：季舟1<br>链接：<a href="https://www.jianshu.com/p/c989ee86d7cf" target="_blank" rel="noopener">https://www.jianshu.com/p/c989ee86d7cf</a><br>来源：简书<br>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+<p>NDB CLUSTER（也称为NDB）是一个内存存储引擎，提供高可用的数据持久化功能。<br>NDB CLUSTER存储引擎可以配置一系列故障转移和负载平衡。</p>
+<h2 id="集群节点"><a href="#集群节点" class="headerlink" title="集群节点"></a>集群节点</h2><p>集群节点有三种类型，在最小的NDB集群配置中，至少会有三个节点。</p>
+<h3 id="Management-node"><a href="#Management-node" class="headerlink" title="Management node"></a>Management node</h3><p>这种类型节点的作用是管理NDB集群中的其他节点，执行诸如提供配置数据、启动和停止节点以及运行备份等功能。因为这个节点类型管理其他节点的配置，所以应该首先启动这种类型的节点，在任何其他节点之前。执行ndb_mgmd命令启动该节点。</p>
+<h3 id="Data-node"><a href="#Data-node" class="headerlink" title="Data node"></a>Data node</h3><p>这种类型节点的作用是存储集群数据。一个副本足以用于数据存储，但不提供冗余;因此，建议使用2（或更多）副本来提供冗余，从而获得高可用性。执行ndbd或ndbmtd（多线程）命令启动该节点。NDB集群表通常存储在内存中，而不是在磁盘上（这就是为什么我们将NDB集群称为内存中的数据库）。然而，一些NDB集群数据可以存储在磁盘上。</p>
+<h3 id="SQL-node"><a href="#SQL-node" class="headerlink" title="SQL node"></a>SQL node</h3><p>在NDB Cluster中SQL节点是一个使用NDBCLUSTER存储引擎的传统MySQL服务器。</p>
+<p>期望在生产环境中使用三个节点的设置是不现实的。这样的配置不提供冗余;为了从NDB集群的高可用性特性中获益，您必须使用多个数据和SQL节点。还强烈推荐使用多个管理节点。</p>
+<h2 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h2><h3 id="标准MySQL客户端"><a href="#标准MySQL客户端" class="headerlink" title="标准MySQL客户端"></a>标准MySQL客户端</h3><p>NDB集群可以与用PHP、Perl、C、C++、Java、Python、Ruby等编写的现有MySQL应用程序一起使用。这样的客户端应用程序发送SQL语句并接收来自MySQL服务器的响应，它们充当NDB集群SQL节点，就像它们与独立的MySQL服务器交互一样。例如，使用Connector/J 5.0.6和更高版本的Java客户端可以使用jdbc:mysql:loadbalance://url以透明地实现负载平衡。</p>
+<h3 id="NDB客户端"><a href="#NDB客户端" class="headerlink" title="NDB客户端"></a>NDB客户端</h3><p>客户端程序可以使用NDB API（一个高层次的C++ API，NDBCLUSTER存储引擎）直接访问NDB集群数据，绕过任何可能连接到集群的MySQL服务器。<br>对于NDB集群来说，也可以使用NDB集群连接器来为NDB集群编写Java应用程序。NDB集群连接器包括ClusterJ，这是一种类似于对象关系映射持久性框架的高级数据库API，如Hibernate和JPA，它们直接连接到NDBCLUSTER，因此不需要访问MySQL服务器。在NDB集群中也为ClusterJPA提供了支持，这是一个利用ClusterJ和JDBC的优势的NDB集群的OpenJPA实现。ID查找和其他快速操作是使用ClusterJ（绕过MySQL服务器）执行的，而可以从MySQL查询优化器中获益的更复杂的查询是通过MySQL服务器发送的，使用JDBC。</p>
+<h3 id="管理客户端"><a href="#管理客户端" class="headerlink" title="管理客户端"></a>管理客户端</h3><p>这些客户端连接到管理服务器，并提供启动和停止节点的命令，启动和停止消息追踪（仅调试版本），显示节点版本和状态，启动和停止备份，等等。这种类型的程序的一个例子是ndbmgm管理客户端提供的NDB集群。</p>
+<h3 id="检查点"><a href="#检查点" class="headerlink" title="检查点"></a>检查点</h3><p> 一般来说，当数据保存到磁盘时，据说已到达检查点。 更具体的是NDB Cluster，检查点是所有已提交事务存储在磁盘上的时间点。 关于NDB存储引擎，有两种类型的检查点可以协同工作，以确保维护集群数据的一致视图。 这些显示在以下列表中：</p>
+<ul>
+<li><p>本地检查点（LCP）：这是一个特定于单个节点的检查点; 但是，LCP或多或少同时发生在集群中的所有节点上。 LCP通常每隔几分钟发生一次; 精确的间隔会有所不同，并取决于节点存储的数据量，群集活动的级别以及其他因素。<br>在NDB 7.6.4之前，LCP涉及将所有节点的数据保存到磁盘。 NDB 7.6.4引入了对部分LCP的支持，在某些条件下可以显着提高恢复时间。 有关更多信息，请参见第21.1.4.2节“NDB Cluster 7.6中的新增功能”，以及启用部分LCP并控制其使用的存储量的EnablePartialLcp和RecoveryWork配置参数的说明。</p>
+</li>
+<li><p>全局检查点（GCP）：每隔几秒就会发生一次GCP，此时所有节点的事务都已同步，并且重做日志被刷新到磁盘。</p>
+</li>
+<li><h2 id="Nodes-Node-Groups-Replicas-and-Partitions"><a href="#Nodes-Node-Groups-Replicas-and-Partitions" class="headerlink" title="Nodes, Node Groups, Replicas, and Partitions"></a>Nodes, Node Groups, Replicas, and Partitions</h2></li>
+</ul>
+<p><strong>Data Node。</strong> ndbd或ndbmtd进程，用于存储一个或多个副本，即分配给该节点所属的节点组的分区副本（本节稍后讨论）。</p>
+<p>每个数据节点应位于单独的计算机上。 虽然也可以在一台计算机上托管多个数据节点进程，但通常不建议这样的配置。</p>
+<p>当引用ndbd或ndbmtd进程时，术语“节点”和“数据节点”通常可互换使用; 如上所述，管理节点（ndb_mgmd进程）和SQL节点（mysqld进程）在本讨论中如此指定。</p>
+<p><strong>Node group。</strong>节点组由一个或多个节点组成，并存储分区或副本集（请参阅下一项）。</p>
+<p>NDB群集中的节点组数量不能直接配置; 它是数据节点数和副本数（NoOfReplicas配置参数）的函数，如下所示：<code># of node groups = # of data nodes / NoOfReplicas</code></p>
+<p><strong>Partition。</strong> 这是群集存储的数据的一部分。 每个节点负责保留分配给它的任何分区的至少一个副本（即，至少一个副本）。<br>NDB Cluster默认使用的分区数取决于数据节点的数量和数据节点使用的LDM线程数，如下所示：<code>[# of partitions] = [# of data nodes] * [# of LDM threads]</code></p>
+<p>使用运行ndbmtd的数据节点时，LDM线程的数量由MaxNoOfExecutionThreads的设置控制。 使用ndbd时，只有一个LDM线程，这意味着与参与集群的节点一样多的集群分区。 使用ndbmtd且MaxNoOfExecutionThreads设置为3或更小时也是如此。 （您应该知道LDM线程的数量随着此参数的值而增加，但不是严格线性的，并且设置它有其他限制;有关详细信息，请参阅MaxNoOfExecutionThreads的说明。）</p>
+<p><strong>NDB and user-defined partitioning</strong>。 NDB群集通常会自​​动分区NDBCLUSTER表。但是，也可以使用NDBCLUSTER表进行用户定义的分区。这受到以下限制：</p>
+<ol>
+<li>使用NDB表生产时仅支持KEY和LINEAR KEY分区方案。</li>
+<li>可以为任何NDB表显式定义的最大分区数是8 <em> MaxNoOfExecutionThreads </em> [节点组数]，NDB群集中的节点组数量正如本节前面所讨论的那样确定。使用ndbd进行数据节点进程时，设置MaxNoOfExecutionThreads无效;在这种情况下，为了执行该计算，可以将其视为等于1。</li>
+</ol>
+<p><strong>Replica</strong>。 这是群集分区的副本。 节点组中的每个节点都存储一个副本。 有时也称为分区副本。 副本数等于每个节点组的节点数。</p>
+<p>副本完全属于单个节点; 节点可以（通常会）存储多个副本。</p>
+<p>下图说明了一个NDB集群，其中四个数据节点运行ndbd，分别安排在两个节点组中，每个节点包含两个节点; 节点1和2属于节点组0，节点3和4属于节点组1。这里只显示数据节点; 虽然有效的NDB群集需要ndb_mgmd进程进行群集管理，并且至少有一个SQL节点需要访问群集存储的数据，但为清楚起见，这些已从图中省略。</p>
+<p><img src="http://490.github.io/images/20190318_133536.png" alt="image"></p>
+<p>群集存储的数据分为四个分区，编号为0,1,2和3.每个分区在同一节点组中存储多个副本。分区存储在备用节点组中，如下所示：</p>
+<p>分区0存储在节点组0上;主副本（主副本）存储在节点1上，备份副本（分区的备份副本）存储在节点2上。</p>
+<p>分区1存储在另一个节点组（节点组1）上;此分区的主副本位于节点3上，其备份副本位于节点4上。</p>
+<p>分区2存储在节点组0上。但是，它的两个副本的放置与分区0的放置相反;对于分区2，主副本存储在节点2上，备份存储在节点1上。</p>
+<p>分区3存储在节点组1上，并且其两个副本的放置与分区1的位置相反。即，其主副本位于节点4上，备份在节点3上。</p>
+<p>对于NDB集群的持续运行，这意味着：只要参与集群的每个节点组至少有一个节点运行，集群就拥有所有数据的完整副本并且仍然可行。这将在下图中说明。</p>
 
       
     </div>
@@ -759,7 +804,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务的隔离级别、锁"><span class="nav-number">2.</span> <span class="nav-text">事务的隔离级别、锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">2.1.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未提交读-Read-uncommitted"><span class="nav-number">2.2.</span> <span class="nav-text">未提交读(Read uncommitted)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交读-Read-committed"><span class="nav-number">2.3.</span> <span class="nav-text">提交读(Read committed)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重复读-Repeatable-reads"><span class="nav-number">2.4.</span> <span class="nav-text">可重复读(Repeatable reads)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可序列化-Serializable"><span class="nav-number">2.5.</span> <span class="nav-text">可序列化(Serializable)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-JOIN"><span class="nav-number">3.</span> <span class="nav-text">SQL JOIN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Innodb与Myisam引擎"><span class="nav-number">4.</span> <span class="nav-text">Innodb与Myisam引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-区别："><span class="nav-number">4.1.</span> <span class="nav-text">1. 区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-为什么MyISAM会比Innodb-的查询速度快。"><span class="nav-number">4.2.</span> <span class="nav-text">2. 为什么MyISAM会比Innodb 的查询速度快。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-应用场景"><span class="nav-number">4.3.</span> <span class="nav-text">3. 应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-number">4.4.</span> <span class="nav-text">MVCC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyCAT"><span class="nav-number">5.</span> <span class="nav-text">MyCAT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复制（replication）和集群（cluster）-读写分离"><span class="nav-number">6.</span> <span class="nav-text">复制（replication）和集群（cluster）/读写分离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication"><span class="nav-number">6.1.</span> <span class="nav-text">Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sharding和Replication"><span class="nav-number">6.2.</span> <span class="nav-text">Sharding和Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql主从复制的原理"><span class="nav-number">6.3.</span> <span class="nav-text">Mysql主从复制的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的三种常用架构"><span class="nav-number">6.4.</span> <span class="nav-text">Replication的三种常用架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读写分离"><span class="nav-number">6.5.</span> <span class="nav-text">读写分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的常用方案"><span class="nav-number">6.6.</span> <span class="nav-text">Replication的常用方案</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务的隔离级别、锁"><span class="nav-number">2.</span> <span class="nav-text">事务的隔离级别、锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">2.1.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未提交读-Read-uncommitted"><span class="nav-number">2.2.</span> <span class="nav-text">未提交读(Read uncommitted)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交读-Read-committed"><span class="nav-number">2.3.</span> <span class="nav-text">提交读(Read committed)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重复读-Repeatable-reads"><span class="nav-number">2.4.</span> <span class="nav-text">可重复读(Repeatable reads)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可序列化-Serializable"><span class="nav-number">2.5.</span> <span class="nav-text">可序列化(Serializable)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-JOIN"><span class="nav-number">3.</span> <span class="nav-text">SQL JOIN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Innodb与Myisam引擎"><span class="nav-number">4.</span> <span class="nav-text">Innodb与Myisam引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-区别："><span class="nav-number">4.1.</span> <span class="nav-text">1. 区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-为什么MyISAM会比Innodb-的查询速度快。"><span class="nav-number">4.2.</span> <span class="nav-text">2. 为什么MyISAM会比Innodb 的查询速度快。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-应用场景"><span class="nav-number">4.3.</span> <span class="nav-text">3. 应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-number">4.4.</span> <span class="nav-text">MVCC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyCAT"><span class="nav-number">5.</span> <span class="nav-text">MyCAT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复制（replication）和集群（cluster）-读写分离"><span class="nav-number">6.</span> <span class="nav-text">复制（replication）和集群（cluster）/读写分离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication"><span class="nav-number">6.1.</span> <span class="nav-text">Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sharding和Replication"><span class="nav-number">6.2.</span> <span class="nav-text">Sharding和Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql主从复制的原理"><span class="nav-number">6.3.</span> <span class="nav-text">Mysql主从复制的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的三种常用架构"><span class="nav-number">6.4.</span> <span class="nav-text">Replication的三种常用架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读写分离"><span class="nav-number">6.5.</span> <span class="nav-text">读写分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的常用方案"><span class="nav-number">6.6.</span> <span class="nav-text">Replication的常用方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NDB-Cluster"><span class="nav-number">7.</span> <span class="nav-text">NDB Cluster</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#集群节点"><span class="nav-number">7.1.</span> <span class="nav-text">集群节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Management-node"><span class="nav-number">7.1.1.</span> <span class="nav-text">Management node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-node"><span class="nav-number">7.1.2.</span> <span class="nav-text">Data node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-node"><span class="nav-number">7.1.3.</span> <span class="nav-text">SQL node</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端"><span class="nav-number">7.2.</span> <span class="nav-text">客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标准MySQL客户端"><span class="nav-number">7.2.1.</span> <span class="nav-text">标准MySQL客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NDB客户端"><span class="nav-number">7.2.2.</span> <span class="nav-text">NDB客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理客户端"><span class="nav-number">7.2.3.</span> <span class="nav-text">管理客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检查点"><span class="nav-number">7.2.4.</span> <span class="nav-text">检查点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nodes-Node-Groups-Replicas-and-Partitions"><span class="nav-number">7.3.</span> <span class="nav-text">Nodes, Node Groups, Replicas, and Partitions</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -793,7 +838,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">128k</span>
+    <span title="Site words total count">130.5k</span>
   
 </div>
 
