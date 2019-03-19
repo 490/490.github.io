@@ -100,7 +100,8 @@
 <meta property="og:image" content="http://490.github.io/images/20190317_094926.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_083546.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133536.png">
-<meta property="og:updated_time" content="2019-03-18T05:35:53.020Z">
+<meta property="og:image" content="http://490.github.io/images/20190318_133608.png">
+<meta property="og:updated_time" content="2019-03-18T06:08:53.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -366,7 +367,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  9.4k
+                  10.3k
                 </span>
               
 
@@ -382,7 +383,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  33
+                  36
                 </span>
               
             </div>
@@ -612,14 +613,25 @@
 </ol>
 <p><strong>Replica</strong>。 这是群集分区的副本。 节点组中的每个节点都存储一个副本。 有时也称为分区副本。 副本数等于每个节点组的节点数。</p>
 <p>副本完全属于单个节点; 节点可以（通常会）存储多个副本。</p>
-<p>下图说明了一个NDB集群，其中四个数据节点运行ndbd，分别安排在两个节点组中，每个节点包含两个节点; 节点1和2属于节点组0，节点3和4属于节点组1。这里只显示数据节点; 虽然有效的NDB群集需要ndb_mgmd进程进行群集管理，并且至少有一个SQL节点需要访问群集存储的数据，但为清楚起见，这些已从图中省略。</p>
+<p>下图说明了一个NDB集群，其中四个数据节点运行ndbd，分别安排在两个节点组中，每个节点组包含两个节点; 节点1和2属于节点组0，节点3和4属于节点组1。这里只显示数据节点; 虽然有效的NDB群集需要ndb_mgmd进程进行群集管理，并且至少有一个SQL节点需要访问群集存储的数据，但为清楚起见，这些已从图中省略。</p>
 <p><img src="http://490.github.io/images/20190318_133536.png" alt="image"></p>
 <p>群集存储的数据分为四个分区，编号为0,1,2和3.每个分区在同一节点组中存储多个副本。分区存储在备用节点组中，如下所示：</p>
-<p>分区0存储在节点组0上;主副本（主副本）存储在节点1上，备份副本（分区的备份副本）存储在节点2上。</p>
-<p>分区1存储在另一个节点组（节点组1）上;此分区的主副本位于节点3上，其备份副本位于节点4上。</p>
-<p>分区2存储在节点组0上。但是，它的两个副本的放置与分区0的放置相反;对于分区2，主副本存储在节点2上，备份存储在节点1上。</p>
-<p>分区3存储在节点组1上，并且其两个副本的放置与分区1的位置相反。即，其主副本位于节点4上，备份在节点3上。</p>
+<ul>
+<li>分区0存储在节点组0上;主副本（主副本）存储在节点1上，备份副本（分区的备份副本）存储在节点2上。</li>
+<li>分区1存储在另一个节点组（节点组1）上;此分区的主副本位于节点3上，其备份副本位于节点4上。</li>
+<li>分区2存储在节点组0上。但是，它的两个副本的放置与分区0的放置相反;对于分区2，主副本存储在节点2上，备份存储在节点1上。</li>
+<li>分区3存储在节点组1上，并且其两个副本的放置与分区1的位置相反。即，其主副本位于节点4上，备份在节点3上。</li>
+</ul>
 <p>对于NDB集群的持续运行，这意味着：只要参与集群的每个节点组至少有一个节点运行，集群就拥有所有数据的完整副本并且仍然可行。这将在下图中说明。</p>
+<p><img src="http://490.github.io/images/20190318_133608.png" alt="image"></p>
+<p>在此示例中，群集由两个节点组组成，每个节点组由两个数据节点组成。 每个数据节点都运行ndbd的实例。 来自节点组0的至少一个节点和来自节点组1的至少一个节点的任何组合足以使群集保持“活动”。 但是，如果来自单个节点组的两个节点都发生故障，则由另一个节点组中的其余两个节点组成的组合是不够的。 在这种情况下，群集已丢失整个分区，因此无法再提供对所有NDB群集数据的完整集合的访问。</p>
+<p>在NDB 7.5.4和更高版本中，单个NDB群集实例支持的最大节点组数为48（Bug＃80845，Bug＃22996305）。</p>
+<h2 id="Network-communication-and-latency"><a href="#Network-communication-and-latency" class="headerlink" title="Network communication and latency"></a>Network communication and latency</h2><p>NDB Cluster需要数据节点和API节点（包括SQL节点）之间以及数据节点和其他数据节点之间的通信，以执行查询和更新。这些进程之间的通信延迟可直接影响观察到的用户查询的性能和延迟。此外，为了在节点无声故障的情况下保持一致性和服务，NDB Cluster使用<strong>心跳和超时机制</strong>，将来自节点的通信的延长丢失视为节点故障。这可以减少冗余。回想一下，为了保持数据一致性，当节点组中的最后一个节点发生故障时，NDB集群会关闭。因此，为了避免增加强制关闭的风险，应尽可能避免节点之间的通信中断。</p>
+<p>数据或API节点的故障导致涉及故障节点的所有未提交事务的中止。数据节点恢复需要在数据节点恢复服务之前，从幸存的数据节点同步故障节点的数据，并重新建立基于磁盘的重做和检查点日志。此恢复可能需要一些时间，在此期间群集以减少的冗余运行。</p>
+<p>心跳依赖于所有节点及时生成心跳信号。如果节点过载，由于与其他程序共享导致机器CPU不足，或者由于交换而出现延迟，则可能无法执行此操作。如果心跳生成被充分延迟，则其他节点会将响应缓慢的节点视为失败。</p>
+<p>在某些情况下，将慢节点作为故障节点的这种处理可能是或可能不是合乎需要的，这取决于节点的慢速操作对集群其余部分的影响。为NDB群集设置HeartbeatIntervalDbDb和HeartbeatIntervalDbApi等超时值时，必须注意实现快速检测，故障转移和恢复服务，同时避免可能出现的代价高昂的误报。</p>
+<p>如果预期数据节点之间的通信延迟高于LAN环境中预期的通信延迟（大约100μs），则必须增加超时参数以确保任何允许的延迟时段都在配置的超时内。以这种方式增加超时对于检测故障的最坏情况时间以及因此服务恢复的时间具有相应的影响。</p>
+<p>LAN环境通常可以配置稳定的低延迟，并且可以通过快速故障转移提供冗余。可以从TCP级别可见的最小和受控延迟（NDB群集正常运行）中恢复单个链路故障。 WAN环境可能会提供一系列延迟，以及冗余和较慢的故障转移时间。单个链路故障可能需要在端到端连接恢复之前传播路由更改。在TCP级别，这可能表现为各个通道上的大延迟。在这些情况下观察到的最坏情况的TCP延迟与IP层在故障周围重新路由的最坏情况时间有关。</p>
 
       
     </div>
@@ -804,7 +816,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务的隔离级别、锁"><span class="nav-number">2.</span> <span class="nav-text">事务的隔离级别、锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">2.1.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未提交读-Read-uncommitted"><span class="nav-number">2.2.</span> <span class="nav-text">未提交读(Read uncommitted)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交读-Read-committed"><span class="nav-number">2.3.</span> <span class="nav-text">提交读(Read committed)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重复读-Repeatable-reads"><span class="nav-number">2.4.</span> <span class="nav-text">可重复读(Repeatable reads)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可序列化-Serializable"><span class="nav-number">2.5.</span> <span class="nav-text">可序列化(Serializable)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-JOIN"><span class="nav-number">3.</span> <span class="nav-text">SQL JOIN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Innodb与Myisam引擎"><span class="nav-number">4.</span> <span class="nav-text">Innodb与Myisam引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-区别："><span class="nav-number">4.1.</span> <span class="nav-text">1. 区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-为什么MyISAM会比Innodb-的查询速度快。"><span class="nav-number">4.2.</span> <span class="nav-text">2. 为什么MyISAM会比Innodb 的查询速度快。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-应用场景"><span class="nav-number">4.3.</span> <span class="nav-text">3. 应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-number">4.4.</span> <span class="nav-text">MVCC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyCAT"><span class="nav-number">5.</span> <span class="nav-text">MyCAT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复制（replication）和集群（cluster）-读写分离"><span class="nav-number">6.</span> <span class="nav-text">复制（replication）和集群（cluster）/读写分离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication"><span class="nav-number">6.1.</span> <span class="nav-text">Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sharding和Replication"><span class="nav-number">6.2.</span> <span class="nav-text">Sharding和Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql主从复制的原理"><span class="nav-number">6.3.</span> <span class="nav-text">Mysql主从复制的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的三种常用架构"><span class="nav-number">6.4.</span> <span class="nav-text">Replication的三种常用架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读写分离"><span class="nav-number">6.5.</span> <span class="nav-text">读写分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的常用方案"><span class="nav-number">6.6.</span> <span class="nav-text">Replication的常用方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NDB-Cluster"><span class="nav-number">7.</span> <span class="nav-text">NDB Cluster</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#集群节点"><span class="nav-number">7.1.</span> <span class="nav-text">集群节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Management-node"><span class="nav-number">7.1.1.</span> <span class="nav-text">Management node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-node"><span class="nav-number">7.1.2.</span> <span class="nav-text">Data node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-node"><span class="nav-number">7.1.3.</span> <span class="nav-text">SQL node</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端"><span class="nav-number">7.2.</span> <span class="nav-text">客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标准MySQL客户端"><span class="nav-number">7.2.1.</span> <span class="nav-text">标准MySQL客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NDB客户端"><span class="nav-number">7.2.2.</span> <span class="nav-text">NDB客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理客户端"><span class="nav-number">7.2.3.</span> <span class="nav-text">管理客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检查点"><span class="nav-number">7.2.4.</span> <span class="nav-text">检查点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nodes-Node-Groups-Replicas-and-Partitions"><span class="nav-number">7.3.</span> <span class="nav-text">Nodes, Node Groups, Replicas, and Partitions</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-number">1.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#事务的隔离级别、锁"><span class="nav-number">2.</span> <span class="nav-text">事务的隔离级别、锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁"><span class="nav-number">2.1.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未提交读-Read-uncommitted"><span class="nav-number">2.2.</span> <span class="nav-text">未提交读(Read uncommitted)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交读-Read-committed"><span class="nav-number">2.3.</span> <span class="nav-text">提交读(Read committed)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重复读-Repeatable-reads"><span class="nav-number">2.4.</span> <span class="nav-text">可重复读(Repeatable reads)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可序列化-Serializable"><span class="nav-number">2.5.</span> <span class="nav-text">可序列化(Serializable)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-JOIN"><span class="nav-number">3.</span> <span class="nav-text">SQL JOIN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Innodb与Myisam引擎"><span class="nav-number">4.</span> <span class="nav-text">Innodb与Myisam引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-区别："><span class="nav-number">4.1.</span> <span class="nav-text">1. 区别：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-为什么MyISAM会比Innodb-的查询速度快。"><span class="nav-number">4.2.</span> <span class="nav-text">2. 为什么MyISAM会比Innodb 的查询速度快。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-应用场景"><span class="nav-number">4.3.</span> <span class="nav-text">3. 应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-number">4.4.</span> <span class="nav-text">MVCC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyCAT"><span class="nav-number">5.</span> <span class="nav-text">MyCAT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复制（replication）和集群（cluster）-读写分离"><span class="nav-number">6.</span> <span class="nav-text">复制（replication）和集群（cluster）/读写分离</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication"><span class="nav-number">6.1.</span> <span class="nav-text">Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sharding和Replication"><span class="nav-number">6.2.</span> <span class="nav-text">Sharding和Replication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql主从复制的原理"><span class="nav-number">6.3.</span> <span class="nav-text">Mysql主从复制的原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的三种常用架构"><span class="nav-number">6.4.</span> <span class="nav-text">Replication的三种常用架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读写分离"><span class="nav-number">6.5.</span> <span class="nav-text">读写分离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replication的常用方案"><span class="nav-number">6.6.</span> <span class="nav-text">Replication的常用方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NDB-Cluster"><span class="nav-number">7.</span> <span class="nav-text">NDB Cluster</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#集群节点"><span class="nav-number">7.1.</span> <span class="nav-text">集群节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Management-node"><span class="nav-number">7.1.1.</span> <span class="nav-text">Management node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-node"><span class="nav-number">7.1.2.</span> <span class="nav-text">Data node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-node"><span class="nav-number">7.1.3.</span> <span class="nav-text">SQL node</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端"><span class="nav-number">7.2.</span> <span class="nav-text">客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标准MySQL客户端"><span class="nav-number">7.2.1.</span> <span class="nav-text">标准MySQL客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NDB客户端"><span class="nav-number">7.2.2.</span> <span class="nav-text">NDB客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理客户端"><span class="nav-number">7.2.3.</span> <span class="nav-text">管理客户端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检查点"><span class="nav-number">7.2.4.</span> <span class="nav-text">检查点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nodes-Node-Groups-Replicas-and-Partitions"><span class="nav-number">7.3.</span> <span class="nav-text">Nodes, Node Groups, Replicas, and Partitions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Network-communication-and-latency"><span class="nav-number">7.4.</span> <span class="nav-text">Network communication and latency</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -838,7 +850,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">130.5k</span>
+    <span title="Site words total count">131.5k</span>
   
 </div>
 
