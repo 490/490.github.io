@@ -1180,7 +1180,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  4.2k
+                  5.7k
                 </span>
               
 
@@ -1196,7 +1196,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  17
+                  23
                 </span>
               
             </div>
@@ -1218,16 +1218,11 @@
 
       
         
-          <p>Java 的 I/O 大概可以分成以下几类：</p>
-<ul>
-<li>磁盘操作：File</li>
-<li>字节操作：InputStream 和 OutputStream</li>
-<li>字符操作：Reader 和 Writer</li>
-<li>对象操作：Serializable：序列化就是将一个对象转换成字节序列，方便存储和传输。</li>
-<li>网络操作：Socket</li>
-<li>新的输入/输出：NIO</li>
-</ul>
-<p>Java I/O 使用了装饰者模式来实现<br>
+          <h1 id="UNIX网络编程对I-O模型的分类"><a href="#UNIX网络编程对I-O模型的分类" class="headerlink" title="UNIX网络编程对I/O模型的分类"></a>UNIX网络编程对I/O模型的分类</h1><p>Linux 的内核将所有外部设备都看做一个文件来操作（一切皆文件），对一个文件的读写操作会调用内核提供的系统命令，返回一个file descriptor（fd，文件描述符）。而对一个socket的读写也会有响应的描述符，称为socket fd（socket文件描述符），描述符就是一个数字，指向内核中的一个结构体（文件路径，数据区等一些属性）。</p>
+<p>根据UNIX网络编程对I/O模型的分类，UNIX提供了5种I/O模型。</p>
+<p>进程是无法直接操作I/O设备的，其必须通过系统调用请求内核来协助完成I/O动作，而内核会为每个I/O设备维护一个buffer。</p>
+<p><img src="http://490.github.io/images/20190314_213445.png" alt="image"></p>
+<p>整个请求过程为： 用户进程发起请求，内核接受到请求后，从I/O设备中获取数据到buffer中，再将buffer中的数据copy到用户进程的地址空间，该用户进程获取到数据后再响应客户端。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/Java的IO/#more" rel="contents">
@@ -1237,7 +1232,7 @@
           <!--/noindex-->
         
       
-    </p></div>
+    </div>
     
     
     
@@ -2088,7 +2083,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">145.3k</span>
+    <span title="Site words total count">146.8k</span>
   
 </div>
 
