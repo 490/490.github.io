@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_232638.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_101001.png">
 <meta property="og:image" content="http://490.github.io/images/20190315_200511.png">
-<meta property="og:updated_time" content="2019-03-15T12:08:25.175Z">
+<meta property="og:updated_time" content="2019-03-20T06:09:44.240Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java基础知识">
 <meta name="twitter:description" content="零散的面试常考基础知识">
@@ -359,7 +359,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6.1k
+                  6.7k
                 </span>
               
 
@@ -375,7 +375,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  23
+                  25
                 </span>
               
             </div>
@@ -462,6 +462,7 @@
 <li>浅：属性不一样，是独立的，对象（方法）什么的一样，是同一份。clone()主要做了些什么，创建一个新对象，然后将当前对象的非静态字段复制到该新对象，如果字段是值类型的，那么对该字段执行复制；如果该字段是引用类型的话，则复制引用但不复制引用的对象。因此，原始对象及其副本引用同一个对象。</li>
 <li>深：都不一样</li>
 </ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//奥义在于深拷贝在super.clone之后还得把属性什么的new一个，然后做和原本的构造函数给属性赋值一样的操作，这样属性就也不一样了</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> DeepCloneExample <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        DeepCloneExample result = (DeepCloneExample) <span class="keyword">super</span>.clone();</span><br><span class="line">        result.arr = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            result.arr[i] = arr[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>new Integer(123) 与 Integer.valueOf(123) 的区别在于，new Integer(123) 每次都会新建一个对象，而 Integer.valueOf(123) 可能会使用缓存对象，因此多次使用 Integer.valueOf(123) 会取得同一个对象的引用。</p>
 <h1 id="反射、泛型"><a href="#反射、泛型" class="headerlink" title="反射、泛型"></a>反射、泛型</h1><h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a><a href="https://blog.csdn.net/s10461/article/details/53941091" target="_blank" rel="noopener">泛型</a></h2><p>泛型，即“参数化类型”。一提到参数，最熟悉的就是定义方法时有形参，然后调用此方法时传递实参。那么参数化类型怎么理解呢？顾名思义，就是将类型由原来的具体的类型参数化，类似于方法中的变量参数，此时类型也定义成参数形式（可以称之为类型形参），然后在使用/调用时传入具体的类型（类型实参）。</p>
 <p>泛型的本质是为了参数化类型（在不创建新的类型的情况下，通过泛型指定的不同类型来控制形参具体限制的类型）。也就是说在泛型使用过程中，操作的数据类型被指定为一个参数，这种参数类型可以用在类、接口和方法中，分别被称为泛型类、泛型接口、泛型方法。</p>
@@ -490,6 +491,25 @@
 <li>获取方法 名称和参数列表来决定  getMethod获取的是public的方法、getDelcaredMethod自己声明的方法</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"Method m = c.getMethod("</span><span class="string">"print"</span><span class="string">", int.class,int.class);</span></span><br><span class="line"><span class="string">//方法的反射操作  </span></span><br><span class="line"><span class="string">//a1.print(10, 20);方法的反射操作是用m对象来进行方法调用 和a1.print调用的效果完全相同</span></span><br><span class="line"><span class="string">//方法如果没有返回值返回null,有返回值返回具体的返回值</span></span><br><span class="line"><span class="string">//Object o = m.invoke(a1,new Object[]&#123;10,20&#125;);</span></span><br><span class="line"><span class="string">Object o = m.invoke(a1, 10,20);</span></span><br></pre></td></tr></table></figure>
+<p>Class 和 java.lang.reflect 一起对反射提供了支持，java.lang.reflect 类库主要包含了以下三个类：</p>
+<ul>
+<li><strong>Field</strong> ：可以使用 get() 和 set() 方法读取和修改 Field 对象关联的字段；</li>
+<li><strong>Method</strong> ：可以使用 invoke() 方法调用与 Method 对象关联的方法；</li>
+<li><strong>Constructor</strong> ：可以用 Constructor 创建新的对象。</li>
+</ul>
+<p><strong>反射的优点：</strong></p>
+<ul>
+<li><strong>可扩展性</strong> ：应用程序可以利用全限定名创建可扩展对象的实例，来使用来自外部的用户自定义类。</li>
+<li><strong>类浏览器和可视化开发环境</strong> ：一个类浏览器需要可以枚举类的成员。可视化开发环境（如 IDE）可以从利用反射中可用的类型信息中受益，以帮助程序员编写正确的代码。</li>
+<li><strong>调试器和测试工具</strong> ： 调试器需要能够检查一个类里的私有成员。测试工具可以利用反射来自动地调用类里定义的可被发现的 API 定义，以确保一组测试中有较高的代码覆盖率。</li>
+</ul>
+<p><strong>反射的缺点：</strong></p>
+<p>尽管反射非常强大，但也不能滥用。如果一个功能可以不用反射完成，那么最好就不用。在我们使用反射技术时，下面几条内容应该牢记于心。</p>
+<ul>
+<li><strong>性能开销</strong> ：反射涉及了动态类型的解析，所以 JVM 无法对这些代码进行优化。因此，反射操作的效率要比那些非反射操作低得多。我们应该避免在经常被执行的代码或对性能要求很高的程序中使用反射。</li>
+<li><strong>安全限制</strong> ：使用反射技术要求程序必须在一个没有安全限制的环境中运行。如果一个程序必须在有安全限制的环境中运行，如 Applet，那么这就是个问题了。</li>
+<li><strong>内部暴露</strong> ：由于反射允许代码执行一些在正常情况下不被允许的操作（比如访问私有的属性和方法），所以使用反射可能会导致意料之外的副作用，这可能导致代码功能失调并破坏可移植性。反射代码破坏了抽象性，因此当平台发生改变的时候，代码的行为就有可能也随着变化。</li>
+</ul>
 <h1 id="Java-Web"><a href="#Java-Web" class="headerlink" title="Java Web"></a>Java Web</h1><h2 id="Servlet的生命周期与工作原理"><a href="#Servlet的生命周期与工作原理" class="headerlink" title="Servlet的生命周期与工作原理"></a>Servlet的生命周期与工作原理</h2><p>Servlet运行在Servlet容器中，其生命周期由容器来管理。Servlet的生命周期通过javax.servlet.Servlet接口中的init()、service()和destroy()方法来表示,Servlet的生命周期包含了下面4个阶段：</p>
 <ol>
 <li>加载和实例化</li>
@@ -727,7 +747,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -817,7 +837,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">131.5k</span>
+    <span title="Site words total count">144.2k</span>
   
 </div>
 
