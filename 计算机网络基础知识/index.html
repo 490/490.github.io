@@ -97,7 +97,10 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_133001.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_133009.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_133015.png">
-<meta property="og:updated_time" content="2019-03-19T02:32:42.430Z">
+<meta property="og:image" content="http://490.github.io/images/20190320_145933.png">
+<meta property="og:image" content="http://490.github.io/images/20190320_150021.png">
+<meta property="og:image" content="http://490.github.io/images/20190320_150031.png">
+<meta property="og:updated_time" content="2019-03-20T07:01:21.430Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机网络基础知识">
 <meta name="twitter:description" content="一次完整的 HTTP 请求所经历的步骤即在浏览器中输入 URL 地址 &amp;gt;&amp;gt; 显示主页的过程。总体来说分为以下几个过程：  DNS 解析 TCP 连接 发送 HTTP 请求 服务器处理请求并返回 HTTP 报文 浏览器解析渲染页面 连接结束">
@@ -363,7 +366,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8.9k
+                  10k
                 </span>
               
 
@@ -379,7 +382,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  31
+                  35
                 </span>
               
             </div>
@@ -690,6 +693,55 @@
 <p>通过这些描述我们可以得到一些结论：</p>
 <h1 id="NAT网络地址转换"><a href="#NAT网络地址转换" class="headerlink" title="NAT网络地址转换"></a>NAT网络地址转换</h1><p>常用于私有地址与公有地址的转换，以解决 IP 地址匮乏的问题。</p>
 <p>NAT 的基本工作原理是：当私有网主机和公共网主机通信的 IP 包经过 NAT 网关时，将 IP 包中的源 IP 或目的 IP 在私有 IP 和 NAT 的公共 IP 之间进行转换。</p>
+<h1 id="路由器"><a href="#路由器" class="headerlink" title="路由器"></a>路由器</h1><p><img src="http://490.github.io/images/20190320_145933.png" alt="image"></p>
+<h2 id="路由器分组转发流程"><a href="#路由器分组转发流程" class="headerlink" title="路由器分组转发流程"></a>路由器分组转发流程</h2><ul>
+<li>从数据报的首部提取目的主机的 IP 地址 D，得到目的网络地址 N。</li>
+<li>若 N 就是与此路由器直接相连的某个网络地址，则进行直接交付；</li>
+<li>若路由表中有目的地址为 D 的特定主机路由，则把数据报传送给表中所指明的下一跳路由器；</li>
+<li>若路由表中有到达网络 N 的路由，则把数据报传送给路由表中所指明的下一跳路由器；</li>
+<li>若路由表中有一个默认路由，则把数据报传送给路由表中所指明的默认路由器；</li>
+<li>报告转发分组出错。</li>
+</ul>
+<p><img src="http://490.github.io/images/20190320_150021.png" alt="image"></p>
+<h2 id="路由选择协议"><a href="#路由选择协议" class="headerlink" title="路由选择协议"></a>路由选择协议</h2><p>路由选择协议都是自适应的，能随着网络通信量和拓扑结构的变化而自适应地进行调整。</p>
+<p>互联网可以划分为许多较小的自治系统 AS，一个 AS 可以使用一种和别的 AS 不同的路由选择协议。</p>
+<p>可以把路由选择协议划分为两大类：</p>
+<ul>
+<li>自治系统内部的路由选择：RIP 和 OSPF</li>
+<li>自治系统间的路由选择：BGP</li>
+</ul>
+<h3 id="1-内部网关协议-RIP"><a href="#1-内部网关协议-RIP" class="headerlink" title="1. 内部网关协议 RIP"></a>1. 内部网关协议 RIP</h3><p>RIP 是一种基于距离向量的路由选择协议。距离是指跳数，直接相连的路由器跳数为 1。跳数最多为 15，超过 15 表示不可达。</p>
+<p>RIP 按固定的时间间隔仅和相邻路由器交换自己的路由表，经过若干次交换之后，所有路由器最终会知道到达本自治系统中任何一个网络的最短距离和下一跳路由器地址。</p>
+<p>距离向量算法：</p>
+<ul>
+<li>对地址为 X 的相邻路由器发来的 RIP 报文，先修改报文中的所有项目，把下一跳字段中的地址改为 X，并把所有的距离字段加 1；</li>
+<li>对修改后的 RIP 报文中的每一个项目，进行以下步骤：<ul>
+<li>若原来的路由表中没有目的网络 N，则把该项目添加到路由表中；</li>
+<li>否则：若下一跳路由器地址是 X，则把收到的项目替换原来路由表中的项目；否则：若收到的项目中的距离 d 小于路由表中的距离，则进行更新（例如原始路由表项为 Net2, 5, P，新表项为 Net2, 4, X，则更新）；否则什么也不做。</li>
+</ul>
+</li>
+<li>若 3 分钟还没有收到相邻路由器的更新路由表，则把该相邻路由器标为不可达，即把距离置为 16。</li>
+</ul>
+<p>RIP 协议实现简单，开销小。但是 RIP 能使用的最大距离为 15，限制了网络的规模。并且当网络出现故障时，要经过比较长的时间才能将此消息传送到所有路由器。</p>
+<h3 id="2-内部网关协议-OSPF"><a href="#2-内部网关协议-OSPF" class="headerlink" title="2. 内部网关协议 OSPF"></a>2. 内部网关协议 OSPF</h3><p>开放最短路径优先 OSPF，是为了克服 RIP 的缺点而开发出来的。</p>
+<p>开放表示 OSPF 不受某一家厂商控制，而是公开发表的；最短路径优先表示使用了 Dijkstra 提出的最短路径算法 SPF。</p>
+<p>OSPF 具有以下特点：</p>
+<ul>
+<li>向本自治系统中的所有路由器发送信息，这种方法是洪泛法。</li>
+<li>发送的信息就是与相邻路由器的链路状态，链路状态包括与哪些路由器相连以及链路的度量，度量用费用、距离、时延、带宽等来表示。</li>
+<li>只有当链路状态发生变化时，路由器才会发送信息。</li>
+</ul>
+<p>所有路由器都具有全网的拓扑结构图，并且是一致的。相比于 RIP，OSPF 的更新过程收敛的很快。</p>
+<h3 id="3-外部网关协议-BGP"><a href="#3-外部网关协议-BGP" class="headerlink" title="3. 外部网关协议 BGP"></a>3. 外部网关协议 BGP</h3><p>BGP（Border Gateway Protocol，边界网关协议）</p>
+<p>AS 之间的路由选择很困难，主要是由于：</p>
+<ul>
+<li>互联网规模很大；</li>
+<li>各个 AS 内部使用不同的路由选择协议，无法准确定义路径的度量；</li>
+<li>AS 之间的路由选择必须考虑有关的策略，比如有些 AS 不愿意让其它 AS 经过。</li>
+</ul>
+<p>BGP 只能寻找一条比较好的路由，而不是最佳路由。</p>
+<p>每个 AS 都必须配置 BGP 发言人，通过在两个相邻 BGP 发言人之间建立 TCP 连接来交换路由信息。</p>
+<p><img src="http://490.github.io/images/20190320_150031.png" alt="image"></p>
 
       
     </div>
@@ -874,7 +926,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一次完整的-HTTP-请求所经历的步骤"><span class="nav-number">1.</span> <span class="nav-text">一次完整的 HTTP 请求所经历的步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS-解析"><span class="nav-number">1.1.</span> <span class="nav-text">DNS 解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-连接"><span class="nav-number">1.2.</span> <span class="nav-text">TCP 连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发送-HTTP-请求"><span class="nav-number">1.3.</span> <span class="nav-text">发送 HTTP 请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器处理请求并返回-HTTP-报文"><span class="nav-number">1.4.</span> <span class="nav-text">服务器处理请求并返回 HTTP 报文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器解析渲染页面"><span class="nav-number">1.5.</span> <span class="nav-text">浏览器解析渲染页面</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS-解析-1"><span class="nav-number">2.</span> <span class="nav-text">DNS 解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CDN（Content-Distribute-Network）"><span class="nav-number">3.</span> <span class="nav-text">CDN（Content Distribute Network）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-是如何传输数据的？"><span class="nav-number">4.</span> <span class="nav-text">TCP 是如何传输数据的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-报头结构"><span class="nav-number">5.</span> <span class="nav-text">TCP 报头结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-三次握手、四次挥手"><span class="nav-number">6.</span> <span class="nav-text">TCP 三次握手、四次挥手</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#三次握手"><span class="nav-number">6.1.</span> <span class="nav-text">三次握手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三次握手的流程"><span class="nav-number">6.1.1.</span> <span class="nav-text">三次握手的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么-TCP-连接需要三次握手，两次不可以吗？"><span class="nav-number">6.1.2.</span> <span class="nav-text">为什么 TCP 连接需要三次握手，两次不可以吗？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四次挥手"><span class="nav-number">6.2.</span> <span class="nav-text">四次挥手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#四次挥手的流程"><span class="nav-number">6.2.1.</span> <span class="nav-text">四次挥手的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIME-WAIT-存在的必要性"><span class="nav-number">6.2.2.</span> <span class="nav-text">TIME_WAIT 存在的必要性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-流量控制、拥塞控制"><span class="nav-number">7.</span> <span class="nav-text">TCP 流量控制、拥塞控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#流量控制"><span class="nav-number">7.1.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拥塞控制"><span class="nav-number">7.2.</span> <span class="nav-text">拥塞控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#慢启动和拥塞避免"><span class="nav-number">7.2.1.</span> <span class="nav-text">慢启动和拥塞避免</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快重传和快恢复"><span class="nav-number">7.2.2.</span> <span class="nav-text">快重传和快恢复</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-滑动窗口"><span class="nav-number">8.</span> <span class="nav-text">TCP 滑动窗口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#停止等待协议（ARQ-协议，滑动窗口协议的简易版）"><span class="nav-number">8.1.</span> <span class="nav-text">停止等待协议（ARQ 协议，滑动窗口协议的简易版）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#滑动窗口协议（连续-ARQ-协议）"><span class="nav-number">8.1.1.</span> <span class="nav-text">滑动窗口协议（连续 ARQ 协议）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-与-UDP-的区别"><span class="nav-number">9.</span> <span class="nav-text">TCP 与 UDP 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-长连接、短连接"><span class="nav-number">10.</span> <span class="nav-text">HTTP 长连接、短连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#短连接"><span class="nav-number">10.1.</span> <span class="nav-text">短连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#长连接"><span class="nav-number">10.2.</span> <span class="nav-text">长连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-长连接、短连接"><span class="nav-number">11.</span> <span class="nav-text">TCP 长连接、短连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#短链接"><span class="nav-number">11.1.</span> <span class="nav-text">短链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#长连接-1"><span class="nav-number">11.2.</span> <span class="nav-text">长连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP、HTTPS-区别"><span class="nav-number">12.</span> <span class="nav-text">HTTP、HTTPS 区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-通信存在的问题"><span class="nav-number">12.1.</span> <span class="nav-text">HTTP 通信存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#区别"><span class="nav-number">12.2.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-1-1-与-HTTP-1-0-的区别"><span class="nav-number">13.</span> <span class="nav-text">HTTP 1.1 与 HTTP 1.0 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如果客户端不断的发送请求连接会怎样"><span class="nav-number">14.</span> <span class="nav-text">如果客户端不断的发送请求连接会怎样</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DDos-攻击"><span class="nav-number">14.1.</span> <span class="nav-text">DDos 攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DDos-预防"><span class="nav-number">14.2.</span> <span class="nav-text">DDos 预防</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GET-和-POST-区别"><span class="nav-number">15.</span> <span class="nav-text">GET 和 POST 区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#转发-forward-和重定向-redirect"><span class="nav-number">16.</span> <span class="nav-text">转发(forward)和重定向(redirect)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#URL-和-URI"><span class="nav-number">17.</span> <span class="nav-text">URL 和 URI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NAT网络地址转换"><span class="nav-number">18.</span> <span class="nav-text">NAT网络地址转换</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一次完整的-HTTP-请求所经历的步骤"><span class="nav-number">1.</span> <span class="nav-text">一次完整的 HTTP 请求所经历的步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS-解析"><span class="nav-number">1.1.</span> <span class="nav-text">DNS 解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-连接"><span class="nav-number">1.2.</span> <span class="nav-text">TCP 连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发送-HTTP-请求"><span class="nav-number">1.3.</span> <span class="nav-text">发送 HTTP 请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器处理请求并返回-HTTP-报文"><span class="nav-number">1.4.</span> <span class="nav-text">服务器处理请求并返回 HTTP 报文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器解析渲染页面"><span class="nav-number">1.5.</span> <span class="nav-text">浏览器解析渲染页面</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS-解析-1"><span class="nav-number">2.</span> <span class="nav-text">DNS 解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CDN（Content-Distribute-Network）"><span class="nav-number">3.</span> <span class="nav-text">CDN（Content Distribute Network）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-是如何传输数据的？"><span class="nav-number">4.</span> <span class="nav-text">TCP 是如何传输数据的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-报头结构"><span class="nav-number">5.</span> <span class="nav-text">TCP 报头结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-三次握手、四次挥手"><span class="nav-number">6.</span> <span class="nav-text">TCP 三次握手、四次挥手</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#三次握手"><span class="nav-number">6.1.</span> <span class="nav-text">三次握手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三次握手的流程"><span class="nav-number">6.1.1.</span> <span class="nav-text">三次握手的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么-TCP-连接需要三次握手，两次不可以吗？"><span class="nav-number">6.1.2.</span> <span class="nav-text">为什么 TCP 连接需要三次握手，两次不可以吗？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四次挥手"><span class="nav-number">6.2.</span> <span class="nav-text">四次挥手</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#四次挥手的流程"><span class="nav-number">6.2.1.</span> <span class="nav-text">四次挥手的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIME-WAIT-存在的必要性"><span class="nav-number">6.2.2.</span> <span class="nav-text">TIME_WAIT 存在的必要性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-流量控制、拥塞控制"><span class="nav-number">7.</span> <span class="nav-text">TCP 流量控制、拥塞控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#流量控制"><span class="nav-number">7.1.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拥塞控制"><span class="nav-number">7.2.</span> <span class="nav-text">拥塞控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#慢启动和拥塞避免"><span class="nav-number">7.2.1.</span> <span class="nav-text">慢启动和拥塞避免</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#快重传和快恢复"><span class="nav-number">7.2.2.</span> <span class="nav-text">快重传和快恢复</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-滑动窗口"><span class="nav-number">8.</span> <span class="nav-text">TCP 滑动窗口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#停止等待协议（ARQ-协议，滑动窗口协议的简易版）"><span class="nav-number">8.1.</span> <span class="nav-text">停止等待协议（ARQ 协议，滑动窗口协议的简易版）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#滑动窗口协议（连续-ARQ-协议）"><span class="nav-number">8.1.1.</span> <span class="nav-text">滑动窗口协议（连续 ARQ 协议）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-与-UDP-的区别"><span class="nav-number">9.</span> <span class="nav-text">TCP 与 UDP 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-长连接、短连接"><span class="nav-number">10.</span> <span class="nav-text">HTTP 长连接、短连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#短连接"><span class="nav-number">10.1.</span> <span class="nav-text">短连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#长连接"><span class="nav-number">10.2.</span> <span class="nav-text">长连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-长连接、短连接"><span class="nav-number">11.</span> <span class="nav-text">TCP 长连接、短连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#短链接"><span class="nav-number">11.1.</span> <span class="nav-text">短链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#长连接-1"><span class="nav-number">11.2.</span> <span class="nav-text">长连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP、HTTPS-区别"><span class="nav-number">12.</span> <span class="nav-text">HTTP、HTTPS 区别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-通信存在的问题"><span class="nav-number">12.1.</span> <span class="nav-text">HTTP 通信存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#区别"><span class="nav-number">12.2.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-1-1-与-HTTP-1-0-的区别"><span class="nav-number">13.</span> <span class="nav-text">HTTP 1.1 与 HTTP 1.0 的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如果客户端不断的发送请求连接会怎样"><span class="nav-number">14.</span> <span class="nav-text">如果客户端不断的发送请求连接会怎样</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DDos-攻击"><span class="nav-number">14.1.</span> <span class="nav-text">DDos 攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DDos-预防"><span class="nav-number">14.2.</span> <span class="nav-text">DDos 预防</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GET-和-POST-区别"><span class="nav-number">15.</span> <span class="nav-text">GET 和 POST 区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#转发-forward-和重定向-redirect"><span class="nav-number">16.</span> <span class="nav-text">转发(forward)和重定向(redirect)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#URL-和-URI"><span class="nav-number">17.</span> <span class="nav-text">URL 和 URI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NAT网络地址转换"><span class="nav-number">18.</span> <span class="nav-text">NAT网络地址转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#路由器"><span class="nav-number">19.</span> <span class="nav-text">路由器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#路由器分组转发流程"><span class="nav-number">19.1.</span> <span class="nav-text">路由器分组转发流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#路由选择协议"><span class="nav-number">19.2.</span> <span class="nav-text">路由选择协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-内部网关协议-RIP"><span class="nav-number">19.2.1.</span> <span class="nav-text">1. 内部网关协议 RIP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-内部网关协议-OSPF"><span class="nav-number">19.2.2.</span> <span class="nav-text">2. 内部网关协议 OSPF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-外部网关协议-BGP"><span class="nav-number">19.2.3.</span> <span class="nav-text">3. 外部网关协议 BGP</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -908,7 +960,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">144.2k</span>
+    <span title="Site words total count">145.3k</span>
   
 </div>
 
