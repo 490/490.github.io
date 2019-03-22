@@ -106,6 +106,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_103102.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_103127.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_103134.png">
+<meta property="og:image" content="http://490.github.io/images/20190322_073646.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_103148.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_103208.png">
 <meta property="og:image" content="http://490.github.io/images/20190314_203513.png">
@@ -116,7 +117,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_133232.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_133238.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_133316.png">
-<meta property="og:updated_time" content="2019-03-21T13:55:37.903Z">
+<meta property="og:updated_time" content="2019-03-21T23:37:23.082Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java多线程与并发">
 <meta name="twitter:description" content="线程池基本组成1、线程池管理器（ThreadPool）：用于创建并管理线程池，包括 创建线程池，销毁线程池，添加新任务；2、工作线程（PoolWorker）：线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；3、任务接口（Task）：每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务的入口，任务执行完后的收尾工作，任务的执行状态等；4、任务队列（taskQueue）：用">
@@ -596,7 +597,8 @@
 <p><strong>锁的不是代码。是对象</strong></p>
 <p><img src="http://490.github.io/images/20190310_103049.png" alt="image"><br><img src="http://490.github.io/images/20190310_103055.png" alt="image"><br><img src="http://490.github.io/images/20190310_103102.png" alt="image"></p>
 <p>对象在内存中的布局：对象头、实例数据、对齐填充<br><img src="http://490.github.io/images/20190310_103127.png" alt="image"><br><img src="http://490.github.io/images/20190310_103134.png" alt="image"></p>
-<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><h2 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h2><p>总是假设最坏的情况，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会阻塞直到它拿到锁（共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程）。传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先<br>上锁。Java中 synchronized和 ReentrantLock等独占锁就是悲观锁思想的实现。</p>
+<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><p><img src="http://490.github.io/images/20190322_073646.png" alt="image"></p>
+<h2 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h2><p>总是假设最坏的情况，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会阻塞直到它拿到锁（共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程）。传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先<br>上锁。Java中 synchronized和 ReentrantLock等独占锁就是悲观锁思想的实现。</p>
 <h2 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h2><p>总是假设最好的情况，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是在更新的时候会判断一下在此期间别人有没有去更新这个数据，可以使用版本号机制和CAS算法实现。乐观锁适用于多读的应用类型，这样可以提高吞吐量，像数据库提供的类似于write_condition机制，其实都是提供的乐观锁。在Java中 java.util.concurrent.atomic包下面的原子变量类就是使用了乐观锁的一种实现方式CAS实现的。</p>
 <p>从上面对两种锁的介绍，我们知道两种锁各有优缺点，不可认为一种好于另一种，像乐观锁适用于写比较少的情况下（多读场景），即冲突真的很少发生的时候，这样可以省去了锁的开销，加大了系统的整个吞吐量。但如果是多写的情况，一般会经常产生冲突，这就会导致上层应用会不断的进行retry，这样反倒是降低了性能，所以一般多写的场景下用悲观锁就比较合适。</p>
 <p><strong>乐观锁一般会使用版本号机制或CAS算法实现</strong>。</p>
