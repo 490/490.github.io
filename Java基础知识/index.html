@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190331_135144.png">
 <meta property="og:image" content="http://490.github.io/images/20190331_135019.png">
 <meta property="og:image" content="http://490.github.io/images/20190315_200511.png">
-<meta property="og:updated_time" content="2019-03-31T05:51:58.443Z">
+<meta property="og:updated_time" content="2019-03-31T05:52:48.049Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java基础知识">
 <meta name="twitter:description" content="零散的面试常考基础知识">
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  9k
+                  9.1k
                 </span>
               
 
@@ -557,6 +557,7 @@
 <li>Context 容器<br>Context 代表 Servlet 的 Context，它具备了 Servlet 运行的基本环境，理论上只要有 Context 就能运行 Servlet 了。简单的 Tomcat 可以没有 Engine 和 Host。Context 最重要的功能就是管理它里面的 Servlet 实例，Servlet 实例在 Context 中是以 Wrapper 出现的，还有一点就是 Context 如何才能找到正确的 Servlet 来执行它呢？ Tomcat5 以前是通过一个 Mapper 类来管理的，Tomcat5 以后这个功能被移到了 request 中，在前面的时序图中就可以发现获取子容器都是通过 request 来分配的。</li>
 <li>Wrapper 容器<br>Wrapper 代表一个 Servlet，它负责管理一个 Servlet，包括的 Servlet 的装载、初始化、执行以及资源回收。Wrapper 是最底层的容器，它没有子容器了，所以调用它的 addChild 将会报错。<br>Wrapper 的实现类是 StandardWrapper，StandardWrapper 还实现了拥有一个 Servlet 初始化信息的 ServletConfig，由此看出 StandardWrapper 将直接和 Servlet 的各种信息打交道。</li>
 </ul>
+<p>Tomcat 还有其它重要的组件，如安全组件 security、logger 日志组件、session、mbeans、naming 等其它组件。这些组件共同为 Connector 和 Container 提供必要的服务。</p>
 <h3 id="Tomcat-Server处理一个HTTP请求的过程"><a href="#Tomcat-Server处理一个HTTP请求的过程" class="headerlink" title="Tomcat Server处理一个HTTP请求的过程"></a>Tomcat Server处理一个HTTP请求的过程</h3><p><img src="http://490.github.io/images/20190331_135019.png" alt="image"></p>
 <p>1、用户点击网页内容，请求被发送到本机端口8080，被在那里监听的Coyote HTTP/1.1 Connector获得。<br>2、Connector把该请求交给它所在的Service的Engine来处理，并等待Engine的回应。<br>3、Engine获得请求localhost/test/index.jsp，匹配所有的虚拟主机Host。<br>4、Engine匹配到名为localhost的Host（即使匹配不到也把请求交给该Host处理，因为该Host被定义为该Engine的默认主机），名为localhost的Host获得请求/test/index.jsp，匹配它所拥有的所有的Context。Host匹配到路径为/test的Context（如果匹配不到就把该请求交给路径名为“ ”的Context去处理）。<br>5、path=“/test”的Context获得请求/index.jsp，在它的mapping table中寻找出对应的Servlet。Context匹配到URL PATTERN为*.jsp的Servlet,对应于JspServlet类。<br>6、构造HttpServletRequest对象和HttpServletResponse对象，作为参数调用JspServlet的doGet（）或doPost（）.执行业务逻辑、数据存储等程序。<br>7、Context把执行完之后的HttpServletResponse对象返回给Host。<br>8、Host把HttpServletResponse对象返回给Engine。<br>9、Engine把HttpServletResponse对象返回Connector。<br>10、Connector把HttpServletResponse对象返回给客户Browser。</p>
 <h1 id="Java-序列化和反序列化"><a href="#Java-序列化和反序列化" class="headerlink" title="Java 序列化和反序列化"></a>Java 序列化和反序列化</h1><p>序列化是指 把 Java 对象字节序列化的过程，就是说将原本保存在 内存 中的对象，以字节序列的形式，保存到 硬盘 (或数据库等) 中。当需要使用时，再 反序列化 恢复到内存中使用。</p>
@@ -868,7 +869,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">188.1k</span>
+    <span title="Site words total count">188.2k</span>
   
 </div>
 
