@@ -105,7 +105,7 @@
 <meta property="og:image" content="https://490.github.io/设计模式/pic/桥接模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/模板模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/迭代器模式.png">
-<meta property="og:image" content="https://490.github.io/设计模式/pic/策略模式.png">
+<meta property="og:image" content="http://490.github.io/images/20190412_145852.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/状态模式.png">
 <meta property="og:image" content="http://490.github.io/images/20190412_105222.png">
 <meta property="og:image" content="http://490.github.io/images/20190412_133801.png">
@@ -116,7 +116,7 @@
 <meta property="og:image" content="https://490.github.io/设计模式/pic/命令模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/访问者模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/责任链模式.png">
-<meta property="og:updated_time" content="2019-04-12T06:07:25.990Z">
+<meta property="og:updated_time" content="2019-04-12T07:09:26.068Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式---基于Java详解(全)">
 <meta name="twitter:description" content="创建型模式： 对象实例化的模式，创建型模式用于解耦对象的实例化过程。 单例模式：某个类只能有一个实例，提供一个全局的访问点。 简单工厂模式：一个工厂类根据传入的参量决定创建出那一种产品类的实例。 工厂方法模式：定义一个创建对象的接口，让子类决定实例化那个类。 抽象工厂模式：创建相关或依赖对象的家族，而无需明确指定具体类。 建造者模式：封装一个复杂对象的构建过程，并可以按步骤构造。 原型模式：通过">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  7.6k
+                  9.1k
                 </span>
               
 
@@ -398,7 +398,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  30
+                  35
                 </span>
               
             </div>
@@ -599,7 +599,40 @@
 <h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><p><img src="./pic/桥接模式.png" alt="桥接模式.png"></p>
 <h1 id="行为型模式"><a href="#行为型模式" class="headerlink" title="行为型模式"></a>行为型模式</h1><h2 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h2><p><img src="./pic/模板模式.png" alt="模板模式.png"></p>
 <h2 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h2><p><img src="./pic/迭代器模式.png" alt="迭代器模式.png"></p>
-<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p><img src="./pic/策略模式.png" alt="策略模式.png"></p>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p><img src="http://490.github.io/images/20190412_145852.png" alt="image"></p>
+<ol>
+<li>Strategy: 定义所有支持的算法的公共接口抽象类.</li>
+<li>ConcreteStrategy: 封装了具体的算法或行为，继承于Strategy</li>
+<li>Context: 用一个ConcreteStrategy来配置，维护一个对Strategy对象的引用。</li>
+</ol>
+<p><strong>Strategy模式有下面的一些优点</strong>：</p>
+<ol>
+<li>相关算法系列 Strategy类层次为Context定义了一系列的可供重用的算法或行为。 继承有助于析取出这些算法中的公共功能。</li>
+<li>提供了可以替换继承关系的办法： 继承提供了另一种支持多种算法或行为的方法。你可以直接生成一个Context类的子类，从而给它以不同的行为。但这会将行为硬行编制到 Context中，而将算法的实现与Context的实现混合起来,从而使Context难以理解、难以维护和难以扩展，而且还不能动态地改变算法。最后你得到一堆相关的类 , 它们之间的唯一差别是它们所使用的算法或行为。 将算法封装在独立的Strategy类中使得你可以独立于其Context改变它，使它易于切换、易于理解、易于扩展。</li>
+<li>消除了一些if else条件语句 ：Strategy模式提供了用条件语句选择所需的行为以外的另一种选择。当不同的行为堆砌在一个类中时 ,很难避免使用条件语句来选择合适的行为。将行为封装在一个个独立的Strategy类中消除了这些条件语句。含有许多条件语句的代码通常意味着需要使用Strategy模式。</li>
+<li>实现的选择 Strategy模式可以提供相同行为的不同实现。客户可以根据不同时间 /空间权衡取舍要求从不同策略中进行选择。</li>
+</ol>
+<p><strong>Strategy模式缺点:</strong></p>
+<ol>
+<li>客户端必须知道所有的策略类，并自行决定使用哪一个策略类: 本模式有一个潜在的缺点，就是一个客户要选择一个合适的Strategy就必须知道这些Strategy到底有何不同。此时可能不得不向客户暴露具体的实现问题。因此仅当这些不同行为变体与客户相关的行为时 , 才需要使用Strategy模式。</li>
+<li>Strategy和Context之间的通信开销 ：无论各个ConcreteStrategy实现的算法是简单还是复杂, 它们都共享Strategy定义的接口。因此很可能某些 ConcreteStrategy不会都用到所有通过这个接口传递给它们的信息；简单的 ConcreteStrategy可能不使用其中的任何信息！这就意味着有时Context会创建和初始化一些永远不会用到的参数。如果存在这样问题 , 那么将需要在Strategy和Context之间更进行紧密的耦合。</li>
+<li>策略模式将造成产生很多策略类：可以通过使用享元模式在一定程度上减少对象的数量。 增加了对象的数目 Strategy增加了一个应用中的对象的数目。有时你可以将 Strategy实现为可供各Context共享的无状态的对象来减少这一开销。任何其余的状态都由 Context维护。Context在每一次对Strategy对象的请求中都将这个状态传递过去。共享的 Strategy不应在各次调用之间维护状态。</li>
+</ol>
+<p>从项目“模拟鸭子游戏开始”：<br>首先定义一个超类DUCK：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Duck</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Duck</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Quack</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"~~gaga~~"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">swim</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"~~im swim~~"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GreenHeadDuck</span> <span class="keyword">extends</span> <span class="title">Duck</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">display</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">       System.out.println(<span class="string">"**GreenHead**"</span>);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们有一个新的需求;</p>
+<p>(1)添加会飞的鸭子</p>
+<p>我们想的就是在DUCK这个类里面添加一个方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Duck</span> </span>&#123;</span><br><span class="line">    ...	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Fly</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			System.out.println(<span class="string">"~~im fly~~"</span>);</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<p>然后这样的话就导致了所有的鸭子都是会飞的，那要是有些鸭子不会飞呢，<br>然后我们想的是在子类里面重写这个方法，例如</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GreenHeadDuck</span> <span class="keyword">extends</span> <span class="title">Duck</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Fly</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"~~no fly~~"</span>);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的话所有的不会飞的鸭子全部要改动，这样的话工作量很大，上面的设计思想就是我们经常会想到的方法，也就是用面向对象的方式去设计。</p>
+<p><strong>继承的问题</strong>：对类的局部改动，尤其超类的局部改动，会影响其他部分。影响会有溢出效应</p>
+<p>而且超类挖的一个坑，每个子类都要来填，增加工作量，复杂度O(N^2)。不是好的设计方式</p>
+<p>需要新的设计方式，应对项目的扩展性，降低复杂度：<br>1）分析项目变化与不变部分，提取变化部分，抽象成接口+实现；<br>2）鸭子哪些功能是会根据新需求变化的？叫声、飞行…</p>
+<p>所以设计两个接口一个是飞行，一个是叫声</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">FlyBehavior</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">fly</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span>	<span class="class"><span class="keyword">interface</span> <span class="title">QuackBehavior</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">然后不同的叫声各种实现这个叫声接口例如</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>	<span class="class"><span class="keyword">class</span> <span class="title">GaGaQuackBehavior</span> <span class="keyword">implements</span> <span class="title">QuackBehavior</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"__GaGa__"</span>);</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span>	<span class="class"><span class="keyword">class</span> <span class="title">GeGeQuackBehavior</span> <span class="keyword">implements</span> <span class="title">QuackBehavior</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">quack</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"__GeGe__"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重新设计DUCK这个类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">public abstract class Duck </span><br><span class="line">&#123;    </span><br><span class="line">    FlyBehavior mFlyBehavior;</span><br><span class="line">    QuackBehavior mQuackBehavior;    </span><br><span class="line">    public Duck() &#123;&#125;    </span><br><span class="line">    public void Fly() </span><br><span class="line">    &#123;</span><br><span class="line">        mFlyBehavior.fly();</span><br><span class="line">    &#125;    </span><br><span class="line">    public void Quack() </span><br><span class="line">    &#123;</span><br><span class="line">        mQuackBehavior.quack();</span><br><span class="line">    &#125;    </span><br><span class="line">    public abstract void display();    </span><br><span class="line">    public void SetQuackBehavoir(QuackBehavior qb) </span><br><span class="line">    &#123;</span><br><span class="line">        mQuackBehavior = qb;</span><br><span class="line">    &#125;    </span><br><span class="line">    public void SetFlyBehavoir(FlyBehavior fb) </span><br><span class="line">    &#123;</span><br><span class="line">        mFlyBehavior = fb;</span><br><span class="line">    &#125;</span><br><span class="line">    public void swim() </span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;~~im swim~~&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">重写DUCK的子类GreenHeadDuck ：</span><br><span class="line"></span><br><span class="line">public class GreenHeadDuck extends Duck </span><br><span class="line">&#123;</span><br><span class="line">     public GreenHeadDuck() </span><br><span class="line">     &#123;</span><br><span class="line">         mFlyBehavior = new GoodFlyBehavior();      //实例化的时候必须要传入的参数，因为在具体的父类中会用到，并且在用的时候用的是父类中的方法，而且你不必去计较底层是怎么实现的</span><br><span class="line">         mQuackBehavior = new GaGaQuackBehavior();</span><br><span class="line">     &#125;</span><br><span class="line">     @Override</span><br><span class="line">     public void display() &#123;...&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h2 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h2><p><img src="./pic/状态模式.png" alt="状态模式.png"></p>
 <h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>Observer模式是行为模式之一，它的作用是当一个对象的状态发生变化时，能够自动通知其他关联对象，自动刷新对象状态。这样的话就不会错过该对象感兴趣的事情。对象甚至可以在运行时决定是否需要继续被通知。</p>
 <p>Observer模式提供给关联对象一种同步通信的手段，使某个对象与依赖它的其他对象之间保持状态同步。</p>
@@ -864,7 +897,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">195.8k</span>
+    <span title="Site words total count">197.3k</span>
   
 </div>
 
