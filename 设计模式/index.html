@@ -107,14 +107,14 @@
 <meta property="og:image" content="https://490.github.io/设计模式/pic/迭代器模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/策略模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/状态模式.png">
-<meta property="og:image" content="https://490.github.io/设计模式/pic/观察者模式.png">
+<meta property="og:image" content="http://490.github.io/images/20190412_105222.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/解释器模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/备忘录模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/中介者模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/命令模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/访问者模式.png">
 <meta property="og:image" content="https://490.github.io/设计模式/pic/责任链模式.png">
-<meta property="og:updated_time" content="2019-04-12T02:41:25.758Z">
+<meta property="og:updated_time" content="2019-04-12T02:53:25.779Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式---基于Java详解(全)">
 <meta name="twitter:description" content="创建型模式： 对象实例化的模式，创建型模式用于解耦对象的实例化过程。 单例模式：某个类只能有一个实例，提供一个全局的访问点。 简单工厂模式：一个工厂类根据传入的参量决定创建出那一种产品类的实例。 工厂方法模式：定义一个创建对象的接口，让子类决定实例化那个类。 抽象工厂模式：创建相关或依赖对象的家族，而无需明确指定具体类。 建造者模式：封装一个复杂对象的构建过程，并可以按步骤构造。 原型模式：通过">
@@ -380,7 +380,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  6.4k
+                  6.7k
                 </span>
               
 
@@ -396,7 +396,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  24
+                  25
                 </span>
               
             </div>
@@ -599,7 +599,15 @@
 <h2 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h2><p><img src="./pic/迭代器模式.png" alt="迭代器模式.png"></p>
 <h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p><img src="./pic/策略模式.png" alt="策略模式.png"></p>
 <h2 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h2><p><img src="./pic/状态模式.png" alt="状态模式.png"></p>
-<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p><img src="./pic/观察者模式.png" alt="观察者模式.png"></p>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p>Observer模式是行为模式之一，它的作用是当一个对象的状态发生变化时，能够自动通知其他关联对象，自动刷新对象状态。这样的话就不会错过该对象感兴趣的事情。对象甚至可以在运行时决定是否需要继续被通知。</p>
+<p>Observer模式提供给关联对象一种同步通信的手段，使某个对象与依赖它的其他对象之间保持状态同步。</p>
+<p><img src="http://490.github.io/images/20190412_105222.png" alt="image"></p>
+<ul>
+<li>Subject（被观察者）<br>被观察的对象。当需要被观察的状态发生变化时，需要通知队列中所有观察者对象。Subject需要维持（添加，删除，通知）一个观察者对象的队列列表。 </li>
+<li>ConcreteSubject<br>被观察者的具体实现。包含一些基本的属性状态及其他操作。</li>
+<li>Observer（观察者）<br>接口或抽象类。当Subject的状态发生变化时，Observer对象将通过一个callback函数得到通知。</li>
+<li>ConcreteObserver<br>观察者的具体实现。得到通知后将完成一些具体的业务逻辑处理。</li>
+</ul>
 <h2 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h2><p><img src="./pic/解释器模式.png" alt="解释器模式.png"></p>
 <h2 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h2><p><img src="./pic/备忘录模式.png" alt="备忘录模式.png"></p>
 <h2 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h2><p><img src="./pic/中介者模式.png" alt="中介者模式.png"></p>
@@ -830,7 +838,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">194.6k</span>
+    <span title="Site words total count">194.9k</span>
   
 </div>
 
