@@ -118,7 +118,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190318_083546.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133536.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133608.png">
-<meta property="og:updated_time" content="2019-04-14T01:14:19.140Z">
+<meta property="og:updated_time" content="2019-04-14T01:15:19.141Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -384,7 +384,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  25k
+                  25.2k
                 </span>
               
 
@@ -400,7 +400,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  89
+                  90
                 </span>
               
             </div>
@@ -701,7 +701,23 @@
 </ol>
 <p>然后针对那些<code>小小分组</code>进行统计，比如在我们这个查询语句中就是统计每个<code>小小分组</code>包含的记录条数。如果没有索引的话，这个分组过程全部需要在内存里实现，而如果有了索引的话，恰巧这个分组顺序又和我们的<code>B+</code>树中的索引列的顺序是一致的，而我们的<code>B+</code>树索引又是按照索引列排好序的，这不正好么，所以可以直接使用<code>B+</code>树索引进行分组。</p>
 <p>和使用<code>B+</code>树索引进行排序是一个道理，分组列的顺序也需要和索引列的顺序一致，也可以只使用索引列中左边的列进行分组，</p>
-<h2 id="索引失效问题"><a href="#索引失效问题" class="headerlink" title="索引失效问题"></a>索引失效问题</h2><hr>
+<h2 id="索引失效问题"><a href="#索引失效问题" class="headerlink" title="索引失效问题"></a>索引失效问题</h2><ol>
+<li><p>对于创建的多列索引（复合索引），不是使用的第一部分就不会使用索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alter table student add index my_index(name, age)   // name左边的列， age 右边的列                                                              </span><br><span class="line">select * from student where name = &apos;aaa&apos;     // 会用到索引</span><br><span class="line">select * from student where age = 18          //  不会使用索引</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于使用 like 查询， 查询如果是 ‘%aaa’ 不会使用索引，而 ‘aaa%’ 会使用到索引。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from student where name like &apos;aaa%&apos;     // 会用到索引</span><br><span class="line">select * from student where name like &apos;%aaa&apos;        或者   &apos;_aaa&apos;   //  不会使用索引</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="3">
+<li><p>如果条件中有 or， 有条件没有使用索引，即使其中有条件带索引也不会使用，换言之， 就是要求使用的所有字段，都必须单独使用时能使用索引。</p>
+</li>
+<li><p>如果列类型是字符串，那么一定要在条件中使用引号引用起来，否则不使用索引。</p>
+</li>
+<li><p>如果mysql认为全表扫面要比使用索引快，则不使用索引。如：表里只有一条数据。</p>
+</li>
+</ol>
+<hr>
 <h1 id="事务的隔离级别、锁"><a href="#事务的隔离级别、锁" class="headerlink" title="事务的隔离级别、锁"></a>事务的隔离级别、锁</h1><p><a href="http://www.hollischuang.com/archives/934" target="_blank" rel="noopener">深入理解乐观锁与悲观锁</a></p>
 <p><a href="http://www.hollischuang.com/archives/943" target="_blank" rel="noopener">事务的隔离级别</a></p>
 <h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><p>在关系数据库管理系统里，<strong>悲观并发控制</strong>（又名“悲观锁”，Pessimistic Concurrency Control，缩写“PCC”）是一种并发控制的方法。它可以阻止一个事务以影响其他用户的方式来修改数据。如果一个事务执行的操作都某行数据应用了锁，那只有当这个事务把锁释放，其他事务才能够执行与该锁冲突的操作。<br>悲观并发控制主要用于数据争用激烈的环境，以及发生并发冲突时使用锁保护数据的成本要低于回滚事务的成本的环境中。</p>
@@ -1144,7 +1160,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1234,7 +1250,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">197.5k</span>
+    <span title="Site words total count">198.4k</span>
   
 </div>
 
