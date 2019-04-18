@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190331_134940.png">
 <meta property="og:image" content="http://490.github.io/images/20190331_135144.png">
 <meta property="og:image" content="http://490.github.io/images/20190331_135019.png">
-<meta property="og:updated_time" content="2019-04-18T11:44:32.649Z">
+<meta property="og:updated_time" content="2019-04-18T11:50:16.491Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java基础知识">
 <meta name="twitter:description" content="零散的面试常考基础知识">
@@ -610,8 +610,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="Java-动态代理"><a href="#Java-动态代理" class="headerlink" title="Java 动态代理"></a>Java 动态代理</h1><h2 id="代理模式（JDK代理）"><a href="#代理模式（JDK代理）" class="headerlink" title="代理模式（JDK代理）"></a>代理模式（JDK代理）</h2><p><a href="设计模式#代理模式">详见设计模式</a></p>
-<p> <strong>  JDK动态代理所用到的代理类在程序调用到代理类对象时才由JVM真正创建，JVM根据传进来的 业务实现类对象 以及 方法名 ，动态地创建了一个代理类的class文件并被字节码引擎执行，然后通过该代理类对象进行方法调用。</strong>我们需要做的，只需指定代理类的预处理、调用后操作即可。</p>
+<h1 id="Java-动态代理"><a href="#Java-动态代理" class="headerlink" title="Java 动态代理"></a>Java 动态代理</h1><h2 id="代理模式（JDK代理）"><a href="#代理模式（JDK代理）" class="headerlink" title="代理模式（JDK代理）"></a>代理模式（JDK代理）</h2><p> <strong>  JDK动态代理所用到的代理类在程序调用到代理类对象时才由JVM真正创建，JVM根据传进来的 业务实现类对象 以及 方法名 ，动态地创建了一个代理类的class文件并被字节码引擎执行，然后通过该代理类对象进行方法调用。</strong>我们需要做的，只需指定代理类的预处理、调用后操作即可。</p>
 <p>1：首先，定义业务逻辑接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BookFacade</span> </span></span><br><span class="line"><span class="class"></span>&#123; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addBook</span><span class="params">()</span></span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>2：然后，实现业务逻辑接口创建业务实现类</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookFacadeImpl</span> <span class="keyword">implements</span> <span class="title">BookFacade</span> </span></span><br><span class="line"><span class="class"></span>&#123;   </span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addBook</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        System.out.println(<span class="string">"增加图书方法。。。"</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
