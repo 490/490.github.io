@@ -85,14 +85,13 @@
 <meta property="og:site_name" content="我的笔记">
 <meta property="og:description" content="实现简单的 Spring IoC 框架IoC 概述IoC (Inversion of Control)，即控制反转，或者称其为依赖注入更好理解一些，不过这个翻译还是比较晦涩难懂的，所以我们举一个吃西红柿炒鸡蛋的例子来说明一下">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://490.github.io/IOC/doc/pic/IoC原理饭店解说01.jpg">
-<meta property="og:image" content="https://490.github.io/IOC/doc/pic/IoC原理饭店解说02.jpg">
-<meta property="og:image" content="https://490.github.io/IOC/doc/pic/程序结构_new.png">
-<meta property="og:updated_time" content="2019-04-24T13:52:24.910Z">
+<meta property="og:image" content="http://490.github.io/images/20190424_215419.png">
+<meta property="og:image" content="http://490.github.io/images/20190424_215427.png">
+<meta property="og:updated_time" content="2019-04-24T13:55:26.163Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="实现简单的SpringIOC,AOP">
 <meta name="twitter:description" content="实现简单的 Spring IoC 框架IoC 概述IoC (Inversion of Control)，即控制反转，或者称其为依赖注入更好理解一些，不过这个翻译还是比较晦涩难懂的，所以我们举一个吃西红柿炒鸡蛋的例子来说明一下">
-<meta name="twitter:image" content="https://490.github.io/IOC/doc/pic/IoC原理饭店解说01.jpg">
+<meta name="twitter:image" content="http://490.github.io/images/20190424_215419.png">
 
 
 
@@ -392,9 +391,9 @@
 
       
         <h1 id="实现简单的-Spring-IoC-框架"><a href="#实现简单的-Spring-IoC-框架" class="headerlink" title="实现简单的 Spring IoC 框架"></a>实现简单的 Spring IoC 框架</h1><h2 id="IoC-概述"><a href="#IoC-概述" class="headerlink" title="IoC 概述"></a>IoC 概述</h2><p>IoC (Inversion of Control)，即控制反转，或者称其为依赖注入更好理解一些，不过这个翻译还是比较晦涩难懂的，所以我们举一个吃西红柿炒鸡蛋的例子来说明一下<br><a id="more"></a><br>之前我们要吃西红柿炒鸡蛋，是要自己做的，我们得先上下厨房查菜谱，去超市买西红柿（new Tomato），买鸡蛋（new Egg），然后把它俩放搅和到一块，我们才能有西红柿炒鸡蛋吃。就像这样：</p>
-<p><img src="doc/pic/IoC原理饭店解说01.jpg" alt="IoC原理饭店解说01.jpg"></p>
+<p><img src="http://490.github.io/images/20190424_215419.png" alt="image"></p>
 <p>可以看到，我们要 5 行代码才能得到 twe 对象（一盘西红柿炒鸡蛋），而且想吃一回，就给重复一次这 5 行代码，真的是相当的麻烦，可是这只是做法相当简单的西红柿炒鸡蛋啊，这要是想吃个圣诞节烤鸡就不要想着自己做了，即使能找到齐全的菜谱，正常人应该也懒得自己做，所以我们选择冲向饭店，也就是 Spring 容器：</p>
-<p><img src="doc/pic/IoC原理饭店解说02.jpg" alt="IoC原理饭店解说02.jpg"></p>
+<p><img src="http://490.github.io/images/20190424_215427.png" alt="image"></p>
 <p>现在，我们把 <code>菜谱.xml</code> 给饭店了，只要 Spring 容器初始化好了（饭店开门了），我们就对服务员（ac 对象）说：“给我来一盘西红柿炒鸡蛋”，然后服务员就会给我们端来一盘西红柿炒鸡蛋（ac.getBean(“TomatoWithEgg”)），只要想吃就向服务员要就行，是不是非常的方便呀。</p>
 <p>而且这个饭店还是高度定制化的，你想吃啥就把 <code>菜谱.xml</code> 给它，它就会丝毫不差的照着菜谱给你做你想要的菜（构造你想要的对象），如果你想改造一下菜的做法，只消改一下给饭店的 <code>菜谱.xml</code> 就行，然后 Spring 容器就会照着新的 <code>菜谱.xml</code> 给你造对象。这相当于将应用程序的配置和依赖性规范与实际的应用程序代码分开，也就是说，我们现在要是想往西红柿炒鸡蛋里面放土豆块，只消在 <code>菜谱.xml</code> 中的原料表中加上土豆块，然后给 TomatoWithEgg 的属性中加上土豆块就可以了，不用去代码中搜索所有用到 TomatoWithEgg 对象的地方，再给它加上土豆块属性了。</p>
 <p>也就是说，可以把 IoC 模式看做工厂模式的升华，IoC 就是一个大工厂，这个大工厂要生成的对象在 XML 中给出定义，然后就可以利用 Java 反射，根据 XML 中给出的类名生成相应的对象。这种做法有比工厂模式高级在哪里呢？以前的工厂模式都是在工厂方法中把对象的生成代码写死，而 Spring 容器则是由 XML 文件来定义类与类之间的关系，将工厂和对象生成两者独立开来。简单来说， <strong>Spring IoC 就是我们把类与类之间的依赖关系在 XML 配置文件中写好，就不再自己 new 对象了，之后我们要用哪个对象就向 Spring 要，Spring 会帮我们按照我们定义的依赖关系给我们创建好相应的对象。</strong></p>
@@ -418,8 +417,6 @@
 <li>根据配置文件初始化容器，创建容器需要创建的 Bean 对象（BeanUtils）；</li>
 <li>通过 <code>getBean(String beanName)</code> 方法获取我们想要的 Bean 对象。</li>
 </ul>
-<p>代码结构如下：</p>
-<p><img src="doc/pic/程序结构_new.png" alt="程序结构.png"></p>
 <h3 id="解析配置文件"><a href="#解析配置文件" class="headerlink" title="解析配置文件"></a>解析配置文件</h3><p>我们需要做的一切都是要基于配置文件的，所有先来看一下配置文件的格式：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"A"</span> <span class="attr">class</span>=<span class="string">"org.simplespring.model.A"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"strData"</span> <span class="attr">value</span>=<span class="string">"A的strData"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"intData"</span> <span class="attr">value</span>=<span class="string">"123"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"B"</span> <span class="attr">class</span>=<span class="string">"org.simplespring.model.B"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"refData"</span> <span class="attr">ref</span>=<span class="string">"A"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"C"</span> <span class="attr">class</span>=<span class="string">"org.simplespring.model.C"</span> <span class="attr">scope</span>=<span class="string">"prototype"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"strData"</span> <span class="attr">value</span>=<span class="string">"C的strData"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"D"</span> <span class="attr">class</span>=<span class="string">"org.simplespring.model.D"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">type</span>=<span class="string">"java.lang.String"</span> <span class="attr">value</span>=<span class="string">"D的name属性值"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"1"</span> <span class="attr">type</span>=<span class="string">"java.lang.String"</span> <span class="attr">value</span>=<span class="string">"D的value属性值"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"2"</span> <span class="attr">type</span>=<span class="string">"org.simplespring.model.A"</span> <span class="attr">ref</span>=<span class="string">"A"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>我们配置了 3 个类：A、B、C，其中 A 和 B 是 singleton 的，也就是说是单例的，只在容器初始化时创建一次，每次调用 getBean 返回的都是同一个对象；C 是多例的，即每次调用 getBean 都返回一个新创建的对象。</p>
@@ -746,7 +743,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">208.2k</span>
+    <span title="Site words total count">208.6k</span>
   
 </div>
 
