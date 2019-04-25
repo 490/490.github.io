@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190331_134940.png">
 <meta property="og:image" content="http://490.github.io/images/20190331_135144.png">
 <meta property="og:image" content="http://490.github.io/images/20190331_135019.png">
-<meta property="og:updated_time" content="2019-04-25T01:46:36.862Z">
+<meta property="og:updated_time" content="2019-04-25T01:47:37.570Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java基础知识">
 <meta name="twitter:description" content="零散的面试常考基础知识">
@@ -361,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  12.1k
+                  12.2k
                 </span>
               
 
@@ -377,7 +377,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  46
+                  47
                 </span>
               
             </div>
@@ -686,7 +686,9 @@ CGlib动态代理是通过继承业务类，生成的动态代理类是业务类
 <h2 id="注解的使用"><a href="#注解的使用" class="headerlink" title="注解的使用"></a>注解的使用</h2><p> 第一步：新建一个annotation，名字为：MyAnnotation.java。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.dragon.test.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target</span>(ElementType.METHOD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnnotation</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">String <span class="title">hello</span> <span class="params">()</span> <span class="keyword">default</span> "hello"</span>;</span><br><span class="line">    <span class="function">String <span class="title">world</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>第二步：建立一个MyTest.java 来使用上面的annotation。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.dragon.test.annotation;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by gmq on 2015/9/10.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTest</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@MyAnnotation</span>(hello = <span class="string">"Hello,Beijing"</span>,world = <span class="string">"Hello,world"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">output</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"method output is running "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.dragon.test.annotation;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTest</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@MyAnnotation</span>(hello = <span class="string">"Hello,Beijing"</span>,world = <span class="string">"Hello,world"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">output</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"method output is running "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三步：用反射机制来调用注解中的内容</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.dragon.test.annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReflection</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 获得要调用的类</span></span><br><span class="line">        Class&lt;MyTest&gt; myTestClass = MyTest.class;</span><br><span class="line">        <span class="comment">// 获得要调用的方法，output是要调用的方法名字，new Class[]&#123;&#125;为所需要的参数。空则不是这种</span></span><br><span class="line">        Method method = myTestClass.getMethod(<span class="string">"output"</span>, <span class="keyword">new</span> Class[]&#123;&#125;);</span><br><span class="line">        <span class="comment">// 是否有类型为MyAnnotation的注解</span></span><br><span class="line">        <span class="keyword">if</span> (method.isAnnotationPresent(MyAnnotation.class))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 获得注解</span></span><br><span class="line">            MyAnnotation annotation = method.getAnnotation(MyAnnotation.class);</span><br><span class="line">            <span class="comment">// 调用注解的内容</span></span><br><span class="line">            System.out.println(annotation.hello());</span><br><span class="line">            System.out.println(annotation.world());</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"----------------------------------"</span>);</span><br><span class="line">        <span class="comment">// 获得所有注解。必须是runtime类型的</span></span><br><span class="line">        Annotation[] annotations = method.getAnnotations();</span><br><span class="line">        <span class="keyword">for</span> (Annotation annotation : annotations)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 遍历所有注解的名字</span></span><br><span class="line">            System.out.println(annotation.annotationType().getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Hello,Beijing</span><br><span class="line">Hello,world</span><br><span class="line">----------------------------------</span><br><span class="line">com.dragon.test.annotation.MyAnnotation</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -815,7 +817,7 @@ CGlib动态代理是通过继承业务类，生成的动态代理类是业务类
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -905,7 +907,7 @@ CGlib动态代理是通过继承业务类，生成的动态代理类是业务类
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">210.9k</span>
+    <span title="Site words total count">213.5k</span>
   
 </div>
 
