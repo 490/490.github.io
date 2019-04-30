@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190331_134940.png">
 <meta property="og:image" content="http://490.github.io/images/20190331_135144.png">
 <meta property="og:image" content="http://490.github.io/images/20190331_135019.png">
-<meta property="og:updated_time" content="2019-04-27T00:16:37.486Z">
+<meta property="og:updated_time" content="2019-04-27T00:17:37.488Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java基础知识">
 <meta name="twitter:description" content="零散的面试常考基础知识">
@@ -361,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  12.3k
+                  13k
                 </span>
               
 
@@ -377,7 +377,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  47
+                  50
                 </span>
               
             </div>
@@ -689,7 +689,28 @@ CGlib动态代理是通过继承业务类，生成的动态代理类是业务类
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.dragon.test.annotation;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTest</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@MyAnnotation</span>(hello = <span class="string">"Hello,Beijing"</span>,world = <span class="string">"Hello,world"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">output</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"method output is running "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>第三步：用反射机制来调用注解中的内容</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.dragon.test.annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReflection</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 获得要调用的类</span></span><br><span class="line">        Class&lt;MyTest&gt; myTestClass = MyTest.class;</span><br><span class="line">        <span class="comment">// 获得要调用的方法，output是要调用的方法名字，new Class[]&#123;&#125;为所需要的参数。空则不是这种</span></span><br><span class="line">        Method method = myTestClass.getMethod(<span class="string">"output"</span>, <span class="keyword">new</span> Class[]&#123;&#125;);</span><br><span class="line">        <span class="comment">// 是否有类型为MyAnnotation的注解</span></span><br><span class="line">        <span class="keyword">if</span> (method.isAnnotationPresent(MyAnnotation.class))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 获得注解</span></span><br><span class="line">            MyAnnotation annotation = method.getAnnotation(MyAnnotation.class);</span><br><span class="line">            <span class="comment">// 调用注解的内容</span></span><br><span class="line">            System.out.println(annotation.hello());</span><br><span class="line">            System.out.println(annotation.world());</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"----------------------------------"</span>);</span><br><span class="line">        <span class="comment">// 获得所有注解。必须是runtime类型的</span></span><br><span class="line">        Annotation[] annotations = method.getAnnotations();</span><br><span class="line">        <span class="keyword">for</span> (Annotation annotation : annotations)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 遍历所有注解的名字</span></span><br><span class="line">            System.out.println(annotation.annotationType().getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Hello,Beijing</span><br><span class="line">Hello,world</span><br><span class="line">----------------------------------</span><br><span class="line">com.dragon.test.annotation.MyAnnotation</span><br></pre></td></tr></table></figure>
-<h1 id="通过接口引用对象"><a href="#通过接口引用对象" class="headerlink" title="通过接口引用对象"></a>通过接口引用对象</h1>
+<h1 id="通过接口引用对象"><a href="#通过接口引用对象" class="headerlink" title="通过接口引用对象"></a>通过接口引用对象</h1><p>对于参数类型，要优先使用接口而不是类。通俗地讲，应该优先使用接口而不是类来引用对象。如果有合适的接口类型存在，那么对于参数、返回值、变量和域来说，就应该使用接口类型来声明。只有当你利用构造函数创建某个对象的时候，才真正引用这个对象的类。</p>
+<p>考虑Vector的情形，它是List接口的一个实现，在声明变量的时候应该养成这样的习惯：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Good - use interface as type</span><br><span class="line">List&lt;？&gt; list= new Vector&lt;？&gt;();</span><br></pre></td></tr></table></figure>
+<p>而不是像这样的声明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Bad - use class as type</span><br><span class="line">Vector&lt;?&gt; list= new Vector&lt;?&gt;();</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ol>
+<li>假如一个类实现了多个接口,那么用接口类型来定义它的引用变量的话,一眼就可以明白,这里是需要这个类的哪些方法。</li>
+<li>程序更加灵活。当你决定更换实现时，只需要改变构造器中类的名称。其他使用list地方的代码根本不需要改动。第一个声明可以被改变为：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;?&gt; list= new ArrayList&lt;?&gt;();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注意：<br>list只能使用ArrayList已经实现了的List接口中的方法，ArrayList中那些自己的、没有在List接口中定义的方法是不可以被访问到的。List.add其实是List接口的方法，但是调用ArrayList方法如clone（）方法是调用不到的。</p>
+<p>适合于用类来引用对象的情形：</p>
+<ol>
+<li>如果没有合适的接口存在，可以用类来引用对象。<br>例如，考虑值类（String、BigInteger）很少用多个实现编写，他们通常是final的，并且很少有对应的接口。使用这种值类作为参数、变量、域或者返回值类型就比较合适。</li>
+<li>对象属于一个框架，而框架的基本类型是类，不是接口。（对象属于基于类的框架）<br>例如java.util.TimerTask抽象类。应该用相关的基类（往往是抽象类）来引用对象，而不是它的实现类。</li>
+<li>类实现了接口，但是它提供了接口中不存在的额外方法。<br>例如LinkedHashMap，程序依赖于这些额外的方法，这种类就应该只被用来引用它的实例。</li>
+</ol>
+<p>以上这些例子并不全面，而只是代表了一些“适合于用类来引用对象”的情形</p>
+<p>总结：给定的对象是否具有适当的接口应该是很明显的。如果是，用接口引用对象就会使程序更加灵活；如果不是，则使用类层次结构中提供了必要功能的最基础的类。</p>
+<p>作者：真爱也枉然<br>链接：<a href="https://www.jianshu.com/p/a5fa6300177e" target="_blank" rel="noopener">https://www.jianshu.com/p/a5fa6300177e</a><br>来源：简书<br>简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
+
       
     </div>
     
@@ -817,7 +838,7 @@ CGlib动态代理是通过继承业务类，生成的动态代理类是业务类
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -907,7 +928,7 @@ CGlib动态代理是通过继承业务类，生成的动态代理类是业务类
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">213.5k</span>
+    <span title="Site words total count">214.3k</span>
   
 </div>
 
