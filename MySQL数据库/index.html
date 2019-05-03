@@ -118,7 +118,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190318_083546.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133536.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133608.png">
-<meta property="og:updated_time" content="2019-04-14T01:15:19.141Z">
+<meta property="og:updated_time" content="2019-05-01T02:09:04.492Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -384,7 +384,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  25.2k
+                  25.3k
                 </span>
               
 
@@ -759,7 +759,11 @@
 <h1 id="SQL-知识"><a href="#SQL-知识" class="headerlink" title="SQL 知识"></a>SQL 知识</h1><h2 id="if，ifnull"><a href="#if，ifnull" class="headerlink" title="if，ifnull"></a>if，ifnull</h2><p>把salary表中的女改成男，男改成女:</p>
 <p>update salary set sex = if( sex = ‘男’,’女’,’男’);</p>
 <p>if(true,a,b),  if(false,a,b) 这个就是第一个如果是true，就等于a，false就等于b，有点像三元表达式</p>
-<p>ifnull(null, a),ifnull(a,b),    ifnull里有两个数，如果第一个不是null，是a非null,就都等于a， 如果a=Null，就都为a。</p>
+<p>MySQL IFNULL函数是MySQL控制流函数之一，它接受两个参数，如果不是NULL，则返回第一个参数。 否则，IFNULL函数返回第二个参数。</p>
+<p>两个参数可以是文字值或表达式。</p>
+<p>以下说明了IFNULL函数的语法：</p>
+<p>IFNULL(expression_1,expression_2);<br>SQL<br>如果expression_1不为NULL，则IFNULL函数返回expression_1; 否则返回expression_2的结果。</p>
+<p>IFNULL函数根据使用的上下文返回字符串或数字。</p>
 <h2 id="limit-，offset"><a href="#limit-，offset" class="headerlink" title="limit ，offset"></a>limit ，offset</h2><p>① select * from table limit 2,1;<br>//含义是跳过2条取出1条数据，limit后面是从第2条开始读，读取1条信息，即读取第3条数据</p>
 <p>② select * from table limit 2 offset 1;<br>//含义是从第1条（不包括）数据开始取出2条数据，limit后面跟的是2条数据，offset后面是从第1条开始读取，即读取第2,3条</p>
 <h2 id="distinct"><a href="#distinct" class="headerlink" title="distinct"></a>distinct</h2><p>去掉重复值，如果有多个列，会应用到每个列</p>
@@ -1250,7 +1254,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">216k</span>
+    <span title="Site words total count">216.1k</span>
   
 </div>
 
