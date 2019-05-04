@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_081109.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081116.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081253.png">
-<meta property="og:updated_time" content="2019-03-16T23:09:47.722Z">
+<meta property="og:updated_time" content="2019-05-04T08:48:46.170Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="消息队列 RabbitMQ基础知识">
 <meta name="twitter:description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。">
@@ -357,7 +357,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.2k
+                  2.3k
                 </span>
               
 
@@ -373,7 +373,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  7
+                  8
                 </span>
               
             </div>
@@ -413,6 +413,9 @@
 <li>系统复杂性提高： 加入MQ之后，你需要保证消息没有被重复消费、处理消息丢失的情况、保证消- 息传递的顺序性等等问题！</li>
 <li>一致性问题： 我上面讲了消息队列可以实现异步，消息队列带来的异步确实可以提高系统响应速度。但是，万一消息的真正消费者并没有正确消费消息怎么办？这样就会导致数据不一致的情况了!</li>
 </ul>
+<h1 id="JMS"><a href="#JMS" class="headerlink" title="JMS"></a>JMS</h1><p>JMS（JAVA Message Service,java消息服务）是java的消息服务，JMS的客户端之间可以通过JMS服务进行异步的消息传输。JMS（JAVA Message Service,Java消息服务）API是一个消息服务的标准或者说是规范，允许应用程序组件基于JavaEE平台创建、发送、接收和读取消息。它使分布式通信耦合度更低，消息服务更加可靠以及异步性。 ActiveMQ 就是基于 JMS 规范实现的。</p>
+<h2 id="JMS两种消息模型"><a href="#JMS两种消息模型" class="headerlink" title="JMS两种消息模型"></a>JMS两种消息模型</h2><p>①点到点（P2P）模型</p>
+<p>② 发布/订阅（Pub/Sub）模型</p>
 <h1 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h1><p>AMQP，即 Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦和通讯。<br>AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。<br>RabbitMQ是一个开源的AMQP实现，服务器端用 Erlang 语言编写，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，具有很高的易用性和可用性。</p>
 <p><strong>ConnectionFactory、Connection、Channel </strong> 都是RabbitMQ对外提供的API中最基本的对象。</p>
 <p>ConnectionFactory：ConnectionFactory为Connection的制造工厂。</p>
@@ -618,7 +621,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列"><span class="nav-number">1.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">2.</span> <span class="nav-text">RabbitMQ</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列"><span class="nav-number">1.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JMS"><span class="nav-number">2.</span> <span class="nav-text">JMS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS两种消息模型"><span class="nav-number">2.1.</span> <span class="nav-text">JMS两种消息模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">3.</span> <span class="nav-text">RabbitMQ</span></a></li></ol></div>
             
 
           </div>
@@ -652,7 +655,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">216.1k</span>
+    <span title="Site words total count">216.6k</span>
   
 </div>
 

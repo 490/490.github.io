@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_133906.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_134003.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_134009.png">
-<meta property="og:updated_time" content="2019-05-03T01:49:53.706Z">
+<meta property="og:updated_time" content="2019-05-03T01:50:53.712Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基础知识">
 <meta name="twitter:description" content="简单来说 Redis 就是一个数据库，不过与传统数据库不同的是 Redis 的数据是存在内存中的，所以存写速度非常快，因此 Redis 被广泛应用于缓存方向。此外，redis 也经常用来做分布式锁。">
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  7.5k
+                  7.9k
                 </span>
               
 
@@ -378,7 +378,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  26
+                  28
                 </span>
               
             </div>
@@ -620,7 +620,14 @@
 <li><a href="https://www.jianshu.com/p/8bddd381de06" target="_blank" rel="noopener">分布式锁解决并发的三种实现方式</a></li>
 <li><a href="https://blog.csdn.net/zeb_perfect/article/details/54135506" target="_blank" rel="noopener">缓存穿透，缓存击穿，缓存雪崩解决方案分析</a></li>
 </ul>
-<h1 id="如何保证redis中存放的都是热点数据"><a href="#如何保证redis中存放的都是热点数据" class="headerlink" title="如何保证redis中存放的都是热点数据"></a>如何保证redis中存放的都是热点数据</h1>
+<h1 id="如何保证redis中存放的都是热点数据"><a href="#如何保证redis中存放的都是热点数据" class="headerlink" title="如何保证redis中存放的都是热点数据"></a>如何保证redis中存放的都是热点数据</h1><p>当redis使用的内存超过了设置的最大内存时，会触发redis的key淘汰机制，在redis 3.0中有6种淘汰策略：</p>
+<p>noeviction: 不删除策略。当达到最大内存限制时, 如果需要使用更多内存,则直接返回错误信息。（redis默认淘汰策略）<br>allkeys-lru: 在所有key中优先删除最近最少使用(less recently used ,LRU) 的 key。<br>allkeys-random: 在所有key中随机删除一部分 key。<br>volatile-lru: 在设置了超时时间（expire ）的key中优先删除最近最少使用(less recently used ,LRU) 的 key。<br>volatile-random: 在设置了超时时间（expire）的key中随机删除一部分 key。<br>volatile-ttl: 在设置了超时时间（expire ）的key中优先删除剩余时间(time to live,TTL) 短的key。<br>场景：</p>
+<p>数据库中有1000w的数据，而redis中只有50w数据，如何保证redis中10w数据都是热点数据？</p>
+<p>方案：</p>
+<p> 限定 Redis 占用的内存，Redis 会根据自身数据淘汰策略，留下热数据到内存。所以，计算一下 50W 数据大约占用的内存，然后设置一下 Redis 内存限制即可，并将淘汰策略为volatile-lru或者allkeys-lru。  </p>
+<p>设置Redis最大占用内存：</p>
+<p>打开redis配置文件，设置maxmemory参数，maxmemory是bytes字节类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># In short... if you have slaves attached it is suggested that you set a lower</span><br><span class="line"># limit for maxmemory so that there is some free RAM on the system for slave</span><br><span class="line"># output buffers (but this is not needed if the policy is &apos;noeviction&apos;).</span><br><span class="line">#</span><br><span class="line"># maxmemory &lt;bytes&gt;</span><br><span class="line">maxmemory 268435456</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">设置过期策略</span><br><span class="line">maxmemory-policy volatile-lru</span><br></pre></td></tr></table></figure></p>
+
       
     </div>
     
@@ -838,7 +845,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">216.1k</span>
+    <span title="Site words total count">216.6k</span>
   
 </div>
 
