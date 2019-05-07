@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_104449.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104457.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_104643.png">
-<meta property="og:updated_time" content="2019-03-17T11:35:31.843Z">
+<meta property="og:updated_time" content="2019-05-07T00:31:36.167Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java虚拟机内存管理机制">
 <meta name="twitter:description" content="整体结构参考原文">
@@ -683,13 +683,13 @@
 </ul>
 <p><img src="http://490.github.io/images/20190312_082309.png" alt="image"></p>
 <h3 id="宣告对象死亡的两次标记过程"><a href="#宣告对象死亡的两次标记过程" class="headerlink" title="宣告对象死亡的两次标记过程"></a>宣告对象死亡的两次标记过程</h3><ul>
-<li>当发现对象不可达后，该对象被第一次标记，并进行是否有必要执行 <code>finalize()</code> 方法的判断；<ul>
-<li>不需要执行：对象没有覆盖 <code>finalize()</code> 方法，或者 <code>finalize()</code> 方法已被执行过（<code>finalize()</code> 只被执行一次）；</li>
-<li>需要执行：将该对象放置在一个队列中，稍后由一个虚拟机自动创建的低优先级线程执行。</li>
+<li>finalize()是Object的protected方法，子类可以覆盖该方法以实现资源清理工作，GC在回收对象之前调用该方法。</li>
+<li>finalize()与C中的析构函数不是对应的。C中的析构函数调用的时机是确定的（对象离开作用域或delete掉），但Java中的finalize的调用具有不确定性</li>
+<li>不建议用finalize方法完成“非内存资源”的清理工作，但建议用于：<ul>
+<li>清理本地对象(通过JNI创建的对象)；</li>
+<li>作为确保某些非内存资源(如Socket、文件等)释放的一个补充：在finalize方法中显式调用其他资源释放方法。</li>
 </ul>
 </li>
-<li><code>finalize()</code> 方法是对象逃脱死亡的最后一次机会，不过虚拟机不保证等待 <code>finalize()</code> 方法执行结束，也就是说，虚拟机只触发 <code>finalize()</code> 方法的执行，如果这个方法要执行超久，那么虚拟机并不等待它执行结束，所以最好不要用这个方法。</li>
-<li><code>finalize()</code> 方法能做的，try-finally 都能做，所以忘了这个方法吧！</li>
 </ul>
 <h3 id="方法区的回收"><a href="#方法区的回收" class="headerlink" title="方法区的回收"></a>方法区的回收</h3><p>因为方法区主要存放永久代对象，而永久代对象的回收率比新生代差很多，因此在方法区上进行回收性价比不高。主要是对常量池的回收和对类的卸载。<br>永久代的 GC 主要回收：<strong>废弃常量</strong> 和 <strong>无用的类</strong>。</p>
 <ul>
@@ -1104,7 +1104,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">217.7k</span>
+    <span title="Site words total count">218.1k</span>
   
 </div>
 
