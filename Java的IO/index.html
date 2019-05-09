@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190317_073255.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_073314.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_073321.png">
-<meta property="og:updated_time" content="2019-03-20T07:26:09.806Z">
+<meta property="og:updated_time" content="2019-05-09T07:34:14.855Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java的 I&#x2F;O机制">
 <meta name="twitter:description" content="UNIX网络编程对I/O模型的分类Linux 的内核将所有外部设备都看做一个文件来操作（一切皆文件），对一个文件的读写操作会调用内核提供的系统命令，返回一个file descriptor（fd，文件描述符）。而对一个socket的读写也会有响应的描述符，称为socket fd（socket文件描述符），描述符就是一个数字，指向内核中的一个结构体（文件路径，数据区等一些属性）。 根据UNIX网络编程">
@@ -507,6 +507,8 @@
 <h2 id="transient"><a href="#transient" class="headerlink" title="transient"></a>transient</h2><p>transient 关键字可以使一些属性不会被序列化。</p>
 <p>ArrayList 中存储数据的数组 elementData 是用 transient 修饰的，因为这个数组是动态扩展的，并不是所有的空间都被使用，因此就不需要所有的内容都被序列化。通过重写序列化和反序列化方法，使得可以只序列化数组中有内容的那部分数据。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">transient</span> Object[] elementData;</span><br></pre></td></tr></table></figure>
+<p>想序列化ArrayList的话，把elementdata的元素一个个读出来，一个个序列化。</p>
+<p><a href="java基础知识#java-序列化和反序列化">补充阅读</a></p>
 <h1 id="Java网络操作"><a href="#Java网络操作" class="headerlink" title="Java网络操作"></a>Java网络操作</h1><p>Java 中的网络支持：</p>
 <ul>
 <li>InetAddress：用于表示网络上的硬件资源，即 IP 地址；</li>
@@ -864,7 +866,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">218.2k</span>
+    <span title="Site words total count">218.3k</span>
   
 </div>
 
