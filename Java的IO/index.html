@@ -96,12 +96,19 @@
 <meta property="og:image" content="http://490.github.io/images/20190315_081725.png">
 <meta property="og:image" content="http://490.github.io/images/20190320_152542.png">
 <meta property="og:image" content="http://490.github.io/images/20190320_152555.png">
+<meta property="og:image" content="http://490.github.io/images/20190509_160810.png">
+<meta property="og:image" content="http://490.github.io/images/20190509_185146.png">
+<meta property="og:image" content="http://490.github.io/images/20190509_185157.png">
+<meta property="og:image" content="http://490.github.io/images/20190509_185225.png">
+<meta property="og:image" content="http://490.github.io/images/20190509_185335.png">
+<meta property="og:image" content="http://490.github.io/images/20190509_185352.png">
+<meta property="og:image" content="http://490.github.io/images/20190509_185455.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_073241.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_073249.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_073255.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_073314.png">
 <meta property="og:image" content="http://490.github.io/images/20190317_073321.png">
-<meta property="og:updated_time" content="2019-05-09T07:34:14.855Z">
+<meta property="og:updated_time" content="2019-05-09T10:55:48.859Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java的 I&#x2F;O机制">
 <meta name="twitter:description" content="UNIX网络编程对I/O模型的分类Linux 的内核将所有外部设备都看做一个文件来操作（一切皆文件），对一个文件的读写操作会调用内核提供的系统命令，返回一个file descriptor（fd，文件描述符）。而对一个socket的读写也会有响应的描述符，称为socket fd（socket文件描述符），描述符就是一个数字，指向内核中的一个结构体（文件路径，数据区等一些属性）。 根据UNIX网络编程">
@@ -367,7 +374,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5.7k
+                  6.9k
                 </span>
               
 
@@ -383,7 +390,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  23
+                  27
                 </span>
               
             </div>
@@ -530,6 +537,58 @@
 <li>DatagramSocket：通信类</li>
 <li>DatagramPacket：数据包类</li>
 </ul>
+<h1 id="零拷贝-zero-copy"><a href="#零拷贝-zero-copy" class="headerlink" title="零拷贝 zero-copy"></a>零拷贝 zero-copy</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>考虑这样一种常用的情形：你需要将静态内容（类似图片、文件）展示给用户。那么这个情形就意味着你需要先将静态内容从磁盘中拷贝出来放到一个内存buf中，然后将这个buf通过socket传输给用户，进而用户或者静态内容的展示。这看起来再正常不过了，但是实际上这是很低效的流程，我们把上面的这种情形抽象成下面的过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">read(file, tmp_buf, len);write(socket, tmp_buf, len);</span><br></pre></td></tr></table></figure>
+<p>首先调用read将静态内容，这里假设为文件A，读取到tmp_buf, 然后调用write将tmp_buf写入到socket中，如图：</p>
+<p><img src="http://490.github.io/images/20190509_160810.png" alt="image"></p>
+<p>在这个过程中文件A的经历了4次copy的过程：</p>
+<ol>
+<li>首先，调用read时，文件A拷贝到了kernel模式；</li>
+<li>之后，CPU控制将kernel模式数据copy到user模式下；</li>
+<li>调用write时，先将user模式下的内容copy到kernel模式下的socket的buffer中；</li>
+<li>最后将kernel模式下的socket buffer的数据copy到网卡设备中传送；</li>
+</ol>
+<p>从上面的过程可以看出，数据白白从kernel模式到user模式走了一圈，浪费了2次copy(第一次，从kernel模式拷贝到user模式；第二次从user模式再拷贝回kernel模式，即上面4次过程的第2和3步骤。)。而且上面的过程中kernel和user模式的上下文的切换也是4次。</p>
+<p>幸运的是，你可以用一种叫做Zero-Copy的技术来去掉这些无谓的copy。应用程序用Zero-Copy来请求kernel直接把disk的data传输给socket，而不是通过应用程序传输。Zero-Copy大大提高了应用程序的性能，并且减少了kernel和user模式上下文的切换。</p>
+<h2 id="详述"><a href="#详述" class="headerlink" title="详述"></a>详述</h2><p>Zero-Copy技术省去了将操作系统的read buffer拷贝到程序的buffer，以及从程序buffer拷贝到socket buffer的步骤，直接将read buffer拷贝到socket buffer. Java NIO中的FileChannal.transferTo()方法就是这样的实现，这个实现是依赖于操作系统底层的sendFile()实现的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void transferTo(long position, long count, WritableByteChannel target);</span><br></pre></td></tr></table></figure>
+<p>他底层的调用时系统调用<strong>sendFile()</strong>方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);</span><br></pre></td></tr></table></figure>
+<p>下图展示了在transferTo()之后的数据流向：</p>
+<p><img src="http://490.github.io/images/20190509_185146.png" alt="image"></p>
+<p>下图展示了在使用transferTo()之后的上下文切换：</p>
+<p><img src="http://490.github.io/images/20190509_185157.png" alt="image"></p>
+<p>使用了Zero-Copy技术之后，整个过程如下：</p>
+<ol>
+<li>transferTo()方法使得文件A的内容直接拷贝到一个read buffer（kernel buffer）中；</li>
+<li>然后数据(kernel buffer)拷贝到socket buffer中。</li>
+<li>最后将socket buffer中的数据拷贝到网卡设备（protocol engine）中传输；<br>这显然是一个伟大的进步：这里把上下文的切换次数从4次减少到2次，同时也把数据copy的次数从4次降低到了3次。<br>但是这是Zero-Copy么，答案是否定的。</li>
+</ol>
+<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><p>Linux 2.1内核开始引入了sendfile函数（上一节有提到）,用于将文件通过socket传送。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sendfile(socket, file, len);</span><br></pre></td></tr></table></figure>
+<p>该函数通过一次系统调用完成了文件的传送，减少了原来read/write方式的模式切换。此外更是减少了数据的copy, sendfile的详细过程如图：</p>
+<p><img src="http://490.github.io/images/20190509_185225.png" alt="image"></p>
+<p>通过sendfile传送文件只需要一次系统调用，当调用sendfile时：</p>
+<ol>
+<li>首先（通过DMA）将数据从磁盘读取到kernel buffer中；</li>
+<li>然后将kernel buffer拷贝到socket buffer中；</li>
+<li>最后将socket buffer中的数据copy到网卡设备（protocol engine）中发送；</li>
+</ol>
+<p>这个过程就是第二节（详述）中的那个步骤。</p>
+<p>sendfile与read/write模式相比，少了一次copy。但是从上述过程中也可以发现从kernel buffer中将数据copy到socket buffer是没有必要的。</p>
+<p>Linux2.4 内核对sendfile做了改进，如图：</p>
+<p><img src="http://490.github.io/images/20190509_185335.png" alt="image"></p>
+<p>改进后的处理过程如下：</p>
+<ol>
+<li>将文件拷贝到kernel buffer中；</li>
+<li>向socket buffer中追加当前要发生的数据在kernel buffer中的位置和偏移量；</li>
+<li>根据socket buffer中的位置和偏移量直接将kernel buffer的数据copy到网卡设备（protocol engine）中；</li>
+</ol>
+<p>经过上述过程，数据只经过了2次copy就从磁盘传送出去了。这个才是真正的Zero-Copy(这里的零拷贝是针对kernel来讲的，数据在kernel模式下是Zero-Copy)。</p>
+<p>正是Linux2.4的内核做了改进，Java中的TransferTo()实现了Zero-Copy,如下图：</p>
+<p><img src="http://490.github.io/images/20190509_185352.png" alt="image"></p>
+<p>Zero-Copy技术的使用场景有很多，比如Kafka, 又或者是Netty等，可以大大提升程序的性能。</p>
+<p><img src="http://490.github.io/images/20190509_185455.png" alt="image"></p>
 <h1 id="Java-NIO"><a href="#Java-NIO" class="headerlink" title="Java NIO"></a>Java NIO</h1><p>NIO，就是 New IO，是非阻塞 IO。支持面向缓冲区，基于通道的 IO 操作。</p>
 <p>传统的 IO 是面向流的，并且是单向的。如果要进行双工的通信，要建立两个流，一个输入流，一个输出流。</p>
 <p>NIO 是面向缓冲区的，是双向的，通信双方建立一个通道，然后把数据存放在缓冲区中，然后缓冲区在通道中流动进行数据的传输。打个比方，通道 —— 铁路，缓冲区 —— 火车，数据 —— 人，一堆人想要从 A 地到达 B 地，首先需要把人装上火车，然后火车在铁路上从 A 地跑到 B 地，实现将人从 A 地运到 B 地；同样的道理，一堆数据如果想要从 A 地运到 B 地，需要先把数据装入缓冲区，然后将缓冲区从 A 地跑到 B 地，从而实现将数据从 A 地运到 B 地。</p>
@@ -776,7 +835,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -832,7 +891,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UNIX网络编程对I-O模型的分类"><span class="nav-number">1.</span> <span class="nav-text">UNIX网络编程对I/O模型的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞I-O模型"><span class="nav-number">1.1.</span> <span class="nav-text">阻塞I/O模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞I-O模型"><span class="nav-number">1.2.</span> <span class="nav-text">非阻塞I/O模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O复用模型"><span class="nav-number">1.3.</span> <span class="nav-text">I/O复用模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信号驱动I-O模型"><span class="nav-number">1.4.</span> <span class="nav-text">信号驱动I/O模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步I-O"><span class="nav-number">1.5.</span> <span class="nav-text">异步I/O</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I-O多路复用技术"><span class="nav-number">2.</span> <span class="nav-text">I/O多路复用技术</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-I-O-概览"><span class="nav-number">3.</span> <span class="nav-text">Java I/O 概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java磁盘操作"><span class="nav-number">4.</span> <span class="nav-text">Java磁盘操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java字节操作"><span class="nav-number">5.</span> <span class="nav-text">Java字节操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现文件复制"><span class="nav-number">5.1.</span> <span class="nav-text">实现文件复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰者模式"><span class="nav-number">5.2.</span> <span class="nav-text">装饰者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java字符操作"><span class="nav-number">6.</span> <span class="nav-text">Java字符操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编码与解码"><span class="nav-number">6.1.</span> <span class="nav-text">编码与解码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-的编码方式"><span class="nav-number">6.2.</span> <span class="nav-text">String 的编码方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reader-与-Writer"><span class="nav-number">6.3.</span> <span class="nav-text">Reader 与 Writer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现逐行输出文本文件的内容"><span class="nav-number">6.4.</span> <span class="nav-text">实现逐行输出文本文件的内容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java对象操作"><span class="nav-number">7.</span> <span class="nav-text">Java对象操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化"><span class="nav-number">7.1.</span> <span class="nav-text">序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Serializable"><span class="nav-number">7.2.</span> <span class="nav-text">Serializable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transient"><span class="nav-number">7.3.</span> <span class="nav-text">transient</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java网络操作"><span class="nav-number">8.</span> <span class="nav-text">Java网络操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#InetAddress"><span class="nav-number">8.1.</span> <span class="nav-text">InetAddress</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URL"><span class="nav-number">8.2.</span> <span class="nav-text">URL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sockets"><span class="nav-number">8.3.</span> <span class="nav-text">Sockets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datagram"><span class="nav-number">8.4.</span> <span class="nav-text">Datagram</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-NIO"><span class="nav-number">9.</span> <span class="nav-text">Java NIO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#缓冲区-Buffer"><span class="nav-number">9.1.</span> <span class="nav-text">缓冲区 Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓冲区中的核心属性"><span class="nav-number">9.1.1.</span> <span class="nav-text">缓冲区中的核心属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直接缓冲区与非直接缓冲区"><span class="nav-number">9.1.2.</span> <span class="nav-text">直接缓冲区与非直接缓冲区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用方法代码示例"><span class="nav-number">9.1.3.</span> <span class="nav-text">常用方法代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通道-Channel"><span class="nav-number">9.2.</span> <span class="nav-text">通道 Channel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要实现类"><span class="nav-number">9.2.1.</span> <span class="nav-text">主要实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取通道"><span class="nav-number">9.2.2.</span> <span class="nav-text">获取通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通道之间的数据传输"><span class="nav-number">9.2.3.</span> <span class="nav-text">通道之间的数据传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分散读取与聚集写入"><span class="nav-number">9.2.4.</span> <span class="nav-text">分散读取与聚集写入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码示例"><span class="nav-number">9.2.5.</span> <span class="nav-text">代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞与非阻塞"><span class="nav-number">9.3.</span> <span class="nav-text">阻塞与非阻塞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO-完成网络通信的三个核心"><span class="nav-number">9.3.1.</span> <span class="nav-text">NIO 完成网络通信的三个核心</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DatagramChannel"><span class="nav-number">9.4.</span> <span class="nav-text">DatagramChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管道-Pipe"><span class="nav-number">9.5.</span> <span class="nav-text">管道 Pipe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码示例-1"><span class="nav-number">9.5.1.</span> <span class="nav-text">代码示例</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UNIX网络编程对I-O模型的分类"><span class="nav-number">1.</span> <span class="nav-text">UNIX网络编程对I/O模型的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞I-O模型"><span class="nav-number">1.1.</span> <span class="nav-text">阻塞I/O模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞I-O模型"><span class="nav-number">1.2.</span> <span class="nav-text">非阻塞I/O模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O复用模型"><span class="nav-number">1.3.</span> <span class="nav-text">I/O复用模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信号驱动I-O模型"><span class="nav-number">1.4.</span> <span class="nav-text">信号驱动I/O模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步I-O"><span class="nav-number">1.5.</span> <span class="nav-text">异步I/O</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I-O多路复用技术"><span class="nav-number">2.</span> <span class="nav-text">I/O多路复用技术</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-I-O-概览"><span class="nav-number">3.</span> <span class="nav-text">Java I/O 概览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java磁盘操作"><span class="nav-number">4.</span> <span class="nav-text">Java磁盘操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java字节操作"><span class="nav-number">5.</span> <span class="nav-text">Java字节操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现文件复制"><span class="nav-number">5.1.</span> <span class="nav-text">实现文件复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰者模式"><span class="nav-number">5.2.</span> <span class="nav-text">装饰者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java字符操作"><span class="nav-number">6.</span> <span class="nav-text">Java字符操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编码与解码"><span class="nav-number">6.1.</span> <span class="nav-text">编码与解码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-的编码方式"><span class="nav-number">6.2.</span> <span class="nav-text">String 的编码方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reader-与-Writer"><span class="nav-number">6.3.</span> <span class="nav-text">Reader 与 Writer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现逐行输出文本文件的内容"><span class="nav-number">6.4.</span> <span class="nav-text">实现逐行输出文本文件的内容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java对象操作"><span class="nav-number">7.</span> <span class="nav-text">Java对象操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化"><span class="nav-number">7.1.</span> <span class="nav-text">序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Serializable"><span class="nav-number">7.2.</span> <span class="nav-text">Serializable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transient"><span class="nav-number">7.3.</span> <span class="nav-text">transient</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java网络操作"><span class="nav-number">8.</span> <span class="nav-text">Java网络操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#InetAddress"><span class="nav-number">8.1.</span> <span class="nav-text">InetAddress</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URL"><span class="nav-number">8.2.</span> <span class="nav-text">URL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sockets"><span class="nav-number">8.3.</span> <span class="nav-text">Sockets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Datagram"><span class="nav-number">8.4.</span> <span class="nav-text">Datagram</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#零拷贝-zero-copy"><span class="nav-number">9.</span> <span class="nav-text">零拷贝 zero-copy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">9.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#详述"><span class="nav-number">9.2.</span> <span class="nav-text">详述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进阶"><span class="nav-number">9.3.</span> <span class="nav-text">进阶</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-NIO"><span class="nav-number">10.</span> <span class="nav-text">Java NIO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#缓冲区-Buffer"><span class="nav-number">10.1.</span> <span class="nav-text">缓冲区 Buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓冲区中的核心属性"><span class="nav-number">10.1.1.</span> <span class="nav-text">缓冲区中的核心属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直接缓冲区与非直接缓冲区"><span class="nav-number">10.1.2.</span> <span class="nav-text">直接缓冲区与非直接缓冲区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用方法代码示例"><span class="nav-number">10.1.3.</span> <span class="nav-text">常用方法代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通道-Channel"><span class="nav-number">10.2.</span> <span class="nav-text">通道 Channel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要实现类"><span class="nav-number">10.2.1.</span> <span class="nav-text">主要实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取通道"><span class="nav-number">10.2.2.</span> <span class="nav-text">获取通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通道之间的数据传输"><span class="nav-number">10.2.3.</span> <span class="nav-text">通道之间的数据传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分散读取与聚集写入"><span class="nav-number">10.2.4.</span> <span class="nav-text">分散读取与聚集写入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码示例"><span class="nav-number">10.2.5.</span> <span class="nav-text">代码示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞与非阻塞"><span class="nav-number">10.3.</span> <span class="nav-text">阻塞与非阻塞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO-完成网络通信的三个核心"><span class="nav-number">10.3.1.</span> <span class="nav-text">NIO 完成网络通信的三个核心</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DatagramChannel"><span class="nav-number">10.4.</span> <span class="nav-text">DatagramChannel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管道-Pipe"><span class="nav-number">10.5.</span> <span class="nav-text">管道 Pipe</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码示例-1"><span class="nav-number">10.5.1.</span> <span class="nav-text">代码示例</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -866,7 +925,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">218.3k</span>
+    <span title="Site words total count">221.7k</span>
   
 </div>
 

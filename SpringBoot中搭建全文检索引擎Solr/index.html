@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Solr介绍Solr 是Apache下的一个顶级开源项目，采用Java开发，它是基于Lucene的全文搜索服务器。Solr可以独立运行在Jetty、Tomcat等这些Servlet容器中。 Solr提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展，并对索引、搜索性能进行了优化。 使用Solr 进行创建索引和搜索索引的实现方法很简单，如下：  创建索引：客户端（可以是浏览器可以是Ja">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot中搭建全文检索引擎Solr">
+<meta property="og:url" content="https://490.github.io/SpringBoot中搭建全文检索引擎Solr/index.html">
+<meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="Solr介绍Solr 是Apache下的一个顶级开源项目，采用Java开发，它是基于Lucene的全文搜索服务器。Solr可以独立运行在Jetty、Tomcat等这些Servlet容器中。 Solr提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展，并对索引、搜索性能进行了优化。 使用Solr 进行创建索引和搜索索引的实现方法很简单，如下：  创建索引：客户端（可以是浏览器可以是Ja">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://490.github.io/images/20190510_073048.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_075001.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_075129.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_075135.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_075149.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_080237.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_080634.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_080701.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_080743.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_081030.png">
+<meta property="og:image" content="http://490.github.io/images/20190510_081040.png">
+<meta property="og:updated_time" content="2019-05-10T00:18:58.530Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot中搭建全文检索引擎Solr">
+<meta name="twitter:description" content="Solr介绍Solr 是Apache下的一个顶级开源项目，采用Java开发，它是基于Lucene的全文搜索服务器。Solr可以独立运行在Jetty、Tomcat等这些Servlet容器中。 Solr提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展，并对索引、搜索性能进行了优化。 使用Solr 进行创建索引和搜索索引的实现方法很简单，如下：  创建索引：客户端（可以是浏览器可以是Ja">
+<meta name="twitter:image" content="http://490.github.io/images/20190510_073048.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://490.github.io/SpringBoot中搭建全文检索引擎Solr/">
+
+
+
+
+
+  <title>SpringBoot中搭建全文检索引擎Solr | 我的笔记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br>
+            
+            文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-vcard-o"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/SpringBoot中搭建全文检索引擎Solr/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="le">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringBoot中搭建全文检索引擎Solr</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-09T21:37:16+08:00">
+                2019-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/SpringBoot中搭建全文检索引擎Solr/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/SpringBoot中搭建全文检索引擎Solr/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Solr介绍"><a href="#Solr介绍" class="headerlink" title="Solr介绍"></a>Solr介绍</h1><p>Solr 是Apache下的一个顶级开源项目，采用Java开发，它是基于Lucene的全文搜索服务器。Solr可以独立运行在Jetty、Tomcat等这些Servlet容器中。</p>
+<p>Solr提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展，并对索引、搜索性能进行了优化。</p>
+<p>使用Solr 进行创建索引和搜索索引的实现方法很简单，如下：</p>
+<ul>
+<li>创建索引：客户端（可以是浏览器可以是Java程序）用 POST 方法向 Solr 服务器发送一个描述 Field 及其内容的 XML 文档，Solr服务器根据xml文档添加、删除、更新索引 。</li>
+<li>搜索索引：客户端（可以是浏览器可以是Java程序）用 GET方法向 Solr 服务器发送请求，然后对Solr服务器返回Xml、json等格式的查询结果进行解析，组织页面布局。Solr不提供构建页面UI的功能，但是Solr提供了一个管理界面，通过管理界面可以查询Solr的配置和运行情况。</li>
+</ul>
+<h1 id="Slor的安装启动"><a href="#Slor的安装启动" class="headerlink" title="Slor的安装启动"></a>Slor的安装启动</h1><p>下载地址<a href="http://lucene.apache.org/solr/" target="_blank" rel="noopener">http://lucene.apache.org/solr/</a></p>
+<p>下载完成后解压即可</p>
+<p>cmd命令行下切换到解压目录下的bin目录下，启动slor服务，启动的是solr的云服务版，启动命令为</p>
+<p><code>solr -e cloud -noprompt</code><br>默认在8983和7574端口启动两组solr服务</p>
+<p>当然也可以用下述命令启动单机版的solr：</p>
+<p><code>solr start -p 8983</code><br>当需要更多的命令时，可以使用</p>
+<p><code>solr -help</code><br>查看更多的命令</p>
+<p>启动服务之后在<a href="http://localhost:8983就可以打开启动的solr服务" target="_blank" rel="noopener">http://localhost:8983就可以打开启动的solr服务</a></p>
+<p><img src="http://490.github.io/images/20190510_073048.png" alt="image"></p>
+<p>启动服务之后，需要导入相应的数据，命令为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Dc=gettingstarted -Dauto -Drecursive -jar example\exampledocs\post.jar docs\</span><br></pre></td></tr></table></figure>
+<p><img src="http://490.github.io/images/20190510_075001.png" alt="image"></p>
+<h1 id="中文分词搜索：IK-Analyzer"><a href="#中文分词搜索：IK-Analyzer" class="headerlink" title="中文分词搜索：IK-Analyzer"></a>中文分词搜索：IK-Analyzer</h1><p><strong>（1）</strong>关掉上述cloud版的服务，然后打开单机版，默认89893端口打开</p>
+<p><img src="http://490.github.io/images/20190510_075129.png" alt="image"></p>
+<p><strong>（2）</strong>创建索引的部署</p>
+<p><img src="http://490.github.io/images/20190510_075135.png" alt="image"></p>
+<p> <strong>（3）</strong>中文分词</p>
+<p>由于slor默认的是英文格式的分词格式，也就是按照空格的方式分词的，因此要实现中文的分词需要做一些修改<br><img src="http://490.github.io/images/20190510_075149.png" alt="image"></p>
+<p>下面两个文件是我们所需要了解的两个配置文件</p>
+<p>在managed-schema中添加如下代码端作为中文分词的配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;fieldTypename=&quot;text_ik&quot; class=&quot;solr.TextField&quot;&gt;</span><br><span class="line">    &lt;!--索引时候的分词器--&gt;</span><br><span class="line">    &lt;analyzer type=&quot;index&quot;&gt;</span><br><span class="line">        &lt;tokenizerclass=&quot;org.wltea.analyzer.util.IKTokenizerFactory&quot; useSmart=“false&quot;/&gt;</span><br><span class="line">        &lt;filter class=&quot;solr.LowerCaseFilterFactory&quot;/&gt;</span><br><span class="line">    &lt;/analyzer&gt;</span><br><span class="line">    &lt;!--查询时候的分词器--&gt;</span><br><span class="line">    &lt;analyzer type=&quot;query&quot;&gt;</span><br><span class="line">        &lt;tokenizerclass=&quot;org.wltea.analyzer.util.IKTokenizerFactory&quot; useSmart=“true&quot;/&gt;</span><br><span class="line">    &lt;/analyzer&gt;</span><br><span class="line">&lt;/fieldType&gt;</span><br></pre></td></tr></table></figure></p>
+<p>索引时候的分词器使用的是useSmart=“false”，这个时候分词分的越细越好<br>查询时候的分词器使用的是useSmart=“true”，这个时候就是越接近查询的内容越好，查询起来越快</p>
+<p><img src="http://490.github.io/images/20190510_080237.png" alt="image"></p>
+<p>后台的配置因为需要用到中文的分词，所以需要你进行在solrconfig.xml中的lib下添加相应的jar包</p>
+<p><img src="http://490.github.io/images/20190510_080634.png" alt="image"></p>
+<p>重启solr，在solr中就可以看见相应的text_ik的分词器，就是刚才自己定义的text_ik<br>使用分词之后可以看到和上述的分词的结果是一样的</p>
+<p><img src="http://490.github.io/images/20190510_080701.png" alt="image"></p>
+<p>然后搜索的话需要有字典和后台的数据库的内容，然后如何从数据库中把数据导入呢？</p>
+<p>数据库相关jar包导入，参考资料：<a href="https://wiki.apache.org/solr/DIHQuickStart" target="_blank" rel="noopener">http://wiki.apache.org/solr/DIHQuickStart</a></p>
+<p>首先在solrconfig.xml中添加如下代码行<br><img src="http://490.github.io/images/20190510_080743.png" alt="image"></p>
+<p>上图中有显示一个data-config.xml的文件，这个是我们需要自己添加并配置的</p>
+<p>在你的自己之前建立的wenda的目录文件夹下新建一个data-config.xml，并在文件中添加如下代码段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataConfig&gt;</span><br><span class="line">  &lt;dataSource type=&quot;JdbcDataSource&quot; </span><br><span class="line">              driver=&quot;com.mysql.jdbc.Driver&quot;</span><br><span class="line">              url=&quot;jdbc:mysql://localhost/wenda&quot; </span><br><span class="line">              user=&quot;root&quot; </span><br><span class="line">              password=&quot;123456&quot;/&gt;</span><br><span class="line">  &lt;document&gt;</span><br><span class="line">    &lt;entity name=&quot;question&quot; </span><br><span class="line">            query=&quot;select id,title,content from question&quot;&gt;</span><br><span class="line">        &lt;field column=&quot;title&quot; name=&quot;question_title&quot;/&gt;</span><br><span class="line">        &lt;field column=&quot;content&quot; name=&quot;question_content&quot;/&gt;</span><br><span class="line">    &lt;/entity&gt;</span><br><span class="line">  &lt;/document&gt;</span><br><span class="line">&lt;/dataConfig&gt;</span><br></pre></td></tr></table></figure></p>
+<p>其实上面代码段与你的数据库是一一对应的，<a href="http://wiki.apache.org/solr/DIHQuickStart" target="_blank" rel="noopener">这个代码段是在</a>里抄来的，然后根据自己的参数进行修改</p>
+<p>url    数据库的本机地址<br>user    数据库的用户名<br>password    数据库的密码</p>
+<p><field column="title" name="question_title">    与是你数据库的字段，与你的managed-schema中定义的filed的name的定义是相同的<br> <field column="content" name="question_content">    同上</field></field></p>
+<p><img src="http://490.github.io/images/20190510_081030.png" alt="image"></p>
+<p>然后重启solr</p>
+<p>导入数据库里的数据</p>
+<p><img src="http://490.github.io/images/20190510_081040.png" alt="image"></p>
+<p>到这里就把solr的服务器搭建并测试成功了</p>
+<h1 id="Sringboot中集成solr"><a href="#Sringboot中集成solr" class="headerlink" title="Sringboot中集成solr"></a>Sringboot中集成solr</h1><p>（1）.pom中添加solrj的Maven依赖<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">!-- https://mvnrepository.com/artifact/org.apache.solr/solr-solrj --&gt;</span><br><span class="line">	&lt;dependency&gt;</span><br><span class="line">		&lt;groupId&gt;org.apache.solr&lt;/groupId&gt;</span><br><span class="line">		&lt;artifactId&gt;solr-solrj&lt;/artifactId&gt;</span><br><span class="line">		&lt;version&gt;6.2.0&lt;/version&gt;</span><br><span class="line">	&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<p>&lt;<br>（2）按照dao-service-controller编写服务<br>因为不涉及数据库的读写，所以就不需要dao层</p>
+<p>关于solr的集成按照什么方式去配置，怎么去写，<a href="https://lucene.apache.org/solr/guide/6_6/using-solrj.html" target="_blank" rel="noopener">参照</a></p>
+<p>service层</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.springboot.springboot.service;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.model.Question;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.annotations.Update;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.SolrQuery;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.impl.HttpSolrClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.response.QueryResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.client.solrj.response.UpdateResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.solr.common.SolrInputDocument;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Service;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> WilsonSong</span></span><br><span class="line"><span class="comment"> * solr的搜索服务</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/7/25</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SearchService</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">//private static final String  SOLR_URL = "http://127.0.0.1:8983/solr/#/wenda";</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String  SOLR_URL =<span class="string">"http://localhost:8983/solr/wenda"</span>;</span><br><span class="line">    <span class="keyword">private</span> HttpSolrClient client = <span class="keyword">new</span> HttpSolrClient.Builder(SOLR_URL).build();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String QUESTION_TITLE_FIELD = <span class="string">"question_title"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String QUESTION_CONTENT_FIELD = <span class="string">"question_content"</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> keyword 搜索的关键词</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> offset 翻页</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> count 翻页</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> hlPer  高亮的前缀</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> hlPos 高亮的后缀</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * 搜索</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Question&gt; <span class="title">searchQuestion</span><span class="params">(String keyword, <span class="keyword">int</span> offset, <span class="keyword">int</span> count, String hlPer, String hlPos)</span> <span class="keyword">throws</span> Exception</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        List&lt;Question&gt; questionList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="comment">//solr的相关配置</span></span><br><span class="line">        SolrQuery query = <span class="keyword">new</span> SolrQuery(keyword);</span><br><span class="line">        query.setRows(count);</span><br><span class="line">        query.setStart(offset);</span><br><span class="line">        query.setHighlight(<span class="keyword">true</span>);         <span class="comment">//高亮</span></span><br><span class="line">        query.setHighlightSimplePre(hlPer);  <span class="comment">//前缀</span></span><br><span class="line">        query.setHighlightSimplePost(hlPos);  <span class="comment">//后缀</span></span><br><span class="line">        query.set(<span class="string">"hl.fl"</span>, QUESTION_CONTENT_FIELD + <span class="string">","</span> +QUESTION_TITLE_FIELD);</span><br><span class="line">        QueryResponse response = client.query(query);</span><br><span class="line">        <span class="comment">//解析搜索的界面的东西</span></span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;String, Map&lt;String, List&lt;String&gt;&gt;&gt; entry :response.getHighlighting().entrySet())</span><br><span class="line">        &#123;</span><br><span class="line">            Question q = <span class="keyword">new</span> Question();</span><br><span class="line">            q.setId(Integer.parseInt(entry.getKey()));</span><br><span class="line">            <span class="keyword">if</span> (entry.getValue().containsKey(QUESTION_CONTENT_FIELD))</span><br><span class="line">            &#123;</span><br><span class="line">                List&lt;String&gt; contentList = entry.getValue().get(QUESTION_CONTENT_FIELD);</span><br><span class="line">                <span class="keyword">if</span> (contentList.size() &gt; <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    q.setContent(contentList.get(<span class="number">0</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"> </span><br><span class="line">            <span class="keyword">if</span> (entry.getValue().containsKey(QUESTION_TITLE_FIELD))</span><br><span class="line">            &#123;</span><br><span class="line">                List&lt;String&gt; titleList = entry.getValue().get(QUESTION_TITLE_FIELD);</span><br><span class="line">                <span class="keyword">if</span> (titleList.size() &gt; <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    q.setTitle(titleList.get(<span class="number">0</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            questionList.add(q);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> questionList;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 索引</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> qid</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> title</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> content</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">indexQuestion</span><span class="params">(<span class="keyword">int</span> qid, String title, String content)</span> <span class="keyword">throws</span> Exception</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        SolrInputDocument doc = <span class="keyword">new</span> SolrInputDocument();</span><br><span class="line">        doc.setField(<span class="string">"id"</span>, qid);</span><br><span class="line">        doc.setField(QUESTION_TITLE_FIELD, title);</span><br><span class="line">        doc.setField(QUESTION_CONTENT_FIELD, content);</span><br><span class="line">        UpdateResponse response = client.add(doc,<span class="number">1000</span>);</span><br><span class="line">        <span class="keyword">return</span> response != <span class="keyword">null</span> &amp;&amp; response.getStatus() == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>controller层</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.springboot.springboot.controller;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.model.EntityType;</span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.model.Question;</span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.model.viewObject;</span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.service.FollowService;</span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.service.SearchService;</span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.service.questionService;</span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.service.userService;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.ui.Model;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMethod;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestParam;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 搜索</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> WilsonSong</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/7/25/025</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SearchController</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger = LoggerFactory.getLogger(SearchController.class);</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    SearchService searchService;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    questionService qService;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    FollowService followService;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    userService uService;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@RequestMapping</span>(path = &#123;<span class="string">"/search"</span>&#125;, method = &#123;RequestMethod.GET&#125;)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">Search</span><span class="params">(Model model,@RequestParam(<span class="string">"q"</span>)</span> String keyword, @<span class="title">RequestParam</span><span class="params">(value = <span class="string">"offset"</span>,defaultValue = <span class="string">"0"</span>)</span> <span class="keyword">int</span> offset</span></span><br><span class="line"><span class="function">                         , @<span class="title">RequestParam</span><span class="params">(value = <span class="string">"count"</span>, defaultValue = <span class="string">"10"</span>)</span> <span class="keyword">int</span> count)</span></span><br><span class="line"><span class="function">                         </span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            List&lt;Question&gt; questionList = searchService.searchQuestion(keyword,offset,count, <span class="string">"&lt;strong&gt;"</span>,<span class="string">"&lt;/strong&gt;"</span>);</span><br><span class="line">            List&lt;viewObject&gt; vos = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="keyword">for</span> (Question question:questionList)</span><br><span class="line">            &#123;</span><br><span class="line">                Question q = qService.selectQuestionById(question.getId());</span><br><span class="line">                viewObject vo = <span class="keyword">new</span> viewObject();</span><br><span class="line">                <span class="keyword">if</span> (question.getContent() != <span class="keyword">null</span>) </span><br><span class="line">                &#123;</span><br><span class="line">                    q.setContent(question.getContent());</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (question.getTitle() != <span class="keyword">null</span>) </span><br><span class="line">                &#123;</span><br><span class="line">                    q.setTitle(question.getTitle());</span><br><span class="line">                &#125;</span><br><span class="line">                vo.set(<span class="string">"question"</span>,q);</span><br><span class="line">                <span class="comment">//问题关注的数量</span></span><br><span class="line">                vo.set(<span class="string">"followCount"</span>, followService.getFollowerCount(EntityType.ENTITY_QUESTION, question.getId()));</span><br><span class="line">                vo.set(<span class="string">"user"</span>, uService.getUser(q.getUserId()));</span><br><span class="line">                vos.add(vo);</span><br><span class="line">            &#125;</span><br><span class="line">            model.addAttribute(<span class="string">"vos"</span>, vos);</span><br><span class="line">            model.addAttribute(<span class="string">"keyword"</span>, keyword);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            logger.error(<span class="string">"查询失败"</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"result"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样后端的代码结合前端就写完了，实现solr的集成，然后就可以在你的网站使用solr搜索引擎来搜索</p>
+<p>但是面临一个问题，你的slor的库是从数据库中导入的，然后每次出现新的内容，怎么能够实现实时的搜索呢？</p>
+<p>有两种方式：</p>
+<ul>
+<li>使用solr的自动增量导入功能</li>
+<li>在增加内容的时候使用异步事件把内容实时添加到solr的搜索内容中，具体实现</li>
+</ul>
+<p>首先在你增加内容 的时候先产生事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加问题后就产生一个异步的事件，把问题增加进去，然后达到实时搜索的功能</span></span><br><span class="line"> eventProducer.fireEvent(<span class="keyword">new</span> EventModel(EventType.ADD_QUESTION)                         .setActorId(question.getUserId()).setEntityId(question.getId())</span><br><span class="line">                          .setExts(<span class="string">"title"</span>, question.getTitle()).setExts(<span class="string">"content"</span>, </span><br><span class="line">                          question.getContent()));</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.springboot.springboot.async.handler;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.async.EventHandler;</span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.async.EventModel;</span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.async.EventType;</span><br><span class="line"><span class="keyword">import</span> com.springboot.springboot.service.SearchService;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 异步事件实现增加问题就直接加入solr的搜索库</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> WilsonSong</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018/7/26/026</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AddQuestionHandler</span> <span class="keyword">implements</span> <span class="title">EventHandler</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger logger  = LoggerFactory.getLogger(AddQuestionHandler.class);</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    SearchService searchService;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doHander</span><span class="params">(EventModel model)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            searchService.indexQuestion(model.getEntityId(),model.getExts(<span class="string">"title"</span>),model.getExts(<span class="string">"content"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            logger.error(<span class="string">"增加问题索引失败"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;EventType&gt; <span class="title">getSupportEventTypes</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Arrays.asList(EventType.ADD_QUESTION);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/优化方法/" rel="next" title="SQL优化方法">
+                <i class="fa fa-chevron-left"></i> SQL优化方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="le">
+            
+              <p class="site-author-name" itemprop="name">le</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/490" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Solr介绍"><span class="nav-number">1.</span> <span class="nav-text">Solr介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Slor的安装启动"><span class="nav-number">2.</span> <span class="nav-text">Slor的安装启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#中文分词搜索：IK-Analyzer"><span class="nav-number">3.</span> <span class="nav-text">中文分词搜索：IK-Analyzer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sringboot中集成solr"><span class="nav-number">4.</span> <span class="nav-text">Sringboot中集成solr</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">le</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">221.7k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '490',
+            repo: 'https://github.com/490/490.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'dd4cdc4ae526b060d983e343530d30ed338af4b2',
+            
+                client_id: '2340dc349a2e19013ca4'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'Yi80CT04XNkVSJTMAPm5FtWc-gzGzoHsz',
+        appKey: 'j3zcBrBI4kxBuazJBe3Gra3B',
+        placeholder: '^_^',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":80,"height":160},"mobile":{"show":true}});</script></body>
+</html>
