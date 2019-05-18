@@ -91,7 +91,8 @@
 <meta property="og:image" content="http://490.github.io/images/20190310_081109.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081116.png">
 <meta property="og:image" content="http://490.github.io/images/20190310_081253.png">
-<meta property="og:updated_time" content="2019-05-04T08:49:46.174Z">
+<meta property="og:image" content="http://images.cnitblog.com/i/452671/201407/021448393248578.png">
+<meta property="og:updated_time" content="2019-05-18T01:35:32.444Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="消息队列 RabbitMQ基础知识">
 <meta name="twitter:description" content="消息队列使用消息队列主要有两点好处：  通过异步处理提高系统性能（削峰、减少响应所需时间）; 降低系统耦合性。">
@@ -357,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.6k
+                  3.1k
                 </span>
               
 
@@ -373,7 +374,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  9
+                  10
                 </span>
               
             </div>
@@ -438,6 +439,17 @@
 <p>如果我们希望即使在RabbitMQ服务重启的情况下，也不会丢失消息，我们可以将Queue与Message都设置为可持久化的（durable），这样可以保证绝大部分情况下我们的RabbitMQ消息不会丢失。但依然解决不了小概率丢失事件的发生（比如RabbitMQ服务器已经接收到生产者的消息，但还没来得及持久化该消息时RabbitMQ服务器就断电了），如果我们需要对这种小概率事件也要管理起来，那么我们要用到事务。由于这里仅为RabbitMQ的简单介绍，所以这里将不讲解RabbitMQ相关的事务。具体可以参考 <a href="https://link.jianshu.com?t=http%3A%2F%2Fblog.csdn.net%2Fu013256816%2Farticle%2Fdetails%2F55515234" target="_blank" rel="noopener">RabbitMQ之消息确认机制（事务+Confirm）</a></p>
 <hr>
 <p>接口优化===同步下单改为异步下单<br>收到请求后由redis先预检库存，不足的话直接返回，减少数据库访问<br>如果有库存，则请求放到消息队列。返回一个排队中<br>请求出队。客户端轮询是否秒杀成功</p>
+<h1 id="Redis与RabbitMQ作为消息队列的比较"><a href="#Redis与RabbitMQ作为消息队列的比较" class="headerlink" title="Redis与RabbitMQ作为消息队列的比较"></a>Redis与RabbitMQ作为消息队列的比较</h1><h2 id="可靠消费"><a href="#可靠消费" class="headerlink" title="可靠消费"></a>可靠消费</h2><p>Redis：没有相应的机制保证消息的消费，当消费者消费失败的时候，消息体丢失，需要手动处理<br>RabbitMQ：具有消息消费确认，即使消费者消费失败，也会自动使消息体返回原队列，同时可全程持久化，保证消息体被正确消费</p>
+<h2 id="可靠发布"><a href="#可靠发布" class="headerlink" title="可靠发布"></a>可靠发布</h2><p>Reids：不提供，需自行实现<br>RabbitMQ：具有发布确认功能，保证消息被发布到服务器</p>
+<h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><p>Redis：采用主从模式，读写分离，但是故障转移还没有非常完善的官方解决方案<br>RabbitMQ：集群采用磁盘、内存节点，任意单点故障都不会影响整个队列的操作</p>
+<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><p>Redis：将整个Redis实例持久化到磁盘<br>RabbitMQ：队列，消息，都可以选择是否持久化</p>
+<h2 id="消费者负载均衡"><a href="#消费者负载均衡" class="headerlink" title="消费者负载均衡"></a>消费者负载均衡</h2><p>Redis：不提供，需自行实现<br>RabbitMQ：根据消费者情况，进行消息的均衡分发</p>
+<h2 id="队列监控"><a href="#队列监控" class="headerlink" title="队列监控"></a>队列监控</h2><p>Redis：不提供，需自行实现<br>RabbitMQ：后台可以监控某个队列的所有信息，（内存，磁盘，消费者，生产者，速率等）</p>
+<h2 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h2><p>Redis：不提供，需自行实现<br>RabbitMQ：服务器过载的情况，对生产者速率会进行限制，保证服务可靠性</p>
+<h2 id="出入队性能"><a href="#出入队性能" class="headerlink" title="出入队性能"></a>出入队性能</h2><p>对于RabbitMQ和Redis的入队和出队操作，各执行100万次，每10万次记录一次执行时间。<br>测试数据分为128Bytes、512Bytes、1K和10K四个不同大小的数据。<br><img src="http://images.cnitblog.com/i/452671/201407/021448393248578.png" alt><br>注：此数据来源于互联网，部分数据有误，已修正</p>
+<hr>
+<h1 id="应用场景分析"><a href="#应用场景分析" class="headerlink" title="应用场景分析"></a>应用场景分析</h1><p>Redis：轻量级，高并发，延迟敏感<br>即时数据分析、秒杀计数器、缓存等</p>
+<p>RabbitMQ：重量级，高并发，异步<br>批量数据异步处理、并行任务串行化，高负载任务的负载均衡等</p>
 
       
     </div>
@@ -624,7 +636,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列"><span class="nav-number">1.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JMS"><span class="nav-number">2.</span> <span class="nav-text">JMS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS两种消息模型"><span class="nav-number">2.1.</span> <span class="nav-text">JMS两种消息模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS-五种不同的消息正文格式"><span class="nav-number">2.2.</span> <span class="nav-text">JMS 五种不同的消息正文格式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">3.</span> <span class="nav-text">RabbitMQ</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#消息队列"><span class="nav-number">1.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JMS"><span class="nav-number">2.</span> <span class="nav-text">JMS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS两种消息模型"><span class="nav-number">2.1.</span> <span class="nav-text">JMS两种消息模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS-五种不同的消息正文格式"><span class="nav-number">2.2.</span> <span class="nav-text">JMS 五种不同的消息正文格式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">3.</span> <span class="nav-text">RabbitMQ</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis与RabbitMQ作为消息队列的比较"><span class="nav-number">4.</span> <span class="nav-text">Redis与RabbitMQ作为消息队列的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#可靠消费"><span class="nav-number">4.1.</span> <span class="nav-text">可靠消费</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可靠发布"><span class="nav-number">4.2.</span> <span class="nav-text">可靠发布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高可用"><span class="nav-number">4.3.</span> <span class="nav-text">高可用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#持久化"><span class="nav-number">4.4.</span> <span class="nav-text">持久化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消费者负载均衡"><span class="nav-number">4.5.</span> <span class="nav-text">消费者负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#队列监控"><span class="nav-number">4.6.</span> <span class="nav-text">队列监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流量控制"><span class="nav-number">4.7.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#出入队性能"><span class="nav-number">4.8.</span> <span class="nav-text">出入队性能</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用场景分析"><span class="nav-number">5.</span> <span class="nav-text">应用场景分析</span></a></li></ol></div>
             
 
           </div>
@@ -658,7 +670,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">221.7k</span>
+    <span title="Site words total count">222.2k</span>
   
 </div>
 
