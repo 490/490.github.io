@@ -119,7 +119,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190318_083546.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133536.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133608.png">
-<meta property="og:updated_time" content="2019-05-19T11:53:59.874Z">
+<meta property="og:updated_time" content="2019-05-21T11:01:51.830Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -385,7 +385,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  25.6k
+                  25k
                 </span>
               
 
@@ -401,7 +401,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  91
+                  89
                 </span>
               
             </div>
@@ -775,13 +775,7 @@
 <h2 id="limit-，offset"><a href="#limit-，offset" class="headerlink" title="limit ，offset"></a>limit ，offset</h2><p>① select * from table limit 2,1;<br>//含义是跳过2条取出1条数据，limit后面是从第2条开始读，读取1条信息，即读取第3条数据</p>
 <p>② select * from table limit 2 offset 1;<br>//含义是从第1条（不包括）数据开始取出2条数据，limit后面跟的是2条数据，offset后面是从第1条开始读取，即读取第2,3条</p>
 <h2 id="distinct"><a href="#distinct" class="headerlink" title="distinct"></a>distinct</h2><p>去掉重复值，如果有多个列，会应用到每个列</p>
-<h2 id="on条件与where条件的区别"><a href="#on条件与where条件的区别" class="headerlink" title="on条件与where条件的区别"></a>on条件与where条件的区别</h2><p>0.on后的条件如果有过滤主表的条件，则结果对于不符合该条件的主表数据也会原条数保留，只是不匹配右表数据而已。对于on后面对右表的过滤条件，连接时会用该条件直接过滤右表数据后再和左边进行左连接。总之，对于不满足on后面的所有条件的数据，左表会在结果数据中原条数保留数据，只是不匹配右表数据而已。不满足条件的右表数据各字段会直接以NULL连接主表。</p>
-<p>1.ON后对左表的筛选条件对于结果行数会被忽略，但会影响结果中的匹配右表数据，因为只有符合左表条件的数据才会去和符合条件的右表数据进行匹配，不符合条件的左表数据会保留在最后结果中，但匹配的右表数据都是NULL.因此，对于需要过滤左表数据的话，需要把过滤条件放到where后面。</p>
-<p>2.ON后的左表条件（单独对左表进行的筛选条件）对于结果行数无影响，还是会返回所有左表的数据，但和右表匹配数据时，系统只会拿左表符合条件（ON后的对左表过滤条件）的数据去和右表符合条件（ON后的对右表过滤条件）的数据进行匹配抓取数据，而不符合条件的左表数据还是会出现在结果列表中，只是对应的右表数据都是NULL。</p>
-<p>3.ON后的右表条件（单独对右表进行的筛选条件）会先对右表进行数据筛选后再和左表做连接查询，对结果行数有影响（当左表对右表是一对多时），但不会影响左表的显示行数，然后拿符合条件的右表数据去和符合条件的左表数据进行匹配。</p>
-<p>4.Where还是对连接后的数据进行过滤筛选，这个无异议。</p>
-<p>5.匹配数据时无论左右表，都是拿符合ON后的过滤条件去做数据匹配，不符合的会保留左表数据，用NULL填充右表数据。</p>
-<p>综上得出，ON后面对于左表的过滤条件，在最后结果行数中会被忽略，并不会先去过滤左表数据再连接查询，但是ON后的右表条件会先过滤右表数据再连接左表进行查询。</p>
+<h2 id="on条件与where条件的区别"><a href="#on条件与where条件的区别" class="headerlink" title="on条件与where条件的区别"></a>on条件与where条件的区别</h2><p>综上得出，ON后面对于左表的过滤条件，在最后结果行数中会被忽略，并不会先去过滤左表数据再连接查询，但是ON后的右表条件会先过滤右表数据再连接左表进行查询。</p>
 <p>连接查询时，都是用符合ON后的左右表的过滤条件的数据进行连接查询，只有符合左右表过滤条件的数据才能正确匹配，剩下的左表数据会正常出现在结果集中，但匹配的右表数据是NULL。因此对于左表的过滤条件切记要放到Where后，对于右表的过滤条件要看情况了。如果需要先过滤右表数据就把条件放到ON后面即可。</p>
 <p>on、where、having的区别</p>
 <p>on、where、having这三个都可以加条件的子句中，on是最先执行，where次之，having最后。有时候如果这先后顺序不影响中间结果的话，那最终结果是相同的。但因为on是先把不符合条件的记录过滤后才进行统计，它就可以减少中间运算要处理的数据，按理说应该速度是最快的。          根据上面的分析，可以知道where也应该比having快点的，因为它过滤数据后才进行sum，所以having是最慢的。但也不是说having没用，因为有时在步骤3还没出来都不知道那个记录才符合要求时，就要用having了。          在两个表联接时才用on的，所以在一个表的时候，就剩下where跟having比较了。在这单表查询统计的情况下，如果要过滤的条件没有涉及到要计算字段，那它们的结果是一样的，只是where可以使用rushmore技术，而having就不能，在速度上后者要慢。          如果要涉及到计算的字段，就表示在没计算之前，这个字段的值是不确定的，根据上篇写的工作流程，where的作用时间是在计算之前就完成的，而having就是在计算后才起作用的，所以在这种情况下，两者的结果会不同。          在多表联接查询时，on比where更早起作用。系统首先根据各个表之间的联接条件，把多个表合成一个临时表后，再由where进行过滤，然后再计算，计算完后再由having进行过滤。由此可见，要想过滤条件起到正确的作用，首先要明白这个条件应该在什么时候起作用，然后再决定放在那里</p>
@@ -1262,7 +1256,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">222.5k</span>
+    <span title="Site words total count">222k</span>
   
 </div>
 
