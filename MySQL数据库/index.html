@@ -119,7 +119,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190318_083546.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133536.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133608.png">
-<meta property="og:updated_time" content="2019-05-21T11:01:51.830Z">
+<meta property="og:updated_time" content="2019-05-24T02:50:43.477Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -385,7 +385,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  25k
+                  25.1k
                 </span>
               
 
@@ -821,7 +821,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; delimiter $</span><br><span class="line">mysql&gt; SELECT * FROM t1 LIMIT 1;</span><br><span class="line">    -&gt; SELECT * FROM t2 LIMIT 1;</span><br><span class="line">    -&gt; SELECT * FROM t3 LIMIT 1;</span><br><span class="line">    -&gt; $</span><br><span class="line">    用完改回去</span><br><span class="line">    delimiter ;</span><br></pre></td></tr></table></figure>
 <h2 id="存储例程简介"><a href="#存储例程简介" class="headerlink" title="存储例程简介"></a>存储例程简介</h2><p><code>存储例程</code>是<code>存储程序</code>的一种类型，本质上也是封装了一些可执行的语句，只不过它的调用方式是：需要手动去调用！<code>存储例程</code>又可以分为<code>存储函数</code>和<code>存储过程</code>，下边我们详细唠叨这两个家伙。</p>
 <h3 id="存储函数"><a href="#存储函数" class="headerlink" title="存储函数"></a>存储函数</h3><p><code>存储函数</code>其实就是一种<code>函数</code>，只不过在这个函数里可以执行命令语句而已。<code>函数</code>的概念大家都应该不陌生，它可以把处理某个问题的过程封装起来，之后我们直接调用函数就可以去解决同样的问题了，简单方便又环保。<code>MySQL</code>中定义<code>存储函数</code>的语句如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE FUNCTION avg_score(s VARCHAR(100))</span><br><span class="line">RETURNS DOUBLE</span><br><span class="line">BEGIN</span><br><span class="line">    RETURN (SELECT AVG(score) FROM student_score WHERE subject = s);</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE FUNCTION avg_score(s VARCHAR(100))</span><br><span class="line">RETURNS DOUBLE</span><br><span class="line">BEGIN</span><br><span class="line"></span><br><span class="line">（declare count  integer有需要的话在这里定义变量）</span><br><span class="line">    RETURN (SELECT AVG(score) FROM student_score WHERE subject = s);</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
 <p>从这里我们可以看出，定义一个<code>存储函数</code>需要指定函数名称、参数列表、返回值类型以及函数体内容，如果该函数不需要参数，那参数列表可以被省略，函数体内容可以包括一条或多条语句，每条语句都要以分号<code>;</code>结尾。</p>
 <h3 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h3><p><code>存储函数</code>侧重于执行这些语句并返回一个值，而<code>存储过程</code>更侧重于单纯的去执行这些语句。<code>存储函数</code>执行语句并返回一个值，所以常用在表达式中。<code>存储过程</code>偏向于调用那些语句，并不能用在表达式中，我们需要显式的使用<code>CALL</code>语句来调用一个<code>存储过程</code>：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE PROCEDURE 存储过程名称([参数列表])</span><br><span class="line">BEGIN</span><br><span class="line">    需要执行的语句</span><br><span class="line">END</span><br><span class="line"></span><br><span class="line">CALL 存储过程([参数列表]);</span><br></pre></td></tr></table></figure>
