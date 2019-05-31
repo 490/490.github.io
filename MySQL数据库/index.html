@@ -119,7 +119,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190318_083546.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133536.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133608.png">
-<meta property="og:updated_time" content="2019-05-24T02:50:43.477Z">
+<meta property="og:updated_time" content="2019-05-31T02:03:10.238Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -401,7 +401,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  89
+                  90
                 </span>
               
             </div>
@@ -774,7 +774,7 @@
 <p>IFNULL函数根据使用的上下文返回字符串或数字。</p>
 <h2 id="limit-，offset"><a href="#limit-，offset" class="headerlink" title="limit ，offset"></a>limit ，offset</h2><p>① select * from table limit 2,1;<br>//含义是跳过2条取出1条数据，limit后面是从第2条开始读，读取1条信息，即读取第3条数据</p>
 <p>② select * from table limit 2 offset 1;<br>//含义是从第1条（不包括）数据开始取出2条数据，limit后面跟的是2条数据，offset后面是从第1条开始读取，即读取第2,3条</p>
-<h2 id="distinct"><a href="#distinct" class="headerlink" title="distinct"></a>distinct</h2><p>去掉重复值，如果有多个列，会应用到每个列</p>
+<h2 id="distinct"><a href="#distinct" class="headerlink" title="distinct"></a>distinct</h2><p>去掉重复值，如果有多个列，会应用到每个列<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 统计A公司的男女人数 </span><br><span class="line">select count(distinct id) from table_1 </span><br><span class="line">where company = &apos;A&apos; </span><br><span class="line">group by sex </span><br><span class="line">-- 统计各公司的男性平均年龄，并且仅保留平均年龄30岁以上的公司 </span><br><span class="line">select company, avg(age) from table_1 </span><br><span class="line">where sex = &apos;M&apos; </span><br><span class="line">group by company </span><br><span class="line">having avg(age)&gt;30;</span><br></pre></td></tr></table></figure></p>
 <h2 id="on条件与where条件的区别"><a href="#on条件与where条件的区别" class="headerlink" title="on条件与where条件的区别"></a>on条件与where条件的区别</h2><p>综上得出，ON后面对于左表的过滤条件，在最后结果行数中会被忽略，并不会先去过滤左表数据再连接查询，但是ON后的右表条件会先过滤右表数据再连接左表进行查询。</p>
 <p>连接查询时，都是用符合ON后的左右表的过滤条件的数据进行连接查询，只有符合左右表过滤条件的数据才能正确匹配，剩下的左表数据会正常出现在结果集中，但匹配的右表数据是NULL。因此对于左表的过滤条件切记要放到Where后，对于右表的过滤条件要看情况了。如果需要先过滤右表数据就把条件放到ON后面即可。</p>
 <p>on、where、having的区别</p>
@@ -1256,7 +1256,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">227.1k</span>
+    <span title="Site words total count">227.3k</span>
   
 </div>
 
