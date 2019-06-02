@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190419_133732.png">
 <meta property="og:image" content="http://490.github.io/images/20190415_193118.png">
 <meta property="og:image" content="http://490.github.io/images/20190415_193140.png">
-<meta property="og:updated_time" content="2019-06-02T00:34:20.537Z">
+<meta property="og:updated_time" content="2019-06-02T00:35:20.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hbase">
 <meta name="twitter:description" content="深入了解hbase">
@@ -471,7 +471,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):021:0&gt; describe 'coprocessor_table' Table coprocessor_table is ENABLED                                              </span><br><span class="line">coprocessor_table, &#123;TABLE_ATTRIBUTES =&gt; &#123;coprocessor$1 =&gt; 'hdfs://ns1/testdata/T</span><br><span class="line">est-HBase-Observer.jar|cn.com.newbee.feng.MyRegionObserver|1001'&#125;               </span><br><span class="line">COLUMN FAMILIES DESCRIPTION                                                     </span><br><span class="line">&#123;NAME =&gt; 'F', DATA_BLOCK_ENCODING =&gt; 'NONE', BLOOMFILTER =&gt; 'ROW', REPLICATION_S</span><br><span class="line">COPE =&gt; '0', VERSIONS =&gt; '1', COMPRESSION =&gt; 'NONE', MIN_VERSIONS =&gt; '0', TTL =&gt;</span><br><span class="line"> 'FOREVER', KEEP_DELETED_CELLS =&gt; 'FALSE', BLOCKSIZE =&gt; '65536', IN_MEMORY =&gt; 'f</span><br><span class="line">alse', BLOCKCACHE =&gt; 'true'&#125;                                                    </span><br><span class="line">1 row(s) in 0.0300 seconds</span><br></pre></td></tr></table></figure>
 <p>可以看到协处理器被表成功加载，其实内部是将update所有此表的region去加载协处理器的。</p>
 <h1 id="Hbase读写数据的原理解析"><a href="#Hbase读写数据的原理解析" class="headerlink" title="Hbase读写数据的原理解析"></a>Hbase读写数据的原理解析</h1><p><img src="http://490.github.io/images/20190415_193118.png" alt="image"></p>
-<p>每个列族对应一个store，每个store先存到memstore里，</p>
+<p>每个列族对应一个store，每个store先存到memstore里</p>
 <p>针对上图的一些解释：<br>这里面数据分区（region）存储是为了查询方便（即因为是集群所以能充分利用磁盘的IO性）。添加数据时，数据先进入Hlog–预写日志（数据只能追加不能修改）&lt;防止数据丢失&gt;，数据在Hlog写完后再写到内存中。<br>HFile：认为是将数据进行序列化。<br>StoreFile：认为是一个文件。<br>DFS:调用HDFS的客户端API来将数据传到HDFS。</p>
 <h2 id="写数据的流程（参考上图）："><a href="#写数据的流程（参考上图）：" class="headerlink" title="写数据的流程（参考上图）："></a>写数据的流程（参考上图）：</h2><p>1、客户端向hregionServer请求写数据<br>2、hregionServer将数据先写入hlog中。<br>3、hregionServer将数据后写入memstore中。<br>4、当内存中的数据达到阈值64M的时候，将数据Flush到硬盘中，并同时删除内存和hlog中的历史数据。<br>5、将硬盘中数据通过HFile来序列化，再将数据传输到HDFS进行存储。并对Hlog做一个标记。<br>6、当HDFS中的数据块达到4块的时候，Hmaster将数据加载到本地进行一个合并（如果合并后数据的大小小于256M则当数据块再次达到4块时（包含小于256M的数据块）将最新4块数据块再次进行合并，此时数据块大于256M）。<br>7、若数据块大于256M，则将数据重新拆分，将分配后的region重新分配给不同的hregionServer进行管理。<br>8、当hregionServer宕机后，将hregionServer上的hlog重新分配给不同的hregionServer进行加载（修改.META文件中关于数据所在server的信息）。注意：hlog会同步到HDFS中。</p>
 <h2 id="读数据的流程（参考下图）："><a href="#读数据的流程（参考下图）：" class="headerlink" title="读数据的流程（参考下图）："></a>读数据的流程（参考下图）：</h2><p>1、通过zk来获取ROOT表在那个节点上，然后进一步通过-ROOT表和-META表来获取最终的位置信息。<br>2、数据从内存和硬盘合并后返回到客户端。 </p>
@@ -753,7 +753,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">227.6k</span>
+    <span title="Site words total count">227.7k</span>
   
 </div>
 
