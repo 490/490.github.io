@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_133906.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_134003.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_134009.png">
-<meta property="og:updated_time" content="2019-06-01T00:49:16.567Z">
+<meta property="og:updated_time" content="2019-06-01T00:50:17.209Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基础知识">
 <meta name="twitter:description" content="简单来说 Redis 就是一个数据库，不过与传统数据库不同的是 Redis 的数据是存在内存中的，所以存写速度非常快，因此 Redis 被广泛应用于缓存方向。此外，redis 也经常用来做分布式锁。">
@@ -401,6 +401,7 @@
       
         <p>简单来说 Redis 就是一个数据库，不过与传统数据库不同的是 Redis 的数据是存在内存中的，所以存写速度非常快，因此 Redis 被广泛应用于缓存方向。此外，redis 也经常用来做分布式锁。</p>
 <a id="more"></a>
+<p>Redis是单线程，但是还这么快的原因是用了IO多路复用。</p>
 <h1 id="为什么要用-Redis"><a href="#为什么要用-Redis" class="headerlink" title="为什么要用 Redis"></a>为什么要用 Redis</h1><p><strong>高性能</strong></p>
 <p>假如用户第一次访问数据库中的某些数据。因为是从硬盘上读取的，所以这个过程会比较慢。我们可以将该用户这次访问的数据存在数缓存中，这样下一次再访问这些数据的时候就可以直接从缓存中获取了。操作缓存就是直接操作内存，所以速度相当快。如果数据库中的对应数据改变的之后，同步改变缓存中相应的数据即可！</p>
 <p><strong>高并发</strong></p>
