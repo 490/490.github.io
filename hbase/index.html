@@ -90,7 +90,10 @@
 <meta property="og:image" content="http://490.github.io/images/20190419_133732.png">
 <meta property="og:image" content="http://490.github.io/images/20190415_193118.png">
 <meta property="og:image" content="http://490.github.io/images/20190415_193140.png">
-<meta property="og:updated_time" content="2019-06-02T00:35:20.538Z">
+<meta property="og:image" content="http://490.github.io/images/20190604_102259.png">
+<meta property="og:image" content="http://490.github.io/images/20190604_102308.png">
+<meta property="og:image" content="http://490.github.io/images/20190604_102312.png">
+<meta property="og:updated_time" content="2019-06-04T02:26:48.046Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hbase">
 <meta name="twitter:description" content="深入了解hbase">
@@ -356,7 +359,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5.3k
+                  5.8k
                 </span>
               
 
@@ -372,7 +375,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  20
+                  22
                 </span>
               
             </div>
@@ -476,7 +479,7 @@
 <h2 id="写数据的流程（参考上图）："><a href="#写数据的流程（参考上图）：" class="headerlink" title="写数据的流程（参考上图）："></a>写数据的流程（参考上图）：</h2><p>1、客户端向hregionServer请求写数据<br>2、hregionServer将数据先写入hlog中。<br>3、hregionServer将数据后写入memstore中。<br>4、当内存中的数据达到阈值64M的时候，将数据Flush到硬盘中，并同时删除内存和hlog中的历史数据。<br>5、将硬盘中数据通过HFile来序列化，再将数据传输到HDFS进行存储。并对Hlog做一个标记。<br>6、当HDFS中的数据块达到4块的时候，Hmaster将数据加载到本地进行一个合并（如果合并后数据的大小小于256M则当数据块再次达到4块时（包含小于256M的数据块）将最新4块数据块再次进行合并，此时数据块大于256M）。<br>7、若数据块大于256M，则将数据重新拆分，将分配后的region重新分配给不同的hregionServer进行管理。<br>8、当hregionServer宕机后，将hregionServer上的hlog重新分配给不同的hregionServer进行加载（修改.META文件中关于数据所在server的信息）。注意：hlog会同步到HDFS中。</p>
 <h2 id="读数据的流程（参考下图）："><a href="#读数据的流程（参考下图）：" class="headerlink" title="读数据的流程（参考下图）："></a>读数据的流程（参考下图）：</h2><p>1、通过zk来获取ROOT表在那个节点上，然后进一步通过-ROOT表和-META表来获取最终的位置信息。<br>2、数据从内存和硬盘合并后返回到客户端。 </p>
 <p><img src="http://490.github.io/images/20190415_193140.png" alt="image"><br>PS：由上图可看到，当客户端在执行查询语句的时候，会先到zk上寻找对应-ROOT表（主要描述-META表在哪里）的位置信息（由此也知道ZK在Hbase中的作用），接下来根据-ROOT表中数据进而找到对应的HRegionServer，在对应的HRegionServer上的-META表（主要记载表的元数据信息）中找到对应的Table表在哪个HRegionServer上，再到对应的HRegionServer中查找对应的数据。</p>
-<h1 id="hbase-replication原理分析"><a href="#hbase-replication原理分析" class="headerlink" title="hbase replication原理分析"></a><a href="https://www.cnblogs.com/yueweimian/p/6520390.html" target="_blank" rel="noopener">hbase replication原理分析</a></h1><p><strong>replicationSource大致工作流程</strong></p>
+<h1 id="hbase-replication原理分析"><a href="#hbase-replication原理分析" class="headerlink" title="hbase replication原理分析"></a><a href="https://www.cnblogs.com/yueweimian/p/6520390.html" target="_blank" rel="noopener">hbase replication原理分析</a></h1><p><a href="https://blog.csdn.net/lw_ghy/article/details/60779289" target="_blank" rel="noopener">https://blog.csdn.net/lw_ghy/article/details/60779289</a><br><strong>replicationSource大致工作流程</strong></p>
 <ol>
 <li>while(isAlive())进行主体循环</li>
 <li>从WAL文件获取List&lt;WAL.Entry&gt;</li>
@@ -509,7 +512,9 @@
 <p>我们假设在HBase运行的过程中有一个RegionServer突然Crash, 基于这个场景进行分析。</p>
 <h2 id="1-RegionServer-Crash了"><a href="#1-RegionServer-Crash了" class="headerlink" title="1. RegionServer Crash了"></a>1. RegionServer Crash了</h2><p>Crash的原因可能有很多种，程序自身挂掉，OS挂掉，网络断掉，电源断掉，等等。但从MasterServer的角度看来只有一种现象，那就是RegionServer在Zookeeper上面注册的Node消失了。我们知道当RegionServer启动的时候会产生一个StartCode，并在Zookeeper上面注册一个EPHEMERAL类型的节点。</p>
 <p>一旦RS和ZK之间的通信消失，EPHEMERAL的节点就会被自动删除。而MasterServer则会捕获这个Node消失的事件。</p>
-<p>捕获这个事件之后，所有的事情就交给ServerManager.expireServer()来处理了。</p>
+<p>捕获这个事件之后，所有的事情就交给ServerManager.expireServer()来处理了。<br><img src="http://490.github.io/images/20190604_102259.png" alt="image"></p>
+<p><img src="http://490.github.io/images/20190604_102308.png" alt="image"></p>
+<p><img src="http://490.github.io/images/20190604_102312.png" alt="image"></p>
 <h2 id="2-ServerManager处理"><a href="#2-ServerManager处理" class="headerlink" title="2. ServerManager处理"></a>2. ServerManager处理</h2><p>首先ServerManager会更新自己的列表，包括deadserver list, online server list 以及 server connection list. 当然在我们试图Stop整个Cluster的时候也会收到同样的请求，不予理睬就好了。</p>
 <p>并不是所有的RS Crash都做相同的处理，有些RS比较特殊，他们正在管理-ROOT-表或者.META.表。如果我们重新分配Region, 就需要修改.META.表，如果要访问.META.表先要查询-ROOT-表 （参见以前的文章，client如何路由到正确的RS）。问题是现在管理-ROOT-表或者.META.表的RS挂了，显然第一要务是让-ROOT-和.META.有所归属，能够正常的对他们进行读写。</p>
 <p>接下来ServerManager通过传递Event的方式将任务交给Excutor线程来处理，具体调用MetaServerShutdownHandler或者ServerShutdownHandler的process函数。</p>
@@ -535,6 +540,11 @@
 <p>如果RS已经停止服务，但依然存活，ZK Node 就不会消失，这种情况应该发生过。目前只能作为Bug去修理。也许额外的Monitor是一个弥补的办法（定期Scan什么的）。</p>
 <p>3) 容错性到底有多强？</p>
 <p>如果是RS接二连三的挂掉，刚刚分配的RS又挂掉，等等极端情况，HBase的容错性到底有多强呢？也许需要针对性的理论分析和详细测试。</p>
+<h1 id="。。。"><a href="#。。。" class="headerlink" title="。。。"></a>。。。</h1><p>HBase检测宕机是通过Zookeeper实现的， 正常情况下RegionServer会周期性向Zookeeper发送心跳，一旦发生宕机，心跳就会停止，超过一定时间（SessionTimeout）Zookeeper就会认为RegionServer宕机离线，并将该消息通知给Master。上述步骤中比较特殊的是HLog切分，其他步骤相信都能够理解，为什么需要切分HLog？大家都知道当前（0.98）版本中一台RegionServer只有一个HLog文件，即所有Region的日志都是混合写入该HLog的，然而，回放日志是以Region为单元进行的，一个Region一个Region回放，因此在回放之前首先需要将HLog按照Region进行分组，每个Region的日志数据放在一起，方便后面按照Region进行回放。这个分组的过程就称为HLog切分。</p>
+<p>根据实现方式的不同，HBase的故障恢复前后经历了三种不同模式，</p>
+<p>1. 将待切分日志文件夹重命名，为什么需要将文件夹重命名呢？这是因为在某些场景下RegionServer并没有真正宕机，但是HMaster会认为其已经宕机并进行故障恢复，比如最常见的RegionServer发生长时间Full GC，这种场景下用户并不知道RegionServer宕机，所有的写入更新操作还会继续发送到该RegionServer，而且由于该RegionServer自身还继续工作所以会接收用户的请求，此时如果不重命名日志文件夹，就会发生HMaster已经在使用HLog进行故障恢复了，但是RegionServer还在不断写入HLog</p>
+<p>2. 启动一个读线程依次顺序读出每个HLog中所有&lt;HLogKey,WALEdit&gt;数据对，根据HLogKey所属的Region不同写入不同的内存buffer中，如上图Buffer-Region1内存存放Region1对应的所有日志数据，这样整个HLog所有数据会被完整group到不同的buffer中</p>
+<p>3. 每个buffer会对应启动一个写线程，负责将buffer中的数据写入hdfs中（对应的路径为/hbase/table_name/region/recoverd.edits/.tmp），再等Region重新分配到其他RegionServer之后按顺序回放对应Region的日志数据。</p>
 
       
     </div>
@@ -663,7 +673,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -719,7 +729,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase协处理器"><span class="nav-number">1.</span> <span class="nav-text">HBase协处理器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两者代码实现细节的差异"><span class="nav-number">1.2.</span> <span class="nav-text">两者代码实现细节的差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Observer协处理器的实现"><span class="nav-number">1.3.</span> <span class="nav-text">Observer协处理器的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Observer协处理器上传加载"><span class="nav-number">1.4.</span> <span class="nav-text">Observer协处理器上传加载</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hbase读写数据的原理解析"><span class="nav-number">2.</span> <span class="nav-text">Hbase读写数据的原理解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#写数据的流程（参考上图）："><span class="nav-number">2.1.</span> <span class="nav-text">写数据的流程（参考上图）：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读数据的流程（参考下图）："><span class="nav-number">2.2.</span> <span class="nav-text">读数据的流程（参考下图）：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hbase-replication原理分析"><span class="nav-number">3.</span> <span class="nav-text">hbase replication原理分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase是强一致性系统"><span class="nav-number">4.</span> <span class="nav-text">HBase是强一致性系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crash后"><span class="nav-number">5.</span> <span class="nav-text">crash后</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-RegionServer-Crash了"><span class="nav-number">5.1.</span> <span class="nav-text">1. RegionServer Crash了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ServerManager处理"><span class="nav-number">5.2.</span> <span class="nav-text">2. ServerManager处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-ServerShutdownHandler处理"><span class="nav-number">5.3.</span> <span class="nav-text">3. ServerShutdownHandler处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Assign-RegionServer"><span class="nav-number">5.4.</span> <span class="nav-text">4. Assign RegionServer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-RegionServer加载新的Region"><span class="nav-number">5.5.</span> <span class="nav-text">5. RegionServer加载新的Region</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-分析后的思考"><span class="nav-number">5.6.</span> <span class="nav-text">6. 分析后的思考</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase协处理器"><span class="nav-number">1.</span> <span class="nav-text">HBase协处理器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两者代码实现细节的差异"><span class="nav-number">1.2.</span> <span class="nav-text">两者代码实现细节的差异</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Observer协处理器的实现"><span class="nav-number">1.3.</span> <span class="nav-text">Observer协处理器的实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Observer协处理器上传加载"><span class="nav-number">1.4.</span> <span class="nav-text">Observer协处理器上传加载</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hbase读写数据的原理解析"><span class="nav-number">2.</span> <span class="nav-text">Hbase读写数据的原理解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#写数据的流程（参考上图）："><span class="nav-number">2.1.</span> <span class="nav-text">写数据的流程（参考上图）：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读数据的流程（参考下图）："><span class="nav-number">2.2.</span> <span class="nav-text">读数据的流程（参考下图）：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hbase-replication原理分析"><span class="nav-number">3.</span> <span class="nav-text">hbase replication原理分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase是强一致性系统"><span class="nav-number">4.</span> <span class="nav-text">HBase是强一致性系统</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#crash后"><span class="nav-number">5.</span> <span class="nav-text">crash后</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-RegionServer-Crash了"><span class="nav-number">5.1.</span> <span class="nav-text">1. RegionServer Crash了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ServerManager处理"><span class="nav-number">5.2.</span> <span class="nav-text">2. ServerManager处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-ServerShutdownHandler处理"><span class="nav-number">5.3.</span> <span class="nav-text">3. ServerShutdownHandler处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Assign-RegionServer"><span class="nav-number">5.4.</span> <span class="nav-text">4. Assign RegionServer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-RegionServer加载新的Region"><span class="nav-number">5.5.</span> <span class="nav-text">5. RegionServer加载新的Region</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-分析后的思考"><span class="nav-number">5.6.</span> <span class="nav-text">6. 分析后的思考</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#。。。"><span class="nav-number">6.</span> <span class="nav-text">。。。</span></a></li></ol></div>
             
 
           </div>
@@ -753,7 +763,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">227.8k</span>
+    <span title="Site words total count">228.3k</span>
   
 </div>
 
