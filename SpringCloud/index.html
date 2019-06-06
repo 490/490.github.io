@@ -85,10 +85,13 @@
 <meta property="og:site_name" content="我的笔记">
 <meta property="og:description" content="微服务https://blog.lqdev.cn/categories/SpringCloud/">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-06T01:05:15.295Z">
+<meta property="og:image" content="http://qiniu.xds123.cn/18-9-20/20652450.jpg">
+<meta property="og:image" content="http://qiniu.xds123.cn/18-9-20/75877117.jpg">
+<meta property="og:updated_time" content="2019-06-06T04:53:15.532Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringCloud">
 <meta name="twitter:description" content="微服务https://blog.lqdev.cn/categories/SpringCloud/">
+<meta name="twitter:image" content="http://qiniu.xds123.cn/18-9-20/20652450.jpg">
 
 
 
@@ -350,7 +353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.8k
+                  2.3k
                 </span>
               
 
@@ -366,7 +369,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  9
                 </span>
               
             </div>
@@ -400,7 +403,18 @@
 <h2 id="EnableDiscoveryClient"><a href="#EnableDiscoveryClient" class="headerlink" title="@EnableDiscoveryClient"></a>@EnableDiscoveryClient</h2><p>在启动类上，注册到eureka server<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">spring.application.name: micro-weather-config-client</span><br><span class="line"></span><br><span class="line">eureka.client.serviceUrl.defaultZone: http://localhost:8761/eureka/</span><br><span class="line"></span><br><span class="line">spring.cloud.config.profile=dev</span><br><span class="line">spring.cloud.config.uri=http://localhost:8888/</span><br></pre></td></tr></table></figure></p>
 <h2 id="EnableEurekaServer"><a href="#EnableEurekaServer" class="headerlink" title="@EnableEurekaServer"></a>@EnableEurekaServer</h2><p>注册服务中心</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">server.port: 8761</span><br><span class="line"></span><br><span class="line">eureka.instance.hostname: localhost</span><br><span class="line">eureka.client.registerWithEureka: false</span><br><span class="line">eureka.client.fetchRegistry: false</span><br><span class="line">eureka.client.serviceUrl.defaultZone: http://$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka/</span><br><span class="line"></span><br><span class="line">eureka.server.enable-self-preservation=false</span><br></pre></td></tr></table></figure>
-<h1 id="微服务的消费者"><a href="#微服务的消费者" class="headerlink" title="微服务的消费者"></a>微服务的消费者</h1><h2 id="httpclient"><a href="#httpclient" class="headerlink" title="httpclient"></a>httpclient</h2><h2 id="ribbon"><a href="#ribbon" class="headerlink" title="ribbon"></a>ribbon</h2><h2 id="feign"><a href="#feign" class="headerlink" title="feign"></a>feign</h2><p>哪个微服务A里面依赖了另一个微服务B，就把A改造成feign，这个客户端去调用B，这个客户端在Acontroller里像service一样用@Autowire注册。</p>
+<h1 id="微服务的消费者"><a href="#微服务的消费者" class="headerlink" title="微服务的消费者"></a>微服务的消费者</h1><h2 id="httpclient"><a href="#httpclient" class="headerlink" title="httpclient"></a>httpclient</h2><h2 id="ribbon"><a href="#ribbon" class="headerlink" title="ribbon"></a>ribbon</h2><p><code>Spring Cloud Ribbon</code>是一个基于Http和TCP的客服端负载均衡工具，它是基于<code>Netflix Ribbon</code>实现的。与<code>Eureka</code>配合使用时，<code>Ribbon</code>可自动从<code>Eureka Server (注册中心)</code>获取服务提供者地址列表，并基于<code>负载均衡</code>算法，通过在客户端中配置<code>ribbonServerList</code>来设置服务端列表去轮询访问以达到均衡负载的作用。</p>
+<p><strong>创建一个工程：<code>spring-cloud-eureka-consumer-ribbon</code></strong><br>(其实这个工程和<code>spring-cloud-eureka-consumer</code>是差不多的，只是有些许不同。)</p>
+<p>0.加入pom依赖<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 客户端依赖 --&gt;</span><br><span class="line"> &lt;dependency&gt;</span><br><span class="line"> &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line"> &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;</span><br><span class="line"> &lt;/dependency&gt;</span><br><span class="line"> &lt;dependency&gt;</span><br><span class="line"> &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line"> &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line"> &lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<p>1.配置文件修改，添加注册中心等相关信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">spring.application.name=eureka-consumer-ribbon</span><br><span class="line">server.port=8018</span><br><span class="line"></span><br><span class="line">#指定注册中心地址</span><br><span class="line">eureka.client.service-url.defaultZone=http://127.0.0.1:1000/eureka</span><br><span class="line"># 启用ip配置 这样在注册中心列表中看见的是以ip+端口呈现的</span><br><span class="line">eureka.instance.prefer-ip-address=true</span><br><span class="line"># 实例名称  最后呈现地址：ip:2000</span><br><span class="line">eureka.instance.instance-id=$&#123;spring.cloud.client.ip-address&#125;:$&#123;server.port&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.编写启动类，加入<code>@EnableDiscoveryClient</code>，同时申明一个<code>RestTemplate</code>，<strong>这里和原先不同，就在于加入了<code>@LoadBalanced</code>注解进行修饰<code>RestTemplate</code>类，稍后会大致讲解下是如何进行实现的。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootApplication</span><br><span class="line">@EnableDiscoveryClient</span><br><span class="line">@Slf4j</span><br><span class="line">public class EurekaConsumerRibbonApplication </span><br><span class="line">&#123;</span><br><span class="line"> public static void main(String[] args) throws Exception </span><br><span class="line"> &#123;</span><br><span class="line">     SpringApplication.run(EurekaConsumerRibbonApplication.class, args);</span><br><span class="line">     log.info(&quot;spring-cloud-eureka-consumer-ribbon启动!&quot;);</span><br><span class="line"> &#125;</span><br><span class="line"> //添加 @LoadBalanced 使其具备了使用LoadBalancerClient 进行负载均衡的能力</span><br><span class="line"> @Bean</span><br><span class="line"> @LoadBalanced</span><br><span class="line"> public RestTemplate restTemplage() </span><br><span class="line"> &#123;</span><br><span class="line">     return new RestTemplate();</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.编写测试类，进行服务调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * ribbon访问客户端示例</span><br><span class="line"> * @author oKong</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">@RestController</span><br><span class="line">@Slf4j</span><br><span class="line">public class DemoController </span><br><span class="line">&#123;</span><br><span class="line">   @Autowired </span><br><span class="line">   RestTemplate restTemplate;</span><br><span class="line">   @GetMapping(&quot;/hello&quot;) </span><br><span class="line">   public String hello(String name) </span><br><span class="line">   &#123;</span><br><span class="line"> //直接使用服务名进行访问</span><br><span class="line">       log.info(&quot;请求参数name:&#123;&#125;&quot;, name);</span><br><span class="line">       return restTemplate.getForObject(&quot;http://eureka-client/hello?name=&quot; + name, String.class);</span><br><span class="line">   &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看见，可以直接注入<code>RestTemplate</code>，通过服务名直接调用.</p>
+<p>4.启动应用，访问:(<a href="http://127.0.0.1:8018/hello?name=oKong" target="_blank" rel="noopener">http://127.0.0.1:8018/hello?name=oKong</a>) ,可以看见调用成功：</p>
+<p><a href="http://qiniu.xds123.cn/18-9-20/20652450.jpg" title="hello" target="_blank" rel="noopener"><img src="http://qiniu.xds123.cn/18-9-20/20652450.jpg" alt="hello"></a><br>控制台输出：</p>
+<p><a href="http://qiniu.xds123.cn/18-9-20/75877117.jpg" title="控制台输出" target="_blank" rel="noopener"><img src="http://qiniu.xds123.cn/18-9-20/75877117.jpg" alt="控制台输出"></a></p>
+<h2 id="feign"><a href="#feign" class="headerlink" title="feign"></a>feign</h2><p>哪个微服务A里面依赖了另一个微服务B，就把A改造成feign，这个客户端去调用B，这个客户端在Acontroller里像service一样用@Autowire注册。</p>
 <p>一个类似于 Java HTTP 客户端的工具 Feign 来访问远程 HTTP 服务器；用于服务之间的调用</p>
 <p>虽然说我们可以采用 RestTemplate、URLConnection、Netty、HttpClient都可以访问远端 HTTP 服务器，但是使用 Feign 来说，Feign 可以做到使用 HTTP 请求远程服务时就像调用本地的方法一样，让开发者完全感知不到这是在调用远端服务，感觉无非就是调用一个 API 方法一样；</p>
 <p>当我们使用 Feign 的时候，SpringCloud 整合了 Ribbon 和 Eureka 去提供负载均衡；</p>
@@ -434,7 +448,8 @@
 <li>网关需高可用，可能产生单点故障</li>
 <li>管理复杂</li>
 </ul>
-<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><h2 id="zuul"><a href="#zuul" class="headerlink" title="zuul"></a>zuul</h2><p><strong>Zuul的核心一系列的过滤器</strong>：</p>
+<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><p>服务端负载均衡</p>
+<h2 id="zuul"><a href="#zuul" class="headerlink" title="zuul"></a>zuul</h2><p><strong>Zuul的核心一系列的过滤器</strong>：</p>
 <ul>
 <li>身份认证与安全：识别每个资源的验证要求，并拒绝那些与要求不符的请求。</li>
 <li>审查与监控：在边缘位置追踪有意义的数据和统计结果，从而带来精确的生产视图。</li>
@@ -662,7 +677,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">230.1k</span>
+    <span title="Site words total count">230.6k</span>
   
 </div>
 
