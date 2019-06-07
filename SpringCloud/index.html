@@ -88,7 +88,7 @@
 <meta property="og:image" content="http://qiniu.xds123.cn/18-9-20/20652450.jpg">
 <meta property="og:image" content="http://qiniu.xds123.cn/18-9-20/75877117.jpg">
 <meta property="og:image" content="http://qiniu.xds123.cn/18-10-9/49986433.jpg">
-<meta property="og:updated_time" content="2019-06-06T13:22:16.165Z">
+<meta property="og:updated_time" content="2019-06-06T13:23:16.151Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringCloud">
 <meta name="twitter:description" content="微服务https://blog.lqdev.cn/categories/SpringCloud/">
@@ -370,7 +370,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  17
+                  18
                 </span>
               
             </div>
@@ -498,6 +498,10 @@
 <p><code>application.properties</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 设置应用名称，需要和配置文件匹配</span><br><span class="line">spring.application.name=my-config-client</span><br><span class="line">server.port=5666</span><br></pre></td></tr></table></figure>
 <p><code>spring-cloud-config</code>相关的属性<strong>必须配置在<code>bootstrap.properties</code>中</strong>，config部分内容才能被正确加载。因为config的相关配置会先于<code>application.properties</code>，而<code>bootstrap.properties</code>的加载也是先于<code>application.properties</code>。</p>
+<ol start="3">
+<li>编写一个控制层，利用<code>@Value</code>进行参数测试。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoController</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">   <span class="meta">@Value</span>(<span class="string">"$&#123;config&#125;"</span>)</span><br><span class="line">   String config;</span><br><span class="line">   <span class="meta">@GetMapping</span>(<span class="string">"/"</span>)</span><br><span class="line">   <span class="function"><span class="keyword">public</span> String <span class="title">demo</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="string">"返回的config参数值为:"</span> + config;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="熔断"><a href="#熔断" class="headerlink" title="熔断"></a>熔断</h1><p>而在微服务调用中，自身异常可自行处理外，对于依赖的服务若发生错误，或者调用异常，或者调用时间过长等原因时，避免长时间等待，造成系统资源耗尽。<br>一般上都会通过<code>设置请求的超时时间</code>，如<code>http</code>请求中的<code>ConnectTimeout</code>和<code>ReadTimeout</code>；再或者就是使用<code>熔断器</code>模式，隔离问题服务，防止级联错误等。</p>
 <p>熔断器，和现实生活中的<code>空气开关</code>作用很像。它可以实现<strong>快速失败</strong>，如果它在一段时间内侦测到许多类似的错误，<strong>会强迫其以后的多个调用快速失败，不再访问远程服务器，从而防止应用程序不断地尝试执行可能会失败的操作</strong>，使得应用程序继续执行而不用等待修正错误，或者浪费CPU时间去等到长时间的超时产生。<strong>熔断器也可以使应用程序能够诊断错误是否已经修正，如果已经修正，应用程序会再次尝试调用操作。</strong></p>
 <p>熔断器模式就像是那些容易导致错误的操作的一种代理。<strong>这种代理能够记录最近调用发生错误的次数，然后决定使用允许操作继续，或者立即返回错误</strong>。</p>
@@ -750,7 +754,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">232.8k</span>
+    <span title="Site words total count">232.9k</span>
   
 </div>
 
