@@ -89,7 +89,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_081729.png">
 <meta property="og:image" content="https://github.com/TangBean/MarkdownNotes/raw/master/DockerAndKubernetes/01-Docker%E5%9F%BA%E7%A1%80/pic/00-Docker%E5%BC%95%E6%93%8E%E7%9A%84%E6%9E%B6%E6%9E%84.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_081737.png">
-<meta property="og:updated_time" content="2019-06-09T13:31:21.081Z">
+<meta property="og:updated_time" content="2019-06-09T13:32:21.876Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker简介">
 <meta name="twitter:description" content="一句话概括容器：容器就是将软件打包成标准化单元，以用于开发、交付和部署。  容器镜像是轻量的、可执行的独立软件包 ，包含软件运行所需的所有内容：代码、运行时环境、系统工具、系统库和设置。 容器化软件适用于基于Linux和Windows的应用，在任何环境中都能够始终如一地运行。 容器赋予了软件独立性　，使其免受外在环境差异（例如，开发和预演环境的差异）的影响，从而有助于减少团队间在相同基础设施上运行">
@@ -493,9 +493,9 @@
 <h1 id="容器自动退出问题"><a href="#容器自动退出问题" class="headerlink" title="容器自动退出问题"></a>容器自动退出问题</h1><p>docker logs -f  容器id </p>
 <p>查看容器日志信息,看最后面发现一个error:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ERROR: [1] bootstrap checks failed</span><br><span class="line">[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least</span><br></pre></td></tr></table></figure></p>
 <p>显示max_map_count的值太小了，需要设大到262144</p>
-<p>查看max_map_count :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
-<p>cat /proc/sys/vm/max_map_count<br>65530</p>
-<p>设置max_map_count:<br>sysctl -w vm.max_map_count=262144<br>vm.max_map_count = 262144<br>重启容器:docker start  容器id或名字</p>
+<p>查看max_map_count :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/sys/vm/max_map_count</span><br><span class="line">65530</span><br></pre></td></tr></table></figure></p>
+<p>设置max_map_count:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sysctl -w vm.max_map_count=262144</span><br><span class="line">vm.max_map_count = 262144</span><br></pre></td></tr></table></figure></p>
+<p>重启容器:docker start  容器id或名字</p>
 
       
     </div>
@@ -714,7 +714,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">233.9k</span>
+    <span title="Site words total count">235.2k</span>
   
 </div>
 
