@@ -80,14 +80,14 @@
 <meta name="description" content="Elasticsearch是一个实时的分布式搜索和分析引擎。它可以帮助你用前所未有的速度去处理大规模数据。ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳">
 <meta name="keywords" content="Spring">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Elasticsearch">
+<meta property="og:title" content="ELK">
 <meta property="og:url" content="https://490.github.io/Elasticsearch/index.html">
 <meta property="og:site_name" content="我的笔记">
 <meta property="og:description" content="Elasticsearch是一个实时的分布式搜索和分析引擎。它可以帮助你用前所未有的速度去处理大规模数据。ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-10T08:41:35.834Z">
+<meta property="og:updated_time" content="2019-06-11T10:56:20.751Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Elasticsearch">
+<meta name="twitter:title" content="ELK">
 <meta name="twitter:description" content="Elasticsearch是一个实时的分布式搜索和分析引擎。它可以帮助你用前所未有的速度去处理大规模数据。ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳">
 
 
@@ -124,7 +124,7 @@
 
 
 
-  <title>Elasticsearch | 我的笔记</title>
+  <title>ELK | 我的笔记</title>
   
 
 
@@ -296,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Elasticsearch</h1>
+          <h1 class="post-title" itemprop="name headline">ELK</h1>
         
 
         <div class="post-meta">
@@ -350,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.2k
+                  1.3k
                 </span>
               
 
@@ -400,7 +400,9 @@
 <p>stdin，表示输入流，指从键盘输入 stdout，表示输出流，指从显示器输出<br>命令行参数:-e 执行 –config 或 -f 配置文件，后跟参数类型可以是一个字符串的配置或全路径文件名或全路径路径(如：/etc/logstash.d/，logstash会自动读取/etc/logstash.d/目录下所有*.conf 的文本文件，然后在自己内存里拼接成一个完整的大配置文件再去执行)</p>
 <h2 id="MySQL数据导入Elasticsearch"><a href="#MySQL数据导入Elasticsearch" class="headerlink" title="MySQL数据导入Elasticsearch"></a>MySQL数据导入Elasticsearch</h2><p>（1）在logstash-5.6.8安装目录下创建文件夹mysqletc （名称随意）<br>（2）文件夹下创建mysql.conf （名称随意） ，内容如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">  jdbc &#123;</span><br><span class="line">      # mysql jdbc connection string to our backup databse 后面的test 对应mysql中的test数据库 jdbc_connection_string =&gt;</span><br><span class="line">      &quot;jdbc:mysql://127.0.0.1:3306/tensquare_article?characterEncoding=UTF8&quot;</span><br><span class="line">      # the user we wish to excute our statement as</span><br><span class="line">      jdbc_user =&gt; &quot;root&quot;</span><br><span class="line">      jdbc_password =&gt; &quot;123456&quot;</span><br><span class="line">      # the path to our downloaded jdbc driver</span><br><span class="line">      jdbc_driver_library =&gt; &quot;D:/logstash‐5.6.8/mysqletc/mysql‐</span><br><span class="line">      connector‐java‐5.1.46.jar&quot;</span><br><span class="line">      # the name of the driver class for mysql</span><br><span class="line">      jdbc_driver_class =&gt; &quot;com.mysql.jdbc.Driver&quot;</span><br><span class="line">      jdbc_paging_enabled =&gt; &quot;true&quot;</span><br><span class="line">      jdbc_page_size =&gt; &quot;50000&quot;</span><br><span class="line">      #以下对应着要执行的sql的绝对路径。 statement =&gt; &quot;select id,title,content from tb_article&quot;</span><br><span class="line">      #定时字段 各字段含义（由左至右）分、时、天、月、年，全部为*默认含义为</span><br><span class="line">      每分钟都更新 schedule =&gt; &quot;* * * * *&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line">output &#123;</span><br><span class="line">  elasticsearch &#123;</span><br><span class="line">      #ESIP地址与端口 hosts =&gt; &quot;localhost:9200&quot;</span><br><span class="line">      #ES索引名称（自己定义的） index =&gt; &quot;tensquare&quot;</span><br><span class="line">      #自增ID编号 document_id =&gt; &quot;%&#123;id&#125;&quot;</span><br><span class="line">      document_type =&gt; &quot;article&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    stdout &#123;</span><br><span class="line">      #以JSON格式输出 codec =&gt; json_lines</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>3）将mysql驱动包mysql-connector-java-5.1.46.jar拷贝至D:/logstash-<br>5.6.8/mysqletc/ 下 。D:/logstash-5.6.8是你的安装目录<br>（4）命令行下执行<br><code>logstash ‐f ../mysqletc/mysql.conf</code></p>
+<p>3）将mysql驱动包mysql-connector-java-5.1.46.jar拷贝至D:/logstash-5.6.8/mysqletc/ 下 。D:/logstash-5.6.8是你的安装目录<br>（4）命令行下执行<br><code>logstash ‐f ../mysqletc/mysql.conf</code></p>
+<p>观察控制台输出，每间隔1分钟就执行一次sql查询。再次刷新elasticsearch-head的数据显示，看是否也更新了数据。</p>
+<h1 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h1><p>Kibana 也是一个开源和免费的工具，Kibana可以为 Logstash 和 ElasticSearch 提供的日志分析友好的 Web 界面，可以帮助汇总、分析和搜索重要数据日志。</p>
 
       
     </div>
@@ -581,7 +583,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ElasticSearch特点"><span class="nav-number">1.</span> <span class="nav-text">ElasticSearch特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ElasticSearch体系结构"><span class="nav-number">2.</span> <span class="nav-text">ElasticSearch体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ElasticSearch部署与启动"><span class="nav-number">3.</span> <span class="nav-text">ElasticSearch部署与启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Head插件的安装与使用"><span class="nav-number">4.</span> <span class="nav-text">Head插件的安装与使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Elasticsearch与MySQL数据同步"><span class="nav-number">5.</span> <span class="nav-text">Elasticsearch与MySQL数据同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Logstash安装与测试"><span class="nav-number">5.1.</span> <span class="nav-text">Logstash安装与测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL数据导入Elasticsearch"><span class="nav-number">5.2.</span> <span class="nav-text">MySQL数据导入Elasticsearch</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ElasticSearch特点"><span class="nav-number">1.</span> <span class="nav-text">ElasticSearch特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ElasticSearch体系结构"><span class="nav-number">2.</span> <span class="nav-text">ElasticSearch体系结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ElasticSearch部署与启动"><span class="nav-number">3.</span> <span class="nav-text">ElasticSearch部署与启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Head插件的安装与使用"><span class="nav-number">4.</span> <span class="nav-text">Head插件的安装与使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Elasticsearch与MySQL数据同步"><span class="nav-number">5.</span> <span class="nav-text">Elasticsearch与MySQL数据同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Logstash安装与测试"><span class="nav-number">5.1.</span> <span class="nav-text">Logstash安装与测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL数据导入Elasticsearch"><span class="nav-number">5.2.</span> <span class="nav-text">MySQL数据导入Elasticsearch</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kibana"><span class="nav-number">6.</span> <span class="nav-text">Kibana</span></a></li></ol></div>
             
 
           </div>
@@ -615,7 +617,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">235.2k</span>
+    <span title="Site words total count">235.3k</span>
   
 </div>
 
