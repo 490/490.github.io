@@ -77,13 +77,13 @@
 
 
 
-<meta name="description" content="Spring IoC、AOP 的理解以及实现的原理Spring IoC Spring IoC 实现原理：反射创建实例。 IoC 容器的加戴过程：XML -&amp;gt; 读取 -&amp;gt; Resource -&amp;gt; 解析 -&amp;gt; BeanDefinition -&amp;gt; 注册 -&amp;gt; BeanFactory  IoC(Inversion of Control,控制翻转) 是Spring 中一个">
+<meta name="description" content="Spring IoC、AOP 的理解以及实现的原理Spring IoC Spring IoC 实现原理：反射创建实例。 IoC 容器的加戴过程：XML -&amp;gt; 读取 -&amp;gt; Resource -&amp;gt; 解析 -&amp;gt; BeanDefinition -&amp;gt; 注册 -&amp;gt; BeanFactory">
 <meta name="keywords" content="Spring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring基础知识">
 <meta property="og:url" content="https://490.github.io/Spring/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="Spring IoC、AOP 的理解以及实现的原理Spring IoC Spring IoC 实现原理：反射创建实例。 IoC 容器的加戴过程：XML -&amp;gt; 读取 -&amp;gt; Resource -&amp;gt; 解析 -&amp;gt; BeanDefinition -&amp;gt; 注册 -&amp;gt; BeanFactory  IoC(Inversion of Control,控制翻转) 是Spring 中一个">
+<meta property="og:description" content="Spring IoC、AOP 的理解以及实现的原理Spring IoC Spring IoC 实现原理：反射创建实例。 IoC 容器的加戴过程：XML -&amp;gt; 读取 -&amp;gt; Resource -&amp;gt; 解析 -&amp;gt; BeanDefinition -&amp;gt; 注册 -&amp;gt; BeanFactory">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190327_193609.png">
 <meta property="og:image" content="http://490.github.io/images/20190327_193715.png">
@@ -91,10 +91,10 @@
 <meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/iaIdQfEric9TwBuibJ4N5OTyAvJibFj8b7zh3apBemUibszLADBA4wIW10sYZcPXiaBrSaJUTPjVY5EY03Pu65eeDdNA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
 <meta property="og:image" content="http://490.github.io/images/20190424_215419.png">
 <meta property="og:image" content="http://490.github.io/images/20190424_215427.png">
-<meta property="og:updated_time" content="2019-06-09T07:42:03.905Z">
+<meta property="og:updated_time" content="2019-06-18T12:10:37.547Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring基础知识">
-<meta name="twitter:description" content="Spring IoC、AOP 的理解以及实现的原理Spring IoC Spring IoC 实现原理：反射创建实例。 IoC 容器的加戴过程：XML -&amp;gt; 读取 -&amp;gt; Resource -&amp;gt; 解析 -&amp;gt; BeanDefinition -&amp;gt; 注册 -&amp;gt; BeanFactory  IoC(Inversion of Control,控制翻转) 是Spring 中一个">
+<meta name="twitter:description" content="Spring IoC、AOP 的理解以及实现的原理Spring IoC Spring IoC 实现原理：反射创建实例。 IoC 容器的加戴过程：XML -&amp;gt; 读取 -&amp;gt; Resource -&amp;gt; 解析 -&amp;gt; BeanDefinition -&amp;gt; 注册 -&amp;gt; BeanFactory">
 <meta name="twitter:image" content="http://490.github.io/images/20190327_193609.png">
 
 
@@ -398,6 +398,7 @@
 <li>Spring IoC 实现原理：反射创建实例。</li>
 <li>IoC 容器的加戴过程：<code>XML -&gt; 读取 -&gt; Resource -&gt; 解析 -&gt; BeanDefinition -&gt; 注册 -&gt; BeanFactory</code></li>
 </ul>
+<a id="more"></a>
 <p>IoC(Inversion of Control,控制翻转) 是Spring 中一个非常非常重要的概念，它不是什么技术，而是一种解耦的设计思想。它的主要目的是借助于“第三方”(Spring 中的 IOC 容器) 实现具有依赖关系的对象之间的解耦(IOC容器管理对象，你只管使用即可)，从而降低代码之间的耦合度。IOC 是一个原则，而不是一个模式，以下模式（但不限于）实现了IoC原则。</p>
 <p>Spring IOC 容器就像是一个工厂一样，当我们需要创建一个对象的时候，只需要配置好配置文件/注解即可，完全不用考虑对象是如何被创建出来的。 IOC 容器负责创建对象，将对象连接在一起，配置这些对象，并从创建中处理这些对象的整个生命周期，直到它们被完全销毁。</p>
 <p>在实际项目中一个 Service 类如果有几百甚至上千个类作为它的底层，我们需要实例化这个 Service，你可能要每次都要搞清这个 Service 所有底层类的构造函数，这可能会把人逼疯。如果利用 IOC 的话，你只需要配置好，然后在需要的地方引用就行了，这大大增加了项目的可维护性且降低了开发难度。关于Spring IOC 的理解，推荐看这一下知乎的一个回答：<a href="https://www.zhihu.com/question/23277575/answer/169698662" target="_blank" rel="noopener">https://www.zhihu.com/question/23277575/answer/169698662</a> ，非常不错。</p>
@@ -608,7 +609,7 @@
 <p>set注入的缺点是无法清晰表达哪些属性是必须的，哪些是可选的，构造注入的优势是通过构造强制依赖关系，不可能实例化不 完全的或无法使用的bean。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">MemberBean定义四个变量，</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> String name;</span><br><span class="line"><span class="keyword">private</span> Double salary;</span><br><span class="line"><span class="keyword">private</span> Dept dept;</span><br><span class="line"><span class="keyword">private</span> String sex;</span><br><span class="line"></span><br><span class="line">加上构造方法和toString方法：方便测试</span><br><span class="line"></span><br><span class="line">Dept：</span><br><span class="line"><span class="keyword">private</span> String dname;</span><br><span class="line"><span class="keyword">private</span> String deptno;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">第一种方法：根据索引赋值，索引都是以0开头的：</span><br><span class="line"></span><br><span class="line"> &lt;bean id=&quot;memberBean&quot; class=&quot;www.csdn.spring01.constructor.MemberBean&quot;&gt;</span><br><span class="line">         &lt;constructor-arg index=&quot;0&quot; value=&quot;刘晓刚&quot; /&gt;</span><br><span class="line">         &lt;constructor-arg index=&quot;1&quot; value=&quot;3500&quot; /&gt;</span><br><span class="line">         &lt;constructor-arg index=&quot;2&quot; ref=&quot;dept&quot;/&gt;</span><br><span class="line">         &lt;constructor-arg index=&quot;3&quot; value=&quot;男&quot; /&gt;</span><br><span class="line"></span><br><span class="line">第二种方法是根据所属类型传值</span><br><span class="line">这种方法基本上不怎么适用，因为一个类里可以有好几个相同基本类型的变量，很容易就混淆值传给哪一个参数了所以做好不要使用这种方法：</span><br><span class="line"></span><br><span class="line">         &lt;constructor-arg type=&quot;java.lang.String&quot; value=&quot;刘晓刚&quot; </span><br><span class="line">         &lt;constructor-arg type=&quot;java.lang.Double&quot; value=&quot;3500&quot; /&gt;</span><br><span class="line">         &lt;constructor-arg type=&quot;www.csdn.spring01.constructor.Dept&quot; ref=&quot;dept&quot;/&gt;</span><br><span class="line">         &lt;constructor-arg type=&quot;java.lang.String&quot; value=&quot;男&quot; /&gt; </span><br><span class="line"></span><br><span class="line">第三种方法：根据参数的名字传值：（推荐用法）</span><br><span class="line">在这几种方法里我感觉这种方法是最实用的，他是根据名字来传值的，所以基本上只要名字对了，这个值就可以获取到  </span><br><span class="line"></span><br><span class="line">         &lt;constructor-arg name=&quot;name&quot; value=&quot;刘晓刚&quot; /&gt;</span><br><span class="line">         &lt;constructor-arg name=&quot;salary&quot; value=&quot;3500&quot; /&gt;</span><br><span class="line">         &lt;constructor-arg name=&quot;dept&quot; ref=&quot;dept&quot;/&gt;</span><br><span class="line">         &lt;constructor-arg name=&quot;sex&quot; value=&quot;男&quot; /&gt;</span><br><span class="line"></span><br><span class="line">第四种方法：直接传值</span><br><span class="line">直接给参数赋值，这种方法也是根据顺序排的，所以一旦调换位置的话，就会出现bug，这种方法已经很原始了</span><br><span class="line"></span><br><span class="line">         &lt;constructor-arg  value=&quot;刘晓刚&quot; /&gt;</span><br><span class="line">         &lt;constructor-arg  value=&quot;3500&quot; /&gt;</span><br><span class="line">         &lt;constructor-arg  ref=&quot;dept&quot;/&gt;</span><br><span class="line">         &lt;constructor-arg  value=&quot;男&quot; /&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;bean id=&quot;dept&quot; class=&quot;www.csdn.spring01.constructor.Dept&quot; &gt;</span><br><span class="line">  &lt;property name=&quot;dname&quot; value=&quot;北航&quot;/&gt;</span><br><span class="line">  &lt;property name=&quot;deptno&quot; value=&quot;00001&quot;/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
-<h1 id="构造函数注入的-Spring-IoC"><a href="#构造函数注入的-Spring-IoC" class="headerlink" title="构造函数注入的 Spring IoC"></a>构造函数注入的 Spring IoC</h1><h2 id="IoC-概述"><a href="#IoC-概述" class="headerlink" title="IoC 概述"></a>IoC 概述</h2><p>IoC (Inversion of Control)，即控制反转，或者称其为依赖注入更好理解一些，不过这个翻译还是比较晦涩难懂的，所以我们举一个吃西红柿炒鸡蛋的例子来说明一下<br><a id="more"></a><br>之前我们要吃西红柿炒鸡蛋，是要自己做的，我们得先上下厨房查菜谱，去超市买西红柿（new Tomato），买鸡蛋（new Egg），然后把它俩放搅和到一块，我们才能有西红柿炒鸡蛋吃。就像这样：</p>
+<h1 id="构造函数注入的-Spring-IoC"><a href="#构造函数注入的-Spring-IoC" class="headerlink" title="构造函数注入的 Spring IoC"></a>构造函数注入的 Spring IoC</h1><h2 id="IoC-概述"><a href="#IoC-概述" class="headerlink" title="IoC 概述"></a>IoC 概述</h2><p>IoC (Inversion of Control)，即控制反转，或者称其为依赖注入更好理解一些，不过这个翻译还是比较晦涩难懂的，所以我们举一个吃西红柿炒鸡蛋的例子来说明一下<br><!--more--><br>之前我们要吃西红柿炒鸡蛋，是要自己做的，我们得先上下厨房查菜谱，去超市买西红柿（new Tomato），买鸡蛋（new Egg），然后把它俩放搅和到一块，我们才能有西红柿炒鸡蛋吃。就像这样：</p>
 <p><img src="http://490.github.io/images/20190424_215419.png" alt="image"></p>
 <p>可以看到，我们要 5 行代码才能得到 twe 对象（一盘西红柿炒鸡蛋），而且想吃一回，就给重复一次这 5 行代码，真的是相当的麻烦，可是这只是做法相当简单的西红柿炒鸡蛋啊，这要是想吃个圣诞节烤鸡就不要想着自己做了，即使能找到齐全的菜谱，正常人应该也懒得自己做，所以我们选择冲向饭店，也就是 Spring 容器：</p>
 <p><img src="http://490.github.io/images/20190424_215427.png" alt="image"></p>
@@ -917,7 +918,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1007,7 +1008,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">237k</span>
+    <span title="Site words total count">237.8k</span>
   
 </div>
 
