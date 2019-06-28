@@ -85,7 +85,7 @@
 <meta property="og:site_name" content="我的笔记">
 <meta property="og:description" content="Scala 是一门多范式（multi-paradigm）的编程语言，设计初衷是要集成面向对象编程和函数式编程的各种特性。Scala 运行在Java虚拟机上，并兼容现有的Java程序。Scala 源代码被编译成Java字节码，所以它可以运行于JVM之上，并可以调用现有的Java类库。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-26T00:31:17.351Z">
+<meta property="og:updated_time" content="2019-06-28T00:34:33.399Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scala入门">
 <meta name="twitter:description" content="Scala 是一门多范式（multi-paradigm）的编程语言，设计初衷是要集成面向对象编程和函数式编程的各种特性。Scala 运行在Java虚拟机上，并兼容现有的Java程序。Scala 源代码被编译成Java字节码，所以它可以运行于JVM之上，并可以调用现有的Java类库。">
@@ -350,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.4k
+                  1.8k
                 </span>
               
 
@@ -366,7 +366,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  5
+                  7
                 </span>
               
             </div>
@@ -422,9 +422,24 @@
 <p>private[x]  或  protected[x]</p>
 <p>这里的x指代某个所属的包、类或单例对象。如果写成private[x],读作”这个成员除了对[…]中的类或[…]中的包中的类及它们的伴生对像可见外，对其它所有类都是private。</p>
 <p>这种技巧在横跨了若干包的大型项目中非常有用，它允许你定义一些在你项目的若干子包中可见但对于项目外部的客户却始终不可见的东西。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> bobsrocckets</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">package</span> navigation</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">private</span>[bobsrockets] <span class="class"><span class="keyword">class</span> <span class="title">Navigator</span></span></span><br><span class="line"><span class="class">        </span>&#123;</span><br><span class="line">             <span class="keyword">protected</span>[navigation] <span class="function">def <span class="title">useStarChart</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">             <span class="class"><span class="keyword">class</span> <span class="title">LegOfJourney</span></span></span><br><span class="line"><span class="class">             </span>&#123;</span><br><span class="line">                 <span class="keyword">private</span>[Navigator] val distance = <span class="number">100</span></span><br><span class="line">             &#125;</span><br><span class="line">              <span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">var</span> speed = <span class="number">200</span></span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="keyword">package</span> launch</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">import</span> navigation._</span><br><span class="line">            object Vehicle&#123;</span><br><span class="line">            <span class="keyword">private</span>[launch] val guide = <span class="keyword">new</span> Navigator</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> bobsrocckets</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">package</span> navigation</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">private</span>[bobsrockets] <span class="class"><span class="keyword">class</span> <span class="title">Navigator</span></span></span><br><span class="line"><span class="class">        </span>&#123;</span><br><span class="line">             <span class="keyword">protected</span>[navigation] <span class="function">def <span class="title">useStarChart</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">             <span class="class"><span class="keyword">class</span> <span class="title">LegOfJourney</span></span></span><br><span class="line"><span class="class">             </span>&#123;</span><br><span class="line">                 <span class="keyword">private</span>[Navigator] val distance = <span class="number">100</span></span><br><span class="line">             &#125;</span><br><span class="line">              <span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">var</span> speed = <span class="number">200</span></span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">package</span> launch</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">import</span> navigation._</span><br><span class="line">        object Vehicle</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">private</span>[launch] val guide = <span class="keyword">new</span> Navigator</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上述例子中，类Navigator被标记为private[bobsrockets]就是说这个类对包含在bobsrockets包里的所有的类和对象可见。</p>
 <p>比如说，从Vehicle对象里对Navigator的访问是被允许的，因为对象Vehicle包含在包launch中，而launch包在bobsrockets中，相反，所有在包bobsrockets之外的代码都不能访问类Navigator。</p>
+<h1 id="Scala-方法与函数"><a href="#Scala-方法与函数" class="headerlink" title="Scala 方法与函数"></a>Scala 方法与函数</h1><p>Scala 有方法与函数，二者在语义上的区别很小。Scala 方法是类的一部分，而函数是一个对象可以赋值给一个变量。换句话来说在类中定义的函数即是方法。</p>
+<p>Scala 中的方法跟 Java 的类似，方法是组成类的一部分。</p>
+<p>Scala 中的函数则是一个完整的对象，Scala 中的函数其实就是继承了 Trait 的类的对象。</p>
+<p>Scala 中使用 <strong>val</strong> 语句可以定义函数，<strong>def</strong> 语句定义方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">  <span class="function">def <span class="title">m</span><span class="params">(x: Int)</span> </span>= x + <span class="number">3</span></span><br><span class="line">  val f = (x: Int) =&gt; x + <span class="number">3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Scala 方法声明格式如下：</p>
+<p><code>def functionName ([参数列表])  :  [return type]</code></p>
+<p>如果你不写等于号和方法主体，那么方法会被隐式声明为<strong>抽象(abstract)</strong>，包含它的类型于是也是一个抽象类型。</p>
+<p>方法定义由一个 def 关键字开始，紧接着是可选的参数列表，一个冒号 : 和方法的返回类型，一个等于号 = ，最后是方法的主体。</p>
+<p>Scala 方法定义格式如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">object add&#123;</span><br><span class="line">   <span class="function">def <span class="title">addInt</span><span class="params">( a:Int, b:Int )</span> : Int </span>= &#123;</span><br><span class="line">      <span class="keyword">var</span> sum:Int = <span class="number">0</span></span><br><span class="line">      sum = a + b</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> sum</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果方法没有返回值，可以返回为 Unit，这个类似于 Java 的 void, 实例如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">object Hello&#123;</span><br><span class="line">   <span class="function">def <span class="title">printMe</span><span class="params">( )</span> : Unit </span>= &#123;</span><br><span class="line">      println(<span class="string">"Hello, Scala!"</span>)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以下是调用方法的标准格式：</p>
+<p><code>functionName(  参数列表  )</code></p>
+<p>如果方法使用了实例的对象来调用，我们可以使用类似java的格式 (使用 <strong>.</strong> 号)：</p>
+<p><code>[instance.]functionName(  参数列表  )</code></p>
 
       
     </div>
@@ -609,7 +624,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础语法"><span class="nav-number">1.</span> <span class="nav-text">基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#引用"><span class="nav-number">1.1.</span> <span class="nav-text">引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scala-访问修饰符"><span class="nav-number">2.</span> <span class="nav-text">Scala 访问修饰符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#私有-Private-成员"><span class="nav-number">2.1.</span> <span class="nav-text">私有(Private)成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保护-Protected-成员"><span class="nav-number">2.2.</span> <span class="nav-text">保护(Protected)成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#公共-Public-成员"><span class="nav-number">2.3.</span> <span class="nav-text">公共(Public)成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域保护"><span class="nav-number">2.4.</span> <span class="nav-text">作用域保护</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础语法"><span class="nav-number">1.</span> <span class="nav-text">基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#引用"><span class="nav-number">1.1.</span> <span class="nav-text">引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scala-访问修饰符"><span class="nav-number">2.</span> <span class="nav-text">Scala 访问修饰符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#私有-Private-成员"><span class="nav-number">2.1.</span> <span class="nav-text">私有(Private)成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保护-Protected-成员"><span class="nav-number">2.2.</span> <span class="nav-text">保护(Protected)成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#公共-Public-成员"><span class="nav-number">2.3.</span> <span class="nav-text">公共(Public)成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域保护"><span class="nav-number">2.4.</span> <span class="nav-text">作用域保护</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scala-方法与函数"><span class="nav-number">3.</span> <span class="nav-text">Scala 方法与函数</span></a></li></ol></div>
             
 
           </div>
@@ -643,7 +658,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">239.2k</span>
+    <span title="Site words total count">239.6k</span>
   
 </div>
 
