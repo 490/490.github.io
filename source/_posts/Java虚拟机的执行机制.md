@@ -277,7 +277,30 @@ JVM 会在程序第一次主动引用类的时候，加载该类，被动引用�
 	- Java类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。
 	- 其次是考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心Java API发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的java.lang.Integer，而直接返回已加载过的Integer.class，这样便可以防止核心API库被随意篡改。
    ![image](http://490.github.io/images/20190311_083801.png)
-   
+
+## 破坏双亲委派
+
+### 为什么需要破坏双亲委派？
+
+因为在某些情况下父类加载器需要委托子类加载器去加载class文件。受到加载范围的限制，父类加载器无法加载到需要的文件，以Driver接口为例，由于Driver接口定义在jdk当中的，而其实现由各个数据库的服务商来提供，比如mysql的就写了`MySQL Connector`，那么问题就来了，DriverManager（也由jdk提供）要加载各个实现了Driver接口的实现类，然后进行管理，但是DriverManager由启动类加载器加载，只能记载JAVA_HOME的lib下文件，而其实现是由服务商提供的，由系统类加载器加载，这个时候就需要启动类加载器来委托子类来加载Driver实现，从而破坏了双亲委派，这里仅仅是举了破坏双亲委派的其中一个情况。
+
+### 破坏双亲委派的实现
+
+我们结合Driver来看一下在spi（Service Provider Inteface）中如何实现破坏双亲委派。
+
+先从DriverManager开始看，平时我们通过DriverManager来获取数据库的Connection：
+
+```
+String url = "jdbc:mysql://localhost:3306/testdb";
+Connection conn = java.sql.DriverManager.getConnection(url, "root", "root"); 
+```
+
+
+[参考](http://www.cnblogs.com/joemsu/p/9310226.html#_caption_2)
+
+
+
+
 
 # 虚拟机字节码执行引擎
 

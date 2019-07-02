@@ -300,6 +300,148 @@ Class 和 java.lang.reflect 一起对反射提供了支持，java.lang.reflect �
 - **安全限制** ：使用反射技术要求程序必须在一个没有安全限制的环境中运行。如果一个程序必须在有安全限制的环境中运行，如 Applet，那么这就是个问题了。
 - **内部暴露** ：由于反射允许代码执行一些在正常情况下不被允许的操作（比如访问私有的属性和方法），所以使用反射可能会导致意料之外的副作用，这可能导致代码功能失调并破坏可移植性。反射代码破坏了抽象性，因此当平台发生改变的时候，代码的行为就有可能也随着变化。
 
+## 数据库驱动为什么用反射
+
+反射我们知道是对一个类的主动使用，会触发类的初始化过程，在jvm定义中，对类加载的前几个步骤在什么情况下执行没有具体规定，但是对初始化过程做了一下规定，凡是主动对一个类的使用，就会触发初始化，既然初始化触发，那么“加载，连接（验证，准备，解析（不一定在这一步）），初始化”肯定都执行了。 
+此外，对一个类的初始化，首先会看他的父类有没有初始化，如果没有，还要先进行父类的初始化。 
+所谓初始化，就是调用其静态代码块，为静态变量赋值。 来看看`com.mysql.jdbc.Driver`在初始化过程中究竟做了那些事。
+
+```java
+static 
+{
+     try {
+          // 放入到一个copyonwritearraylist中
+          java.sql.DriverManager.registerDriver(new Driver());
+    } catch (SQLException E) {throw new RuntimeException("Can't register driver!");}
+}
+```
+
+由此可见，Driver通过静态代码块把自己注册到`DriverManger`中去了，这也是下一步 
+`Connection conn = DriverManager.getConnection(url, username, password);` 
+能够获取连接的原因，看看具体代码
+
+```java
+for(DriverInfo aDriver : registeredDrivers) 
+{
+      // If the caller does not have permission to load the driver then skip it.
+      if(isDriverAllowed(aDriver.driver, callerCL)) 
+      {
+           try {
+                println("    trying " + aDriver.driver.getClass().getName());
+                // 通过具体注册的driver的connect方法获取连接
+                Connection con = aDriver.driver.connect(url, info);
+                if (con != null) 
+                {
+                    println("getConnection returning"+aDriver.driver.getClass().getName());
+                    return (con);
+                 }
+            } catch (SQLException ex) {
+                    if (reason == null) {
+                        reason = ex;}}
+      } else {
+            println("skipping: " + aDriver.getClass().getName());
+      }
+}
+
+```
+
+本质上是调用了mysql.Driver的connect方法，通过建立到数据库的socket连接，来完成接下来sql的执行。 
+JDBC只是jdk提出的一种java连接数据库的规范，提供了一些接口和抽象方法，并没有提供到某个具体数据库的实现，由各个数据库厂家来实现JDBC，比如上面提到的mysql.Driver就是一种具体实现。
+
+**工厂模式**，反射的作用就是，**无论你使用哪种数据库**（数据库类型）只需要把数据库的驱动名称传过来就能穿件对象，而制定类只能创建你制定的数据库对象。
+
+以上对JDBC连接数据库的具体源码做了一个粗略的分析，实际上可以看出来，只要是对`com.mysql.jdbc.Driver `的主动使用都会触发那个注册操作，为什么一定要使用反射呢？因为反射是运行时根据全类名动态生成的Class对象，完全可以把这个全类名写在xml或者properties中去，不仅从代码上解耦和，而且需要更换数据库时，不需要进行代码的重新编译。
+
+## 内省 (Introspector)
+
+Introspector 是操作 javaBean 的 API，用来访问某个属性的 getter/setter 方法。
+对于一个标准的 javaBean 来说，它包括属性、get 方法和 set 方法，这是一个约定俗成的规范。为此 sun 提供了 Introspector 工具包，来使开发者更好或者更灵活的操作 javaBean。
+
+核心类是 `Introspector`, 它提供了的 `getBeanInfo` 系类方法，可以拿到一个 JavaBean 的所有信息。
+
+通过 `BeanInfo` 的 `getPropertyDescriptors` 方法和 `getMethodDescriptors` 方法可以拿到 javaBean 的字段信息列表和 getter 和 setter 方法信息列表。
+
+`PropertyDescriptors` 可以根据字段直接获得该字段的 getter 和 setter 方法。
+
+`MethodDescriptors` 可以获得方法的元信息，比如方法名，参数个数，参数字段类型等。
+
+
+```java
+public class User 
+{
+    private String name;
+    private int age;
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+```
+
+```
+    @Test
+    public void test1() throws Exception 
+    {
+        // 获取整个Bean的信息
+        // BeanInfo beanInfo= Introspector.getBeanInfo(user.getClass());
+        // 在Object类时候停止检索，可以选择在任意一个父类停止
+        BeanInfo beanInfo = Introspector.getBeanInfo(User.class, Object.class);
+        // 获取所有的属性描述
+        PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
+        for (PropertyDescriptor propertyDescriptor : pds) 
+        {
+            System.out.println(propertyDescriptor.getName());
+        }
+        for (MethodDescriptor methodDescriptor : beanInfo.getMethodDescriptors()) 
+        {
+            System.out.println(methodDescriptor.getName());
+            // Method method = methodDescriptor.getMethod();
+        }
+    }
+```
+
+
+```
+    @Test
+    public void test2 () throws Exception 
+    {
+        User user = new User("jack", 21);
+        String propertyName = "name";
+        PropertyDescriptor namePd = new PropertyDescriptor(propertyName, User.class);
+        System.out.println("名字：" + namePd.getReadMethod().invoke(user));
+        namePd.getWriteMethod().invoke(user, "tom");
+        System.out.println("名字：" + namePd.getReadMethod().invoke(user));
+        System.out.println("========================================");
+        String agePropertyName = "age";
+        PropertyDescriptor agePd = new PropertyDescriptor(agePropertyName, User.class);
+        System.out.println("年龄：" + agePd.getReadMethod().invoke(user));
+        agePd.getWriteMethod().invoke(user, 22);
+        System.out.println("年龄：" + agePd.getReadMethod().invoke(user));
+    }
+
+名字：jack
+名字：tom
+========================================
+年龄：21
+年龄：22
+```
+
+
+
+
+
 
 
 # Java Web
@@ -322,7 +464,86 @@ Servlet运行在Servlet容器中，其生命周期由容器来管理。Servlet�
 8.  Servlet容器把HttpServlet的响应结果传给Web Client。
 
 
+## Tomcat
+
+ [解析Tomcat内部结构和请求过程](https://www.cnblogs.com/zhouyuqin/p/5143121.html)
+
+### 结构
+
+Tomcat是一个JSP/Servlet容器。其作为Servlet容器，有三种工作模式：独立的Servlet容器、进程内的Servlet容器和进程外的Servlet容器。
+
+Tomcat是一个基于组件的服务器，它的构成组件都是可配置的，其中最外层的是Catalina servlet容器，其他组件按照一定的格式要求配置在这个顶层容器中。 Tomcat的各种组件都是在Tomcat安装目录下的/conf/server.xml文件中配置的。
+
+```xml
+<Server>    //顶层类元素，可以包括多个Service   
+    <Service> //顶层类元素，可包含一个Engine，多个Connecter
+        <Connector>  //连接器类元素，代表通信接口
+                <Engine>  //容器类元素，为特定的Service组件处理客户请求，要包含多个Host
+                        <Host> //容器类元素，为特定的虚拟主机组件处理客户请求，可包含多个Context
+                                <Context> //容器类元素，为特定的Web应用处理所有的客户请求
+                                </Context>
+                        </Host>
+                </Engine>
+        </Connector>
+    </Service>
+</Server>
+```
+
+![image](http://490.github.io/images/20190331_134940.png)
+
+由上图可看出Tomca的心脏是两个组件：Connecter和Container。一个Container可以选择多个Connecter，多个Connector和一个Container就形成了一个Service。Service可以对外提供服务，而Server服务器控制整个Tomcat的生命周期。
+
+Service 和 Server 管理它下面组件的生命周期。 
+Tomcat 中组件的生命周期是通过 Lifecycle 接口来控制的，组件只要继承这个接口并实现其中的方法就可以统一被拥有它的组件控制了，这样一层一层的直到一个最高级的组件就可以控制 Tomcat 中所有组件的生命周期，这个最高的组件就是 Server，而控制 Server 的是 Startup，也就是您启动和关闭 Tomcat。
+
+### Tomca的两大组件：Connecter和Container
+
+ **Connecter组件**
+
+一个Connecter将在某个指定的端口上侦听客户请求，接收浏览器的发过来的 tcp 连接请求，创建一个 Request 和 Response 对象分别用于和请求端交换数据，然后会产生一个线程来处理这个请求并把产生的 Request 和 Response 对象传给处理Engine(Container中的一部分)，从Engine出获得响应并返回客户。 
+Tomcat中有两个经典的Connector，一个直接侦听来自Browser的HTTP请求，另外一个来自其他的WebServer请求。Cotote HTTP/1.1 Connector在端口8080处侦听来自客户Browser的HTTP请求，Coyote JK2 Connector在端口8009处侦听其他Web Server的Servlet/JSP请求。 
+Connector 最重要的功能就是接收连接请求然后分配线程让 Container 来处理这个请求，所以这必然是多线程的，多线程的处理是 Connector 设计的核心。
+
+**Container组件**
+
+Container的体系结构如下：
+
+![image](http://490.github.io/images/20190331_135144.png)
+
+Container是容器的父接口，该容器的设计用的是典型的责任链的设计模式，它由四个自容器组件构成，分别是Engine、Host、Context、Wrapper。这四个组件是负责关系，存在包含关系。通常一个Servlet class对应一个Wrapper，如果有多个Servlet定义多个Wrapper，如果有多个Wrapper就要定义一个更高的Container，如Context。 
+Context 还可以定义在父容器 Host 中，Host 不是必须的，但是要运行 war 程序，就必须要 Host，因为 war 中必有 web.xml 文件，这个文件的解析就需要 Host 了，如果要有多个 Host 就要定义一个 top 容器 Engine 了。而 Engine 没有父容器了，一个 Engine 代表一个完整的 Servlet 引擎。
+
+*   Engine 容器 
+    Engine 容器比较简单，它只定义了一些基本的关联关系
+*   Host 容器 
+    Host 是 Engine 的字容器，一个 Host 在 Engine 中代表一个虚拟主机，这个虚拟主机的作用就是运行多个应用，它负责安装和展开这些应用，并且标识这个应用以便能够区分它们。它的子容器通常是 Context，它除了关联子容器外，还有就是保存一个主机应该有的信息。
+*   Context 容器 
+    Context 代表 Servlet 的 Context，它具备了 Servlet 运行的基本环境，理论上只要有 Context 就能运行 Servlet 了。简单的 Tomcat 可以没有 Engine 和 Host。Context 最重要的功能就是管理它里面的 Servlet 实例，Servlet 实例在 Context 中是以 Wrapper 出现的，还有一点就是 Context 如何才能找到正确的 Servlet 来执行它呢？ Tomcat5 以前是通过一个 Mapper 类来管理的，Tomcat5 以后这个功能被移到了 request 中，在前面的时序图中就可以发现获取子容器都是通过 request 来分配的。
+*   Wrapper 容器 
+    Wrapper 代表一个 Servlet，它负责管理一个 Servlet，包括的 Servlet 的装载、初始化、执行以及资源回收。Wrapper 是最底层的容器，它没有子容器了，所以调用它的 addChild 将会报错。 
+    Wrapper 的实现类是 StandardWrapper，StandardWrapper 还实现了拥有一个 Servlet 初始化信息的 ServletConfig，由此看出 StandardWrapper 将直接和 Servlet 的各种信息打交道。
+
+Tomcat 还有其它重要的组件，如安全组件 security、logger 日志组件、session、mbeans、naming 等其它组件。这些组件共同为 Connector 和 Container 提供必要的服务。
+
+
+### Tomcat Server处理一个HTTP请求的过程
+
+![image](http://490.github.io/images/20190331_135019.png)
+
+1、用户点击网页内容，请求被发送到本机端口8080，被在那里监听的Coyote HTTP/1.1 Connector获得。 
+2、Connector把该请求交给它所在的Service的Engine来处理，并等待Engine的回应。 
+3、Engine获得请求localhost/test/index.jsp，匹配所有的虚拟主机Host。 
+4、Engine匹配到名为localhost的Host（即使匹配不到也把请求交给该Host处理，因为该Host被定义为该Engine的默认主机），名为localhost的Host获得请求/test/index.jsp，匹配它所拥有的所有的Context。Host匹配到路径为/test的Context（如果匹配不到就把该请求交给路径名为“ ”的Context去处理）。 
+5、path=“/test”的Context获得请求/index.jsp，在它的mapping table中寻找出对应的Servlet。Context匹配到URL PATTERN为*.jsp的Servlet,对应于JspServlet类。 
+6、构造HttpServletRequest对象和HttpServletResponse对象，作为参数调用JspServlet的doGet（）或doPost（）.执行业务逻辑、数据存储等程序。 
+7、Context把执行完之后的HttpServletResponse对象返回给Host。 
+8、Host把HttpServletResponse对象返回给Engine。 
+9、Engine把HttpServletResponse对象返回Connector。 
+10、Connector把HttpServletResponse对象返回给客户Browser。
+
+
 # Java 序列化和反序列化
+[补充阅读](java的io#java对象操作)
 
 序列化是指 把 Java 对象字节序列化的过程，就是说将原本保存在 内存 中的对象，以字节序列的形式，保存到 硬盘 (或数据库等) 中。当需要使用时，再 反序列化 恢复到内存中使用。
 
@@ -377,7 +598,7 @@ Worm newWa = (Worm) in.readObject();
         Square newSq = (Square) in.readObject();
 ```
 
-    *   另外要注意安全问题，序列化也会将 private 数据保存下来，必要的时候可以把敏感数据用 transient 关键字修饰，防止其被序列化。一旦变量被 transient 修饰，变量将不再是对象持久化的一部分，在对象反序列化后，transient 修饰的变量被设为初始值，即 int 型数据的值为 0，对象型数据为 null。
+另外要注意安全问题，序列化也会将 private 数据保存下来，必要的时候可以把敏感数据用 transient 关键字修饰，防止其被序列化。一旦变量被 transient 修饰，变量将不再是对象持久化的一部分，在对象反序列化后，transient 修饰的变量被设为初始值，即 int 型数据的值为 0，对象型数据为 null。
 
 另一种实现序列化和反序列化的方法：实现 ExternalSerializable 接口。
 
@@ -422,139 +643,513 @@ ObjectOutputStream 和 ObjectInputStream 对象的 writeObject() 和 readObject(
 
 # Java 动态代理
 
-动态代理是干啥的？增强对象的！并且是终极加强版的对象增强工具！为啥，请看下表：
+## 代理模式（JDK代理）
 
-| **增强对象方式** | **被增强对象** | **增强内容** |
-| --- | --- | --- |
-| 继承 | 固定 | 固定 |
-| 装饰者模式 | 不固定 | 固定 |
-| 动态代理 | 不固定 | 不固定 |
+[设计模式](设计模式#代理模式)
 
-通过上表可以看出，动态代理最为灵活！
+ **  JDK动态代理所用到的代理类在程序调用到代理类对象时才由JVM真正创建，JVM根据传进来的 业务实现类对象 以及 方法名 ，动态地创建了一个代理类的class文件并被字节码引擎执行，然后通过该代理类对象进行方法调用。**我们需要做的，只需指定代理类的预处理、调用后操作即可。
 
-现在我们就要实现这个超强的对象加强机器，它就像一个有三个卡槽的对象加强机器一样，给它装配好合适的卡之后，它就能按你给它装配了什么卡生产出相应的增强对象出来，十分的灵活。如下图：
-
-![image](http://490.github.io/images/20190315_200511.png)
-
-之后只要我们创建一个 ProxyFactory factory，然后在里面放好 targetObject (这个是必须有的)，再放上 beforeAdvice 和 afterAdvice (这两个是可有可没有的，要根据对象加强的需要)，最后调用 factory.createProxy() 就能生产出来一个被加强的对象了。
-
-**需求分析：**
-
-我们有一个 Eat 接口，实现了这个接口的类都能吃饭，然后我们我们现在想要对所有实现这个接口的类的 eat() 方法进行加强，在吃之前要说：我开动啦，吃完之后要说：我吃饱啦。
-
-**实现**
-
-先准备 3 个接口和两个实现了 Eat 接口的类：
+1：首先，定义业务逻辑接口
+```java
+public interface BookFacade 
+{ 
+    public void addBook();  
+} 
+```
+2：然后，实现业务逻辑接口创建业务实现类
 
 ```java
-public interface Eat {
-    public void eat();
+public class BookFacadeImpl implements BookFacade 
+{   
+    @Override  
+    public void addBook() 
+    {  
+        System.out.println("增加图书方法。。。");  
+    }  
 }
-public interface BeforeAdvice {
-    public void before();
-}
-public interface AfterAdvice {
-    public void after();
-}
-public class Man implements Eat {
-    @Override
-    public void eat() {
-        System.out.println("Man在吃饭...");
-    }
-}
-public class Animal implements Eat {
-    @Override
-    public void eat() {
-        System.out.println("Animal在吃饭...");
-    }
+```
+3：最后，实现 调用管理接口InvocationHandler  创建动态代理类
+
+```java
+public class BookFacadeProxy implements InvocationHandler 
+{  
+    private Object target;//这其实业务实现类对象，用来调用具体的业务方法 
+    /** 
+     * 绑定业务对象并返回一个代理类  
+     */  
+    public Object bind(Object target) 
+    {  
+        this.target = target;  //接收业务实现类对象参数
+       //通过反射机制，创建一个代理类对象实例并返回。用户进行方法调用时使用
+       //创建代理对象时，需要传递该业务类的类加载器（用来获取业务实现类的元数据，在包装方法是调用真正的业务方法）、接口、handler实现类
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(),  
+                target.getClass().getInterfaces(), this); 
+    }  
+    /** 
+     * 包装调用方法：进行预处理、调用后处理 
+     */  
+    public Object invoke(Object proxy, Method method, Object[] args)  throws Throwable 
+    {  
+        Object result=null;  
+        System.out.println("预处理操作——————");  
+        //调用真正的业务方法  
+        result=method.invoke(target, args);  
+        System.out.println("调用后处理——————");  
+        return result;  
+    }  
 }
 ```
 
-然后我们就可以通过动态代理实现这样的一个对象加强器了：
+
+ 4：在使用时，首先创建一个业务实现类对象和一个代理类对象，然后定义接口引用（这里使用向上转型）并用代理对象.bind(业务实现类对象)的返回值进行赋值。最后[通过接口引用对象](#通过接口引用对象)调用业务方法即可。（接口引用真正指向的是一个绑定了业务类的代理类对象，所以通过接口方法名调用的是被代理的方法们）
+
 
 ```java
-public class DynamicProxyFactory 
+public static void main(String[] args) 
+{  
+        BookFacadeImpl bookFacadeImpl=new BookFacadeImpl();
+        BookFacadeProxy proxy = new BookFacadeProxy();  
+        BookFacade bookfacade = (BookFacade) proxy.bind(bookFacadeImpl);  
+        bookfacade.addBook();  
+}
+```
+
+   JDK动态代理的代理对象在创建时，需要使用业务实现类所实现的接口作为参数（因为在后面代理方法时需要根据接口内的方法名进行调用）。如果业务实现类是没有实现接口而是直接定义业务方法的话，就无法使用JDK动态代理了。并且，如果业务实现类中新增了接口中没有的方法，这些方法是无法被代理的（因为无法被调用）。
+
+
+
+
+
+## CGLIB代理
+
+CGLIB（Code Generator Library）是一个强大的、高性能的代码生成库。其被广泛应用于AOP框架（Spring、dynaop）中，用以提供方法拦截操作。
+
+** cglib是针对类来实现代理的，原理是对指定的业务类生成一个子类，并覆盖其中业务方法实现代理。因为采用的是继承，所以不能对final修饰的类进行代理。** 
+
+1：首先定义业务类，无需实现接口（当然，实现接口也可以，不影响的）
+
+```java
+public class BookFacadeImpl1 
+{ 
+    public void addBook() 
+    {  
+        System.out.println("新增图书...");  
+    }  
+}
+```
+ 2：实现 MethodInterceptor方法代理接口，创建代理类
+
+```java
+public class BookFacadeCglib implements MethodInterceptor 
+{  
+    private Object target;//业务类对象，供代理方法中进行真正的业务方法调用
+    //相当于JDK动态代理中的绑定
+    public Object getInstance(Object target) 
+    {  
+        this.target = target;  //给业务对象赋值
+        Enhancer enhancer = new Enhancer(); //创建加强器，用来创建动态代理类
+        enhancer.setSuperclass(this.target.getClass());  //为加强器指定要代理的业务类（即：为下面生成的代理类指定父类）
+        //设置回调：对于代理类上所有方法的调用，都会调用CallBack，而Callback则需要实现intercept()方法进行拦
+        enhancer.setCallback(this); 
+       // 创建动态代理类对象并返回  
+       return enhancer.create(); 
+    }
+    // 实现回调方法 
+    public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable 
+    { 
+        System.out.println("预处理——————");
+        proxy.invokeSuper(obj, args); //调用业务类（父类中）的方法
+        System.out.println("调用后操作——————");
+        return null; 
+    }
+```
+
+  3：创建业务类和代理类对象，然后通过  代理类对象.getInstance(业务类对象)  返回一个动态代理类对象（它是业务类的子类，可以用业务类引用指向它）。最后通过动态代理类对象进行方法调用。
+
+```java
+public static void main(String[] args) 
+{      
+        BookFacadeImpl1 bookFacade=new BookFacadeImpl1()；
+        BookFacadeCglib  cglib=new BookFacadeCglib();  
+        BookFacadeImpl1 bookCglib=(BookFacadeImpl1)cglib.getInstance(bookFacade);  
+        bookCglib.addBook();  
+}
+```
+
+ 静态代理是通过在代码中显式定义一个业务实现类一个代理，在代理类中对同名的业务方法进行包装，用户通过代理类调用被包装过的业务方法；
+
+    JDK动态代理是通过接口中的方法名，在动态生成的代理类中调用业务实现类的同名方法；
+
+    CGlib动态代理是通过继承业务类，生成的动态代理类是业务类的子类，通过重写业务方法进行代理；
+
+
+# Java注解
+
+## 深入理解JAVA注解
+
+　　要深入学习注解，我们就必须能定义自己的注解，并使用注解，在定义自己的注解之前，我们就必须要了解Java为我们提供的元注解和相关定义注解的语法。
+
+### 元注解（meta-annotation）：
+
+元注解的作用就是负责注解其他注解。Java5.0定义了4个标准的meta-annotation类型，它们被用来提供对其它 annotation类型作说明。Java5.0定义的元注解：
+　　　　1.@Target,
+　　　　2.@Retention,
+　　　　3.@Documented,
+　　　　4.@Inherited
+　　这些类型和它们所支持的类在java.lang.annotation包中可以找到。下面我们看一下每个元注解的作用和相应分参数的使用说明。
+
+**@Target：**
+
+@Target说明了Annotation所修饰的对象范围：Annotation可被用于 packages、types（类、接口、枚举、Annotation类型）、类型成员（方法、构造方法、成员变量、枚举值）、方法参数和本地变量（如循环变量、catch参数）。在Annotation类型的声明中使用了target可更加明晰其修饰的目标。
+
+　**作用：用于描述注解的使用范围（即：被描述的注解可以用在什么地方）**
+　**　取值(ElementType)有：**
+
+　　　　1.CONSTRUCTOR:用于描述构造器
+　　　　2.FIELD:用于描述域
+　　　　3.LOCAL_VARIABLE:用于描述局部变量
+　　　　4.METHOD:用于描述方法
+　　　　5.PACKAGE:用于描述包
+　　　　6.PARAMETER:用于描述参数
+　　　　7.TYPE:用于描述类、接口(包括注解类型) 或enum声明
+
+　　使用实例：
+
+```java
+@Target(ElementType.TYPE)
+public @interface Table 
 {
-    private Object targetObject;
-    private BeforeAdvice beforeAdvice;
-    private AfterAdvice afterAdvice;
+    /**
+     * 数据表名称注解，默认值为类名称
+     * @return
+     */
+    public String tableName() default "className";
+}
+@Target(ElementType.FIELD)
+public @interface NoDBColumn {
+}
+```
 
-    public Object createProxy() 
+
+注解Table 可以用于注解类、接口(包括注解类型) 或enum声明,而注解NoDBColumn仅可用于注解类的成员变量。
+
+**@Retention：**
+
+　**　@Retention**定义了该Annotation被保留的时间长短：某些Annotation仅出现在源代码中，而被编译器丢弃；而另一些却被编译在class文件中；编译在class文件中的Annotation可能会被虚拟机忽略，而另一些在class被装载时将被读取（请注意并不影响class的执行，因为Annotation与class在使用上是被分离的）。使用这个meta-Annotation可以对 Annotation的“生命周期”限制。
+
+　　**作用：表示需要在什么级别保存该注释信息，用于描述注解的生命周期（即：被描述的注解在什么范围内有效）**
+
+　**　取值（RetentionPoicy）有：**
+
+　　　　1.SOURCE:在源文件中有效（即源文件保留）
+　　　　2.CLASS:在class文件中有效（即class保留）
+　　　　3.RUNTIME:在运行时有效（即运行时保留）
+
+Retention meta-annotation类型有唯一的value作为成员，它的取值来自java.lang.annotation.RetentionPolicy的枚举类型值。具体实例如下：
+
+```java
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Column 
+{
+    public String name() default "fieldName";
+    public String setFuncName() default "setField";
+    public String getFuncName() default "getField"; 
+    public boolean defaultDBValue() default false;
+}
+```
+
+
+Column注解的的RetentionPolicy的属性值是RUTIME,这样注解处理器可以通过反射，获取到该注解的属性值，从而去做一些运行时的逻辑处理
+
+**@Documented:**
+
+**@Documented**用于描述其它类型的annotation应该被作为被标注的程序成员的公共API，因此可以被例如javadoc此类的工具文档化。Documented是一个标记注解，没有成员。
+
+```java
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface Column 
+{
+    public String name() default "fieldName";
+    public String setFuncName() default "setField";
+    public String getFuncName() default "getField"; 
+    public boolean defaultDBValue() default false;
+}
+```
+
+**@Inherited：**
+
+@Inherited 元注解是一个标记注解，@Inherited阐述了某个被标注的类型是被继承的。如果一个使用了@Inherited修饰的annotation类型被用于一个class，则这个annotation将被用于该class的子类。
+
+注意：@Inherited annotation类型是被标注过的class的子类所继承。类并不从它所实现的接口继承annotation，方法并不从它所重载的方法继承annotation。
+
+当@Inherited annotation类型标注的annotation的Retention是RetentionPolicy.RUNTIME，则反射API增强了这种继承性。如果我们使用java.lang.reflect去查询一个@Inherited annotation类型的annotation时，反射代码检查将展开工作：检查class和其父类，直到发现指定的annotation类型被发现，或者到达类继承结构的顶层。
+
+实例代码：
+
+```java
+@Inherited
+public @interface Greeting 
+{
+    public enum FontColor{ BULE,RED,GREEN};
+    String name();
+    FontColor fontColor() default FontColor.GREEN;
+}
+```
+
+### 自定义注解：
+
+　　使用@interface自定义注解时，自动继承了java.lang.annotation.Annotation接口，由编译程序自动完成其他细节。在定义注解时，不能继承其他的注解或接口。@interface用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型（返回值类型只能是基本类型、Class、String、enum）。可以通过default来声明参数的默认值。
+
+**定义注解格式：**
+　　public @interface 注解名 {定义体}
+
+**注解参数的可支持数据类型：**
+
+　　　　1.所有基本数据类型（int,float,boolean,byte,double,char,long,short)
+　　　　2.String类型
+　　　　3.Class类型
+　　　　4.enum类型
+　　　　5.Annotation类型
+　　　　6.以上所有类型的数组
+
+　　Annotation类型里面的参数该怎么设定: 
+- 第一,只能用public或默认(default)这两个访问权修饰.例如,String value();这里把方法设为defaul默认类型；　 　
+- 第二,参数成员只能用基本类型byte,short,char,int,long,float,double,boolean八种基本数据类型和 String,Enum,Class,annotations等数据类型,以及这一些类型的数组.例如,String value();这里的参数成员就为String;　　
+- 第三,如果只有一个参数成员,最好把参数名称设为"value",后加小括号.例:下面的例子FruitName注解就只有一个参数成员。
+
+　　简单的自定义注解和使用注解实例：
+
+
+```java
+package annotation;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * 水果名称注解
+ */
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface FruitName 
+{
+    String value() default "";
+}
+
+/**
+ * 水果颜色注解
+ *
+ */
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface FruitColor 
+{
+    /**
+     * 颜色枚举
+     */
+    public enum Color{ BULE,RED,GREEN};
+    /**
+     * 颜色属性
+     * @return
+     */
+    Color fruitColor() default Color.GREEN;
+}
+```
+
+```java
+package annotation;
+import annotation.FruitColor.Color;
+public class Apple 
+{
+    @FruitName("Apple")
+    private String appleName;
+    @FruitColor(fruitColor=Color.RED)
+    private String appleColor;
+    public void setAppleColor(String appleColor) 
     {
-        // 类加载器比较好得到，用当前类的类加载器就行
-        ClassLoader loader = this.getClass().getClassLoader();
-        // 要实现的接口也很好得到，就是我们要加强的接口
-        Class[] interfaces = targetObject.getClass().getInterfaces();
-        // 处理器就是调用代理对象的方法时会执行的内容，除了个别类似 getClass() 这种方法，
-        // 其他的方法调用了并不会执行，而是执行 invoke 这个方法
-        // 所以我们要是想加强原方法只要让它在 invoke 里执行，再加上需要扩展的部分，就达到了增强的效果
-        InvocationHandler handle = new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable 
-            {
-                if (beforeAdvice != null)
-                {
-                    beforeAdvice.before();
-                }
-                Object result = method.invoke(targetObject, args);
-                if (afterAdvice != null) 
-                {
-                    afterAdvice.after();
-                }
-                return result;
-            }
-        };
-        // 得到一个实现了interfaces中接口的类
-        // 这个方法需要三个参数：类加载器，要实现的接口，处理器
-        return Proxy.newProxyInstance(loader, interfaces, handle);
+        this.appleColor = appleColor;
     }
-    public Object getTargetObject() {
-        return targetObject;
+    public String getAppleColor() 
+    {
+        return appleColor;
     }
-    public void setTargetObject(Object targetObject) {
-        this.targetObject = targetObject;
+    public void setAppleName(String appleName) 
+    {
+        this.appleName = appleName;
     }
-    public BeforeAdvice getBeforeAdvice() {
-        return beforeAdvice;
+    public String getAppleName() 
+    {
+        return appleName;
     }
-    public void setBeforeAdvice(BeforeAdvice beforeAdvice) {
-        this.beforeAdvice = beforeAdvice;
-    }
-    public AfterAdvice getAfterAdvice() {
-        return afterAdvice;
-    }
-    public void setAfterAdvice(AfterAdvice afterAdvice) {
-        this.afterAdvice = afterAdvice;
+    public void displayName()
+    {
+        System.out.println("水果的名字是：苹果");
     }
 }
 ```
 
-这个 DynamicProxyFactory 的使用方法如下：
+
+**注解元素的默认值：**
+
+注解元素必须有确定的值，要么在定义注解的默认值中指定，要么在使用注解时指定，非基本类型的注解元素的值不可为null。因此, 使用空字符串或0作为默认值是一种常用的做法。这个约束使得处理器很难表现一个元素的存在或缺失的状态，因为每个注解的声明中，所有元素都存在，并且都具有相应的值，为了绕开这个约束，我们只能定义一些特殊的值，例如空字符串或者负数，一次表示某个元素不存在，在定义注解时，这已经成为一个习惯用法。例如：
+
 
 ```java
-// 创建工厂
-DynamicProxyFactory factory = new DynamicProxyFactory();
-// 设置工厂要进行增强的对象
-// factory.setTargetObject(new Man());
-factory.setTargetObject(new Animal());
-// 设置工厂要在原方法前进行的增强内容
-factory.setBeforeAdvice(new BeforeAdvice() {
-                        @Override
-                        public void before() {
-                            System.out.println("我开动啦");
-                        }
-                    });
-
-// 设置工厂要在原方法后进行的增强内容
-factory.setAfterAdvice(new AfterAdvice() {
-                      @Override
-                      public void after() {
-                          System.out.println("我吃饱啦");
-                      }
-                  });
-
-// 通过createProxy得到增强后的方法
-Eat proxyObject = (Eat) factory.createProxy();
-proxyObject.eat();
+package annotation;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+/**
+ * 水果供应者注解
+ */
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface FruitProvider 
+{
+    /**
+     * 供应商编号
+     * @return
+     */
+    public int id() default -1;
+    /**
+     * 供应商名称
+     * @return
+     */
+    public String name() default "";
+    /**
+     * 供应商地址
+     * @return
+     */
+    public String address() default "";
+}
 ```
+定义了注解，并在需要的时候给相关类，类属性加上注解信息，如果没有响应的注解信息处理流程，注解可以说是没有实用价值。如何让注解真真的发挥作用，主要就在于注解处理方法，下一步我们将学习注解信息的获取和处理！
+
+## 注解的使用
+
+ 第一步：新建一个annotation，名字为：MyAnnotation.java。
+
+```java
+package com.dragon.test.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation
+{
+    String hello () default "hello";
+    String world();
+}
+```
+
+第二步：建立一个MyTest.java 来使用上面的annotation。
+
+```java
+package com.dragon.test.annotation;
+public class MyTest
+{
+    @MyAnnotation(hello = "Hello,Beijing",world = "Hello,world")
+    public void output() {
+        System.out.println("method output is running ");
+    }
+}
+```
+
+第三步：用反射机制来调用注解中的内容
+
+```java
+package com.dragon.test.annotation;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+public class MyReflection
+{
+    public static void main(String[] args) throws Exception
+    {
+        // 获得要调用的类
+        Class<MyTest> myTestClass = MyTest.class;
+        // 获得要调用的方法，output是要调用的方法名字，new Class[]{}为所需要的参数。空则不是这种
+        Method method = myTestClass.getMethod("output", new Class[]{});
+        // 是否有类型为MyAnnotation的注解
+        if (method.isAnnotationPresent(MyAnnotation.class))
+        {
+            // 获得注解
+            MyAnnotation annotation = method.getAnnotation(MyAnnotation.class);
+            // 调用注解的内容
+            System.out.println(annotation.hello());
+            System.out.println(annotation.world());
+        }
+        System.out.println("----------------------------------");
+        // 获得所有注解。必须是runtime类型的
+        Annotation[] annotations = method.getAnnotations();
+        for (Annotation annotation : annotations)
+        {
+            // 遍历所有注解的名字
+            System.out.println(annotation.annotationType().getName());
+        }
+    }
+}
+
+Hello,Beijing
+Hello,world
+----------------------------------
+com.dragon.test.annotation.MyAnnotation
+```
+
+
+# 通过接口引用对象
+
+
+对于参数类型，要优先使用接口而不是类。通俗地讲，应该优先使用接口而不是类来引用对象。如果有合适的接口类型存在，那么对于参数、返回值、变量和域来说，就应该使用接口类型来声明。只有当你利用构造函数创建某个对象的时候，才真正引用这个对象的类。
+
+考虑Vector的情形，它是List接口的一个实现，在声明变量的时候应该养成这样的习惯：
+
+```
+//Good - use interface as type
+List<？> list= new Vector<？>();
+```
+
+而不是像这样的声明：
+
+```
+//Bad - use class as type
+Vector<?> list= new Vector<?>();
+```
+
+优点：
+1. 假如一个类实现了多个接口,那么用接口类型来定义它的引用变量的话,一眼就可以明白,这里是需要这个类的哪些方法。
+2. 程序更加灵活。当你决定更换实现时，只需要改变构造器中类的名称。其他使用list地方的代码根本不需要改动。第一个声明可以被改变为：
+```
+List<?> list= new ArrayList<?>();
+```
+
+
+注意：
+list只能使用ArrayList已经实现了的List接口中的方法，ArrayList中那些自己的、没有在List接口中定义的方法是不可以被访问到的。List.add其实是List接口的方法，但是调用ArrayList方法如clone（）方法是调用不到的。
+
+适合于用类来引用对象的情形：
+1. 如果没有合适的接口存在，可以用类来引用对象。
+例如，考虑值类（String、BigInteger）很少用多个实现编写，他们通常是final的，并且很少有对应的接口。使用这种值类作为参数、变量、域或者返回值类型就比较合适。
+2. 对象属于一个框架，而框架的基本类型是类，不是接口。（对象属于基于类的框架）
+例如java.util.TimerTask抽象类。应该用相关的基类（往往是抽象类）来引用对象，而不是它的实现类。
+3. 类实现了接口，但是它提供了接口中不存在的额外方法。
+例如LinkedHashMap，程序依赖于这些额外的方法，这种类就应该只被用来引用它的实例。
+
+以上这些例子并不全面，而只是代表了一些“适合于用类来引用对象”的情形
+
+总结：给定的对象是否具有适当的接口应该是很明显的。如果是，用接口引用对象就会使程序更加灵活；如果不是，则使用类层次结构中提供了必要功能的最基础的类。
 

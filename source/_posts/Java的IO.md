@@ -3,19 +3,6 @@ title: Java的 I/O机制
 date: 2019-03-10 23:15:41
 tags: Java
 ---
-Java 的 I/O 大概可以分成以下几类：
-*   磁盘操作：File
-*   字节操作：InputStream 和 OutputStream
-*   字符操作：Reader 和 Writer
-*   对象操作：Serializable：序列化就是将一个对象转换成字节序列，方便存储和传输。
-*   网络操作：Socket
-*   新的输入/输出：NIO
-
-Java I/O 使用了装饰者模式来实现
-<!--more-->
-
-[深入分析 Java I/O 的工作机制](https://www.ibm.com/developerworks/cn/java/j-lo-javaio/index.html)
-[Linux 网络 I/O 模型简介（图文）](https://blog.csdn.net/anxpp/article/details/51503329)
 
 # UNIX网络编程对I/O模型的分类
 
@@ -28,6 +15,8 @@ Linux 的内核将所有外部设备都看做一个文件来操作（一切皆�
 ![image](http://490.github.io/images/20190314_213445.png)
 
 整个请求过程为： 用户进程发起请求，内核接受到请求后，从I/O设备中获取数据到buffer中，再将buffer中的数据copy到用户进程的地址空间，该用户进程获取到数据后再响应客户端。
+
+<!--more-->
 
 ## 阻塞I/O模型
 
@@ -117,7 +106,361 @@ I/O编程中，需要处理多个客户端接入请求时，可以利用多线�
 ![image](http://490.github.io/images/20190315_081725.png)
 
 
+# Java I/O 概览
 
+Java 的 I/O 大概可以分成以下几类：
+*   磁盘操作：File
+*   字节操作：InputStream 和 OutputStream
+*   字符操作：Reader 和 Writer
+*   对象操作：Serializable：序列化就是将一个对象转换成字节序列，方便存储和传输。
+*   网络操作：Socket
+*   新的输入/输出：NIO
+
+Java I/O 使用了装饰者模式来实现
+
+
+# Java磁盘操作
+
+File 类可以用于表示文件和目录的信息，但是它不表示文件的内容。
+
+递归地列出一个目录下所有文件：
+
+```java
+public static void listAllFiles(File dir) {
+    if (dir == null || !dir.exists()) {
+        return;
+    }
+    if (dir.isFile()) {
+        System.out.println(dir.getName());
+        return;
+    }
+    for (File file : dir.listFiles()) {
+        listAllFiles(file);
+    }
+}
+```
+
+从 Java7 开始，可以使用 Paths 和 Files 代替 File。
+
+# Java字节操作
+
+## 实现文件复制
+
+```java
+public static void copyFile(String src, String dist) throws IOException {
+    FileInputStream in = new FileInputStream(src);
+    FileOutputStream out = new FileOutputStream(dist);
+
+    byte[] buffer = new byte[20 * 1024];
+    int cnt;
+
+    // read() 最多读取 buffer.length 个字节
+    // 返回的是实际读取的个数
+    // 返回 -1 的时候表示读到 eof，即文件尾
+    while ((cnt = in.read(buffer, 0, buffer.length)) != -1) {
+        out.write(buffer, 0, cnt);
+    }
+
+    in.close();
+    out.close();
+}
+```
+
+## 装饰者模式
+
+Java I/O 使用了装饰者模式来实现。以 InputStream 为例，
+
+- InputStream 是抽象组件；
+- FileInputStream 是 InputStream 的子类，属于具体组件，提供了字节流的输入操作；
+- FilterInputStream 属于抽象装饰者，装饰者用于装饰组件，为组件提供额外的功能。例如 BufferedInputStream 为 FileInputStream 提供缓存的功能。
+
+![image](http://490.github.io/images/20190320_152542.png)
+
+实例化一个具有缓存功能的字节流对象时，只需要在 FileInputStream 对象上再套一层 BufferedInputStream 对象即可。
+
+```java
+FileInputStream fileInputStream = new FileInputStream(filePath);
+BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+```
+
+DataInputStream 装饰者提供了对更多数据类型进行输入的操作，比如 int、double 等基本类型。
+
+# Java字符操作
+
+## 编码与解码
+
+编码就是把字符转换为字节，而解码是把字节重新组合成字符。
+
+如果编码和解码过程使用不同的编码方式那么就出现了乱码。
+
+- GBK 编码中，中文字符占 2 个字节，英文字符占 1 个字节；
+- UTF-8 编码中，中文字符占 3 个字节，英文字符占 1 个字节；
+- UTF-16be 编码中，中文字符和英文字符都占 2 个字节。
+
+UTF-16be 中的 be 指的是 Big Endian，也就是大端。相应地也有 UTF-16le，le 指的是 Little Endian，也就是小端。
+
+Java 的内存编码使用双字节编码 UTF-16be，这不是指 Java 只支持这一种编码方式，而是说 char 这种类型使用 UTF-16be 进行编码。char 类型占 16 位，也就是两个字节，Java 使用这种双字节编码是为了让一个中文或者一个英文都能使用一个 char 来存储。
+
+## String 的编码方式
+
+String 可以看成一个字符序列，可以指定一个编码方式将它编码为字节序列，也可以指定一个编码方式将一个字节序列解码为 String。
+
+```java
+String str1 = "中文";
+byte[] bytes = str1.getBytes("UTF-8");
+String str2 = new String(bytes, "UTF-8");
+System.out.println(str2);
+```
+
+在调用无参数 getBytes() 方法时，默认的编码方式不是 UTF-16be。双字节编码的好处是可以使用一个 char 存储中文和英文，而将 String 转为 bytes[] 字节数组就不再需要这个好处，因此也就不再需要双字节编码。getBytes() 的默认编码方式与平台有关，一般为 UTF-8。
+
+```java
+byte[] bytes = str1.getBytes();
+```
+
+## Reader 与 Writer
+
+不管是磁盘还是网络传输，最小的存储单元都是字节，而不是字符。但是在程序中操作的通常是字符形式的数据，因此需要提供对字符进行操作的方法。
+
+- InputStreamReader 实现从字节流解码成字符流；
+- OutputStreamWriter 实现字符流编码成为字节流。
+
+## 实现逐行输出文本文件的内容
+
+```java
+public static void readFileContent(String filePath) throws IOException {
+
+    FileReader fileReader = new FileReader(filePath);
+    BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+    String line;
+    while ((line = bufferedReader.readLine()) != null) {
+        System.out.println(line);
+    }
+
+    // 装饰者模式使得 BufferedReader 组合了一个 Reader 对象
+    // 在调用 BufferedReader 的 close() 方法时会去调用 Reader 的 close() 方法
+    // 因此只要一个 close() 调用即可
+    bufferedReader.close();
+}
+```
+
+# Java对象操作
+
+## 序列化
+
+序列化就是将一个对象转换成字节序列，方便存储和传输。
+
+- 序列化：ObjectOutputStream.writeObject()
+- 反序列化：ObjectInputStream.readObject()
+
+不会对静态变量进行序列化，因为序列化只是保存对象的状态，静态变量属于类的状态。
+
+## Serializable
+
+序列化的类需要实现 Serializable 接口，它只是一个标准，没有任何方法需要实现，但是如果不去实现它的话而进行序列化，会抛出异常。
+
+```java
+public static void main(String[] args) throws IOException, ClassNotFoundException {
+
+    A a1 = new A(123, "abc");
+    String objectFile = "file/a1";
+
+    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(objectFile));
+    objectOutputStream.writeObject(a1);
+    objectOutputStream.close();
+
+    ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(objectFile));
+    A a2 = (A) objectInputStream.readObject();
+    objectInputStream.close();
+    System.out.println(a2);
+}
+
+private static class A implements Serializable {
+
+    private int x;
+    private String y;
+
+    A(int x, String y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "x = " + x + "  " + "y = " + y;
+    }
+}
+```
+
+## transient
+
+transient 关键字可以使一些属性不会被序列化。
+
+ArrayList 中存储数据的数组 elementData 是用 transient 修饰的，因为这个数组是动态扩展的，并不是所有的空间都被使用，因此就不需要所有的内容都被序列化。通过重写序列化和反序列化方法，使得可以只序列化数组中有内容的那部分数据。
+
+```java
+private transient Object[] elementData;
+```
+
+想序列化ArrayList的话，把elementdata的元素一个个读出来，一个个序列化。
+
+[补充阅读](java基础知识#java-序列化和反序列化)
+# Java网络操作
+
+Java 中的网络支持：
+
+- InetAddress：用于表示网络上的硬件资源，即 IP 地址；
+- URL：统一资源定位符；
+- Sockets：使用 TCP 协议实现网络通信；
+- Datagram：使用 UDP 协议实现网络通信。
+
+## InetAddress
+
+没有公有的构造函数，只能通过静态方法来创建实例。
+
+```java
+InetAddress.getByName(String host);
+InetAddress.getByAddress(byte[] address);
+```
+
+## URL
+
+可以直接从 URL 中读取字节流数据。
+
+```java
+public static void main(String[] args) throws IOException {
+
+    URL url = new URL("http://www.baidu.com");
+
+    /* 字节流 */
+    InputStream is = url.openStream();
+
+    /* 字符流 */
+    InputStreamReader isr = new InputStreamReader(is, "utf-8");
+
+    /* 提供缓存功能 */
+    BufferedReader br = new BufferedReader(isr);
+
+    String line;
+    while ((line = br.readLine()) != null) {
+        System.out.println(line);
+    }
+
+    br.close();
+}
+```
+
+## Sockets
+
+- ServerSocket：服务器端类
+- Socket：客户端类
+- 服务器和客户端通过 InputStream 和 OutputStream 进行输入输出。
+
+![image](http://490.github.io/images/20190320_152555.png)
+
+## Datagram
+
+- DatagramSocket：通信类
+- DatagramPacket：数据包类
+
+
+# 零拷贝 zero-copy
+
+## 概述
+
+考虑这样一种常用的情形：你需要将静态内容（类似图片、文件）展示给用户。那么这个情形就意味着你需要先将静态内容从磁盘中拷贝出来放到一个内存buf中，然后将这个buf通过socket传输给用户，进而用户或者静态内容的展示。这看起来再正常不过了，但是实际上这是很低效的流程，我们把上面的这种情形抽象成下面的过程：
+
+```
+read(file, tmp_buf, len);write(socket, tmp_buf, len);
+```
+
+首先调用read将静态内容，这里假设为文件A，读取到tmp_buf, 然后调用write将tmp_buf写入到socket中，如图：
+
+![image](http://490.github.io/images/20190509_160810.png)
+
+在这个过程中文件A的经历了4次copy的过程：
+
+1.  首先，调用read时，文件A拷贝到了kernel模式；
+2.  之后，CPU控制将kernel模式数据copy到user模式下；
+3.  调用write时，先将user模式下的内容copy到kernel模式下的socket的buffer中；
+4.  最后将kernel模式下的socket buffer的数据copy到网卡设备中传送；
+
+从上面的过程可以看出，数据白白从kernel模式到user模式走了一圈，浪费了2次copy(第一次，从kernel模式拷贝到user模式；第二次从user模式再拷贝回kernel模式，即上面4次过程的第2和3步骤。)。而且上面的过程中kernel和user模式的上下文的切换也是4次。
+
+幸运的是，你可以用一种叫做Zero-Copy的技术来去掉这些无谓的copy。应用程序用Zero-Copy来请求kernel直接把disk的data传输给socket，而不是通过应用程序传输。Zero-Copy大大提高了应用程序的性能，并且减少了kernel和user模式上下文的切换。
+
+
+## 详述
+
+Zero-Copy技术省去了将操作系统的read buffer拷贝到程序的buffer，以及从程序buffer拷贝到socket buffer的步骤，直接将read buffer拷贝到socket buffer. Java NIO中的FileChannal.transferTo()方法就是这样的实现，这个实现是依赖于操作系统底层的sendFile()实现的。
+
+```
+public void transferTo(long position, long count, WritableByteChannel target);
+```
+
+他底层的调用时系统调用**sendFile()**方法：
+
+```
+#include <sys/socket.h>ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);
+```
+
+下图展示了在transferTo()之后的数据流向：
+
+![image](http://490.github.io/images/20190509_185146.png)
+
+下图展示了在使用transferTo()之后的上下文切换：
+
+![image](http://490.github.io/images/20190509_185157.png)
+
+使用了Zero-Copy技术之后，整个过程如下：
+
+1.  transferTo()方法使得文件A的内容直接拷贝到一个read buffer（kernel buffer）中；
+2.  然后数据(kernel buffer)拷贝到socket buffer中。
+3.  最后将socket buffer中的数据拷贝到网卡设备（protocol engine）中传输；
+    这显然是一个伟大的进步：这里把上下文的切换次数从4次减少到2次，同时也把数据copy的次数从4次降低到了3次。
+但是这是Zero-Copy么，答案是否定的。
+
+## 进阶
+
+Linux 2.1内核开始引入了sendfile函数（上一节有提到）,用于将文件通过socket传送。
+
+```
+sendfile(socket, file, len);
+```
+
+该函数通过一次系统调用完成了文件的传送，减少了原来read/write方式的模式切换。此外更是减少了数据的copy, sendfile的详细过程如图：
+
+![image](http://490.github.io/images/20190509_185225.png)
+
+通过sendfile传送文件只需要一次系统调用，当调用sendfile时：
+1.  首先（通过DMA）将数据从磁盘读取到kernel buffer中；
+2.  然后将kernel buffer拷贝到socket buffer中；
+3.  最后将socket buffer中的数据copy到网卡设备（protocol engine）中发送；
+
+这个过程就是第二节（详述）中的那个步骤。
+
+sendfile与read/write模式相比，少了一次copy。但是从上述过程中也可以发现从kernel buffer中将数据copy到socket buffer是没有必要的。
+
+Linux2.4 内核对sendfile做了改进，如图：
+
+![image](http://490.github.io/images/20190509_185335.png)
+
+改进后的处理过程如下：
+
+1.  将文件拷贝到kernel buffer中；
+2.  向socket buffer中追加当前要发生的数据在kernel buffer中的位置和偏移量；
+3.  根据socket buffer中的位置和偏移量直接将kernel buffer的数据copy到网卡设备（protocol engine）中；
+
+经过上述过程，数据只经过了2次copy就从磁盘传送出去了。这个才是真正的Zero-Copy(这里的零拷贝是针对kernel来讲的，数据在kernel模式下是Zero-Copy)。
+
+正是Linux2.4的内核做了改进，Java中的TransferTo()实现了Zero-Copy,如下图：
+
+![image](http://490.github.io/images/20190509_185352.png)
+
+Zero-Copy技术的使用场景有很多，比如Kafka, 又或者是Netty等，可以大大提升程序的性能。
+
+![image](http://490.github.io/images/20190509_185455.png)
 
 
 

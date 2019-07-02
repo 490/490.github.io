@@ -89,6 +89,7 @@ System.out.println("delay 3 seconds");
 }
 }
 ```
+![image](http://490.github.io/images/20190310_102602.png)
 
 ## 线程池的状态
 
@@ -103,38 +104,13 @@ System.out.println("delay 3 seconds");
 
 
 
-## Executor
-
-管理多个异步任务的执行，而无需程序员显式地管理线程的生命周期。这里的异步是指多个任务的执行互不干扰，不需要进行同步操作。
-
-主要有三种 Executor：
-
-*   CachedThreadPool：一个任务创建一个线程；
-*   FixedThreadPool：所有任务只能使用固定大小的线程；
-*   SingleThreadExecutor：相当于大小为 1 的 FixedThreadPool。
-
-```java
-public static void main(String[] args) {
-    ExecutorService executorService = Executors.newCachedThreadPool();
-    for (int i = 0; i < 5; i++) {
-        executorService.execute(new MyRunnable());
-    }
-    executorService.shutdown();
-}
-```
-
-![image](http://490.github.io/images/20190310_102602.png)
-![image](http://490.github.io/images/20190310_102609.png)
-
-
-
 ## 执行execute()方法和submit()方法的区别是什么呢？
 
 1. execute() 方法用于提交不需要返回值的任务，所以无法判断任务是否被线程池执行成功与否；
 2. submit()方法用于提交需要返回值的任务。线程池会返回一个future类型的对象，通过这个future对象可以判断任务是否执行成功，并且可以通过future的get()方法来获取返回值，get()方法会阻塞当前线程直到任务完成，而使用`get（long timeout，TimeUnit unit）` 方法则会阻塞当前线程一段时间后立即返回，这时候有可能任务没有执行完。
 
 
-# 继承Thread、实现Runnable接口和Callable接口
+# 使用线程
 
 ## Thread类
 
@@ -280,7 +256,23 @@ i如果在执行这段代码的过程中，在总线上发出了LCOK#锁的信�
 缓存一致性协议。最出名的就是Intel 的MESI协议，MESI协议保证了每个缓存中使用的共享变量的副本是一致的。它核心的思想是：当CPU写数据时，如果发现操作的变量是共享变量，即在其他CPU中也存在该变量的副本，会发出信号通知其他CPU将该变量的缓存行置为无效状态，因此当其他CPU需要读取这个变量时，发现自己缓存中缓存该变量的缓存行是无效的，那么它就会从内存重新读取。
 ![image](http://490.github.io/images/20190310_102654.png)
 
-## 原子性问题，可见性问题，有序性问题
+## Java内存间交互操作
+
+JLS定义了线程对主存的操作指令：lock，unlock，read，load，use，assign，store，write。这些行为是不可分解的原子操作，在使用上相互依赖，read-load从主内存复制变量到当前工作内存，use-assign执行代码改变共享变量值，store-write用工作内存数据刷新主存相关内容。
+
+*   read（读取）：作用于主内存变量，把一个变量值从主内存传输到线程的工作内存中，以便随后的load动作使用
+*   load（载入）：作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中。
+*   use（使用）：作用于工作内存的变量，把工作内存中的一个变量值传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。
+*   assign（赋值）：作用于工作内存的变量，它把一个从执行引擎接收到的值赋值给工作内存的变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作。
+*   store（存储）：作用于工作内存的变量，把工作内存中的一个变量的值传送到主内存中，以便随后的write的操作。
+*   write（写入）：作用于主内存的变量，它把store操作从工作内存中一个变量的值传送到主内存的变量中。
+
+
+
+
+## 原子性，可见性，有序性
+
+多线程的三个特性。
 
 　　对于可见性，Java提供了volatile关键字来保证可见性。
 　　当一个共享变量被volatile修饰时，它会保证修改的值会立即被更新到主存，当有其他线程需要读取时，它会去内存中读取新值。
@@ -306,17 +298,28 @@ lock前缀指令实际上相当于一个**内存屏障（也成内存栅栏）**
 
   但是在 JVM 的即时编译器中存在指令重排序的优化。也就是说上面的第二步和第三步的顺序是不能保证的，最终的执行顺序可能是 1-2-3 也可能是 1-3-2。如果是后者，则在 3 执行完毕、2 未执行之前，被线程二抢占了，这时 instance 已经是非 null 了（但却没有初始化），所以线程二会直接返回 instance，然后使用，然后报错。加了volatile就不会重排序。
 
-
+当new一个对象的时候，也是被分配在主内存。
 
 
 ## synchronized 关键字和 volatile 关键字的区别
 
-- volatile关键字是线程同步的轻量级实现，所以volatile性能肯定比synchronized关键字要好。但是volatile关键字只能用于变量，而synchronized关键字可以修饰方法以及代码块。synchronized关键字在JavaSE1.6之后，为了减少获得锁和释放锁带来的性能消耗而引入的偏向锁和轻量级锁以及其它各种优化，执行效率有了显著提升，实际开发中使用 synchronized 关键字的场景还是更多一些。
+- volatile关键字是线程同步的轻量级实现，所以volatile性能肯定比synchronized关键字要好。但是volatile关键字只能用于变量，而synchronized关键字可以修饰方法以及代码块。
 - 多线程访问volatile关键字不会发生阻塞，而synchronized关键字可能会发生阻塞。
 - volatile关键字能保证数据的可见性，但不能保证数据的原子性。synchronized关键字两者都能保证。
 - volatile关键字主要用于解决变量在多个线程之间的可见性，而 synchronized关键字解决的是多个线程之间访问资源的同步性。
 
-# Daemon
+# 基础线程机制
+
+
+## Executor
+
+管理多个异步任务的执行，而无需程序员显式地管理线程的生命周期。这里的异步是指多个任务的执行互不干扰，不需要进行同步操作。
+
+![image](http://490.github.io/images/20190310_102609.png)
+
+
+
+## Daemon
 
 守护线程是程序运行时在后台提供服务的线程，不属于程序中不可或缺的部分。
 当所有非守护线程结束时，程序也就终止，同时会杀死所有守护线程。
@@ -330,7 +333,157 @@ thread.setDaemon(true);
 }
 ```
 
-* * *
+## sleep()
+
+Thread.sleep(millisec) 方法会休眠当前正在执行的线程，millisec 单位为毫秒。
+
+sleep() 可能会抛出 InterruptedException，因为异常不能跨线程传播回 main() 中，因此必须在本地进行处理。线程中抛出的其它异常也同样需要在本地进行处理。
+
+```
+public void run() {
+    try {
+        Thread.sleep(3000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+## yield()
+对静态方法 Thread.yield() 的调用声明了当前线程已经完成了生命周期中最重要的部分，可以切换给其它线程来执行。该方法只是对线程调度器的一个建议，而且也只是建议具有相同优先级的其它线程可以运行。
+
+```
+public void run() {
+    Thread.yield();
+}
+```
+
+# 中断
+
+一个线程执行完毕之后会自动结束，如果在运行过程中发生异常也会提前结束。
+
+## InterruptedException
+
+通过调用一个线程的 interrupt() 来中断该线程，如果该线程处于阻塞、限期等待或者无限期等待状态，那么就会抛出 InterruptedException，从而提前结束该线程。但是不能中断 I/O 阻塞和 synchronized 锁阻塞。
+
+对于以下代码，在 main() 中启动一个线程之后再中断它，由于线程中调用了 Thread.sleep() 方法，因此会抛出一个 InterruptedException，从而提前结束线程，不执行之后的语句。
+
+```
+public class InterruptExample 
+{
+
+    private static class MyThread1 extends Thread 
+    {
+        @Override
+        public void run() 
+        {
+            try 
+            {
+                Thread.sleep(2000);
+                System.out.println("Thread run");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+```
+public static void main(String[] args) throws InterruptedException {
+    Thread thread1 = new MyThread1();
+    thread1.start();
+    thread1.interrupt();
+    System.out.println("Main run");
+}
+```
+
+```
+Main run
+java.lang.InterruptedException: sleep interrupted
+    at java.lang.Thread.sleep(Native Method)
+    at InterruptExample.lambda$main$0(InterruptExample.java:5)
+    at InterruptExample$$Lambda$1/713338599.run(Unknown Source)
+    at java.lang.Thread.run(Thread.java:745)
+```
+
+## interrupted()
+
+如果一个线程的 run() 方法执行一个无限循环，并且没有执行 sleep() 等会抛出 InterruptedException 的操作，那么调用线程的 interrupt() 方法就无法使线程提前结束。
+
+但是调用 interrupt() 方法会设置线程的中断标记，此时调用 interrupted() 方法会返回 true。因此可以在循环体中使用 interrupted() 方法来判断线程是否处于中断状态，从而提前结束线程。
+
+```
+public class InterruptExample 
+{
+    private static class MyThread2 extends Thread 
+    {
+        @Override
+        public void run() 
+        {
+            while (!interrupted()) {
+                // ..
+            }
+            System.out.println("Thread end");
+        }
+    }
+}
+```
+
+```
+public static void main(String[] args) throws InterruptedException {
+    Thread thread2 = new MyThread2();
+    thread2.start();
+    thread2.interrupt();
+}
+```
+
+```
+Thread end
+```
+
+## Executor 的中断操作
+
+调用 Executor 的 shutdown() 方法会等待线程都执行完毕之后再关闭，但是如果调用的是 shutdownNow() 方法，则相当于调用每个线程的 interrupt() 方法。
+
+以下使用 Lambda 创建线程，相当于创建了一个匿名内部线程。
+
+```
+public static void main(String[] args) {
+    ExecutorService executorService = Executors.newCachedThreadPool();
+    executorService.execute(() -> {
+        try {
+            Thread.sleep(2000);
+            System.out.println("Thread run");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    });
+    executorService.shutdownNow();
+    System.out.println("Main run");
+}
+```
+
+```
+Main run
+java.lang.InterruptedException: sleep interrupted
+    at java.lang.Thread.sleep(Native Method)
+    at ExecutorInterruptExample.lambda$main$0(ExecutorInterruptExample.java:9)
+    at ExecutorInterruptExample$$Lambda$1/1160460865.run(Unknown Source)
+    at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+    at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+    at java.lang.Thread.run(Thread.java:745)
+```
+
+如果只想中断 Executor 中的一个线程，可以通过使用 submit() 方法来提交一个线程，它会返回一个 Future<?> 对象，通过调用该对象的 cancel(true) 方法就可以中断线程。
+
+```
+Future<?> future = executorService.submit(() -> {
+    // ..
+});
+future.cancel(true);
+```
+
 
 # synchronized关键字
 
@@ -341,7 +494,7 @@ JDK 实现的 ReentrantLock
 - 在 Java 早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层的操作系统的 Mutex Lock 来实现的，Java 的线程是映射到操作系统的原生线程之上的。如果要挂起或者唤醒一个线程，都需要操作系统帮忙完成，而操作系统实现线程之间的切换时需要从用户态转换到内核态，这个状态之间的转换需要相对比较长的时间，时间成本相对较高。
 - Java 6 之后 Java 官方对从 JVM 层面对synchronized 较大优化，JDK1.6对锁的实现引入了大量的优化，如自旋锁、适应性自旋锁、锁消除、锁粗化、偏向锁、轻量级锁等技术来减少锁操作的开销。
 
-## synchronized关键字最主要的三种使用方式
+## 主要的三种使用方式
 
 - **修饰实例方法**，作用于当前对象实例加锁，进入同步代码前要获得当前**对象实例**的锁。
 - **修饰静态方法**，作用于当前类对象加锁，进入同步代码前要获得当前**类对象**的锁 。也就是给当前类加锁，会作用于类的所有对象实例，因为静态成员不属于任何一个实例对象，是类成员（ static 表明这是该类的一个静态资源，不管new了多少个对象，只有一份，所以对该类的所有对象都加了锁）。所以如果一个线程A调用一个实例对象的非静态 synchronized 方法，而线程B需要调用这个实例对象所属类的静态 synchronized 方法，是允许的，不会发生互斥现象，因为访问静态 synchronized 方法占用的锁是当前类的锁，而访问非静态 synchronized 方法占用的锁是当前实例对象锁。
@@ -383,7 +536,7 @@ public class Singleton
 
 使用 volatile 可以禁止 JVM 的指令重排，保证在多线程环境下也能正常运行。
 
-## synchronized 关键字的底层原理
+## 底层原理
 
 ### synchronized 同步语句块的情况
 
@@ -455,14 +608,118 @@ synchronized 是依赖于 JVM 实现的，前面我们也讲到了 虚拟机团�
 ![image](http://490.github.io/images/20190310_103134.png)
 
 
+## 释放的时机
+
+总结下使用synchronized同步锁释放的时机。我们知道程序执行进入同步代码块中monitorenter代表尝试获取锁，退出代码块monitorexit代表释放锁。而在程序中，是无法显式释放对同步监视器的锁的，而会在如下4种情况下释放锁。
+
+- 当前线程的同步方法、代码块执行结束的时候释放
+- 当前线程在同步方法、同步代码块中遇到break 、 return 终于该代码块或者方法的时候释放。
+- 出现未处理的error或者exception导致异常结束的时候释放
+- 程序执行了 同步对象 wait 方法 ，当前线程暂停，释放锁
+
+在以下两种情况不会释放锁。
+
+- 代码块中使用了 Thread.sleep()  Thread.yield() 这些方法暂停线程的执行，不会释放。
+- 线程执行同步代码块时，其他线程调用 suspend 方法将该线程挂起，该线程不会释放锁 ，所以我们应该避免使用 suspend 和 resume 来控制线程 。
+
+## JVM 对 synchronized 的锁优化
+
+### 自旋锁
+
+### 锁消除
+
+锁消除是指对于被检测出不可能存在竞争的共享数据的锁进行消除。
+锁消除主要是通过逃逸分析来支持，如果堆上的共享数据不可能逃逸出去被其它线程访问到，那么就可以把它们当成私有数据对待，也就可以将它们的锁进行消除。
+
+对于一些看起来没有加锁的代码，其实隐式的加了很多锁。例如下面的字符串拼接代码就隐式加了锁：
+
+```
+public static String concatString(String s1, String s2, String s3) 
+{
+    return s1 + s2 + s3;
+}
+```
+
+String 是一个不可变的类，编译器会对 String 的拼接自动优化。在 JDK 1.5 之前，会转化为 StringBuffer 对象的连续 append() 操作：
+
+```
+public static String concatString(String s1, String s2, String s3) 
+{
+    StringBuffer sb = new StringBuffer();
+    sb.append(s1);
+    sb.append(s2);
+    sb.append(s3);
+    return sb.toString();
+}
+```
+
+每个 append() 方法中都有一个同步块。虚拟机观察变量 sb，很快就会发现它的动态作用域被限制在 concatString() 方法内部。也就是说，sb 的所有引用永远不会逃逸到 concatString() 方法之外，其他线程无法访问到它，因此可以进行消除。
+
+### 锁粗化
+
+如果一系列的连续操作都对同一个对象反复加锁和解锁，频繁的加锁操作就会导致性能损耗。
+
+上一节的示例代码中连续的 append() 方法就属于这类情况。如果虚拟机探测到由这样的一串零碎的操作都对同一个对象加锁，将会把加锁的范围扩展（粗化）到整个操作序列的外部。对于上一节的示例代码就是扩展到第一个 append() 操作之前直至最后一个 append() 操作之后，这样只需要加锁一次就可以了。
+
+### 轻量级锁
+
+JDK 1.6 引入了偏向锁和轻量级锁，从而让锁拥有了四个状态：无锁状态（unlocked）、偏向锁状态（biasble）、轻量级锁状态（lightweight locked）和重量级锁状态（inflated）。
+
+下图左侧是一个线程的虚拟机栈，其中有一部分称为 Lock Record 的区域，这是在轻量级锁运行过程创建的，用于存放锁对象的 Mark Word。而右侧就是一个锁对象，包含了 Mark Word 和其它信息。
+
+![image](http://490.github.io/images/20190322_144912.png)
+
+轻量级锁是相对于传统的重量级锁而言，它使用 CAS 操作来避免重量级锁使用互斥量的开销。对于绝大部分的锁，在整个同步周期内都是不存在竞争的，因此也就不需要都使用互斥量进行同步，可以先采用 CAS 操作进行同步，如果 CAS 失败了再改用互斥量进行同步。
+
+**加锁过程：**
+
+1. 在代码进入同步块的时候，如果同步对象锁状态为无锁状态（锁标志位为“01”状态，是否为偏向锁为“0”），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（Lock Record）的空间，用于存储锁对象目前的Mark Word的拷贝，官方称之为 Displaced Mark Word。这时候线程堆栈与对象头的状态如图1所示。
+2. 拷贝对象头中的Mark Word复制到锁记录中。
+3. 拷贝成功后，虚拟机将使用CAS操作尝试将对象的Mark Word更新为指向Lock Record的指针，并将Lock record里的owner指针指向object mark word。如果更新成功，则执行步骤（3），否则执行步骤（4）。
+4. 如果这个更新动作成功了，那么这个线程就拥有了该对象的锁，并且对象Mark Word的锁标志位设置为“00”，即表示此对象处于轻量级锁定状态，这时候线程堆栈与对象头的状态如图2所示。
+5. 如果这个更新操作失败了，虚拟机首先会检查对象的Mark Word是否指向当前线程的栈帧，如果是就说明当前线程已经拥有了这个对象的锁，那就可以直接进入同步块继续执行。否则说明多个线程竞争锁，轻量级锁就要膨胀为重量级锁，锁标志的状态值变为“10”，Mark Word中存储的就是指向重量级锁（互斥量）的指针，后面等待锁的线程也要进入阻塞状态。 而当前线程便尝试使用自旋来获取锁，自旋就是为了不让线程阻塞，而采用循环去获取锁的过程。
+
+![image](http://490.github.io/images/20190322_144918.png)
+
+如果 CAS 操作失败了，虚拟机首先会检查对象的 Mark Word 是否指向当前线程的虚拟机栈，如果是的话说明当前线程已经拥有了这个锁对象，那就可以直接进入同步块继续执行，否则说明这个锁对象已经被其他线程线程抢占了。如果有两条以上的线程争用同一个锁，那轻量级锁就不再有效，要膨胀为重量级锁。
+
+**解锁过程：**
+
+1. 通过CAS操作尝试把线程中复制的Displaced Mark Word对象替换当前的Mark Word。
+2. 如果替换成功，整个同步过程就完成了。
+3. 如果替换失败，说明有其他线程尝试过获取该锁（此时锁已膨胀），那就要在释放锁的同时，唤醒被挂起的线程。
+
+### 偏向锁
+
+引入偏向锁是为了在无多线程竞争的情况下尽量减少不必要的轻量级锁执行路径，因为轻量级锁的获取及释放依赖多次CAS原子指令，而偏向锁只需要在置换ThreadID的时候依赖一次CAS原子指令（由于一旦出现多线程竞争的情况就必须撤销偏向锁，所以偏向锁的撤销操作的性能损耗必须小于节省下来的CAS原子指令的性能消耗）。上面说过，轻量级锁是为了在线程交替执行同步块时提高性能，而偏向锁则是在只有一个线程执行同步块时进一步提高性能。
+
+**偏向锁获取过程：**
+
+1. 访问Mark Word中偏向锁的标识是否设置成1，锁标志位是否为01——确认为可偏向状态。
+2. 如果为可偏向状态，则测试线程ID是否指向当前线程，如果是，进入步骤（5），否则进入步骤（3）。
+3. 如果线程ID并未指向当前线程，则通过CAS操作竞争锁。如果竞争成功，则将Mark Word中线程ID设置为当前线程ID，然后执行（5）；如果竞争失败，执行（4）。
+4. 如果CAS获取偏向锁失败，则表示有竞争。当到达全局安全点（safepoint）时获得偏向锁的线程被挂起，偏向锁升级为轻量级锁，然后被阻塞在安全点的线程继续往下执行同步代码。
+5. 执行同步代码。
+
+**偏向锁的释放：**
+
+偏向锁的撤销在上述第四步骤中有提到：偏向锁只有遇到其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁，线程不会主动去释放偏向锁。
+
+偏向锁的撤销，需要等待全局安全点（在这个时间点上没有字节码正在执行），它会首先暂停拥有偏向锁的线程，判断锁对象是否处于被锁定状态，撤销偏向锁后恢复到未锁定（标志位为“01”）或轻量级锁（标志位为“00”）的状态。
+
+**重量级锁、轻量级锁和偏向锁之间转换**
+
+![image](http://490.github.io/images/20190322_150721.png)
+
 
 
 # 锁
 
+![image](http://490.github.io/images/20190322_073646.png)
+
 ## 悲观锁
 
-总是假设最坏的情况，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会阻塞直到它拿到锁（共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程）。传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先
-上锁。Java中 synchronized和 ReentrantLock等独占锁就是悲观锁思想的实现。
+总是假设最坏的情况，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会阻塞直到它拿到锁（共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程）。传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。Java中 synchronized和 ReentrantLock等独占锁就是悲观锁思想的实现。
 ## 乐观锁
 
 总是假设最好的情况，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是在更新的时候会判断一下在此期间别人有没有去更新这个数据，可以使用版本号机制和CAS算法实现。乐观锁适用于多读的应用类型，这样可以提高吞吐量，像数据库提供的类似于write_condition机制，其实都是提供的乐观锁。在Java中 java.util.concurrent.atomic包下面的原子变量类就是使用了乐观锁的一种实现方式CAS实现的。
@@ -491,11 +748,15 @@ synchronized 是依赖于 JVM 实现的，前面我们也讲到了 虚拟机团�
 **CAS算法**
 乐观锁的一种表现。 即compare and swap（比较与交换），是一种有名的无锁算法。无锁编程，即不使用锁的情况下实现多线程之间的变量同步，也就是在没有线程被阻塞的情况下实现变量的同步，所以也叫非阻塞同步（Non-blocking Synchronization）。CAS算法涉及到三个操作数
 
-*   需要读写的内存值 V
-*   进行比较的值 A
-*   拟写入的新值 B
+ **输入：**
+- 需要读写的内存位置 V
+- 我们认为这个位置现在的值 A
+- 想要写入的新值 B
 
-当且仅当 V 的值等于 A时，CAS通过原子方式用新值B来更新V的值，否则不会执行任何操作（比较和替换是一个原子操作）。一般情况下是一个自旋操作，即不断的重试。
+**输出：** V 位置以前的值（无论写入操作是否成功）
+**含义：** 我们认为 V 处的值应该是 A，如果是，把 V 处的值改为 B，如果不是则不修改，然后把 V 处现在的值返回给我。一般情况下是一个自旋操作，即不断的重试。
+
+
 
 **自旋锁、自适应自旋锁**
 ![image](http://490.github.io/images/20190310_103148.png)
@@ -519,6 +780,53 @@ public class SpinLock {
 }
 ```
 
+### 可重入的自旋锁
+
+```java
+public class ReentrantSpinLock 
+{
+    private AtomicReference<Thread> cas = new AtomicReference<Thread>();
+    private int count;
+    public void lock() 
+    {
+        Thread current = Thread.currentThread();
+        if (current == cas.get()) 
+        { // 如果当前线程已经获取到了锁，线程数增加一，然后返回
+            count++;
+            return;
+        }
+        // 如果没获取到锁，则通过CAS自旋
+        while (!cas.compareAndSet(null, current)) 
+        {
+            // DO nothing
+        }
+    }
+    public void unlock() 
+    {
+        Thread cur = Thread.currentThread();
+        if (cur == cas.get()) 
+        {
+            if (count > 0) 
+            {// 如果大于0，表示当前线程多次获取了该锁，释放锁通过count减一来模拟
+                count--;
+            } else 
+            {// 如果count==0，可以将锁释放，这样就能保证获取锁的次数与释放锁的次数是一致的了。
+                cas.compareAndSet(cur, null);
+            }
+        }
+    }
+}
+```
+
+
+
+### 自旋锁与互斥锁
+
+*   自旋锁与互斥锁都是为了实现保护资源共享的机制。
+*   无论是自旋锁还是互斥锁，在任意时刻，都最多只能有一个保持者。
+*   获取互斥锁的线程，如果锁已经被占用，则该线程将进入睡眠状态；获取自旋锁的线程则不会睡眠，而是一直循环等待锁释放。
+
+
 ### 乐观锁的缺点
 
 **1、 ABA 问题**
@@ -540,9 +848,6 @@ CAS 只对单个共享变量有效，当操作涉及跨多个共享变量时 CAS
 
 对于资源竞争严重（线程冲突严重）的情况，CAS自旋的概率会比较大，从而浪费更多的CPU资源，效率低于synchronized。
 
-补充： Java并发编程这个领域中synchronized关键字一直都是元老级的角色，很久之前很多人都会称它为 “重量级锁” 。但是，在JavaSE 1.6之后进行了主要包括为了减少获得锁和释放锁带来的性能消耗而引入的 偏向锁 和 轻量级锁 以及其它各种优化之后变得在某些情况下并不是那么重了。synchronized的底层实现主要依靠 Lock-Free 的队列，基本思路是 自旋后阻塞，竞争切换后继续竞争锁，稍微牺牲了公平性，但获得了高吞吐量。在线程冲突较少的情况下，可以获得和CAS类似的性能；而线程冲突严重的情况下，性能远高于CAS。
-
-# Lock锁的使用
 
 ## Lock接口简介
 锁是用于通过多个线程控制对共享资源的访问的工具。通常，锁提供对共享资源的独占访问：一次只能有一个线程可以获取锁，并且对共享资源的所有访问都要求首先获取锁。 但是，一些锁可能允许并发访问共享资源，如ReadWriteLock的读写锁。
@@ -557,11 +862,28 @@ Lock接口的实现类：
 ReentrantLock ， ReentrantReadWriteLock.ReadLock ， ReentrantReadWriteLock.WriteLock
 
 ```java
-Lock lock=new ReentrantLock()；
-lock.lock();
-try{
-    }finally{
-    lock.unlock();
+public class LockExample 
+{
+    private Lock lock = new ReentrantLock();
+    public void func() 
+    {
+        lock.lock();
+        try {
+            for (int i = 0; i < 10; i++) {
+                System.out.print(i + " ");
+            }
+        } finally {
+            lock.unlock(); // 确保释放锁，从而避免发生死锁。
+        }
+    }
+}
+
+public static void main(String[] args) {
+    LockExample lockExample = new LockExample();
+    ExecutorService executorService = Executors.newCachedThreadPool();
+    executorService.execute(() -> lockExample.func());
+    executorService.execute(() -> lockExample.func());
+    //0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
 }
 ```
 
@@ -604,13 +926,59 @@ Lock锁分为：公平锁 和 非公平锁。
 
 
 
-
-
-
-
 # 线程间的协作
 
+## join()
+
 在线程中调用另一个线程的 join() 方法，会将当前线程挂起，而不是忙等待，直到目标线程结束。
+
+对于以下代码，虽然 b 线程先启动，但是因为在 b 线程中调用了 a 线程的 join() 方法，b 线程会等待 a 线程结束才继续执行，因此最后能够保证 a 线程的输出先于 b 线程的输出。
+
+```
+public class JoinExample 
+{
+    private class A extends Thread 
+    {
+        @Override
+        public void run() 
+        {
+            System.out.println("A");
+        }
+    }
+    private class B extends Thread 
+    {
+        private A a;
+        B(A a) 
+        {
+            this.a = a;
+        }
+        @Override
+        public void run() 
+        {
+            try 
+            {
+                a.join();
+            } catch (InterruptedException e) { e.printStackTrace();}
+            System.out.println("B");
+        }
+    }
+    public void test() 
+    {
+        A a = new A();
+        B b = new B(a);
+        b.start();
+        a.start();
+    }
+}
+```
+
+```
+public static void main(String[] args) 
+{
+    JoinExample example = new JoinExample();
+    example.test();  //A B
+}
+```
 
 ## wait、notify、notifyAll()
 
@@ -667,13 +1035,10 @@ lock.unlock;
 ![image](http://490.github.io/images/20190310_133232.png)
 ![image](http://490.github.io/images/20190310_133238.png)
 
-**yield**
+****
 使当前线程从执行状态（运行状态）变为可执行态（就绪状态）。cpu会从众多的可执行态里选择，也就是说，当前也就是刚刚的那个线程还是有可能会被再次执行到的，并不是说一定会执行其他线程而该线程在下一次中不会执行到了。
 
 用了yield方法后，该线程就会把CPU时间让掉，让其他或者自己的线程执行（也就是谁先抢到谁执行）
-
-**中断线程**
-![image](http://490.github.io/images/20190310_133316.png)
 
 
 # ThreadLocal
@@ -682,7 +1047,12 @@ ThreadLocal 不继承 Thread，也不实现 Runable 接口， ThreadLocal 类为
 
 # 阻塞队列
 
-阻塞队列（BlockingQueue）是一个支持两个附加操作的队列。这两个附加的操作是：在队列为空时，获取元素的线程会等待队列变为非空。当队列满时，存储元素的线程会等待队列可用。阻塞队列常用于生产者和消费者的场景，生产者是往队列里添加元素的线程，消费者是从队列里拿元素的线程。阻塞队列就是生产者存放元素的容器，而消费者也只从容器里拿元素。
+## 简介
+
+阻塞队列（BlockingQueue）是一个支持两个附加操作的队列。这两个附加的操作是：在队列为空时，获取元素的线程会等待队列变为非空。当队列满时，存储元素的线程会等待队列可用。
+
+阻塞队列常用于生产者和消费者的场景，生产者是往队列里添加元素的线程，消费者是从队列里拿元素的线程。
+阻塞队列就是生产者存放元素的容器，而消费者也只从容器里拿元素。
 
 - ArrayBlockingQueue ：一个由数组结构组成的有界阻塞队列。
 - LinkedBlockingQueue ：一个由链表结构组成的有界阻塞队列。
@@ -699,11 +1069,225 @@ Comparator<Integer> mycomparator = new Comparator<Integer>() {
                   @Override
                   public int compare(Integer o1, Integer o2) 
                   {
-                      return [o2.compareTo](http://o2.compareTo)(o1);
-                  }
-            };
+                      return o2.compareTo(o1);
+                  }};
     maxheap = new PriorityQueue<Integer>(20,mycomparator);
     minheap = new PriorityQueue<Integer>(20);
+```
+
+## 阻塞队列实现原理
+
+如果队列是空的，消费者会一直等待，当生产者添加元素时候，消费者是如何知道当前队列有元素的呢？如果让你来设计阻塞队列你会如何设计，让生产者和消费者能够高效率的进行通讯呢？让我们先来看看JDK是如何实现的。
+
+使用通知模式实现。所谓通知模式，就是当生产者往满的队列里添加元素时会阻塞住生产者，当消费者消费了一个队列中的元素后，会通知生产者当前队列可用。通过查看JDK源码发现ArrayBlockingQueue使用了Condition来实现，代码如下：
+
+```java
+private final Condition notFull;
+private final Condition notEmpty;
+
+public ArrayBlockingQueue(int capacity, boolean fair) 
+{
+    //省略其他代码
+    notEmpty = lock.newCondition();
+    notFull = lock.newCondition();
+}
+public void put(E e) throws InterruptedException 
+{
+    checkNotNull(e);
+    final ReentrantLock lock = this.lock;
+    lock.lockInterruptibly();
+    try 
+    {
+      while (count == items.length)
+          notFull.await();
+      insert(e);
+    }finally {
+      lock.unlock();
+    }
+}
+public E take() throws InterruptedException 
+{
+    final ReentrantLock lock = this.lock;
+    lock.lockInterruptibly();
+    try 
+    {
+      while (count == 0)
+          notEmpty.await();
+      return extract();
+    }finally {
+      lock.unlock();
+    }
+}
+private void insert(E x) 
+{
+    items[putIndex] = x;
+    putIndex = inc(putIndex);
+    ++count;
+    notEmpty.signal();
+}
+
+```
+
+当我们往队列里插入一个元素时，如果队列不可用，阻塞生产者主要通过LockSupport.park(this);来实现
+
+```java
+public final void await() throws InterruptedException 
+{
+      if (Thread.interrupted())
+          throw new InterruptedException();
+      Node node = addConditionWaiter();
+      int savedState = fullyRelease(node);
+      int interruptMode = 0;
+      while (!isOnSyncQueue(node)) 
+      {
+        LockSupport.park(this);
+        if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
+              break;
+      }
+      if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
+            interruptMode = REINTERRUPT;
+      if (node.nextWaiter != null) // clean up if cancelled
+            unlinkCancelledWaiters();
+      if (interruptMode != 0)
+            reportInterruptAfterWait(interruptMode);
+}
+```
+
+## 手写生产者消费者
+
+### 使用Object.wait()和Object.notify()
+```java
+public class Test 
+{
+  private int queueSize = 10;
+  private PriorityQueue<Integer> queue = new PriorityQueue<Integer>(queueSize);
+  public static void main(String[] args) 
+  {
+    Test test = new Test();
+    Producer producer = test.new Producer();
+    Consumer consumer = test.new Consumer();
+     
+    producer.start();
+    consumer.start();
+  }
+  class Consumer extends Thread
+  {
+    @Override
+    public void run() 
+    {
+      consume();
+    }
+    private void consume() 
+    {
+      while(true)
+      {
+        synchronized (queue) 
+        {
+          while(queue.size() == 0)
+          {
+            try {
+              System.out.println("队列空，等待数据");
+              queue.wait();
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+              queue.notify();
+            }
+          }
+          queue.poll();     //每次移走队首元素
+          queue.notify();
+          System.out.println("从队列取走一个元素，队列剩余"+queue.size()+"个元素");
+        }
+      }
+    }
+  }
+   
+  class Producer extends Thread
+  {
+    @Override
+    public void run()
+    {
+      produce();
+    }
+    private void produce() 
+    {
+      while(true)
+      {
+        synchronized (queue)
+        {
+          while(queue.size() == queueSize)
+          {
+            try {
+              System.out.println("队列满，等待有空余空间");
+              queue.wait();
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+              queue.notify();
+            }
+          }
+          queue.offer(1);    //每次插入一个元素
+          queue.notify();
+          System.out.println("向队列取中插入一个元素，队列剩余空间："+(queueSize-queue.size()));
+        }
+      }
+    }
+  }
+}
+```
+
+### 使用阻塞队列实现
+
+```java
+public class Test 
+{
+    private int queueSize = 10;
+    private ArrayBlockingQueue<Integer> queue = new      ArrayBlockingQueue<Integer>(queueSize);
+    public static void main(String[] args) 
+    {
+        Test test = new Test();
+        Producer producer = test.new Producer();
+        Consumer consumer = test.new Consumer();        
+        producer.start();
+        consumer.start();
+    }
+   
+    class Consumer extends Thread
+    {   
+            @Override
+            public void run() 
+            {
+                consume();
+            }   
+            private void consume() 
+            {
+                  while(true)
+                  {
+                    try {
+                      queue.take();
+                      System.out.println("从队列取走一个元素，队列剩余"+queue.size()+"个元素");
+                    } catch (InterruptedException e) {e.printStackTrace();}
+                  }
+            }
+    }
+   
+      class Producer extends Thread
+      {    
+           @Override
+           public void run() 
+           {
+               produce();
+           }    
+              private void produce() 
+              {
+                    while(true)
+                    {
+                      try {
+                        queue.put(1);
+                        System.out.println("向队列取中插入一个元素，队列剩余空间："+(queueSize-queue.size()));
+                      } catch (InterruptedException e) {e.printStackTrace();}
+                    }
+              }
+      }
+}
 ```
 
 
