@@ -85,7 +85,7 @@
 <meta property="og:site_name" content="我的笔记">
 <meta property="og:description" content="Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]模式，是用单机的多个线程来模拟Spark分布式计算，通常用来验证开发出来的应用程序逻辑上有没有问题。其中N代表可以使用N个线程，每个线程拥有一个core。如果不指定N，则默认是1个线程（该线程有1个core）。 指令示例： 1）spark-shell –master local 效果是一样的2）spark-sh">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-14T06:33:41.304Z">
+<meta property="og:updated_time" content="2019-07-14T07:56:58.318Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark">
 <meta name="twitter:description" content="Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]模式，是用单机的多个线程来模拟Spark分布式计算，通常用来验证开发出来的应用程序逻辑上有没有问题。其中N代表可以使用N个线程，每个线程拥有一个core。如果不指定N，则默认是1个线程（该线程有1个core）。 指令示例： 1）spark-shell –master local 效果是一样的2）spark-sh">
@@ -350,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.3k
+                  1.7k
                 </span>
               
 
@@ -366,7 +366,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  6
                 </span>
               
             </div>
@@ -454,6 +454,9 @@
 </ul>
 <p><strong>此外，还有**</strong>Spark On  Mesos<strong>**模式 可以参阅：</strong></p>
 <p><a href="http://ifeve.com/spark-mesos-spark/" target="_blank" rel="noopener">http://ifeve.com/spark-mesos-spark/</a></p>
+<h1 id="spark中cache和persist的区别"><a href="#spark中cache和persist的区别" class="headerlink" title="spark中cache和persist的区别"></a>spark中cache和persist的区别</h1><p>cache和persist都是用于将一个RDD进行缓存的，这样在之后使用的过程中就不需要重新计算了，可以大大节省程序运行时间。cache()调用了persist(),cache只有一个默认的缓存级别MEMORY_ONLY ，而persist可以根据情况设置其它的缓存级别。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">object StorageLevel &#123;</span><br><span class="line">  val NONE = new StorageLevel(false, false, false, false)</span><br><span class="line">  val DISK_ONLY = new StorageLevel(true, false, false, false)</span><br><span class="line">  val DISK_ONLY_2 = new StorageLevel(true, false, false, false, 2)</span><br><span class="line">  val MEMORY_ONLY = new StorageLevel(false, true, false, true)</span><br><span class="line">  val MEMORY_ONLY_2 = new StorageLevel(false, true, false, true, 2)</span><br><span class="line">  val MEMORY_ONLY_SER = new StorageLevel(false, true, false, false)</span><br><span class="line">  val MEMORY_ONLY_SER_2 = new StorageLevel(false, true, false, false, 2)</span><br><span class="line">  val MEMORY_AND_DISK = new StorageLevel(true, true, false, true)</span><br><span class="line">  val MEMORY_AND_DISK_2 = new StorageLevel(true, true, false, true, 2)</span><br><span class="line">  val MEMORY_AND_DISK_SER = new StorageLevel(true, true, false, false)</span><br><span class="line">  val MEMORY_AND_DISK_SER_2 = new StorageLevel(true, true, false, false, 2)</span><br><span class="line">  val OFF_HEAP = new StorageLevel(false, false, true, false)</span><br><span class="line">  ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>useDisk：使用硬盘（外存）<br>useMemory：使用内存<br>useOffHeap：使用堆外内存，这是Java虚拟机里面的概念，堆外内存意味着把内存对象分配在Java虚拟机的堆以外的内存，这些内存直接受操作系统管理（而不是虚拟机）。这样做的结果就是能保持一个较小的堆，以减少垃圾收集对应用的影响。<br>deserialized：反序列化，其逆过程序列化（Serialization）是java提供的一种机制，将对象表示成一连串的字节；而反序列化就表示将字节恢复为对象的过程。序列化是对象永久化的一种机制，可以将对象及其属性保存起来，并能在反序列化后直接恢复这个对象<br>replication：备份数（在多个节点上备份）</p>
 
       
     </div>
@@ -634,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark多种运行模式"><span class="nav-number">1.</span> <span class="nav-text">Spark多种运行模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试或实验性质的本地运行模式（单机）"><span class="nav-number">1.1.</span> <span class="nav-text">测试或实验性质的本地运行模式（单机）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试或实现性质的本地伪集群运行模式（单机模拟集群）"><span class="nav-number">1.2.</span> <span class="nav-text">测试或实现性质的本地伪集群运行模式（单机模拟集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spark自带Cluster-Manager的standalone-Client模式（集群）"><span class="nav-number">1.3.</span> <span class="nav-text">spark自带Cluster Manager的standalone Client模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spark-自带Cluster-manager-的Standalone-cluster模式（集群）"><span class="nav-number">1.4.</span> <span class="nav-text">spark 自带Cluster manager 的Standalone cluster模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于YARN的Resource-Manager-的Client-模式（集群）"><span class="nav-number">1.5.</span> <span class="nav-text">基于YARN的Resource Manager 的Client 模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于YARN的Resource-Manager-的-Cluster-模式（集群）"><span class="nav-number">1.6.</span> <span class="nav-text">基于YARN的Resource Manager 的 Cluster 模式（集群）</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark多种运行模式"><span class="nav-number">1.</span> <span class="nav-text">Spark多种运行模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试或实验性质的本地运行模式（单机）"><span class="nav-number">1.1.</span> <span class="nav-text">测试或实验性质的本地运行模式（单机）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试或实现性质的本地伪集群运行模式（单机模拟集群）"><span class="nav-number">1.2.</span> <span class="nav-text">测试或实现性质的本地伪集群运行模式（单机模拟集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spark自带Cluster-Manager的standalone-Client模式（集群）"><span class="nav-number">1.3.</span> <span class="nav-text">spark自带Cluster Manager的standalone Client模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spark-自带Cluster-manager-的Standalone-cluster模式（集群）"><span class="nav-number">1.4.</span> <span class="nav-text">spark 自带Cluster manager 的Standalone cluster模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于YARN的Resource-Manager-的Client-模式（集群）"><span class="nav-number">1.5.</span> <span class="nav-text">基于YARN的Resource Manager 的Client 模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于YARN的Resource-Manager-的-Cluster-模式（集群）"><span class="nav-number">1.6.</span> <span class="nav-text">基于YARN的Resource Manager 的 Cluster 模式（集群）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spark中cache和persist的区别"><span class="nav-number">2.</span> <span class="nav-text">spark中cache和persist的区别</span></a></li></ol></div>
             
 
           </div>
@@ -668,7 +671,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">246.1k</span>
+    <span title="Site words total count">246.5k</span>
   
 </div>
 
