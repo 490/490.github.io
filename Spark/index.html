@@ -77,18 +77,18 @@
 
 
 
-<meta name="description" content="Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]模式，是用单机的多个线程来模拟Spark分布式计算，通常用来验证开发出来的应用程序逻辑上有没有问题。其中N代表可以使用N个线程，每个线程拥有一个core。如果不指定N，则默认是1个线程（该线程有1个core）。 指令示例： 1）spark-shell –master local 效果是一样的2）spark-sh">
+<meta name="description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理； 框架多样化：1）批处理（离线）：MapReduce、Hive、Pig2）流式处理（实时）： Storm、JStorm3）交互式计算：Impala Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]">
 <meta name="keywords" content="大数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark">
 <meta property="og:url" content="https://490.github.io/Spark/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]模式，是用单机的多个线程来模拟Spark分布式计算，通常用来验证开发出来的应用程序逻辑上有没有问题。其中N代表可以使用N个线程，每个线程拥有一个core。如果不指定N，则默认是1个线程（该线程有1个core）。 指令示例： 1）spark-shell –master local 效果是一样的2）spark-sh">
+<meta property="og:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理； 框架多样化：1）批处理（离线）：MapReduce、Hive、Pig2）流式处理（实时）： Storm、JStorm3）交互式计算：Impala Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-14T09:12:26.381Z">
+<meta property="og:updated_time" content="2019-07-15T10:56:34.569Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark">
-<meta name="twitter:description" content="Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]模式，是用单机的多个线程来模拟Spark分布式计算，通常用来验证开发出来的应用程序逻辑上有没有问题。其中N代表可以使用N个线程，每个线程拥有一个core。如果不指定N，则默认是1个线程（该线程有1个core）。 指令示例： 1）spark-shell –master local 效果是一样的2）spark-sh">
+<meta name="twitter:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理； 框架多样化：1）批处理（离线）：MapReduce、Hive、Pig2）流式处理（实时）： Storm、JStorm3）交互式计算：Impala Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]">
 
 
 
@@ -350,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3k
+                  4k
                 </span>
               
 
@@ -366,7 +366,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  12
+                  16
                 </span>
               
             </div>
@@ -387,7 +387,9 @@
       
 
       
-        <h1 id="Spark多种运行模式"><a href="#Spark多种运行模式" class="headerlink" title="Spark多种运行模式"></a>Spark多种运行模式</h1><h2 id="测试或实验性质的本地运行模式（单机）"><a href="#测试或实验性质的本地运行模式（单机）" class="headerlink" title="测试或实验性质的本地运行模式（单机）"></a>测试或实验性质的本地运行模式（单机）</h2><ul>
+        <h1 id="MapReduce局限性"><a href="#MapReduce局限性" class="headerlink" title="MapReduce局限性"></a>MapReduce局限性</h1><p>MapReduce的局限性：<br>1）代码繁琐；<br>2）只能够支持map和reduce方法；<br>3）执行效率低下；<br>4）不适合迭代多次、交互式、流式的处理；</p>
+<p>框架多样化：<br>1）批处理（离线）：MapReduce、Hive、Pig<br>2）流式处理（实时）： Storm、JStorm<br>3）交互式计算：Impala</p>
+<h1 id="Spark多种运行模式"><a href="#Spark多种运行模式" class="headerlink" title="Spark多种运行模式"></a>Spark多种运行模式</h1><h2 id="测试或实验性质的本地运行模式（单机）"><a href="#测试或实验性质的本地运行模式（单机）" class="headerlink" title="测试或实验性质的本地运行模式（单机）"></a>测试或实验性质的本地运行模式（单机）</h2><ul>
 <li>该模式被称为Local[N]模式，是用单机的多个线程来模拟Spark分布式计算，通常用来验证开发出来的应用程序逻辑上有没有问题。其中N代表可以使用N个线程，每个线程拥有一个core。如果不指定N，则默认是1个线程（该线程有1个core）。</li>
 <li><p><strong>指令示例：</strong></p>
 <p>1）spark-shell –master local 效果是一样的<br>2）spark-shell –master local[4] 代表会有4个线程（每个线程一个core）来并发执行应用程序。</p>
@@ -458,7 +460,41 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">object StorageLevel &#123;</span><br><span class="line">  val NONE = new StorageLevel(false, false, false, false)</span><br><span class="line">  val DISK_ONLY = new StorageLevel(true, false, false, false)</span><br><span class="line">  val DISK_ONLY_2 = new StorageLevel(true, false, false, false, 2)</span><br><span class="line">  val MEMORY_ONLY = new StorageLevel(false, true, false, true)</span><br><span class="line">  val MEMORY_ONLY_2 = new StorageLevel(false, true, false, true, 2)</span><br><span class="line">  val MEMORY_ONLY_SER = new StorageLevel(false, true, false, false)</span><br><span class="line">  val MEMORY_ONLY_SER_2 = new StorageLevel(false, true, false, false, 2)</span><br><span class="line">  val MEMORY_AND_DISK = new StorageLevel(true, true, false, true)</span><br><span class="line">  val MEMORY_AND_DISK_2 = new StorageLevel(true, true, false, true, 2)</span><br><span class="line">  val MEMORY_AND_DISK_SER = new StorageLevel(true, true, false, false)</span><br><span class="line">  val MEMORY_AND_DISK_SER_2 = new StorageLevel(true, true, false, false, 2)</span><br><span class="line">  val OFF_HEAP = new StorageLevel(false, false, true, false)</span><br><span class="line">  ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>useDisk：使用硬盘（外存）<br>useMemory：使用内存<br>useOffHeap：使用堆外内存，这是Java虚拟机里面的概念，堆外内存意味着把内存对象分配在Java虚拟机的堆以外的内存，这些内存直接受操作系统管理（而不是虚拟机）。这样做的结果就是能保持一个较小的堆，以减少垃圾收集对应用的影响。<br>deserialized：反序列化，其逆过程序列化（Serialization）是java提供的一种机制，将对象表示成一连串的字节；而反序列化就表示将字节恢复为对象的过程。序列化是对象永久化的一种机制，可以将对象及其属性保存起来，并能在反序列化后直接恢复这个对象<br>replication：备份数（在多个节点上备份）</p>
 <p>使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xxDF.cache()</span><br><span class="line">使用</span><br><span class="line">xxDF.unpersist(true)</span><br></pre></td></tr></table></figure></p>
-<h1 id="Spark-SQL"><a href="#Spark-SQL" class="headerlink" title="Spark SQL"></a>Spark SQL</h1><h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>即席查询</p>
+<h1 id="Spark-SQL"><a href="#Spark-SQL" class="headerlink" title="Spark SQL"></a>Spark SQL</h1><h2 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h2><p>Hive: 类似于sql的Hive QL语言， sql==&gt;mapreduce</p>
+<ul>
+<li>特点：mapreduce</li>
+<li>改进：hive on tez、hive on spark、hive on mapreduce</li>
+</ul>
+<p>Spark: hive on spark ==&gt; shark(hive on spark)</p>
+<ul>
+<li>shark推出：欢迎， 基于spark、基于内存的列式存储、与hive能够兼容</li>
+<li>缺点：hive ql的解析、逻辑执行计划生成、执行计划的优化是依赖于hive的<pre><code>仅仅只是把物理执行计划从mr作业替换成spark作业
+</code></pre></li>
+</ul>
+<p>Shark终止以后，产生了2个分支：<br>1）hive on spark<br>    Hive社区，源码是在Hive中<br>2）Spark SQL<br>    Spark社区，源码是在Spark中<br>    支持多种数据源，多种优化技术，扩展性好很多</p>
+<p>SQL on Hadoop</p>
+<ul>
+<li><p>Hive<br>  sql ==&gt; mapreduce<br>  metastore ： 元数据<br>  sql：database、table、view<br>  facebook</p>
+</li>
+<li><p>impala<br>  cloudera ： cdh（建议大家在生产上使用的hadoop系列版本）、cm<br>  sql：自己的守护进程执行的，非mr<br>  metastore</p>
+</li>
+<li><p>presto<br>  facebook<br>  京东<br>  sql</p>
+</li>
+<li><p>drill<br>  sql<br>  访问：hdfs、rdbms、json、hbase、mongodb、s3、hive</p>
+</li>
+<li><p>Spark SQL<br>  sql<br>  dataframe/dataset api<br>  metastore<br>  访问：hdfs、rdbms、json、hbase、mongodb、s3、hive  ==&gt; 外部数据源</p>
+</li>
+</ul>
+<p>Spark SQL is Apache Spark’s module for working with structured data. </p>
+<p>有见到SQL字样吗？<br>Spark SQL它不仅仅有访问或者操作SQL的功能，还提供了其他的非常丰富的操作：外部数据源、优化</p>
+<p><strong>Spark SQL概述小结：</strong></p>
+<ul>
+<li>Spark SQL的应用并不局限于SQL；</li>
+<li>访问hive、json、parquet等文件的数据；</li>
+<li>SQL只是Spark SQL的一个功能而已；<br>===&gt; Spark SQL这个名字起的并不恰当</li>
+<li>Spark SQL提供了SQL的api、DataFrame和Dataset的API；</li>
+</ul>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>即席查询</p>
 <p>将分析结果传到streaming</p>
 <p>etl 清洗数据</p>
 <p>把外部数据源的数据弄成dataFrame</p>
@@ -490,6 +526,46 @@
 <p>DataFrame可以处理text，json，parquet等</p>
 <p>SQL和API在DF里，都经过了catalyst优化，（不管菜鸡把SQL写成什么样，最后执行效率都一样）</p>
 <h2 id="savemode"><a href="#savemode" class="headerlink" title="savemode"></a>savemode</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> df=spark.read.format(<span class="string">"json"</span>).load(<span class="string">"file:///home/hadoop/app/spark-2.1.0-bin-2.6.0-cdh5.7.0/examples/src/main/resources/people.json"</span>)</span><br><span class="line"></span><br><span class="line">df.show</span><br><span class="line"></span><br><span class="line"><span class="type">Mode</span>可以有err、overwrite、append、ignore</span><br><span class="line"></span><br><span class="line">df.select(<span class="string">"name"</span>).write.format(<span class="string">"parquet"</span>).mode(<span class="string">"overwrite"</span>).save(<span class="string">"file:///path"</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="YARN架构"><a href="#YARN架构" class="headerlink" title="YARN架构"></a>YARN架构</h1><p>1 RM(ResourceManager) + N NM(NodeManager)</p>
+<p>ResourceManager的职责： 一个集群active状态的RM只有一个，负责整个集群的资源管理和调度</p>
+<ul>
+<li>1）处理客户端的请求(启动/杀死)</li>
+<li>2）启动/监控ApplicationMaster(一个作业对应一个AM)</li>
+<li>3）监控NM</li>
+<li>4）系统的资源分配和调度</li>
+</ul>
+<p>NodeManager：整个集群中有N个，负责单个节点的资源管理和使用以及task的运行情况</p>
+<ul>
+<li>1）定期向RM汇报本节点的资源使用请求和各个Container的运行状态</li>
+<li>2）接收并处理RM的container启停的各种命令</li>
+<li>3）单个节点的资源管理和任务管理</li>
+</ul>
+<p>ApplicationMaster：每个应用/作业对应一个，负责应用程序的管理</p>
+<ul>
+<li>1）数据切分</li>
+<li>2）为应用程序向RM申请资源(container)，并分配给内部任务</li>
+<li>3）与NM通信以启停task， task是运行在container中的</li>
+<li>4）task的监控和容错</li>
+</ul>
+<p>Container：<br>对任务运行情况的描述：cpu、memory、环境变量</p>
+<p>YARN执行流程</p>
+<ul>
+<li>1）用户向YARN提交作业</li>
+<li>2）RM为该作业分配第一个container(AM)</li>
+<li>3）RM会与对应的NM通信，要求NM在这个container上启动应用程序的AM</li>
+<li>4) AM首先向RM注册，然后AM将为各个任务申请资源，并监控运行情况</li>
+<li>5）AM采用轮训的方式通过RPC协议向RM申请和领取资源</li>
+<li>6）AM申请到资源以后，便和相应的NM通信，要求NM启动任务</li>
+<li>7）NM启动我们作业对应的task</li>
+</ul>
+<p>YARN环境搭建<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">mapred-site.xml</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">yarn-site.xml</span><br><span class="line">	<span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>启动yarn：<code>sbin/start-yarn.sh</code></p>
+<p>验证是否启动成功<br><code>jps</code><br><code>ResourceManager</code><br><code>NodeManager</code></p>
+<p>web: <a href="http://hadoop001:8088" target="_blank" rel="noopener">http://hadoop001:8088</a></p>
+<p>停止yarn： <code>sbin/stop-yarn.sh</code></p>
+<p>提交mr作业到yarn上运行： wc</p>
+<p><code>/home/hadoop/app/hadoop-2.6.0-cdh5.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.7.0.jar</code></p>
+<p><code>hadoop jar /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.7.0.jar wordcount /input/wc/hello.txt /output/wc/</code></p>
 
       
     </div>
@@ -670,7 +746,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark多种运行模式"><span class="nav-number">1.</span> <span class="nav-text">Spark多种运行模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试或实验性质的本地运行模式（单机）"><span class="nav-number">1.1.</span> <span class="nav-text">测试或实验性质的本地运行模式（单机）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试或实现性质的本地伪集群运行模式（单机模拟集群）"><span class="nav-number">1.2.</span> <span class="nav-text">测试或实现性质的本地伪集群运行模式（单机模拟集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spark自带Cluster-Manager的standalone-Client模式（集群）"><span class="nav-number">1.3.</span> <span class="nav-text">spark自带Cluster Manager的standalone Client模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spark-自带Cluster-manager-的Standalone-cluster模式（集群）"><span class="nav-number">1.4.</span> <span class="nav-text">spark 自带Cluster manager 的Standalone cluster模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于YARN的Resource-Manager-的Client-模式（集群）"><span class="nav-number">1.5.</span> <span class="nav-text">基于YARN的Resource Manager 的Client 模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于YARN的Resource-Manager-的-Cluster-模式（集群）"><span class="nav-number">1.6.</span> <span class="nav-text">基于YARN的Resource Manager 的 Cluster 模式（集群）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spark中cache和persist的区别"><span class="nav-number">2.</span> <span class="nav-text">spark中cache和persist的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-SQL"><span class="nav-number">3.</span> <span class="nav-text">Spark SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景"><span class="nav-number">3.1.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">3.2.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">3.3.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载数据"><span class="nav-number">3.4.</span> <span class="nav-text">加载数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame和SQL的功能对比"><span class="nav-number">3.5.</span> <span class="nav-text">DataFrame和SQL的功能对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#savemode"><span class="nav-number">3.6.</span> <span class="nav-text">savemode</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MapReduce局限性"><span class="nav-number">1.</span> <span class="nav-text">MapReduce局限性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark多种运行模式"><span class="nav-number">2.</span> <span class="nav-text">Spark多种运行模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试或实验性质的本地运行模式（单机）"><span class="nav-number">2.1.</span> <span class="nav-text">测试或实验性质的本地运行模式（单机）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试或实现性质的本地伪集群运行模式（单机模拟集群）"><span class="nav-number">2.2.</span> <span class="nav-text">测试或实现性质的本地伪集群运行模式（单机模拟集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spark自带Cluster-Manager的standalone-Client模式（集群）"><span class="nav-number">2.3.</span> <span class="nav-text">spark自带Cluster Manager的standalone Client模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spark-自带Cluster-manager-的Standalone-cluster模式（集群）"><span class="nav-number">2.4.</span> <span class="nav-text">spark 自带Cluster manager 的Standalone cluster模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于YARN的Resource-Manager-的Client-模式（集群）"><span class="nav-number">2.5.</span> <span class="nav-text">基于YARN的Resource Manager 的Client 模式（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于YARN的Resource-Manager-的-Cluster-模式（集群）"><span class="nav-number">2.6.</span> <span class="nav-text">基于YARN的Resource Manager 的 Cluster 模式（集群）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#spark中cache和persist的区别"><span class="nav-number">3.</span> <span class="nav-text">spark中cache和persist的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark-SQL"><span class="nav-number">4.</span> <span class="nav-text">Spark SQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#起源"><span class="nav-number">4.1.</span> <span class="nav-text">起源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景"><span class="nav-number">4.2.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特点"><span class="nav-number">4.3.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">4.4.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载数据"><span class="nav-number">4.5.</span> <span class="nav-text">加载数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DataFrame和SQL的功能对比"><span class="nav-number">4.6.</span> <span class="nav-text">DataFrame和SQL的功能对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#savemode"><span class="nav-number">4.7.</span> <span class="nav-text">savemode</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#YARN架构"><span class="nav-number">5.</span> <span class="nav-text">YARN架构</span></a></li></ol></div>
             
 
           </div>
@@ -704,7 +780,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">247.8k</span>
+    <span title="Site words total count">248.7k</span>
   
 </div>
 
