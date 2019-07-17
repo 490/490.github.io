@@ -348,7 +348,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  8.4k
+                  8.9k
                 </span>
               
 
@@ -364,7 +364,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  34
+                  36
                 </span>
               
             </div>
@@ -624,6 +624,18 @@
 <h3 id="流处理"><a href="#流处理" class="headerlink" title="流处理"></a>流处理</h3><p>保存收集流数据，以提供之后对接的Storm或其他流式计算框架进行处理。很多用户会将那些从原始topic来的数据进行阶段性处理，汇总，扩充或者以其他的方式转换到新的topic下再继续后面的处理。例如一个文章推荐的处理流程，可能是先从RSS数据源中抓取文章的内容，然后将其丢入一个叫做“文章”的topic中；后续操作可能是需要对这个内容进行清理，比如回复正常数据或者删除重复数据，最后再将内容匹配的结果返 还给用户。这就在一个独立的topic之外，产生了一系列的实时数据处理的流程。</p>
 <h3 id="日志聚合"><a href="#日志聚合" class="headerlink" title="日志聚合"></a>日志聚合</h3><p>使用Kafka代替日志聚合（log aggregation）。日志聚合一般来说是从服务器上收集日志文件，然后放到一个集中的位置（文件服务器或HDFS）进行处理。然而Kafka忽略掉文件的细节，将其更清晰地抽象成一个个日志或事件的消息流。这就让Kafka处理过程延迟更低，更容易支持多数据源和分布式数据处理。比起以日志为中心的系统比如Scribe或者Flume来说，Kafka提供同样高效的性能和因为复制导致的更高的耐用性保证，以及更低的端到端延迟。</p>
 <h3 id="持久性日志"><a href="#持久性日志" class="headerlink" title="持久性日志"></a>持久性日志</h3><p>Kafka可以为一种外部的持久性日志的分布式系统提供服务。这种日志可以在节点间备份数据，并为故障节点数据回复提供一种重新同步的机制。Kafka中日志压缩功能为这种用法提供了条件。在这种用法中，Kafka类似于Apache BookKeeper项目。</p>
+<h2 id="震惊了！原来这才是kafka！"><a href="#震惊了！原来这才是kafka！" class="headerlink" title="震惊了！原来这才是kafka！"></a><a href="https://www.jianshu.com/p/d3e963ff8b70" target="_blank" rel="noopener">震惊了！原来这才是kafka！</a></h2><p>大概用法就是，Producers往Brokers里面的指定Topic中写消息，Consumers从Brokers里面拉去指定Topic的消息，然后进行业务处理。<br>图中有两个topic，topic 0有两个partition，topic 1有一个partition，三副本备份。可以看到consumer gourp 1中的consumer 2没有分到partition处理，这是有可能出现的，下面会讲到。</p>
+<p>关于broker、topics、partitions的一些元信息用zk来存，监控和路由啥的也都会用到zk。</p>
+<p><img src="http://490.github.io/images/20190717_200118.png" alt="image"></p>
+<h3 id="生产过程"><a href="#生产过程" class="headerlink" title="生产过程"></a>生产过程</h3><p><img src="http://490.github.io/images/20190717_200258.png" alt="image"></p>
+<p>创建一条记录，记录中一个要指定对应的topic和value，key和partition可选。 先序列化，然后按照topic和partition，放进对应的发送队列中。kafka produce都是批量请求，会积攒一批，然后一起发送，不是调send()就进行立刻进行网络发包。<br>如果partition没填，那么情况会是这样的：</p>
+<ol>
+<li>key有填<br>按照key进行哈希，相同key去一个partition。（如果扩展了partition的数量那么就不能保证了）</li>
+<li>key没填<br>round-robin来选partition</li>
+</ol>
+<p>这些要发往同一个partition的请求按照配置，攒一波，然后由一个单独的线程一次性发过去。</p>
+<h3 id="消费过程"><a href="#消费过程" class="headerlink" title="消费过程"></a>消费过程</h3><p>订阅topic是以一个消费组来订阅的，一个消费组里面可以有多个消费者。同一个消费组中的两个消费者，不会同时消费一个partition。换句话来说，<strong>就是一个partition，只能被消费组里的一个消费者消费</strong>，但是可以同时被多个消费组消费。因此，如果消费组内的消费者如果比partition多的话，那么就会有个别消费者一直空闲。</p>
+<h3 id="消息投递语义"><a href="#消息投递语义" class="headerlink" title="消息投递语义"></a>消息投递语义</h3><p>At most once：最多一次，消息可能会丢失，但不会重复<br>At least once：最少一次，消息不会丢失，可能会重复<br>Exactly once：只且一次，消息不丢失不重复，只且消费一次（0.11中实现，仅限于下游也是kafka）</p>
 <h1 id="为什么要集成Flume和Kafka"><a href="#为什么要集成Flume和Kafka" class="headerlink" title="为什么要集成Flume和Kafka"></a>为什么要集成Flume和Kafka</h1><p>一般使用Flume+Kafka架构都是希望完成实时流式的日志处理，后面再连接上Flink/Storm/Spark Streaming等流式实时处理技术，从而完成日志实时解析的目标。第一、如果Flume直接对接实时计算框架，当数据采集速度大于数据处理速度，很容易发生数据堆积或者数据丢失，而kafka可以当做一个消息缓存队列，从广义上理解，把它当做一个数据库，可以存放一段时间的数据。第二、Kafka属于中间件，一个明显的优势就是使各层解耦，使得出错时不会干扰其他组件。</p>
 <p>因此数据从数据源到flume再到Kafka时，数据一方面可以同步到HDFS做离线计算，另一方面可以做实时计算，可实现数据多分发。</p>
 <ol>
@@ -2294,7 +2306,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">255k</span>
+    <span title="Site words total count">255.5k</span>
   
 </div>
 
