@@ -348,7 +348,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  5.1k
+                  6.9k
                 </span>
               
 
@@ -364,7 +364,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  21
+                  28
                 </span>
               
             </div>
@@ -600,6 +600,30 @@
 <h3 id="多路复用采集"><a href="#多路复用采集" class="headerlink" title="多路复用采集"></a>多路复用采集</h3><p><img src="https://s1.51cto.com/images/blog/201901/17/f4ccb4b3d930c7a332c6f1bbc56a39ea.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=" alt="flume"></p>
 <p>在一份agent中有多个channel和多个sink，然后多个sink输出到不同的文件或者文件系统中。<br>规划：<br>Hadoop02：（tail-hdfsandlogger.properties）<br>   使用 exec “tail -F /home/hadoop/testlog/datalog.log”获取采集数据<br>   使用 sink1 将数据 存储hdfs<br>   使用 sink2 将数据都存储 控制台</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#tail-hdfsandlogger.properties</span><br><span class="line">#2个channel和2个sink的配置文件</span><br><span class="line">#Name the components on this agent</span><br><span class="line">a1.sources = s1</span><br><span class="line">a1.sinks = k1 k2</span><br><span class="line">a1.channels = c1 c2</span><br><span class="line"></span><br><span class="line">#Describe/configure tail -F source1</span><br><span class="line">a1.sources.s1.type = exec</span><br><span class="line">a1.sources.s1.command = tail -F /home/hadoop/logs/catalina.out</span><br><span class="line">#指定source进行扇出到多个channnel的规则</span><br><span class="line">a1.sources.s1.selector.type = replicating</span><br><span class="line">a1.sources.s1.channels = c1 c2</span><br><span class="line"></span><br><span class="line">#Use a channel which buffers events in memory</span><br><span class="line">#指定channel c1</span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">#指定channel c2</span><br><span class="line">a1.channels.c2.type = memory</span><br><span class="line"></span><br><span class="line">#Describe the sink</span><br><span class="line">#指定k1的设置</span><br><span class="line">a1.sinks.k1.type = hdfs</span><br><span class="line">a1.sinks.k1.hdfs.path=hdfs:<span class="comment">//myha01/flume_log/%y-%m-%d/%H-%M</span></span><br><span class="line">a1.sinks.k1.hdfs.filePrefix = events</span><br><span class="line">a1.sinks.k1.hdfs.maxOpenFiles = <span class="number">5000</span></span><br><span class="line">a1.sinks.k1.hdfs.batchSize= <span class="number">100</span></span><br><span class="line">a1.sinks.k1.hdfs.fileType = DataStream</span><br><span class="line">a1.sinks.k1.hdfs.writeFormat =Text</span><br><span class="line">a1.sinks.k1.hdfs.rollSize = <span class="number">102400</span></span><br><span class="line">a1.sinks.k1.hdfs.rollCount = <span class="number">1000000</span></span><br><span class="line">a1.sinks.k1.hdfs.rollInterval = <span class="number">60</span></span><br><span class="line">a1.sinks.k1.hdfs.round = <span class="keyword">true</span></span><br><span class="line">a1.sinks.k1.hdfs.roundValue = <span class="number">10</span></span><br><span class="line">a1.sinks.k1.hdfs.roundUnit = minute</span><br><span class="line">a1.sinks.k1.hdfs.useLocalTimeStamp = <span class="keyword">true</span></span><br><span class="line">a1.sinks.k1.channel = c1</span><br><span class="line">#指定k2的</span><br><span class="line">a1.sinks.k2.type = logger</span><br><span class="line">a1.sinks.k2.channel = c2</span><br></pre></td></tr></table></figure>
+<h1 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ol>
+<li>kafka作为集群运行在一个或者多个服务器上</li>
+<li>kafka集群存储的消息是以topic为类别记录的</li>
+<li>kafka存储的消息是k-v键值对，k是offset偏移量，v就是消息的内容</li>
+<li>topic：kafka将消息分门别类，每一类的消息称之为topic</li>
+<li>broker：已发布的消息保存在一组服务器中，称之为Kafka集群。集群中的每一个服务器都是一个代理(Broker). 消费者可以订阅一个或多个主题（topic），并从Broker拉数据，从而消费这些已发布的消息。</li>
+<li>消息：kafka会保存消息直到它过期，无论是否被消费了。</li>
+<li>producer：发布消息的对象，往某个topic中发布消息，也负责选择发布到topic中的哪个分区</li>
+<li>consumer：订阅消息并处理发布的消息的对象</li>
+<li>patition：topic是逻辑上的概念，patition是物理概念。每个分区都是一个顺序的，不可变的消息队列，并且可以持续添加，producer生产的消息都会append到队列的末尾，而不是随机读写的。分区中的消息都会被分了一个序列号，这个序列号在分区内是唯一的，也就是分区内的偏移量。</li>
+<li>如何消费：<br>kafka的生产者没有保持消息消费的顺序，消费的顺序是通过偏移量交给消费者的，消费者持有的元数据就是消息的offset，消费者通过控制offset的移动来决定读取哪里的消息。正常情况下，当消费者消费消息的时候，偏移量是线性增长的。如果消费者想要重新读取数据的时候，就需要将偏移量向前移动。</li>
+<li>为什么说是分布式和冗余备份的：<br>分区被分布到集群中的各个服务器中，每个服务器处理它所拥有的分区。根据配置，每个分区还可以复制到其他服务器作为备份容错。每个分区拥有一个leader，有一个或者多个follower（冗余备份的）。一个broker可以是一个分区的leader,同时也可以是别的分区的follwer，避免了所有的请求只让一个或者几个服务器处理，负载均衡。<br>某个broker如果是一个分区的leader，那么它处理这个分区上的所有读写请求，而follower分区被动的复制数据。如果leader宕机，则follower就可以被推举为leader。</li>
+<li>为什么说是持久性的：<br>kafka使用文件存储消息，并且会保存所有消息直到它过期，无论是否消费。</li>
+<li><p>consumer和topic的关系<br><img src="http://490.github.io/images/20190717_101905.png" alt="image"><br>这个kafka集群中有两个broker，broker1下有partition0和partition3，broker2下有partition1和partition2。<br>有两个消费者集群，消费者集群A拥有两个消费者C1和C2，消费者集群B拥有四个消费者C3,C4,C5,C6。<br>每个partition只能被一个消费者集群中的一个消费者消费，比如broker1中partition0，只能被Consumer GroupA中的C1消费，只能被Consumer GroupB中的C3消费，kafak会确保这个消费者是这个partition的唯一消费者。<br>因为偏移量的唯一值是基于一个分区内的，producer生产的消息按照一定的算法分配到不同的分区，在各个分区内部，偏移量是线性增长的，所以在一个分区内消费消息是可以保持顺序的。但是如果topic里有多个partition的话，那么不能保证全局的消息是顺序的。<br>一个消费组中有多个消费者可以提高消费消息的并发性，并且当partition的消费者出现故障，那么这个partition可以分配给同组的其他消费者，从而提高他的容错性。<br>因为一个partition只能被一个同组的消费者消费，所以当同组中的消费者数量多于partition的数量时，注定有消费者无法消费partition。<br>每个消费者可以消费一个到多个partition。</p>
+</li>
+<li><p>发布订阅<br>消息生产者（发布）将消息发布到topic中，同时有多个消息消费者（订阅）消费该消息。发布到topic的消息会被所有订阅者消费。消费端为拉模型，消费状态和订阅关系由客户端负责维护，消息消费完后不会立即删除，会保留历史消息。</p>
+</li>
+</ol>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><h3 id="监控"><a href="#监控" class="headerlink" title="监控"></a>监控</h3><p>主机通过Kafka发送与系统和应用程序健康相关的指标，然后这些信息会被收集和处理从而创建监控仪表盘并发送警告。</p>
+<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><p> 应用程度使用Kafka作为传统的消息系统实现标准的队列和消息的发布—订阅，例如搜索和内容提要（Content Feed）。比起大多数的消息系统来说，Kafka有更好的吞吐量，内置的分区，冗余及容错性，这让Kafka成为了一个很好的大规模消息处理应用的解决方案。消息系统 一般吞吐量相对较低，但是需要更小的端到端延时，并尝尝依赖于Kafka提供的强大的持久性保障。在这个领域，Kafka足以媲美传统消息系统，如ActiveMR或RabbitMQ</p>
+<h3 id="站点的用户活动追踪"><a href="#站点的用户活动追踪" class="headerlink" title="站点的用户活动追踪"></a>站点的用户活动追踪</h3><p>为了更好地理解用户行为，改善用户体验，将用户查看了哪个页面、点击了哪些内容等信息发送到每个数据中心的Kafka集群上，并通过Hadoop进行分析、生成日常报告。</p>
+<h3 id="流处理"><a href="#流处理" class="headerlink" title="流处理"></a>流处理</h3><p>保存收集流数据，以提供之后对接的Storm或其他流式计算框架进行处理。很多用户会将那些从原始topic来的数据进行阶段性处理，汇总，扩充或者以其他的方式转换到新的topic下再继续后面的处理。例如一个文章推荐的处理流程，可能是先从RSS数据源中抓取文章的内容，然后将其丢入一个叫做“文章”的topic中；后续操作可能是需要对这个内容进行清理，比如回复正常数据或者删除重复数据，最后再将内容匹配的结果返 还给用户。这就在一个独立的topic之外，产生了一系列的实时数据处理的流程。</p>
+<h3 id="日志聚合"><a href="#日志聚合" class="headerlink" title="日志聚合"></a>日志聚合</h3><p>使用Kafka代替日志聚合（log aggregation）。日志聚合一般来说是从服务器上收集日志文件，然后放到一个集中的位置（文件服务器或HDFS）进行处理。然而Kafka忽略掉文件的细节，将其更清晰地抽象成一个个日志或事件的消息流。这就让Kafka处理过程延迟更低，更容易支持多数据源和分布式数据处理。比起以日志为中心的系统比如Scribe或者Flume来说，Kafka提供同样高效的性能和因为复制导致的更高的耐用性保证，以及更低的端到端延迟。</p>
+<h3 id="持久性日志"><a href="#持久性日志" class="headerlink" title="持久性日志"></a>持久性日志</h3><p>Kafka可以为一种外部的持久性日志的分布式系统提供服务。这种日志可以在节点间备份数据，并为故障节点数据回复提供一种重新同步的机制。Kafka中日志压缩功能为这种用法提供了条件。在这种用法中，Kafka类似于Apache BookKeeper项目。</p>
 
           
         
@@ -2247,7 +2271,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">251k</span>
+    <span title="Site words total count">252.9k</span>
   
 </div>
 
