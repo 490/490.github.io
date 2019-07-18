@@ -348,7 +348,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  9.4k
+                  10.3k
                 </span>
               
 
@@ -364,7 +364,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  38
+                  41
                 </span>
               
             </div>
@@ -527,8 +527,7 @@
 <p>SQL和API在DF里，都经过了catalyst优化，（不管菜鸡把SQL写成什么样，最后执行效率都一样）</p>
 <h2 id="savemode"><a href="#savemode" class="headerlink" title="savemode"></a>savemode</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> df=spark.read.format(<span class="string">"json"</span>).load(<span class="string">"file:///home/hadoop/app/spark-2.1.0-bin-2.6.0-cdh5.7.0/examples/src/main/resources/people.json"</span>)</span><br><span class="line"></span><br><span class="line">df.show</span><br><span class="line"></span><br><span class="line"><span class="type">Mode</span>可以有err、overwrite、append、ignore</span><br><span class="line"></span><br><span class="line">df.select(<span class="string">"name"</span>).write.format(<span class="string">"parquet"</span>).mode(<span class="string">"overwrite"</span>).save(<span class="string">"file:///path"</span>)</span><br></pre></td></tr></table></figure>
 <h1 id="Spark架构"><a href="#Spark架构" class="headerlink" title="Spark架构"></a>Spark架构</h1><p>Apache Spark是继Hadoop之后的新一代大数据分布式计算框架，它与Hadoop MapReduce的不同之处在于Spark Job的中间结果可以保存在内存中，不再需要读写HDFS，因此它能更好地适用于机器学习、数据挖掘等需要迭代的算法。Spark最初的设计目标是可以更加高效低分析数据，不仅要使分析程序运行速度快，也要能高效地编写程序。为此Spark使用Scala语言编写，Scala语言集成了面向对象编程和函数式编程的各种特性。基于Scala，Spark为用户提供了交互式的编程方式。</p>
-<p>Spark中的基本概念：</p>
-<ul>
+<h2 id="Spark中的基本概念："><a href="#Spark中的基本概念：" class="headerlink" title="Spark中的基本概念："></a>Spark中的基本概念：</h2><ul>
 <li>RDD：Resilient Distributed Dataset（弹性分布式数据集）是一个分布式对象集合，每个RDD可以分成多个分区（一个数据集片段），并且一个RDD的不同分区可以被保存到集群中不同的节点上，从而可以在集群中的不同节点上进行并行计算。</li>
 <li>Transformation：RDD的一种操作方式，用于指定RDD之间的相互依赖关系。</li>
 <li>Action：RDD的一种操作方式，用于执行计算并指定输出形式。</li>
@@ -538,7 +537,7 @@
 <li>作业：Job，一个作业包含多个RDD及作用于相应RDD上的各种操作。</li>
 <li>阶段：Stage，调度作业的基本单位，一个作业分为多组任务，每组任务被称为“阶段”或 “任务集”。</li>
 </ul>
-<p><img src="http://490.github.io/images/20190718_085900.png" alt="image"></p>
+<h2 id="运行流程"><a href="#运行流程" class="headerlink" title="运行流程"></a>运行流程</h2><p><img src="http://490.github.io/images/20190718_085900.png" alt="image"></p>
 <p>在Spark中，一个Application由一个任务控制节点（Driver）和若干个作业构成，一个作业由多个阶段构成，一个阶段由多个任务组成。如图2.4所示Spark的基本运行流程如下：</p>
 <ul>
 <li><p>（1）当一个Spark应用被提交时，首先需要为这个应用建立基本运行环境，即由任务控制节点创建一个SparkContext，由SparkContext负责和资源管理器通信以及申请运行Executor的资源、分配任务、监控等。</p>
@@ -550,6 +549,28 @@
 <li><p>（4）Executor向SparkContext申请任务，任务调度器将任务分发给Executor运行，任务执行结果将反馈给任务调度器，随后传递给DAG调度器，程序运行完毕后写入数据库并释放资源。</p>
 </li>
 </ul>
+<h2 id="RDD结构"><a href="#RDD结构" class="headerlink" title="RDD结构"></a>RDD结构</h2><p>（1）一组分片（Partition），即数据集的基本组成单位。对于RDD来说，每个分片都会被一个计算任务处理，并决定并行计算的粒度。用户可以在创建RDD时指定RDD的分片个数，如果没有指定，那么就会采用默认值。默认值就是程序所分配到的CPU Core的数目。</p>
+<p>（2）一个计算每个分区的函数。Spark中RDD的计算是以分片为单位的，每个RDD都会实现compute函数以达到这个目的。compute函数会对迭代器进行复合，不需要保存每次计算的结果。</p>
+<p>（3）RDD之间的依赖关系。RDD的每次转换都会生成一个新的RDD，所以RDD之间就会形成类似于流水线一样的前后依赖关系。在部分分区数据丢失时，Spark可以通过这个依赖关系重新计算丢失的分区数据，而不是对RDD的所有分区进行重新计算。</p>
+<p>（4）一个Partitioner，即RDD的分片函数。当前Spark中实现了两种类型的分片函数，一个是基于哈希的HashPartitioner，另外一个是基于范围的RangePartitioner。只有对于于key-value的RDD，才会有Partitioner，非key-value的RDD的Parititioner的值是None。Partitioner函数不但决定了RDD本身的分片数量，也决定了parent RDD Shuffle输出时的分片数量。</p>
+<p>（5）一个列表，存储存取每个Partition的优先位置（preferred location）。对于一个HDFS文件来说，这个列表保存的就是每个Partition所在的块的位置。按照“移动数据不如移动计算”的理念，Spark在进行任务调度的时候，会尽可能地将计算任务分配到其所要处理数据块的存储位置。</p>
+<p><strong>RDD的特点：</strong> </p>
+<ol>
+<li>是一个分区的只读记录的集合； </li>
+<li>一个具有容错机制的特殊集； </li>
+<li>只能通过在稳定的存储器或其他RDD上的确定性操作（转换）来创建； </li>
+<li>可以分布在集群的节点上，以函数式操作集合的方式，进行各种并行操作</li>
+</ol>
+<p><strong>RDD之所以为“弹性”的特点 </strong></p>
+<ol>
+<li>基于Lineage的高效容错（第n个节点出错，会从第n-1个节点恢复，血统容错）； </li>
+<li>Task如果失败会自动进行特定次数的重试（默认4次）； </li>
+<li>Stage如果失败会自动进行特定次数的重试（可以值运行计算失败的阶段），只计算失败的数据分片； </li>
+<li>数据调度弹性：DAG TASK 和资源管理无关； </li>
+<li>checkpoint； </li>
+<li>自动的进行内存和磁盘数据存储的切换；</li>
+</ol>
+<p>窄依赖和宽依赖？<br>来源：<a href="https://www.jianshu.com/p/dd7c7243e7f9?from=singlemessage" target="_blank" rel="noopener">https://www.jianshu.com/p/dd7c7243e7f9?from=singlemessage</a><br>首先，从计算过程来看，窄依赖是数据以管道方式经一系列计算操作可以运行在了一个集群节点上，如（map、filter等），宽依赖则可能需要将数据通过跨节点传递后运行（如groupByKey），有点类似于MR的shuffle过程。<br>其次，从失败恢复来看，窄依赖的失败恢复起来更高效，因为它只需找到父RDD的一个对应分区即可，而且可以在不同节点上并行计算做恢复；宽依赖则牵涉到父RDD的多个分区，恢复起来相对复杂些。</p>
 <h1 id="Spark-Streaming"><a href="#Spark-Streaming" class="headerlink" title="Spark Streaming"></a>Spark Streaming</h1><p>Spark Streaming是Spark的核心组件之一，它可结合批处理和交互查询，提高了Spark处理大规模流式数据的能力，适合一些需要对历史数据和实时数据结合分析的应用场景。Spark Streaming可使用多种输入数据源，如Apache HDFS、Apache Kafka、Apache Flume，甚至包括Socket套接字。经处理后的数据可以存储至数据库、文件系统或者显式地输出。Spark Streaming的基本原理是把实时输入数据流以秒级时间片为单位进行拆分，然后以类似批处理的方式利用Spark引擎处理每个时间片数据，执行流程如图</p>
 <p><img src="http://490.github.io/images/20190718_090117.png" alt="image"></p>
 <p>Spark Streaming主要的抽象是DStream（Discretized Stream，离散化数据流），表示连续不断的数据流。在内部实现上，Spark Streaming的输入数据按照时间片（如1秒）分成一段段的DStream，每一段数据转换为Spark中的RDD，对DStream的操作都最终转变为对相应的RDD的操作。图2.6展示了当进行单词统计时，每个时间片的数据（存储句子的RDD）经过flatMap操作，生成了存储单词的RDD。</p>
@@ -2332,7 +2353,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">256k</span>
+    <span title="Site words total count">256.9k</span>
   
 </div>
 
