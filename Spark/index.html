@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190717_101905.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200118.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200258.png">
-<meta property="og:updated_time" content="2019-07-18T01:19:34.593Z">
+<meta property="og:updated_time" content="2019-07-18T01:20:34.592Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark">
 <meta name="twitter:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理； 框架多样化：1）批处理（离线）：MapReduce、Hive、Pig2）流式处理（实时）： Storm、JStorm3）交互式计算：Impala Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]">
@@ -359,7 +359,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  10.3k
+                  10.2k
                 </span>
               
 
@@ -579,7 +579,8 @@
 <li>checkpoint； </li>
 <li>自动的进行内存和磁盘数据存储的切换；</li>
 </ol>
-<p>窄依赖和宽依赖？<br>来源：<a href="https://www.jianshu.com/p/dd7c7243e7f9?from=singlemessage" target="_blank" rel="noopener">https://www.jianshu.com/p/dd7c7243e7f9?from=singlemessage</a><br>首先，从计算过程来看，窄依赖是数据以管道方式经一系列计算操作可以运行在了一个集群节点上，如（map、filter等），宽依赖则可能需要将数据通过跨节点传递后运行（如groupByKey），有点类似于MR的shuffle过程。<br>其次，从失败恢复来看，窄依赖的失败恢复起来更高效，因为它只需找到父RDD的一个对应分区即可，而且可以在不同节点上并行计算做恢复；宽依赖则牵涉到父RDD的多个分区，恢复起来相对复杂些。</p>
+<p><strong>窄依赖和宽依赖？</strong></p>
+<p>首先，从计算过程来看，窄依赖是数据以管道方式经一系列计算操作可以运行在了一个集群节点上，如（map、filter等），宽依赖则可能需要将数据通过跨节点传递后运行（如groupByKey），有点类似于MR的shuffle过程。<br>其次，从失败恢复来看，窄依赖的失败恢复起来更高效，因为它只需找到父RDD的一个对应分区即可，而且可以在不同节点上并行计算做恢复；宽依赖则牵涉到父RDD的多个分区，恢复起来相对复杂些。</p>
 <h1 id="Spark-Streaming"><a href="#Spark-Streaming" class="headerlink" title="Spark Streaming"></a>Spark Streaming</h1><p>Spark Streaming是Spark的核心组件之一，它可结合批处理和交互查询，提高了Spark处理大规模流式数据的能力，适合一些需要对历史数据和实时数据结合分析的应用场景。Spark Streaming可使用多种输入数据源，如Apache HDFS、Apache Kafka、Apache Flume，甚至包括Socket套接字。经处理后的数据可以存储至数据库、文件系统或者显式地输出。Spark Streaming的基本原理是把实时输入数据流以秒级时间片为单位进行拆分，然后以类似批处理的方式利用Spark引擎处理每个时间片数据，执行流程如图</p>
 <p><img src="http://490.github.io/images/20190718_090117.png" alt="image"></p>
 <p>Spark Streaming主要的抽象是DStream（Discretized Stream，离散化数据流），表示连续不断的数据流。在内部实现上，Spark Streaming的输入数据按照时间片（如1秒）分成一段段的DStream，每一段数据转换为Spark中的RDD，对DStream的操作都最终转变为对相应的RDD的操作。图2.6展示了当进行单词统计时，每个时间片的数据（存储句子的RDD）经过flatMap操作，生成了存储单词的RDD。</p>
@@ -929,7 +930,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">256.9k</span>
+    <span title="Site words total count">257.4k</span>
   
 </div>
 
