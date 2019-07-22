@@ -77,13 +77,13 @@
 
 
 
-<meta name="description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理； 框架多样化：1）批处理（离线）：MapReduce、Hive、Pig2）流式处理（实时）： Storm、JStorm3）交互式计算：Impala Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]">
+<meta name="description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理；">
 <meta name="keywords" content="大数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spark">
 <meta property="og:url" content="https://490.github.io/Spark/index.html">
 <meta property="og:site_name" content="我的笔记">
-<meta property="og:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理； 框架多样化：1）批处理（离线）：MapReduce、Hive、Pig2）流式处理（实时）： Storm、JStorm3）交互式计算：Impala Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]">
+<meta property="og:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理；">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://490.github.io/images/20190718_085900.png">
 <meta property="og:image" content="http://490.github.io/images/20190718_090117.png">
@@ -93,10 +93,10 @@
 <meta property="og:image" content="http://490.github.io/images/20190717_101905.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200118.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200258.png">
-<meta property="og:updated_time" content="2019-07-18T01:20:34.592Z">
+<meta property="og:updated_time" content="2019-07-22T11:01:08.087Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark">
-<meta name="twitter:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理； 框架多样化：1）批处理（离线）：MapReduce、Hive、Pig2）流式处理（实时）： Storm、JStorm3）交互式计算：Impala Spark多种运行模式测试或实验性质的本地运行模式（单机） 该模式被称为Local[N]">
+<meta name="twitter:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理；">
 <meta name="twitter:image" content="http://490.github.io/images/20190718_085900.png">
 
 
@@ -396,7 +396,7 @@
       
 
       
-        <h1 id="MapReduce局限性"><a href="#MapReduce局限性" class="headerlink" title="MapReduce局限性"></a>MapReduce局限性</h1><p>MapReduce的局限性：<br>1）代码繁琐；<br>2）只能够支持map和reduce方法；<br>3）执行效率低下；<br>4）不适合迭代多次、交互式、流式的处理；</p>
+        <h1 id="MapReduce局限性"><a href="#MapReduce局限性" class="headerlink" title="MapReduce局限性"></a>MapReduce局限性</h1><p>MapReduce的局限性：<br>1）代码繁琐；<br>2）只能够支持map和reduce方法；<br>3）执行效率低下；<br>4）不适合迭代多次、交互式、流式的处理；<br><a id="more"></a></p>
 <p>框架多样化：<br>1）批处理（离线）：MapReduce、Hive、Pig<br>2）流式处理（实时）： Storm、JStorm<br>3）交互式计算：Impala</p>
 <h1 id="Spark多种运行模式"><a href="#Spark多种运行模式" class="headerlink" title="Spark多种运行模式"></a>Spark多种运行模式</h1><h2 id="测试或实验性质的本地运行模式（单机）"><a href="#测试或实验性质的本地运行模式（单机）" class="headerlink" title="测试或实验性质的本地运行模式（单机）"></a>测试或实验性质的本地运行模式（单机）</h2><ul>
 <li>该模式被称为Local[N]模式，是用单机的多个线程来模拟Spark分布式计算，通常用来验证开发出来的应用程序逻辑上有没有问题。其中N代表可以使用N个线程，每个线程拥有一个core。如果不指定N，则默认是1个线程（该线程有1个core）。</li>
