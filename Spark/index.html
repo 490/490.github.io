@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190717_101905.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200118.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200258.png">
-<meta property="og:updated_time" content="2019-07-24T07:12:03.888Z">
+<meta property="og:updated_time" content="2019-07-24T08:30:03.978Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark">
 <meta name="twitter:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理；">
@@ -556,7 +556,7 @@
 <li>Executor：运行在Worker Node（工作节点）上的一个进程，为应用程序存储数据。</li>
 <li>任务：Task，运行在Executor上的工作单元。</li>
 <li>作业：Job，一个作业包含多个RDD及作用于相应RDD上的各种操作，一个action对应一个job。</li>
-<li>阶段：Stage，调度作业的基本单位，一个作业分为多组任务，每组任务被称为“阶段”或 “任务集”。</li>
+<li>阶段：Stage，调度作业的基本单位，一个作业分为多组任务，每组任务被称为“阶段”或 “任务集”。xxxbykey会把一个stage分成两个。</li>
 <li>Application：1 driver + n executors</li>
 <li>Driver program：运行main的程序</li>
 <li>Deploy mode：driver进程运行在哪里。cluster、client</li>
@@ -600,7 +600,13 @@
 <li>自动的进行内存和磁盘数据存储的切换；</li>
 </ol>
 <p><strong>窄依赖和宽依赖</strong></p>
-<p>首先，从计算过程来看，窄依赖是数据以管道方式经一系列计算操作可以运行在了一个集群节点上，如（map、filter等），宽依赖则可能需要将数据通过跨节点传递后运行（如groupByKey），有点类似于MR的shuffle过程。<br>其次，从失败恢复来看，窄依赖的失败恢复起来更高效，因为它只需找到父RDD的一个对应分区即可，而且可以在不同节点上并行计算做恢复；宽依赖则牵涉到父RDD的多个分区，恢复起来相对复杂些。</p>
+<ul>
+<li>窄依赖（pipeline-able）：一个父RDD的partition至多被子RDD的某个partition使用一次。 </li>
+<li>宽依赖（shuffle）：会被子RDD的partition使用多次。</li>
+</ul>
+<p>首先，从计算过程来看，窄依赖是数据以管道方式经一系列计算操作可以运行在了一个集群节点上，如（map、filter等），宽依赖则可能需要将数据通过跨节点传递后运行（如group<strong>ByKey</strong>），有点类似于MR的shuffle过程。 </p>
+<p><strong>shuffle会分成两个stage</strong>。</p>
+<p>其次，从失败恢复来看，窄依赖的失败恢复起来更高效，因为它只需找到父RDD的一个对应分区即可，而且可以在不同节点上并行计算做恢复；宽依赖则牵涉到父RDD的多个分区，恢复起来相对复杂些。</p>
 <h2 id="spark-context"><a href="#spark-context" class="headerlink" title="spark context"></a>spark context</h2><p>连接到Spark“集群”， 通过sparkcontext来创建RDD、广播变量到集群</p>
 <p>在创建sparkcontext之前需要创建一个sparkconf对象，</p>
 <h1 id="Spark-Streaming"><a href="#Spark-Streaming" class="headerlink" title="Spark Streaming"></a>Spark Streaming</h1><p>Spark Streaming是Spark的核心组件之一，它可结合批处理和交互查询，提高了Spark处理大规模流式数据的能力，适合一些需要对历史数据和实时数据结合分析的应用场景。Spark Streaming可使用多种输入数据源，如Apache HDFS、Apache Kafka、Apache Flume，甚至包括Socket套接字。经处理后的数据可以存储至数据库、文件系统或者显式地输出。Spark Streaming的基本原理是把实时输入数据流以秒级时间片为单位进行拆分，然后以类似批处理的方式利用Spark引擎处理每个时间片数据，执行流程如图</p>
@@ -956,7 +962,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">261.4k</span>
+    <span title="Site words total count">262k</span>
   
 </div>
 
