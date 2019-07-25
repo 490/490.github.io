@@ -66,7 +66,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="区块链,">
 
 
 
@@ -77,14 +77,18 @@
 
 
 
+<meta name="description" content="。">
+<meta name="keywords" content="区块链">
 <meta property="og:type" content="article">
 <meta property="og:title" content="区块链入门">
 <meta property="og:url" content="https://490.github.io/区块链入门/index.html">
 <meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-24T12:26:19.265Z">
+<meta property="og:updated_time" content="2019-07-24T13:51:05.831Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="区块链入门">
+<meta name="twitter:description" content="。">
 
 
 
@@ -346,7 +350,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  646
                 </span>
               
 
@@ -362,7 +366,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  2
                 </span>
               
             </div>
@@ -383,7 +387,14 @@
       
 
       
-        
+        <p>。<br><a id="more"></a></p>
+<p>【序号、时间戳、hash值】+【交易记录】</p>
+<h1 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h1><p>对称加密也叫做单密钥加密，指的是用同一个密钥对信息进行加密和解密。简单讲就是上锁和开锁都是一把钥匙。一个问题是密钥配送困难问题。</p>
+<p><strong>非对称加密有一对密钥，分别是私钥和公钥，公钥和私钥一一对应，私钥需要保密，而公钥则是可以公开的。加密和解密不是用同一个密钥。</strong></p>
+<p>回到之前的例子，你朋友去配了一对钥匙（钥匙A和钥匙B），<strong>钥匙A上锁柜子之后，必须要钥匙B才能开锁柜子</strong>。你朋友把钥匙A邮寄给你，你用这把钥匙把信件锁到柜子中，然后将柜子邮寄给你朋友，你朋友用钥匙B打开柜子取出信件。细心的小伙伴又想到了，朋友把钥匙A寄给自己的时候，可能会被快递人员偷配钥匙，但是快递人员即使持有钥匙A，他也不能打开柜子，因为钥匙A上锁柜子之后，只有钥匙B才能开锁，整个过程，钥匙B一直在朋友手上，只要朋友不把钥匙B弄丢，这个柜子就只能由朋友打开。</p>
+<p>比特币公钥就是通过私钥推导而来，公钥继续转换变成账户地址，而且是不能反向推导出私钥的**，私钥和公钥是一对，用户需要妥善保管好自己的私钥，而公钥和账户地址都是可以公开的。</p>
+<p>还有一种情况是<strong>私钥加密，公钥解密</strong>。典型的应用场景就是数字签名，A采用自己的私钥加密文件信息后发送给B，并将公钥也发送给B，B利用这个公钥对信息解密，如果C和D也有这个公钥，那C和D也可以解密这个文件信息，但是只有持有私钥的A才能加密这个信息，因此可以确保这个文件信息确确实实是由A发出的，这就比较适用于一些公司老总做电子签名，以确保签名是老总签的。在区块链中，你的收款地址就相当于公钥，人人可以看到，但是如果你要转移你的资产给朋友，你需要输入密码（私钥）进行数字签名，来表示这个资产确确实实是由你发出的。</p>
+
       
     </div>
     
@@ -397,6 +408,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/区块链/" rel="tag"># 区块链</a>
+          
+        </div>
       
 
       
@@ -416,10 +433,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/区块链入门-1/" rel="prev" title="区块链入门">
-                区块链入门 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -478,8 +491,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -496,7 +518,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -509,7 +531,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -543,6 +565,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#非对称加密"><span class="nav-number">1.</span> <span class="nav-text">非对称加密</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -570,7 +608,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">262.9k</span>
+    <span title="Site words total count">264.4k</span>
   
 </div>
 
