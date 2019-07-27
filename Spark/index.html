@@ -93,7 +93,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190717_101905.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200118.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200258.png">
-<meta property="og:updated_time" content="2019-07-25T02:02:13.869Z">
+<meta property="og:updated_time" content="2019-07-25T02:03:14.847Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark">
 <meta name="twitter:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理；">
@@ -625,10 +625,13 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 并行化创建RDD部分代码 </span></span><br><span class="line"><span class="comment">// 实现1到5的累加求和</span></span><br><span class="line"><span class="keyword">val</span> arr = <span class="type">Array</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>)</span><br><span class="line"><span class="keyword">val</span> rdd = sc.parallelize(arr)</span><br><span class="line"><span class="keyword">val</span> sum = rdd.reduce(_ + _)</span><br></pre></td></tr></table></figure>
 <p><strong>使用textFile方法，通过本地文件或HDFS创建RDD</strong></p>
 <p>Spark是支持使用任何Hadoop支持的存储系统上的文件创建RDD的，比如说HDFS、Cassandra、HBase以及本地文件。通过调用SparkContext的textFile()方法，可以针对本地文件或HDFS文件创建RDD。</p>
-<p>SparkContext的textFile()除了可以针对上述几种普通的文件创建RDD之外，还有一些特例的方法来创建RDD：</p>
-<p>SparkContext的wholeTextFiles()方法，可以针对一个目录中的大量小文件，返回由（fileName,fileContent）组成的pair，即pairRDD，而不是普通的RDD。该方法返回的是文件名字和文件中的具体内容；而普通的textFile()方法返回的RDD中，每个元素就是文本中一行文本。<br>SparkContext的sequenceFileK,V方法，可以针对SequenceFile创建RDD，K和V泛型类型就是SequenceFile的key和value的类型。K和V要求必须是Hadoop的序列化机制，比如IntWritable、Text等。<br>SparkContext的hadoopRDD()方法，对于Hadoop的自定义输入类型，可以创建RDD。该方法接收JobConf、InputFormatClass、Key和Value的Class。<br>SparkContext的objectFile()方法，可以针对之前调用的RDD的saveAsObjectFile()创建的对象序列化的文件，反序列化文件中的数据，并创建一个RDD。</p>
-<hr>
-<p>作者：疯狂呼呼呼<br>来源：CSDN<br>原文：<a href="https://blog.csdn.net/lemonZhaoTao/article/details/77923337" target="_blank" rel="noopener">https://blog.csdn.net/lemonZhaoTao/article/details/77923337</a><br>版权声明：本文为博主原创文章，转载请附上博文链接！</p>
+<p><strong>一些特例的方法来创建RDD</strong></p>
+<ul>
+<li>SparkContext的wholeTextFiles()方法，可以针对一个目录中的大量小文件，返回由（fileName,fileContent）组成的pair，即pairRDD，而不是普通的RDD。该方法返回的是文件名字和文件中的具体内容；而普通的textFile()方法返回的RDD中，每个元素就是文本中一行文本。</li>
+<li>SparkContext的sequenceFileK,V方法，可以针对SequenceFile创建RDD，K和V泛型类型就是SequenceFile的key和value的类型。K和V要求必须是Hadoop的序列化机制，比如IntWritable、Text等。</li>
+<li>SparkContext的hadoopRDD()方法，对于Hadoop的自定义输入类型，可以创建RDD。该方法接收JobConf、InputFormatClass、Key和Value的Class。</li>
+<li>SparkContext的objectFile()方法，可以针对之前调用的RDD的saveAsObjectFile()创建的对象序列化的文件，反序列化文件中的数据，并创建一个RDD。</li>
+</ul>
 <h2 id="spark-context"><a href="#spark-context" class="headerlink" title="spark context"></a>spark context</h2><p>连接到Spark“集群”， 通过sparkcontext来创建RDD、广播变量到集群</p>
 <p>在创建sparkcontext之前需要创建一个sparkconf对象，</p>
 <h1 id="Spark-Streaming"><a href="#Spark-Streaming" class="headerlink" title="Spark Streaming"></a>Spark Streaming</h1><p>Spark Streaming是Spark的核心组件之一，它可结合批处理和交互查询，提高了Spark处理大规模流式数据的能力，适合一些需要对历史数据和实时数据结合分析的应用场景。Spark Streaming可使用多种输入数据源，如Apache HDFS、Apache Kafka、Apache Flume，甚至包括Socket套接字。经处理后的数据可以存储至数据库、文件系统或者显式地输出。Spark Streaming的基本原理是把实时输入数据流以秒级时间片为单位进行拆分，然后以类似批处理的方式利用Spark引擎处理每个时间片数据，执行流程如图</p>
@@ -999,7 +1002,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">264.4k</span>
+    <span title="Site words total count">265.1k</span>
   
 </div>
 
