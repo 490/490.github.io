@@ -260,10 +260,16 @@ Class c = obj.getClass();
 /** 成员变量也是对象
 * java.lang.reflect.Field
 * Field类封装了关于成员变量的操作
-* getFields()方法获取的是所有的public的成员变量的信息
-* getDeclaredFields获取的是该类自己声明的成员变量的信息 */
+* getFields()方法获取的是所有的public的成员变量的信息,父类也有的
+* getDeclaredFields获取的是该类自己声明的成员变量的信息 ，子类独有的*/
 //Field[] fs = c.getFields();
 Field[] fs = c.getDeclaredFields();
+
+fs.setAccessible(true);
+想使用的时候，新定义变量，然后把反射获取的对象包装好类赋给变量
+int i = (int)fs.get(obj);
+
+
 ```
 ![image](http://490.github.io/images/20190310_232638.png)
 
@@ -540,6 +546,36 @@ Tomcat 还有其它重要的组件，如安全组件 security、logger 日志组
 8、Host把HttpServletResponse对象返回给Engine。 
 9、Engine把HttpServletResponse对象返回Connector。 
 10、Connector把HttpServletResponse对象返回给客户Browser。
+
+
+
+##  项目中常用的三种日志catalina.out catalina.log localhost.log
+
+catalina.out 是tomcat的标准输出(stdout)和标准出错(stderr)，这是在tomcat的启动脚本里指定的，如果没有修改的话stdout和stderr会重定向到这里。所以我们在应用程序中使用System.out/err打印的东西都会到这里来。另外，我们所有输出到控制台的日志也会记录进来。比如我们常用的log4j，当我们配置`log4j.appender.stdout=org.apache.log4j.ConsoleAppender`时，所有输出到控制台的log4j日志也会记录到Catalina.out中。所以一般情况下`ConsoleAppender`的日志级别需要配高一点，不然`Catalina.out`会显得特别臃肿，查找信息时也不太方便。比如测试的时候我一般用DEBUG级别，发生产用ERROR级别。当然你也可以关掉它，只需设置：
+
+```
+java.util.logging.ConsoleHandler.level = OFF 
+```
+
+或者修改Tomcat\bin目录下的catalina.sh
+
+```
+    if [ -z "$CATALINA_OUT" ] ; then
+      CATALINA_OUT="$CATALINA_BASE"/logs/catalina.out
+    修改为
+    if [ -z "$CATALINA_OUT" ] ; then
+      CATALINA_OUT=/dev/null
+    这样就不会生成catalina.out文件了
+```
+
+
+在Tomcat的conf目录下可以找到logging.properties文件,里面配置了catalina.log和localhost.log相关的信息.默认情况下，启动脚本里指定了java.util.logging.config.file和java.util.logging.manager两个变量。
+ 
+ 
+catalina.log是tomcat自己运行的一些日志，这些日志还会输出到catalina.out，但是应用向控制台输出的日志不会输出到catalina.log里。
+localhost.log主要是应用初始化(listener, filter, servlet)未处理的异常最后被tomcat捕获而输出的日志，而这些未处理异常最终会导致应用无法启动。
+
+一般情况下Catalina.out文件是比较大的，可能几百兆甚至几十G，对于查找问题特别不方便，所以我们可以将ConsoleAppender的日志级别直接配成ERROR级，或者单独配个appender来记录ERROR日志，以便有问题时我们可以迅速查找对应日志。
 
 
 # Java 序列化和反序列化
@@ -1152,4 +1188,7 @@ list只能使用ArrayList已经实现了的List接口中的方法，ArrayList中
 以上这些例子并不全面，而只是代表了一些“适合于用类来引用对象”的情形
 
 总结：给定的对象是否具有适当的接口应该是很明显的。如果是，用接口引用对象就会使程序更加灵活；如果不是，则使用类层次结构中提供了必要功能的最基础的类。
+
+
+
 

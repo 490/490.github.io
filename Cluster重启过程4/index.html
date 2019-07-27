@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL Cluster重启过程(4)">
+<meta property="og:url" content="https://490.github.io/Cluster重启过程4/index.html">
+<meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-16T11:09:00.416Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL Cluster重启过程(4)">
+<meta name="twitter:description" content="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://490.github.io/Cluster重启过程4/">
+
+
+
+
+
+  <title>MySQL Cluster重启过程(4) | 我的笔记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br>
+            
+            文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-vcard-o"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Cluster重启过程4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="le">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL Cluster重启过程(4)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-12T15:26:47+08:00">
+                2019-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Cluster重启过程4/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/Cluster重启过程4/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  15
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE"><a href="#COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE" class="headerlink" title="COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE"></a>COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE</h1><a id="more"></a>
+<p>完成将片段副本还原到一致的全局检查点后，我们现在将根据还原的数据开始重建有序索引。 在重建有序索引之后，我们准备将START_RECCONF发送到起始DBDIH。 START_RECCONF通过DBLQH代理发送，因此在所有DBLQH实例完成此阶段并使用START_RECCONF响应之前，它不会传递到DBDIH。</p>
+<p>此时，在DBLQH实例中，我们已恢复节点中所有数据的一致但旧的变体。 仍然没有有序索引，仍然有很多工作要让节点再次与其他节点同步。 对于群集重新启动，可能是节点已完全准备就绪，但是可能某些节点仍需要与已恢复更新的全局检查点的节点同步。</p>
+<p>然后，起始节点的DBDIH将启动接管过程，因为起始节点具有一致的片段副本。 我们将通过为我们将复制的每个片段副本发送PREPARE_COPY_FRAG_REQ来为复制阶段准备起始节点的DBLQH。 这是一个可以并行化的顺序过程。</p>
+<p>接管片段副本的过程非常复杂。 它首先将PREPARE_COPY_FRAGREQ / CONF发送到起始DBLQH，然后我们将UPDATE_TOREQ / CONF发送到主DBDIH，以确保我们在接管开始之前锁定片段信息。 在接收到该片段锁定的确认之后，起始节点向所有节点发送UPDATE_FRAG_STATEREQ / CONF以将新节点包括在片段上的所有操作中。</p>
+<p>完成此操作后，我们再次向主节点发送UPDATE_TOREQ / CONF以通知新状态并解锁片段信息上的锁定。 然后我们准备执行片段的实际复制。 这是通过将COPY_FRAGREQ / CONF发送到将复制数据的节点来完成的。 完成此复制后，我们将COPY_ACTIVEREQ / CONF发送到起始节点以激活片段副本。</p>
+<p>接下来，我们再次向主服务器发送UPDATE_TOREQ / CONF，通知我们即将安装接管新片段副本的提交。 接下来，我们通过向所有节点发送UPDATE_FRAG_STATEREQ / CONF来提交新的片段副本，通知它们片段副本的复制完成。 最后，我们使用UPDATE_TOREQ / CONF向主节点发送另一个更新。 现在我们终于完成了这个片段的复制。</p>
+<p>这个方案的想法是第一个UPDATE_FRAG_STATEREQ确保我们是片段上所有事务的一部分。 在执行COPY_FRAGREQ以逐行地将起始节点的片段副本与活动节点的片段副本同步之后，我们确信两个片段副本完全同步，我们可以执行新的UPDATE_FRAG_STATEREQ以确保所有节点都知道我们 完成了同步。</p>
+<h1 id="COMPLETED-RESTORING-ON-LINE-NOT-RECOVERABLE-DATABASE"><a href="#COMPLETED-RESTORING-ON-LINE-NOT-RECOVERABLE-DATABASE" class="headerlink" title="COMPLETED RESTORING ON-LINE NOT RECOVERABLE DATABASE"></a>COMPLETED RESTORING ON-LINE NOT RECOVERABLE DATABASE</h1><p>此时，我们通过在线一次添加一个片段来恢复数据库的在线变体。 数据库仍然无法恢复，因为我们尚未启用日志记录，并且起始节点中没有数据的本地检查点。</p>
+<p>下一步是启用所有片段的日志记录，完成此步骤后，我们将END_TOREQ发送到主DBDIH。 此时，我们将等到本地检查点完成，其中涉及此节点。 最后，当本地检查点完成后，我们将END_TOCONF发送到起始节点，然后我们将发送START_COPYCONF，这将完成重启的这个阶段。</p>
+<h1 id="COMPLETED-RESTORING-ON-LINE-RECOVERABLE-DATABASE"><a href="#COMPLETED-RESTORING-ON-LINE-RECOVERABLE-DATABASE" class="headerlink" title="COMPLETED RESTORING ON-LINE RECOVERABLE DATABASE"></a>COMPLETED RESTORING ON-LINE RECOVERABLE DATABASE</h1><p>此时我们已经设法恢复所有数据，并且我们已经将它带到了在线状态，现在我们还在启用日志记录时执行了本地检查点，因此现在起始节点中的数据也是可恢复的。 所以这意味着数据库现在再次完全联机。</p>
+<p>完成NDB_STTOR阶段5之后，此处等待点中已同步的所有节点将再次启动，NDBCNTR将继续运行NDB_STTOR的阶段6。</p>
+<p>在此阶段DBLQH，DBDICT和DBTC设置一些状态变量，指示现在启动已完成（它尚未完全完成，但这些模块运行所需的所有服务都已完成.DBDIH还启动全局检查点协议以进行集群启动/重启 它已成为主节点。</p>
+<p>现在，在群集启动/重启的情况下，所有节点还有一个等待点。 STTOR阶段5的最后一步是SUMA，它读取已配置的节点，获取节点组成员，如果有节点重新启动，它会要求另一个节点重新创建它的订阅。</p>
+<h1 id="STTOR-Phase-6"><a href="#STTOR-Phase-6" class="headerlink" title="STTOR Phase 6"></a>STTOR Phase 6</h1><p>我们现在进入STTOR阶段6.在此阶段，NDBCNTR获取节点的节点组，DBUTIL获取systable id，准备一组操作供以后使用，并连接到TC以使其能够代表其他模块运行关键操作 稍后的。</p>
+<h1 id="STTOR-Phase-7"><a href="#STTOR-Phase-7" class="headerlink" title="STTOR Phase 7"></a>STTOR Phase 7</h1><p>接下来我们进入STTOR阶段7.DBDICT现在启动索引统计循环，该循环将在节点存在时运行。</p>
+<p>QMGR将启动仲裁处理，以处理我们面临网络分区风险的情况。</p>
+<p>BACKUP将更新磁盘检查点速度（重启期间有一个配置变量用于速度，一个用于正常操作，这里我们安装正常运行速度）。 如果初始启动BACKUP也将通过DBUTIL创建备份序列。</p>
+<p>如果SUMA在主节点中运行并且它是初始启动，它将创建一个序列。 SUMA还将始终计算它负责处理的桶。 最后，DBTUX将开始监控有序索引。</p>
+<h1 id="STTOR-Phase-8"><a href="#STTOR-Phase-8" class="headerlink" title="STTOR Phase 8"></a>STTOR Phase 8</h1><p>然后我们转到STTOR阶段8.这里首先要运行NDB_STTOR的第7阶段，其中DBDICT启用外键。 如果我们正在进行集群启动/重启，下一个NDBCNTR也将等待所有节点到达此处。 下一个CMVMI将状态设置为STARTED，QMGR将启用与所有API节点的通信。</p>
+<h1 id="STTOR-Phase-101"><a href="#STTOR-Phase-101" class="headerlink" title="STTOR Phase 101"></a>STTOR Phase 101</h1><p>在此阶段之后，唯一剩下的阶段是STTOR阶段101，其中SUMA接管它负责异步复制处理的桶的责任。</p>
+<p>目前为止主要的潜在消费者：<br>内存分配中的所有步骤（READ_CONFIG_REQ的所有步骤）。 CMVMI STTOR第1阶段可以锁定内存。 运行节点包含协议的QMGR阶段1。</p>
+<p>NDBCNTR STTOR阶段2等待CNTR_START_REQ，DBLQH REDO日志初始化为STTOR阶段2中发生的初始启动类型。鉴于每次只有一个节点可以处于此阶段，这可能会被另一个节点的本地检查点等待停顿 开始。 所以这等待可能相当长。</p>
+<p>DBLQH建立与DBACC和DBTUP的连接，这是NDB_STTOR阶段2.NDB_STTOR阶段2中的DBDIH也可以等待元数据被锁定，它可以等待对START_PERMREQ的响应。</p>
+<p>对于初始启动，等待DBLQH完成NDB_STTOR阶段3，在此阶段初始化REDO日志的设置。 完成NDB_STTOR阶段3后，在STTOR阶段4中用于集群启动/重启的NDBCNTR必须等待所有节点到达此点，然后它必须等待NDB_STARTREQ完成。</p>
+<p>对于节点重启，我们在等待对START_MEREQ信号和START_COPYREQ的响应时有延迟，这实际上是重启的大部分实际工作完成的地方。 重新订阅订阅的SUMA STTOR第5阶段是另一个潜在的时间消费者。</p>
+<p>所有等待点都是潜在的时间消费者。 这些主要位于NDBCNTR（等待点5.2,5,1和6）。</p>
+<p><strong>Historical anecdotes:</strong></p>
+<p>1）NDB内核运行时环境最初是为AX虚拟机设计的。在AX中，开始使用模块MISSRA来驱动各种启动阶段的STTOR / STTORRY信号。 MISSRA后来被并入NDBCNTR，现在是NDBCNTR的子模块。 STTOR和STTORRY的名称在早期的AX系统命名信号方式中有一些基础，但现在已经被遗忘了。 ST至少可以通过启动/重启来完成任务。</p>
+<p>2）引入NDB_STTOR的原因是我们设想了一个系统，其中NDB内核只是运行时环境中的一个子系统。因此，我们为NDB子系统引入了单独的启动阶段。随着时间的推移，对这种子系统启动阶段的需求不再存在，但软件已经为此设计，因此它以这种方式保存。</p>
+<p>3）数据库启动的分布式部分的责任也是分开的。 QMGR负责发现节点何时上下。 NDBCNTR维护用于故障处理和节点配置的其他更改的协议。最后，DBDIH负责数据库部分的分布式启动。它与DBLQH交互很多，DBLQH负责按照DBDIH的指示启动一个节点数据库部分。</p>
+<h1 id="Local-checkpoint-processing-in-MySQL-Cluster"><a href="#Local-checkpoint-processing-in-MySQL-Cluster" class="headerlink" title="Local checkpoint processing in MySQL Cluster"></a>Local checkpoint processing in MySQL Cluster</h1><p>此注释试图描述MySQL Cluster中发生的检查点处理。 它还阐明了潜在的瓶颈所在。 此注释主要用作MySQL Cluster开源代码的内部文档。</p>
+<p>MySQL Cluster中本地检查点的原因是为了确保我们在磁盘上有数据副本，可用于运行REDO日志以在崩溃后恢复MySQL Cluster中的数据。</p>
+<p>我们首先在MySQL Cluster中引入不同的重启变体。第一个变体是正常节点重启，这意味着节点已经短时间丢失，但现在又重新上线。我们首先安装所有表的检查点版本（包括执行REDO日志的正确部分）。下一步是使用仍在线的副本使检查点版本保持最新。副本始终按节点组进行组织，节点组的最常见大小是两个节点。因此，当节点启动时，它使用同一节点组中的另一个节点来使在线版本的表重新联机。在正常的节点重启中，我们首先恢复了所有表的稍微旧版本，然后再使用其他节点进行同步。这意味着我们只需要发送自节点重启之前节点失败以来已更新的最新版本的行。我们还有初始节点重启的情况，其中所有数据都必须从另一个节点恢复，因为起始节点中的检查点太旧而无法重用，或者当一个全新的节点启动时它根本不存在。</p>
+<p>重新启动的第三个变体是所谓的系统重启，这意味着整个群集在群集崩溃后或在群集受控停止后启动。 在此重新启动类型中，我们首先在运行REDO日志之前在所有节点上恢复检查点，以使系统处于一致且最新的状态。 如果任何节点还原到较旧的全局检查点而不是重新启动的节点，则必须使用节点重新启动中使用的相同代码将这些节点置于联机状态。</p>
+<p>系统重启将恢复所谓的全局检查点。 一组事务被组合在一起成为一个全局检查点，当这个全局检查点完成后，属于它的事务是安全的并且将在集群崩溃后继续存在。 我们在第二级运行全局检查点，本地检查点将整个数据集写入磁盘，并且是一个耗时至少几分钟的较长过程。</p>
+<p>在可以将起始节点声明为完全恢复之前，它必须参与本地检查点。 崩溃节点错过了恢复群集所需的一组REDO日志记录，因此节点未完全恢复，直到它可用于恢复系统重启时拥有的所有数据。</p>
+<p>因此，当执行滚动节点重新启动时，群集中的所有节点都重新启动（例如，升级MySQL群集中的软件），一次重启一组节点是有意义的，因为我们只能在一个节点重新启动一组节点。 时间。</p>
+<p>这是了解本地检查站需求的一个先决条件。 我们现在转到如何处理本地检查点的描述。</p>
+<p>本地检查点是一个分布式进程。 它由名为DBDIH（简称DIH，DIstribution Handler）的软件模块控制。 DIH包含有关每个片段（与分区的同义词）的各种副本放置在何处以及这些副本上的各种数据的所有信息。 DIH将分发信息存储在每个表的一个文件中。 这个文件实际上是两个文件，这是为了确保我们可以仔细编写文件。 我们首先写文件0，当这个完成后，我们写文件1，这样我们就可以在编写表描述时轻松处理任何崩溃。</p>
+<p>当本地检查点完成后，DIH立即启动该过程以启动下一个检查点。 自从我们启动新的本地检查点之前启动本地检查点以来，必须至少完成一个全局检查点。</p>
+<p>下一个本地检查点的第一步是检查我们是否已准备好运行它。 这是通过将消息TCGETOPSIZEREQ发送到集群中的所有TC来执行的。 这将通过检查TC中收到的所有写入事务的信息来报告生成的REDO日志信息量。 该消息将由主DIH发送。 主服务器的角色被分配给最旧的幸存数据节点，这使得当目前充当主数据节点的数据节点死亡时，可以轻松选择新主服务器。 所有节点都同意进入群集的节点的顺序，因此节点的年龄在群集中的所有节点中都是一致的。</p>
+<p>当所有消息都将REDO日志写入大小返回到主DIH时，我们将它与配置变量TimeBetweenLocalCheckpoints进行比较（此变量以大小的对数设置，因此例如25表示我们等待2 ^ 25个单词的REDO日志已创建于 该集群是128 MByte的REDO日志信息）。<br>当生成足够数量的REDO日志时，我们启动下一个本地检查点，第一步是清除所有TC计数器，这是通过将TC_CLOPSIZEREQ发送到集群中的所有TC来完成的。</p>
+<p>下一步是计算保持GCI（这是需要在REDO日志中保留的最早的全局检查点ID）。 这个数字非常重要，因为我们可以向前移动REDO日志的尾部。 如果我们用完REDO日志空间，我们将无法运行任何写入事务，直到我们启动下一个本地检查点，从而向前移动REDO日志尾部。</p>
+<p>我们通过检查每个片段需要恢复的GCI来计算这个数字。 我们目前保留两个旧的本地检查点仍然有效，因此我们不会将GCI移回以使每个片段的两个最旧的本地检查点无效。 完成此计算后可恢复的GCI是循环遍历所有片段时发现的最小GCI。</p>
+<p>接下来，我们在集群中所有节点的Sysfile中写下此编号和新的本地检查点ID以及其他一些信息。 在系统重新启动时开始恢复群集时，我们首先看到此Sysfile，因此在此文件中使此类信息正确非常重要。</p>
+<p>完成此操作后，我们将计算将参与本地检查点的节点（当前执行重启的早期部分的节点不是本地检查点的一部分，显然也不是死节点）。</p>
+<p>我们将有关起始本地检查点的信息发送给系统中的所有其他DIH。我们必须始终保持所有其他DIH的最新状态，以确保在主DIH崩溃或在本地检查点过程中停止时也很容易继续本地检查点。每个DIH记录参与本地检查点的节点集。他们还在每个副本记录上设置一个标志，指示本地检查点正在进行中，在每个片段记录上我们还设置了作为此本地检查点一部分的副本数。</p>
+<p>现在我们已经完成了本地检查点的准备工作，现在是时候开始实际检查点写入实际数据了。主DIH通过为应检查点的每个片段副本发送LCP_FRAG_ORD来控制此过程。 DIH目前每个节点有2个这样的LCP_FRAG_ORD未完成，排队的2个片段副本。每个LDM线程可以一次处理一个片段副本的写入，并且可以对排队的下一个片段副本有一个请求。扩展此数字非常简单，以便可以并行写入更多的片段副本，并且可以对更多片段副本进行排队。</p>
+<p>当片段副本的本地检查点完成时，LCP_FRAG_REP被发送到所有DIH。 当DIH发现表的所有片段副本都已完成本地检查点时，则应该将表描述写入文件系统。 这将记录所有片段副本的有趣的本地检查点信息。 有两件事可以导致这种情况等待。 首先编写和读取整个表描述只能一次发生一次，这主要发生在正在处理本地检查点时正在进行某些节点故障处理的情况。</p>
+<p>可以阻止写表描述的第二件事是，目前最多可以并行写入4个表描述。 这可能很容易成为瓶颈，因为每次写入文件可能需要大约50毫秒。 所以这意味着我们目前每秒只能写出大约80个这样的表。 在具有许多表和少量数据的系统中，这可能成为瓶颈。 然而，它应该不是一个困难的瓶颈。</p>
+<p>当主DIH已将所有请求发送到检查点所有片段副本时，它将向所有节点发送一个特殊的LCP_FRAG_ORD，指示不再发送任何片段副本。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/trie/" rel="next" title="字典树简介(Trie)">
+                <i class="fa fa-chevron-left"></i> 字典树简介(Trie)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/启发式算法/" rel="prev" title="启发式算法">
+                启发式算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="le">
+            
+              <p class="site-author-name" itemprop="name">le</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/490" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#COMPLETED-RESTORING-OFF-LINE-CONSISTENT-DATABASE"><span class="nav-number">1.</span> <span class="nav-text">COMPLETED RESTORING OFF-LINE CONSISTENT DATABASE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#COMPLETED-RESTORING-ON-LINE-NOT-RECOVERABLE-DATABASE"><span class="nav-number">2.</span> <span class="nav-text">COMPLETED RESTORING ON-LINE NOT RECOVERABLE DATABASE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#COMPLETED-RESTORING-ON-LINE-RECOVERABLE-DATABASE"><span class="nav-number">3.</span> <span class="nav-text">COMPLETED RESTORING ON-LINE RECOVERABLE DATABASE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-6"><span class="nav-number">4.</span> <span class="nav-text">STTOR Phase 6</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-7"><span class="nav-number">5.</span> <span class="nav-text">STTOR Phase 7</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-8"><span class="nav-number">6.</span> <span class="nav-text">STTOR Phase 8</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#STTOR-Phase-101"><span class="nav-number">7.</span> <span class="nav-text">STTOR Phase 101</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Local-checkpoint-processing-in-MySQL-Cluster"><span class="nav-number">8.</span> <span class="nav-text">Local checkpoint processing in MySQL Cluster</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">le</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">241.8k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '490',
+            repo: 'https://github.com/490/490.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'dd4cdc4ae526b060d983e343530d30ed338af4b2',
+            
+                client_id: '2340dc349a2e19013ca4'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'Yi80CT04XNkVSJTMAPm5FtWc-gzGzoHsz',
+        appKey: 'j3zcBrBI4kxBuazJBe3Gra3B',
+        placeholder: '^_^',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":80,"height":160},"mobile":{"show":true}});</script></body>
+</html>

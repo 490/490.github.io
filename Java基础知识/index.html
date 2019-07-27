@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="零散的面试常考基础知识">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础知识">
+<meta property="og:url" content="https://490.github.io/Java基础知识/index.html">
+<meta property="og:site_name" content="我的笔记">
+<meta property="og:description" content="零散的面试常考基础知识">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://490.github.io/images/20190313_073019.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_232512.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_232518.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_232524.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_232551.png">
+<meta property="og:image" content="http://490.github.io/images/20190310_232638.png">
+<meta property="og:image" content="http://490.github.io/images/20190311_101001.png">
+<meta property="og:image" content="http://490.github.io/images/20190331_134940.png">
+<meta property="og:image" content="http://490.github.io/images/20190331_135144.png">
+<meta property="og:image" content="http://490.github.io/images/20190331_135019.png">
+<meta property="og:updated_time" content="2019-06-13T01:29:52.139Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java基础知识">
+<meta name="twitter:description" content="零散的面试常考基础知识">
+<meta name="twitter:image" content="http://490.github.io/images/20190313_073019.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://490.github.io/Java基础知识/">
+
+
+
+
+
+  <title>Java基础知识 | 我的笔记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">我的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br>
+            
+            文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-vcard-o"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://490.github.io/Java基础知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="le">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java基础知识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-14T13:07:49+08:00">
+                2019-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/Java基础知识/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/Java基础知识/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  12.9k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  49
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>零散的面试常考基础知识<br><a id="more"></a></p>
+<h1 id="String-和-StringBuffer、StringBuilder-的区别是什么？"><a href="#String-和-StringBuffer、StringBuilder-的区别是什么？" class="headerlink" title="String 和 StringBuffer、StringBuilder 的区别是什么？"></a>String 和 StringBuffer、StringBuilder 的区别是什么？</h1><h2 id="可变性"><a href="#可变性" class="headerlink" title="可变性"></a>可变性</h2><p>简单的来说：String 类中使用 final 关键字字符数组保存字符串， <code>private final char value[]</code>，所以 String 对象是不可变的。而StringBuilder 与 StringBuffer 都继承自 AbstractStringBuilder 类，在 AbstractStringBuilder 中也是使用字符数组保存字符串 char[]value 但是没有用 final 关键字修饰，所以这两种对象都是可变的。 StringBuilder 与 StringBuffer 的构造方法都是调用父类构造方法也就是 AbstractStringBuilder 实现的，大家可以自行查阅源码。<br> AbstractStringBuilder.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractStringBuilder</span> <span class="keyword">implements</span> <span class="title">Appendable</span>, <span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span>[] value;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    AbstractStringBuilder() &#123;</span><br><span class="line">    &#125; </span><br><span class="line">    AbstractStringBuilder(<span class="keyword">int</span> capacity) &#123;</span><br><span class="line">      value = <span class="keyword">new</span> <span class="keyword">char</span>[capacity];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="线程安全性"><a href="#线程安全性" class="headerlink" title="线程安全性"></a>线程安全性</h2><p>String 中的对象是不可变的，也就可以理解为常量，线程安全。AbstractStringBuilder 是 StringBuilder 与 StringBuffer 的公共父类，定义了一些字符串的基本操作，如 expandCapacity、append、insert、indexOf 等公共方法。StringBuffer 对方法加了同步锁或者对调用的方法加了同步锁，所以是线程安全的，如果一个StringBuffer对象在字符串缓冲区被多个线程使用时，StringBuffer中很多方法可以带有synchronized关键字。StringBuilder 并没有对方法进行加同步锁，所以是非线程安全的。</p>
+<h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>每次对 String 类型进行改变的时候，都会生成一个新的 String 对象，然后将指针指向新的 String 对象。 StringBuffer 每次都会对 StringBuffer 对象本身进行操作，而不是生成新的对象并改变对象引用。相同情况下使用 StirngBuilder 相比使用 StringBuffer 仅能获得 10%~15% 左右的性能提升，但却要冒多线程不安全的风险。</p>
+<h2 id="对于三者使用的总结："><a href="#对于三者使用的总结：" class="headerlink" title="对于三者使用的总结："></a>对于三者使用的总结：</h2><ol>
+<li>操作少量的数据 = String</li>
+<li>单线程操作字符串缓冲区下操作大量数据 = StringBuilder</li>
+<li>多线程操作字符串缓冲区下操作大量数据 = StringBuffer</li>
+</ol>
+<h1 id="关于-final-关键字的一些总结"><a href="#关于-final-关键字的一些总结" class="headerlink" title="关于 final 关键字的一些总结"></a>关于 final 关键字的一些总结</h1><p>final关键字主要用在三个地方：变量、方法、类。 </p>
+<ol>
+<li>对于一个final变量，如果是基本数据类型的变量，则其数值一旦在初始化之后便不能更改；如果是引用类型的变量，则在对其初始化之后便不能再让其指向另一个对象。</li>
+<li>当用final修饰一个类时，表明这个类不能被继承。final类中的所有成员方法都会被隐式地指定为final方法。 </li>
+<li>使用final方法的原因有两个。第一个原因是把方法锁定，以防任何继承类修改它的含义；第二个原因是效率。在早期的Java实现版本中，会将final方法转为内嵌调用。但是如果方法过于庞大，可能看不到内嵌调用带来的任何性能提升（现在的Java版本已经不需要使用final方法进行这些优化了）。类中所有的private方法都隐式地指定为fianl</li>
+</ol>
+<h1 id="Object类的常见方法总结"><a href="#Object类的常见方法总结" class="headerlink" title="Object类的常见方法总结"></a>Object类的常见方法总结</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> Class&lt;?&gt; getClass()<span class="comment">//native方法，用于返回当前运行时对象的Class对象，使用了final关键字修饰，故不允许子类重写。</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> <span class="comment">//native方法，用于返回对象的哈希码，主要使用在哈希表中，比如JDK中的HashMap。</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span><span class="comment">//用于比较2个对象的内存地址是否相等，String类对该方法进行了重写用户比较字符串的值是否相等。</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">native</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException<span class="comment">//naitive方法，用于创建并返回当前对象的一份拷贝。一般情况下，对于任何对象 x，表达式 x.clone() != x 为true，x.clone().getClass() == x.getClass() 为true。Object本身没有实现Cloneable接口，所以不重写clone方法并且进行调用的话会发CloneNotSupportedException异常。</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span><span class="comment">//返回类的名字@实例的哈希码的16进制的字符串。建议Object所有的子类都重写这个方法。</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notify</span><span class="params">()</span><span class="comment">//native方法，并且不能重写。唤醒一个在此对象监视器上等待的线程(监视器相当于就是锁的概念)。如果有多个线程在等待只会任意唤醒一个。</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">notifyAll</span><span class="params">()</span><span class="comment">//native方法，并且不能重写。跟notify一样，唯一的区别就是会唤醒在此对象监视器上等待的所有线程，而不是一个线程。</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout)</span> <span class="keyword">throws</span> InterruptedException<span class="comment">//native方法，并且不能重写。暂停线程的执行。注意：sleep方法没有释放锁，而wait方法释放了锁 。timeout是等待时间。</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout, <span class="keyword">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException<span class="comment">//多了nanos参数，这个参数表示额外时间（以毫微秒为单位，范围是 0-999999）。 所以超时的时间还需要加上nanos毫秒。</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException<span class="comment">//跟之前的2个wait方法一样，只不过该方法一直等待，没有超时时间这个概念</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123; &#125;<span class="comment">//实例被垃圾回收器回收的时候触发的操作</span></span><br></pre></td></tr></table></figure>
+<h1 id="Java的异常体系"><a href="#Java的异常体系" class="headerlink" title="Java的异常体系"></a>Java的异常体系</h1><p><img src="http://490.github.io/images/20190313_073019.png" alt="image"></p>
+<h2 id="Error（错误）"><a href="#Error（错误）" class="headerlink" title="Error（错误）"></a>Error（错误）</h2><p>是程序无法处理的错误，表示运行应用程序中较严重问题。大多数错误与代码编写者执行的操作无关，而表示代码运行时 JVM（Java 虚拟机）出现的问题。例如，Java虚拟机运行错误（Virtual MachineError），当 JVM 不再有继续执行操作所需的内存资源时，将出现 OutOfMemoryError。这些异常发生时，Java虚拟机（JVM）一般会选择线程终止。</p>
+<p>这些错误表示故障发生于虚拟机自身、或者发生在虚拟机试图执行应用时，如Java虚拟机运行错误（VirtualMachineError）、类定义错误（NoClassDefFoundError）等。这些错误是不可查的，因为它们在应用程序的控制和处理能力之 外，而且绝大多数是程序运行时不允许出现的状况。对于设计合理的应用程序来说，即使确实发生了错误，本质上也不应该试图去处理它所引起的异常状况。在 Java中，错误通过Error的子类描述。 </p>
+<h2 id="Exception（异常）"><a href="#Exception（异常）" class="headerlink" title="Exception（异常）"></a>Exception（异常）</h2><h3 id="unchecked-Exception（RuntimeException）"><a href="#unchecked-Exception（RuntimeException）" class="headerlink" title="unchecked Exception（RuntimeException）"></a>unchecked Exception（RuntimeException）</h3><p>RuntimeException 异常由Java虚拟机抛出。NullPointerException（要访问的变量没有引用任何对象时，抛出该异常）、ArithmeticException（算术运算异常，一个整数除以0时，抛出该异常）和 ArrayIndexOutOfBoundsException （下标越界异常）。</p>
+<p><strong>对未检查的异常(unchecked exception )的几种处理方式</strong>：</p>
+<ol>
+<li>捕获</li>
+<li>继续抛出</li>
+<li>不处理</li>
+</ol>
+<h3 id="checked-Exception（非RuntimeException）"><a href="#checked-Exception（非RuntimeException）" class="headerlink" title="checked Exception（非RuntimeException）"></a>checked Exception（非RuntimeException）</h3><p>对于不是你犯的错，我们统称为非RuntimeException，也叫checked Exception。<br><strong>对检查的异常的几种处理方式</strong>：</p>
+<ol>
+<li>继续抛出，消极的方法，一直可以抛到java虚拟机来处理</li>
+<li>用try…catch捕获</li>
+</ol>
+<p>对于检查的异常必须处理，或者必须捕获或者必须抛出</p>
+<p>异常处理完成以后，Exception对象会在下一个垃圾回收过程中被回收掉。</p>
+<p>注意：异常和错误的区别：异常能被程序本身可以处理，错误是无法处理。 </p>
+<h3 id="Throwable类常用方法"><a href="#Throwable类常用方法" class="headerlink" title="Throwable类常用方法"></a>Throwable类常用方法</h3><p><code>public string getMessage()</code>:返回异常发生时的详细信息<br><code>public string toString()</code>:返回异常发生时的简要描述<br><code>public string getLocalizedMessage()</code>:返回异常对象的本地化信息。使用Throwable的子类覆盖这个方法，可以声称本地化信息。如果子类没有覆盖该方法，则该方法返回的信息与getMessage（）返回的结果相同<br> <code>public void printStackTrace()</code>:在控制台上打印Throwable对象封装的异常信息</p>
+<h3 id="异常处理总结"><a href="#异常处理总结" class="headerlink" title="异常处理总结"></a>异常处理总结</h3><ul>
+<li>try 块：用于捕获异常。其后可接零个或多个catch块，如果没有catch块，则必须跟一个finally块。</li>
+<li>catch 块：用于处理try捕获到的异常。</li>
+<li>finally 块：无论是否捕获或处理异常，finally块里的语句都会被执行。当在try块或catch块中遇到return语句时，finally语句块将在方法返回之前被执行。</li>
+</ul>
+<p>在以下4种特殊情况下，finally块不会被执行： </p>
+<ol>
+<li>在finally语句块中发生了异常。 </li>
+<li>在前面的代码中用了System.exit()退出程序。 </li>
+<li>程序所在的线程死亡。 </li>
+<li>关闭CPU</li>
+</ol>
+<h1 id="获取用键盘输入常用的的两种方法"><a href="#获取用键盘输入常用的的两种方法" class="headerlink" title="获取用键盘输入常用的的两种方法"></a>获取用键盘输入常用的的两种方法</h1><p>方法1：通过 Scanner</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Scanner input = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">String s = input.nextLine();</span><br><span class="line">input.close();</span><br></pre></td></tr></table></figure>
+<p>方法2：通过 BufferedReader</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BufferedReader input = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">String s = input.readLine();</span><br></pre></td></tr></table></figure>
+<h1 id="接口和抽象类的区别是什么"><a href="#接口和抽象类的区别是什么" class="headerlink" title="接口和抽象类的区别是什么"></a>接口和抽象类的区别是什么</h1><ol>
+<li>接口的方法默认是 public，所有方法在接口中不能有实现(Java 8 开始接口方法可以有默认实现），抽象类可以有非抽象的方法</li>
+<li>接口中的实例变量默认是 final 类型的，而抽象类中则不一定 </li>
+<li>一个类可以实现多个接口，但最多只能实现一个抽象类 </li>
+<li>一个类实现接口的话要实现接口的所有方法，而抽象类不一定 </li>
+<li>接口不能用 new 实例化，但可以声明，但是必须引用一个实现该接口的对象 。从设计层面来说，抽象是对类的抽象，是一种模板设计，接口是行为的抽象，是一种行为的规范。</li>
+</ol>
+<p>备注:在JDK8中，接口也可以定义静态方法，可以直接用接口名调用。实现类和实现是不可以调用的。如果同时实现两个接口，接口中定义了一样的默认方法，必须重写，不然会报错。</p>
+<h1 id="深拷贝与浅拷贝"><a href="#深拷贝与浅拷贝" class="headerlink" title="深拷贝与浅拷贝"></a>深拷贝与浅拷贝</h1><p><a href="http://blog.csdn.net/xiaxia__/article/details/41652057" target="_blank" rel="noopener">Java深拷贝浅拷贝</a><br>将一个对象的引用复制给另外一个对象，一共有三种方式。第一种方式是直接赋值，第二种方式是浅拷贝，第三种是深拷贝。</p>
+<ul>
+<li>直接赋值：A a1 = a2，复制的是引用，也就是说a1和a2指向的是同一个对象。因此，当a1变化的时候，a2里面的成员变量也会跟着变化。 </li>
+<li>浅：属性不一样，是独立的，对象（方法）什么的一样，是同一份。clone()主要做了些什么，创建一个新对象，然后将当前对象的非静态字段复制到该新对象，如果字段是值类型的，那么对该字段执行复制；如果该字段是引用类型的话，则复制引用但不复制引用的对象。因此，原始对象及其副本引用同一个对象。</li>
+<li>深：都不一样</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//奥义在于深拷贝在super.clone之后还得把属性什么的new一个，然后做和原本的构造函数给属性赋值一样的操作，这样属性就也不一样了</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> DeepCloneExample <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        DeepCloneExample result = (DeepCloneExample) <span class="keyword">super</span>.clone();</span><br><span class="line">        result.arr = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            result.arr[i] = arr[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>new Integer(123) 与 Integer.valueOf(123) 的区别在于，new Integer(123) 每次都会新建一个对象，而 Integer.valueOf(123) 可能会使用缓存对象，因此多次使用 Integer.valueOf(123) 会取得同一个对象的引用。</p>
+<h1 id="反射、泛型"><a href="#反射、泛型" class="headerlink" title="反射、泛型"></a>反射、泛型</h1><h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a><a href="https://blog.csdn.net/s10461/article/details/53941091" target="_blank" rel="noopener">泛型</a></h2><p>泛型，即“参数化类型”。一提到参数，最熟悉的就是定义方法时有形参，然后调用此方法时传递实参。那么参数化类型怎么理解呢？顾名思义，就是将类型由原来的具体的类型参数化，类似于方法中的变量参数，此时类型也定义成参数形式（可以称之为类型形参），然后在使用/调用时传入具体的类型（类型实参）。</p>
+<p>泛型的本质是为了参数化类型（在不创建新的类型的情况下，通过泛型指定的不同类型来控制形参具体限制的类型）。也就是说在泛型使用过程中，操作的数据类型被指定为一个参数，这种参数类型可以用在类、接口和方法中，分别被称为泛型类、泛型接口、泛型方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List arrayList = <span class="keyword">new</span> ArrayList();</span><br><span class="line">arrayList.add(<span class="string">"aaaa"</span>);</span><br><span class="line"></span><br><span class="line">List&lt;String&gt; arrayList = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line"><span class="comment">//arrayList.add(100); 在编译阶段，编译器就会报错</span></span><br></pre></td></tr></table></figure>
+<p><strong>泛型只在编译阶段有效</strong>。见“反射”，用方法的反射绕过编译</p>
+<p><strong>通配符的出现是为了指定泛型中的类型范围</strong>。</p>
+<ol>
+<li><code>&lt;?&gt;</code>被称作无限定的通配符。</li>
+<li><code>&lt;? extends T&gt;</code>被称作有上限的通配符。</li>
+<li><code>&lt;? super T&gt;</code>被称作有下限的通配符。</li>
+</ol>
+<p>泛型类、泛型接口、泛型方法</p>
+<p>泛型擦除： Java 编译器生成的字节码文件不包含有泛型信息，泛型信息将在编译时被擦除，这个过程称为泛型擦除。其主要过程为 </p>
+<ol>
+<li>将所有泛型参数用其最左边界（最顶级的父类型）类型替换； </li>
+<li>移除 all 的类型参数。</li>
+</ol>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p><code>javap</code> 原生的 看class文件<br><img src="http://490.github.io/images/20190310_232512.png" alt="image"><br><img src="http://490.github.io/images/20190310_232518.png" alt="image"><br><img src="http://490.github.io/images/20190310_232524.png" alt="image"></p>
+<p>类是java.lang.class类的实例对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一种表示方式---&gt;实际在告诉我们任何一个类都有一个隐含的静态成员变量class</span></span><br><span class="line">		Class c1 = Foo.class;</span><br><span class="line">		<span class="comment">//第二中表达方式  已经知道该类的对象通过getClass方法</span></span><br><span class="line">		Class c2 = foo1.getClass();</span><br><span class="line">		<span class="comment">/*官网 c1 ,c2 表示了Foo类的类类型(class type) 万事万物皆对象，类也是对象，是Class类的实例对象</span></span><br><span class="line"><span class="comment">		 * 这个对象我们称为该类的类类型 */</span></span><br><span class="line">		<span class="comment">//不管c1  or c2都代表了Foo类的类类型，一个类只可能是Class类的一个实例对象</span></span><br><span class="line">		System.out.println(c1 == c2);相等</span><br><span class="line">		<span class="comment">//第三种表达方式</span></span><br><span class="line">		Class c3 = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			c3 = Class.forName(<span class="string">"com.imooc.reflect.Foo"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(c2==c3);相等</span><br><span class="line">		<span class="comment">//我们完全可以通过类的类类型创建该类的对象实例----&gt;通过c1 or c2 or c3创建Foo的实例对象</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Foo foo = (Foo)c1.newInstance();<span class="comment">//需要有无参数的构造方法</span></span><br><span class="line">			foo.print();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (InstantiationException e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://490.github.io/images/20190310_232551.png" alt="image"><br>new创建对象是静态加载类，编译时刻就需要加载所有可能用到的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Class c = obj.getClass();</span><br><span class="line"><span class="comment">/** 成员变量也是对象</span></span><br><span class="line"><span class="comment">* java.lang.reflect.Field</span></span><br><span class="line"><span class="comment">* Field类封装了关于成员变量的操作</span></span><br><span class="line"><span class="comment">* getFields()方法获取的是所有的public的成员变量的信息</span></span><br><span class="line"><span class="comment">* getDeclaredFields获取的是该类自己声明的成员变量的信息 */</span></span><br><span class="line"><span class="comment">//Field[] fs = c.getFields();</span></span><br><span class="line">Field[] fs = c.getDeclaredFields();</span><br></pre></td></tr></table></figure>
+<p><img src="http://490.github.io/images/20190310_232638.png" alt="image"></p>
+<ol>
+<li>要获取一个方法就是获取类的信息，获取类的信息首先要获取类的类类型.</li>
+<li>获取方法 名称和参数列表来决定  getMethod获取的是public的方法、getDelcaredMethod自己声明的方法</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"Method m = c.getMethod("</span><span class="string">"print"</span><span class="string">", int.class,int.class);</span></span><br><span class="line"><span class="string">//方法的反射操作  </span></span><br><span class="line"><span class="string">//a1.print(10, 20);方法的反射操作是用m对象来进行方法调用 和a1.print调用的效果完全相同</span></span><br><span class="line"><span class="string">//方法如果没有返回值返回null,有返回值返回具体的返回值</span></span><br><span class="line"><span class="string">//Object o = m.invoke(a1,new Object[]&#123;10,20&#125;);</span></span><br><span class="line"><span class="string">Object o = m.invoke(a1, 10,20);</span></span><br></pre></td></tr></table></figure>
+<p>Class 和 java.lang.reflect 一起对反射提供了支持，java.lang.reflect 类库主要包含了以下三个类：</p>
+<ul>
+<li><strong>Field</strong> ：可以使用 get() 和 set() 方法读取和修改 Field 对象关联的字段；</li>
+<li><strong>Method</strong> ：可以使用 invoke() 方法调用与 Method 对象关联的方法；</li>
+<li><strong>Constructor</strong> ：可以用 Constructor 创建新的对象。</li>
+</ul>
+<p><strong>反射的优点：</strong></p>
+<ul>
+<li><strong>可扩展性</strong> ：应用程序可以利用全限定名创建可扩展对象的实例，来使用来自外部的用户自定义类。</li>
+<li><strong>类浏览器和可视化开发环境</strong> ：一个类浏览器需要可以枚举类的成员。可视化开发环境（如 IDE）可以从利用反射中可用的类型信息中受益，以帮助程序员编写正确的代码。</li>
+<li><strong>调试器和测试工具</strong> ： 调试器需要能够检查一个类里的私有成员。测试工具可以利用反射来自动地调用类里定义的可被发现的 API 定义，以确保一组测试中有较高的代码覆盖率。</li>
+</ul>
+<p><strong>反射的缺点：</strong></p>
+<p>尽管反射非常强大，但也不能滥用。如果一个功能可以不用反射完成，那么最好就不用。在我们使用反射技术时，下面几条内容应该牢记于心。</p>
+<ul>
+<li><strong>性能开销</strong> ：反射涉及了动态类型的解析，所以 JVM 无法对这些代码进行优化。因此，反射操作的效率要比那些非反射操作低得多。我们应该避免在经常被执行的代码或对性能要求很高的程序中使用反射。</li>
+<li><strong>安全限制</strong> ：使用反射技术要求程序必须在一个没有安全限制的环境中运行。如果一个程序必须在有安全限制的环境中运行，如 Applet，那么这就是个问题了。</li>
+<li><strong>内部暴露</strong> ：由于反射允许代码执行一些在正常情况下不被允许的操作（比如访问私有的属性和方法），所以使用反射可能会导致意料之外的副作用，这可能导致代码功能失调并破坏可移植性。反射代码破坏了抽象性，因此当平台发生改变的时候，代码的行为就有可能也随着变化。</li>
+</ul>
+<h2 id="数据库驱动为什么用反射"><a href="#数据库驱动为什么用反射" class="headerlink" title="数据库驱动为什么用反射"></a>数据库驱动为什么用反射</h2><p>反射我们知道是对一个类的主动使用，会触发类的初始化过程，在jvm定义中，对类加载的前几个步骤在什么情况下执行没有具体规定，但是对初始化过程做了一下规定，凡是主动对一个类的使用，就会触发初始化，既然初始化触发，那么“加载，连接（验证，准备，解析（不一定在这一步）），初始化”肯定都执行了。<br>此外，对一个类的初始化，首先会看他的父类有没有初始化，如果没有，还要先进行父类的初始化。<br>所谓初始化，就是调用其静态代码块，为静态变量赋值。 来看看<code>com.mysql.jdbc.Driver</code>在初始化过程中究竟做了那些事。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> </span><br><span class="line">&#123;</span><br><span class="line">     <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 放入到一个copyonwritearraylist中</span></span><br><span class="line">          java.sql.DriverManager.registerDriver(<span class="keyword">new</span> Driver());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (SQLException E) &#123;<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Can't register driver!"</span>);&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由此可见，Driver通过静态代码块把自己注册到<code>DriverManger</code>中去了，这也是下一步<br><code>Connection conn = DriverManager.getConnection(url, username, password);</code><br>能够获取连接的原因，看看具体代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(DriverInfo aDriver : registeredDrivers) </span><br><span class="line">&#123;</span><br><span class="line">      <span class="comment">// If the caller does not have permission to load the driver then skip it.</span></span><br><span class="line">      <span class="keyword">if</span>(isDriverAllowed(aDriver.driver, callerCL)) </span><br><span class="line">      &#123;</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">                println(<span class="string">"    trying "</span> + aDriver.driver.getClass().getName());</span><br><span class="line">                <span class="comment">// 通过具体注册的driver的connect方法获取连接</span></span><br><span class="line">                Connection con = aDriver.driver.connect(url, info);</span><br><span class="line">                <span class="keyword">if</span> (con != <span class="keyword">null</span>) </span><br><span class="line">                &#123;</span><br><span class="line">                    println(<span class="string">"getConnection returning"</span>+aDriver.driver.getClass().getName());</span><br><span class="line">                    <span class="keyword">return</span> (con);</span><br><span class="line">                 &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (SQLException ex) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (reason == <span class="keyword">null</span>) &#123;</span><br><span class="line">                        reason = ex;&#125;&#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            println(<span class="string">"skipping: "</span> + aDriver.getClass().getName());</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本质上是调用了mysql.Driver的connect方法，通过建立到数据库的socket连接，来完成接下来sql的执行。<br>JDBC只是jdk提出的一种java连接数据库的规范，提供了一些接口和抽象方法，并没有提供到某个具体数据库的实现，由各个数据库厂家来实现JDBC，比如上面提到的mysql.Driver就是一种具体实现。</p>
+<p><strong>工厂模式</strong>，反射的作用就是，<strong>无论你使用哪种数据库</strong>（数据库类型）只需要把数据库的驱动名称传过来就能穿件对象，而制定类只能创建你制定的数据库对象。</p>
+<p>以上对JDBC连接数据库的具体源码做了一个粗略的分析，实际上可以看出来，只要是对<code>com.mysql.jdbc.Driver</code>的主动使用都会触发那个注册操作，为什么一定要使用反射呢？因为反射是运行时根据全类名动态生成的Class对象，完全可以把这个全类名写在xml或者properties中去，不仅从代码上解耦和，而且需要更换数据库时，不需要进行代码的重新编译。</p>
+<h2 id="内省-Introspector"><a href="#内省-Introspector" class="headerlink" title="内省 (Introspector)"></a>内省 (Introspector)</h2><p>Introspector 是操作 javaBean 的 API，用来访问某个属性的 getter/setter 方法。<br>对于一个标准的 javaBean 来说，它包括属性、get 方法和 set 方法，这是一个约定俗成的规范。为此 sun 提供了 Introspector 工具包，来使开发者更好或者更灵活的操作 javaBean。</p>
+<p>核心类是 <code>Introspector</code>, 它提供了的 <code>getBeanInfo</code> 系类方法，可以拿到一个 JavaBean 的所有信息。</p>
+<p>通过 <code>BeanInfo</code> 的 <code>getPropertyDescriptors</code> 方法和 <code>getMethodDescriptors</code> 方法可以拿到 javaBean 的字段信息列表和 getter 和 setter 方法信息列表。</p>
+<p><code>PropertyDescriptors</code> 可以根据字段直接获得该字段的 getter 和 setter 方法。</p>
+<p><code>MethodDescriptors</code> 可以获得方法的元信息，比如方法名，参数个数，参数字段类型等。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void test1() throws Exception </span><br><span class="line">&#123;</span><br><span class="line">    // 获取整个Bean的信息</span><br><span class="line">    // BeanInfo beanInfo= Introspector.getBeanInfo(user.getClass());</span><br><span class="line">    // 在Object类时候停止检索，可以选择在任意一个父类停止</span><br><span class="line">    BeanInfo beanInfo = Introspector.getBeanInfo(User.class, Object.class);</span><br><span class="line">    // 获取所有的属性描述</span><br><span class="line">    PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();</span><br><span class="line">    for (PropertyDescriptor propertyDescriptor : pds) </span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(propertyDescriptor.getName());</span><br><span class="line">    &#125;</span><br><span class="line">    for (MethodDescriptor methodDescriptor : beanInfo.getMethodDescriptors()) </span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(methodDescriptor.getName());</span><br><span class="line">        // Method method = methodDescriptor.getMethod();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">    @Test</span><br><span class="line">    public void test2 () throws Exception </span><br><span class="line">    &#123;</span><br><span class="line">        User user = new User(&quot;jack&quot;, 21);</span><br><span class="line">        String propertyName = &quot;name&quot;;</span><br><span class="line">        PropertyDescriptor namePd = new PropertyDescriptor(propertyName, User.class);</span><br><span class="line">        System.out.println(&quot;名字：&quot; + namePd.getReadMethod().invoke(user));</span><br><span class="line">        namePd.getWriteMethod().invoke(user, &quot;tom&quot;);</span><br><span class="line">        System.out.println(&quot;名字：&quot; + namePd.getReadMethod().invoke(user));</span><br><span class="line">        System.out.println(&quot;========================================&quot;);</span><br><span class="line">        String agePropertyName = &quot;age&quot;;</span><br><span class="line">        PropertyDescriptor agePd = new PropertyDescriptor(agePropertyName, User.class);</span><br><span class="line">        System.out.println(&quot;年龄：&quot; + agePd.getReadMethod().invoke(user));</span><br><span class="line">        agePd.getWriteMethod().invoke(user, 22);</span><br><span class="line">        System.out.println(&quot;年龄：&quot; + agePd.getReadMethod().invoke(user));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">名字：jack</span><br><span class="line">名字：tom</span><br><span class="line">========================================</span><br><span class="line">年龄：21</span><br><span class="line">年龄：22</span><br></pre></td></tr></table></figure>
+<h1 id="Java-Web"><a href="#Java-Web" class="headerlink" title="Java Web"></a>Java Web</h1><h2 id="Servlet的生命周期与工作原理"><a href="#Servlet的生命周期与工作原理" class="headerlink" title="Servlet的生命周期与工作原理"></a>Servlet的生命周期与工作原理</h2><p>Servlet运行在Servlet容器中，其生命周期由容器来管理。Servlet的生命周期通过javax.servlet.Servlet接口中的init()、service()和destroy()方法来表示,Servlet的生命周期包含了下面4个阶段：</p>
+<ol>
+<li>加载和实例化</li>
+<li>初始化</li>
+<li>请求处理</li>
+<li>服务终止</li>
+</ol>
+<p><img src="http://490.github.io/images/20190311_101001.png" alt="image"></p>
+<ol>
+<li>Web Client 向Servlet容器（Tomcat）发出Http请求</li>
+<li>Servlet容器接收Web Client的请求</li>
+<li>Servlet容器创建一个HttpRequest对象，将Web Client请求的信息封装到这个对象中。</li>
+<li>Servlet容器创建一个HttpResponse对象</li>
+<li>Servlet容器调用HttpServlet对象的service方法，把HttpRequest对象与HttpResponse对象作为参数传给HttpServlet 对象。</li>
+<li>HttpServlet调用HttpRequest对象的有关方法，获取Http请求信息。</li>
+<li>HttpServlet调用HttpResponse对象的有关方法，生成响应数据。</li>
+<li>Servlet容器把HttpServlet的响应结果传给Web Client。</li>
+</ol>
+<h2 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h2><p> <a href="https://www.cnblogs.com/zhouyuqin/p/5143121.html" target="_blank" rel="noopener">解析Tomcat内部结构和请求过程</a></p>
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>Tomcat是一个JSP/Servlet容器。其作为Servlet容器，有三种工作模式：独立的Servlet容器、进程内的Servlet容器和进程外的Servlet容器。</p>
+<p>Tomcat是一个基于组件的服务器，它的构成组件都是可配置的，其中最外层的是Catalina servlet容器，其他组件按照一定的格式要求配置在这个顶层容器中。 Tomcat的各种组件都是在Tomcat安装目录下的/conf/server.xml文件中配置的。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Server</span>&gt;</span>    //顶层类元素，可以包括多个Service   </span><br><span class="line">    <span class="tag">&lt;<span class="name">Service</span>&gt;</span> //顶层类元素，可包含一个Engine，多个Connecter</span><br><span class="line">        <span class="tag">&lt;<span class="name">Connector</span>&gt;</span>  //连接器类元素，代表通信接口</span><br><span class="line">                <span class="tag">&lt;<span class="name">Engine</span>&gt;</span>  //容器类元素，为特定的Service组件处理客户请求，要包含多个Host</span><br><span class="line">                        <span class="tag">&lt;<span class="name">Host</span>&gt;</span> //容器类元素，为特定的虚拟主机组件处理客户请求，可包含多个Context</span><br><span class="line">                                <span class="tag">&lt;<span class="name">Context</span>&gt;</span> //容器类元素，为特定的Web应用处理所有的客户请求</span><br><span class="line">                                <span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">Connector</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://490.github.io/images/20190331_134940.png" alt="image"></p>
+<p>由上图可看出Tomca的心脏是两个组件：Connecter和Container。一个Container可以选择多个Connecter，多个Connector和一个Container就形成了一个Service。Service可以对外提供服务，而Server服务器控制整个Tomcat的生命周期。</p>
+<p>Service 和 Server 管理它下面组件的生命周期。<br>Tomcat 中组件的生命周期是通过 Lifecycle 接口来控制的，组件只要继承这个接口并实现其中的方法就可以统一被拥有它的组件控制了，这样一层一层的直到一个最高级的组件就可以控制 Tomcat 中所有组件的生命周期，这个最高的组件就是 Server，而控制 Server 的是 Startup，也就是您启动和关闭 Tomcat。</p>
+<h3 id="Tomca的两大组件：Connecter和Container"><a href="#Tomca的两大组件：Connecter和Container" class="headerlink" title="Tomca的两大组件：Connecter和Container"></a>Tomca的两大组件：Connecter和Container</h3><p> <strong>Connecter组件</strong></p>
+<p>一个Connecter将在某个指定的端口上侦听客户请求，接收浏览器的发过来的 tcp 连接请求，创建一个 Request 和 Response 对象分别用于和请求端交换数据，然后会产生一个线程来处理这个请求并把产生的 Request 和 Response 对象传给处理Engine(Container中的一部分)，从Engine出获得响应并返回客户。<br>Tomcat中有两个经典的Connector，一个直接侦听来自Browser的HTTP请求，另外一个来自其他的WebServer请求。Cotote HTTP/1.1 Connector在端口8080处侦听来自客户Browser的HTTP请求，Coyote JK2 Connector在端口8009处侦听其他Web Server的Servlet/JSP请求。<br>Connector 最重要的功能就是接收连接请求然后分配线程让 Container 来处理这个请求，所以这必然是多线程的，多线程的处理是 Connector 设计的核心。</p>
+<p><strong>Container组件</strong></p>
+<p>Container的体系结构如下：</p>
+<p><img src="http://490.github.io/images/20190331_135144.png" alt="image"></p>
+<p>Container是容器的父接口，该容器的设计用的是典型的责任链的设计模式，它由四个自容器组件构成，分别是Engine、Host、Context、Wrapper。这四个组件是负责关系，存在包含关系。通常一个Servlet class对应一个Wrapper，如果有多个Servlet定义多个Wrapper，如果有多个Wrapper就要定义一个更高的Container，如Context。<br>Context 还可以定义在父容器 Host 中，Host 不是必须的，但是要运行 war 程序，就必须要 Host，因为 war 中必有 web.xml 文件，这个文件的解析就需要 Host 了，如果要有多个 Host 就要定义一个 top 容器 Engine 了。而 Engine 没有父容器了，一个 Engine 代表一个完整的 Servlet 引擎。</p>
+<ul>
+<li>Engine 容器<br>Engine 容器比较简单，它只定义了一些基本的关联关系</li>
+<li>Host 容器<br>Host 是 Engine 的字容器，一个 Host 在 Engine 中代表一个虚拟主机，这个虚拟主机的作用就是运行多个应用，它负责安装和展开这些应用，并且标识这个应用以便能够区分它们。它的子容器通常是 Context，它除了关联子容器外，还有就是保存一个主机应该有的信息。</li>
+<li>Context 容器<br>Context 代表 Servlet 的 Context，它具备了 Servlet 运行的基本环境，理论上只要有 Context 就能运行 Servlet 了。简单的 Tomcat 可以没有 Engine 和 Host。Context 最重要的功能就是管理它里面的 Servlet 实例，Servlet 实例在 Context 中是以 Wrapper 出现的，还有一点就是 Context 如何才能找到正确的 Servlet 来执行它呢？ Tomcat5 以前是通过一个 Mapper 类来管理的，Tomcat5 以后这个功能被移到了 request 中，在前面的时序图中就可以发现获取子容器都是通过 request 来分配的。</li>
+<li>Wrapper 容器<br>Wrapper 代表一个 Servlet，它负责管理一个 Servlet，包括的 Servlet 的装载、初始化、执行以及资源回收。Wrapper 是最底层的容器，它没有子容器了，所以调用它的 addChild 将会报错。<br>Wrapper 的实现类是 StandardWrapper，StandardWrapper 还实现了拥有一个 Servlet 初始化信息的 ServletConfig，由此看出 StandardWrapper 将直接和 Servlet 的各种信息打交道。</li>
+</ul>
+<p>Tomcat 还有其它重要的组件，如安全组件 security、logger 日志组件、session、mbeans、naming 等其它组件。这些组件共同为 Connector 和 Container 提供必要的服务。</p>
+<h3 id="Tomcat-Server处理一个HTTP请求的过程"><a href="#Tomcat-Server处理一个HTTP请求的过程" class="headerlink" title="Tomcat Server处理一个HTTP请求的过程"></a>Tomcat Server处理一个HTTP请求的过程</h3><p><img src="http://490.github.io/images/20190331_135019.png" alt="image"></p>
+<p>1、用户点击网页内容，请求被发送到本机端口8080，被在那里监听的Coyote HTTP/1.1 Connector获得。<br>2、Connector把该请求交给它所在的Service的Engine来处理，并等待Engine的回应。<br>3、Engine获得请求localhost/test/index.jsp，匹配所有的虚拟主机Host。<br>4、Engine匹配到名为localhost的Host（即使匹配不到也把请求交给该Host处理，因为该Host被定义为该Engine的默认主机），名为localhost的Host获得请求/test/index.jsp，匹配它所拥有的所有的Context。Host匹配到路径为/test的Context（如果匹配不到就把该请求交给路径名为“ ”的Context去处理）。<br>5、path=“/test”的Context获得请求/index.jsp，在它的mapping table中寻找出对应的Servlet。Context匹配到URL PATTERN为*.jsp的Servlet,对应于JspServlet类。<br>6、构造HttpServletRequest对象和HttpServletResponse对象，作为参数调用JspServlet的doGet（）或doPost（）.执行业务逻辑、数据存储等程序。<br>7、Context把执行完之后的HttpServletResponse对象返回给Host。<br>8、Host把HttpServletResponse对象返回给Engine。<br>9、Engine把HttpServletResponse对象返回Connector。<br>10、Connector把HttpServletResponse对象返回给客户Browser。</p>
+<h1 id="Java-序列化和反序列化"><a href="#Java-序列化和反序列化" class="headerlink" title="Java 序列化和反序列化"></a>Java 序列化和反序列化</h1><p><a href="java的io#java对象操作">补充阅读</a></p>
+<p>序列化是指 把 Java 对象字节序列化的过程，就是说将原本保存在 内存 中的对象，以字节序列的形式，保存到 硬盘 (或数据库等) 中。当需要使用时，再 反序列化 恢复到内存中使用。</p>
+<h2 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h2><p>只要对象实现了 Serializable 接口，这个对象就可以通过如下方法进行序列化和反序列化 ( <strong>注意：</strong> Serializable 接口仅仅是一个标记接口，里面没有任何方法 )：</p>
+<ul>
+<li><strong>序列化：</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个 OutputStream 流并将其封装在一个 ObjectOutputStream 对象内。</span></span><br><span class="line">ObjectOutputStream out = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(<span class="string">"worm.out"</span>));</span><br><span class="line"><span class="comment">// 调用 ObjectOutputStream 对象的 writeObject() 方法，即可将对象 wa 序列化。</span></span><br><span class="line">out.writeObject(wa);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>反序列化：</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个 InputStream 流并将其封装在一个 ObjectInputStream 对象内。</span></span><br><span class="line">ObjectInputStream in = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(<span class="string">"worm.out"</span>));</span><br><span class="line"><span class="comment">// 调用 ObjectInputStream 对象的 readObject() 方法，可获得一个向上转型的 Object 对象引用，然后将获得的 Object 对象向下转型即可。</span></span><br><span class="line">Worm newWa = (Worm) in.readObject();</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>注意：</strong><ul>
+<li>将一个对象从它的序列化状态恢复出来所需要的必要条件：保证 Java JVM 能够找到相关的 .class 文件，否则会抛出 ClassNotFoundException 异常。</li>
+<li>被 static 修饰的字段是无法被序列化的，因为它根本就不保存在对象中，而是保存在方法区中，如果想要序列化 static 值，必须自己手动去实现，并手动调用方法，一般会在类中加上 <code>serializeStaticState(ObjectOutputStream os)</code> 和 <code>deserializeStaticState(ObjectInputStream os)</code> 这两个方法用来序列化 static 字段。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> color = RED;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">serializeStaticState</span><span class="params">(ObjectOutputStream os)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        os.writeInt(color); <span class="comment">// 在这里</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">deserializeStaticState</span><span class="params">(ObjectInputStream os)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        color = os.readInt();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在序列化和反序列化 Square 对象时的时候需要手动调用：</span></span><br><span class="line"><span class="comment">// 序列化：</span></span><br><span class="line">ObjectOutputStream out = <span class="keyword">new</span> ObjectOutputStream(<span class="keyword">new</span> FileOutputStream(<span class="string">"square.out"</span>));</span><br><span class="line">Square.serializeStaticState(out); <span class="comment">// 在 writeObject 前先把 static 变量的值写道 Output 流中</span></span><br><span class="line">out.writeObject(sq);</span><br><span class="line"><span class="comment">// 反序列化：</span></span><br><span class="line">ObjectInputStream in = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> FileInputStream(<span class="string">"square.out"</span>));</span><br><span class="line">Square.deserializeStaticState(in); <span class="comment">// 在 readObject 前先把 static 变量的值从 Input 流中取出来</span></span><br><span class="line">Square newSq = (Square) in.readObject();</span><br></pre></td></tr></table></figure>
+<p>另外要注意安全问题，序列化也会将 private 数据保存下来，必要的时候可以把敏感数据用 transient 关键字修饰，防止其被序列化。一旦变量被 transient 修饰，变量将不再是对象持久化的一部分，在对象反序列化后，transient 修饰的变量被设为初始值，即 int 型数据的值为 0，对象型数据为 null。</p>
+<p>另一种实现序列化和反序列化的方法：实现 ExternalSerializable 接口。</p>
+<h2 id="序列化的控制：Externalizable-接口"><a href="#序列化的控制：Externalizable-接口" class="headerlink" title="序列化的控制：Externalizable 接口"></a>序列化的控制：Externalizable 接口</h2><p>Externalizable 接口继承自 Serializable 接口，同时增加了两个方法：<code>writeExternal()</code>和<code>readExternal()</code>，这两个方法会在序列化和反序列化还原的过程中被自动调用，我们可以在<code>writeExternal()</code>中将来自对象的重要信息写入，然后在<code>readExternal()</code>中恢复数据。(默认是不写入任何成员对象的)</p>
+<ul>
+<li><strong>对比 transient 关键字：</strong><ul>
+<li>Externalizable 接口：选择要进行序列化的字段进行序列化操作。</li>
+<li>transient 关键字：选择不要进行序列化的字段取消序列化操作。</li>
+</ul>
+</li>
+<li><strong>对比 Serializable 接口：</strong><ul>
+<li>Externalizable 接口：会调用普通的默认构造器，因此必须有 public 的默认构造器，否则会抛出异常。相当于新 new 了一个对象，然后把<code>writeExternal()</code>中进行序列化的成员变量进行重新赋值。</li>
+<li>Serializable 接口：对象完全以它存储的二进制位为基础来构造，不调用构造器。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Externalizable-接口的替代方法"><a href="#Externalizable-接口的替代方法" class="headerlink" title="Externalizable 接口的替代方法"></a>Externalizable 接口的替代方法</h2><p>Externalizable 接口使用起来较为麻烦，我们可以实现 Serializable 接口，并添加 (是”添加”，既不是”覆盖”也不是”实现”) 如下两个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">writeObject</span><span class="params">(ObjectOutputStream stream)</span> <span class="keyword">throws</span> IOException </span>&#123; ... &#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readObject</span><span class="params">(ObjectInputStream stream)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<p>ObjectOutputStream 和 ObjectInputStream 对象的 writeObject() 和 readObject() 方法会调用我们的对象的 writeObject() 和 readObject() 方法。</p>
+<p><strong>既然如此我们为什么不为这两个方法写个接口呢？因为这两个方法是 private 的，而接口中定义的东西都是默认 public 的，所以只能是”添加”这两个方法了。</strong></p>
+<p>在我们的 writeObject() 和 readObject() 方法中，可以调用 defaultWriteObject() 和 defaultReadObject() 方法来选择执行默认的 writeObject() 和 readObject() 方法，比较方便好用。</p>
+<p><strong>注意：</strong> 如果我们打算使用默认机制写入对象的非 transient 部分，那么必须调用 defaultWriteObject() 作为 writeObject() 的第一个操作，调用 defaultReadObject() 作为 readObject() 的第一个操作。</p>
+<h2 id="常见的序列化协议"><a href="#常见的序列化协议" class="headerlink" title="常见的序列化协议"></a>常见的序列化协议</h2><ul>
+<li><strong>XML：</strong> XML是一种常用的序列化和反序列化协议，具有跨机器，跨语言等优点，并且可读性强。</li>
+<li><strong>JSON：</strong><ul>
+<li>这种 Associative array 格式非常符合工程师对对象的理解。</li>
+<li>它保持了XML的人眼可读（Human-readable）的优点。</li>
+<li>相对于XML而言，序列化后的数据更加简洁。</li>
+<li>它具备 Javascript 的先天性支持，所以被广泛应用于 Web browser 的应用常景中，是 Ajax 的事实标准协议。</li>
+<li>与 XML 相比，其协议比较简单，解析速度比较快。</li>
+<li>松散的 Associative array 使得其具有良好的可扩展性和兼容性。</li>
+</ul>
+</li>
+</ul>
+<h1 id="Java-动态代理"><a href="#Java-动态代理" class="headerlink" title="Java 动态代理"></a>Java 动态代理</h1><h2 id="代理模式（JDK代理）"><a href="#代理模式（JDK代理）" class="headerlink" title="代理模式（JDK代理）"></a>代理模式（JDK代理）</h2><p><a href="设计模式#代理模式">设计模式</a></p>
+<p> <strong>  JDK动态代理所用到的代理类在程序调用到代理类对象时才由JVM真正创建，JVM根据传进来的 业务实现类对象 以及 方法名 ，动态地创建了一个代理类的class文件并被字节码引擎执行，然后通过该代理类对象进行方法调用。</strong>我们需要做的，只需指定代理类的预处理、调用后操作即可。</p>
+<p>1：首先，定义业务逻辑接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BookFacade</span> </span></span><br><span class="line"><span class="class"></span>&#123; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addBook</span><span class="params">()</span></span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2：然后，实现业务逻辑接口创建业务实现类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookFacadeImpl</span> <span class="keyword">implements</span> <span class="title">BookFacade</span> </span></span><br><span class="line"><span class="class"></span>&#123;   </span><br><span class="line">    <span class="meta">@Override</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addBook</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        System.out.println(<span class="string">"增加图书方法。。。"</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3：最后，实现 调用管理接口InvocationHandler  创建动态代理类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookFacadeProxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span></span><br><span class="line"><span class="class"></span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> Object target;<span class="comment">//这其实业务实现类对象，用来调用具体的业务方法 </span></span><br><span class="line">    <span class="comment">/** </span></span><br><span class="line"><span class="comment">     * 绑定业务对象并返回一个代理类  </span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">bind</span><span class="params">(Object target)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        <span class="keyword">this</span>.target = target;  <span class="comment">//接收业务实现类对象参数</span></span><br><span class="line">       <span class="comment">//通过反射机制，创建一个代理类对象实例并返回。用户进行方法调用时使用</span></span><br><span class="line">       <span class="comment">//创建代理对象时，需要传递该业务类的类加载器（用来获取业务实现类的元数据，在包装方法是调用真正的业务方法）、接口、handler实现类</span></span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(target.getClass().getClassLoader(),  </span><br><span class="line">                target.getClass().getInterfaces(), <span class="keyword">this</span>); </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">/** </span></span><br><span class="line"><span class="comment">     * 包装调用方法：进行预处理、调用后处理 </span></span><br><span class="line"><span class="comment">     */</span>  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span>  <span class="keyword">throws</span> Throwable </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        Object result=<span class="keyword">null</span>;  </span><br><span class="line">        System.out.println(<span class="string">"预处理操作——————"</span>);  </span><br><span class="line">        <span class="comment">//调用真正的业务方法  </span></span><br><span class="line">        result=method.invoke(target, args);  </span><br><span class="line">        System.out.println(<span class="string">"调用后处理——————"</span>);  </span><br><span class="line">        <span class="keyword">return</span> result;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 4：在使用时，首先创建一个业务实现类对象和一个代理类对象，然后定义接口引用（这里使用向上转型）并用代理对象.bind(业务实现类对象)的返回值进行赋值。最后<a href="#通过接口引用对象">通过接口引用对象</a>调用业务方法即可。（接口引用真正指向的是一个绑定了业务类的代理类对象，所以通过接口方法名调用的是被代理的方法们）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">        BookFacadeImpl bookFacadeImpl=<span class="keyword">new</span> BookFacadeImpl();</span><br><span class="line">        BookFacadeProxy proxy = <span class="keyword">new</span> BookFacadeProxy();  </span><br><span class="line">        BookFacade bookfacade = (BookFacade) proxy.bind(bookFacadeImpl);  </span><br><span class="line">        bookfacade.addBook();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>   JDK动态代理的代理对象在创建时，需要使用业务实现类所实现的接口作为参数（因为在后面代理方法时需要根据接口内的方法名进行调用）。如果业务实现类是没有实现接口而是直接定义业务方法的话，就无法使用JDK动态代理了。并且，如果业务实现类中新增了接口中没有的方法，这些方法是无法被代理的（因为无法被调用）。</p>
+<h2 id="CGLIB代理"><a href="#CGLIB代理" class="headerlink" title="CGLIB代理"></a>CGLIB代理</h2><p>CGLIB（Code Generator Library）是一个强大的、高性能的代码生成库。其被广泛应用于AOP框架（Spring、dynaop）中，用以提供方法拦截操作。</p>
+<p><strong> cglib是针对类来实现代理的，原理是对指定的业务类生成一个子类，并覆盖其中业务方法实现代理。因为采用的是继承，所以不能对final修饰的类进行代理。</strong> </p>
+<p>1：首先定义业务类，无需实现接口（当然，实现接口也可以，不影响的）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookFacadeImpl1</span> </span></span><br><span class="line"><span class="class"></span>&#123; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addBook</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        System.out.println(<span class="string">"新增图书..."</span>);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 2：实现 MethodInterceptor方法代理接口，创建代理类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookFacadeCglib</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span></span><br><span class="line"><span class="class"></span>&#123;  </span><br><span class="line">    <span class="keyword">private</span> Object target;<span class="comment">//业务类对象，供代理方法中进行真正的业务方法调用</span></span><br><span class="line">    <span class="comment">//相当于JDK动态代理中的绑定</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getInstance</span><span class="params">(Object target)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;  </span><br><span class="line">        <span class="keyword">this</span>.target = target;  <span class="comment">//给业务对象赋值</span></span><br><span class="line">        Enhancer enhancer = <span class="keyword">new</span> Enhancer(); <span class="comment">//创建加强器，用来创建动态代理类</span></span><br><span class="line">        enhancer.setSuperclass(<span class="keyword">this</span>.target.getClass());  <span class="comment">//为加强器指定要代理的业务类（即：为下面生成的代理类指定父类）</span></span><br><span class="line">        <span class="comment">//设置回调：对于代理类上所有方法的调用，都会调用CallBack，而Callback则需要实现intercept()方法进行拦</span></span><br><span class="line">        enhancer.setCallback(<span class="keyword">this</span>); </span><br><span class="line">       <span class="comment">// 创建动态代理类对象并返回  </span></span><br><span class="line">       <span class="keyword">return</span> enhancer.create(); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 实现回调方法 </span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Object obj, Method method, Object[] args, MethodProxy proxy)</span> <span class="keyword">throws</span> Throwable </span></span><br><span class="line"><span class="function">    </span>&#123; </span><br><span class="line">        System.out.println(<span class="string">"预处理——————"</span>);</span><br><span class="line">        proxy.invokeSuper(obj, args); <span class="comment">//调用业务类（父类中）的方法</span></span><br><span class="line">        System.out.println(<span class="string">"调用后操作——————"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>; </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>  3：创建业务类和代理类对象，然后通过  代理类对象.getInstance(业务类对象)  返回一个动态代理类对象（它是业务类的子类，可以用业务类引用指向它）。最后通过动态代理类对象进行方法调用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span></span><br><span class="line"><span class="function"></span>&#123;      </span><br><span class="line">        BookFacadeImpl1 bookFacade=<span class="keyword">new</span> BookFacadeImpl1()；</span><br><span class="line">        BookFacadeCglib  cglib=<span class="keyword">new</span> BookFacadeCglib();  </span><br><span class="line">        BookFacadeImpl1 bookCglib=(BookFacadeImpl1)cglib.getInstance(bookFacade);  </span><br><span class="line">        bookCglib.addBook();  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 静态代理是通过在代码中显式定义一个业务实现类一个代理，在代理类中对同名的业务方法进行包装，用户通过代理类调用被包装过的业务方法；</p>
+<pre><code>JDK动态代理是通过接口中的方法名，在动态生成的代理类中调用业务实现类的同名方法；
+
+CGlib动态代理是通过继承业务类，生成的动态代理类是业务类的子类，通过重写业务方法进行代理；
+</code></pre><h1 id="Java注解"><a href="#Java注解" class="headerlink" title="Java注解"></a>Java注解</h1><h2 id="深入理解JAVA注解"><a href="#深入理解JAVA注解" class="headerlink" title="深入理解JAVA注解"></a>深入理解JAVA注解</h2><p>　　要深入学习注解，我们就必须能定义自己的注解，并使用注解，在定义自己的注解之前，我们就必须要了解Java为我们提供的元注解和相关定义注解的语法。</p>
+<h3 id="元注解（meta-annotation）："><a href="#元注解（meta-annotation）：" class="headerlink" title="元注解（meta-annotation）："></a>元注解（meta-annotation）：</h3><p>元注解的作用就是负责注解其他注解。Java5.0定义了4个标准的meta-annotation类型，它们被用来提供对其它 annotation类型作说明。Java5.0定义的元注解：<br>　　　　1.@Target,<br>　　　　2.@Retention,<br>　　　　3.@Documented,<br>　　　　4.@Inherited<br>　　这些类型和它们所支持的类在java.lang.annotation包中可以找到。下面我们看一下每个元注解的作用和相应分参数的使用说明。</p>
+<p><strong>@Target：</strong></p>
+<p>@Target说明了Annotation所修饰的对象范围：Annotation可被用于 packages、types（类、接口、枚举、Annotation类型）、类型成员（方法、构造方法、成员变量、枚举值）、方法参数和本地变量（如循环变量、catch参数）。在Annotation类型的声明中使用了target可更加明晰其修饰的目标。</p>
+<p>　<strong>作用：用于描述注解的使用范围（即：被描述的注解可以用在什么地方）</strong><br>　<strong>　取值(ElementType)有：</strong></p>
+<p>　　　　1.CONSTRUCTOR:用于描述构造器<br>　　　　2.FIELD:用于描述域<br>　　　　3.LOCAL_VARIABLE:用于描述局部变量<br>　　　　4.METHOD:用于描述方法<br>　　　　5.PACKAGE:用于描述包<br>　　　　6.PARAMETER:用于描述参数<br>　　　　7.TYPE:用于描述类、接口(包括注解类型) 或enum声明</p>
+<p>　　使用实例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Table </span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 数据表名称注解，默认值为类名称</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">tableName</span><span class="params">()</span> <span class="keyword">default</span> "className"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> NoDBColumn &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注解Table 可以用于注解类、接口(包括注解类型) 或enum声明,而注解NoDBColumn仅可用于注解类的成员变量。</p>
+<p><strong>@Retention：</strong></p>
+<p>　<strong>　@Retention</strong>定义了该Annotation被保留的时间长短：某些Annotation仅出现在源代码中，而被编译器丢弃；而另一些却被编译在class文件中；编译在class文件中的Annotation可能会被虚拟机忽略，而另一些在class被装载时将被读取（请注意并不影响class的执行，因为Annotation与class在使用上是被分离的）。使用这个meta-Annotation可以对 Annotation的“生命周期”限制。</p>
+<p>　　<strong>作用：表示需要在什么级别保存该注释信息，用于描述注解的生命周期（即：被描述的注解在什么范围内有效）</strong></p>
+<p>　<strong>　取值（RetentionPoicy）有：</strong></p>
+<p>　　　　1.SOURCE:在源文件中有效（即源文件保留）<br>　　　　2.CLASS:在class文件中有效（即class保留）<br>　　　　3.RUNTIME:在运行时有效（即运行时保留）</p>
+<p>Retention meta-annotation类型有唯一的value作为成员，它的取值来自java.lang.annotation.RetentionPolicy的枚举类型值。具体实例如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Column </span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> "fieldName"</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">setFuncName</span><span class="params">()</span> <span class="keyword">default</span> "setField"</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFuncName</span><span class="params">()</span> <span class="keyword">default</span> "getField"</span>; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">defaultDBValue</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Column注解的的RetentionPolicy的属性值是RUTIME,这样注解处理器可以通过反射，获取到该注解的属性值，从而去做一些运行时的逻辑处理</p>
+<p><strong>@Documented:</strong></p>
+<p><strong>@Documented</strong>用于描述其它类型的annotation应该被作为被标注的程序成员的公共API，因此可以被例如javadoc此类的工具文档化。Documented是一个标记注解，没有成员。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Column </span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> "fieldName"</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">setFuncName</span><span class="params">()</span> <span class="keyword">default</span> "setField"</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getFuncName</span><span class="params">()</span> <span class="keyword">default</span> "getField"</span>; </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">defaultDBValue</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>@Inherited：</strong></p>
+<p>@Inherited 元注解是一个标记注解，@Inherited阐述了某个被标注的类型是被继承的。如果一个使用了@Inherited修饰的annotation类型被用于一个class，则这个annotation将被用于该class的子类。</p>
+<p>注意：@Inherited annotation类型是被标注过的class的子类所继承。类并不从它所实现的接口继承annotation，方法并不从它所重载的方法继承annotation。</p>
+<p>当@Inherited annotation类型标注的annotation的Retention是RetentionPolicy.RUNTIME，则反射API增强了这种继承性。如果我们使用java.lang.reflect去查询一个@Inherited annotation类型的annotation时，反射代码检查将展开工作：检查class和其父类，直到发现指定的annotation类型被发现，或者到达类继承结构的顶层。</p>
+<p>实例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Greeting </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">enum</span> FontColor&#123; BULE,RED,GREEN&#125;;</span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">FontColor <span class="title">fontColor</span><span class="params">()</span> <span class="keyword">default</span> FontColor.GREEN</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="自定义注解："><a href="#自定义注解：" class="headerlink" title="自定义注解："></a>自定义注解：</h3><p>　　使用@interface自定义注解时，自动继承了java.lang.annotation.Annotation接口，由编译程序自动完成其他细节。在定义注解时，不能继承其他的注解或接口。@interface用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型（返回值类型只能是基本类型、Class、String、enum）。可以通过default来声明参数的默认值。</p>
+<p><strong>定义注解格式：</strong><br>　　public @interface 注解名 {定义体}</p>
+<p><strong>注解参数的可支持数据类型：</strong></p>
+<p>　　　　1.所有基本数据类型（int,float,boolean,byte,double,char,long,short)<br>　　　　2.String类型<br>　　　　3.Class类型<br>　　　　4.enum类型<br>　　　　5.Annotation类型<br>　　　　6.以上所有类型的数组</p>
+<p>　　Annotation类型里面的参数该怎么设定: </p>
+<ul>
+<li>第一,只能用public或默认(default)这两个访问权修饰.例如,String value();这里把方法设为defaul默认类型；　 　</li>
+<li>第二,参数成员只能用基本类型byte,short,char,int,long,float,double,boolean八种基本数据类型和 String,Enum,Class,annotations等数据类型,以及这一些类型的数组.例如,String value();这里的参数成员就为String;　　</li>
+<li>第三,如果只有一个参数成员,最好把参数名称设为”value”,后加小括号.例:下面的例子FruitName注解就只有一个参数成员。</li>
+</ul>
+<p>　　简单的自定义注解和使用注解实例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Documented;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 水果名称注解</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> FruitName </span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 水果颜色注解</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> FruitColor </span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 颜色枚举</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">enum</span> Color&#123; BULE,RED,GREEN&#125;;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 颜色属性</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">Color <span class="title">fruitColor</span><span class="params">()</span> <span class="keyword">default</span> Color.GREEN</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> annotation;</span><br><span class="line"><span class="keyword">import</span> annotation.FruitColor.Color;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Apple</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@FruitName</span>(<span class="string">"Apple"</span>)</span><br><span class="line">    <span class="keyword">private</span> String appleName;</span><br><span class="line">    <span class="meta">@FruitColor</span>(fruitColor=Color.RED)</span><br><span class="line">    <span class="keyword">private</span> String appleColor;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAppleColor</span><span class="params">(String appleColor)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.appleColor = appleColor;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAppleColor</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> appleColor;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAppleName</span><span class="params">(String appleName)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.appleName = appleName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAppleName</span><span class="params">()</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> appleName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">displayName</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"水果的名字是：苹果"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注解元素的默认值：</strong></p>
+<p>注解元素必须有确定的值，要么在定义注解的默认值中指定，要么在使用注解时指定，非基本类型的注解元素的值不可为null。因此, 使用空字符串或0作为默认值是一种常用的做法。这个约束使得处理器很难表现一个元素的存在或缺失的状态，因为每个注解的声明中，所有元素都存在，并且都具有相应的值，为了绕开这个约束，我们只能定义一些特殊的值，例如空字符串或者负数，一次表示某个元素不存在，在定义注解时，这已经成为一个习惯用法。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Documented;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 水果供应者注解</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Target</span>(ElementType.FIELD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> FruitProvider </span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 供应商编号</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">id</span><span class="params">()</span> <span class="keyword">default</span> -1</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 供应商名称</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 供应商地址</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">address</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义了注解，并在需要的时候给相关类，类属性加上注解信息，如果没有响应的注解信息处理流程，注解可以说是没有实用价值。如何让注解真真的发挥作用，主要就在于注解处理方法，下一步我们将学习注解信息的获取和处理！</p>
+<h2 id="注解的使用"><a href="#注解的使用" class="headerlink" title="注解的使用"></a>注解的使用</h2><p> 第一步：新建一个annotation，名字为：MyAnnotation.java。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.dragon.test.annotation;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target</span>(ElementType.METHOD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyAnnotation</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">String <span class="title">hello</span> <span class="params">()</span> <span class="keyword">default</span> "hello"</span>;</span><br><span class="line">    <span class="function">String <span class="title">world</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二步：建立一个MyTest.java 来使用上面的annotation。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.dragon.test.annotation;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTest</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@MyAnnotation</span>(hello = <span class="string">"Hello,Beijing"</span>,world = <span class="string">"Hello,world"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">output</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"method output is running "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三步：用反射机制来调用注解中的内容</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.dragon.test.annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyReflection</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 获得要调用的类</span></span><br><span class="line">        Class&lt;MyTest&gt; myTestClass = MyTest.class;</span><br><span class="line">        <span class="comment">// 获得要调用的方法，output是要调用的方法名字，new Class[]&#123;&#125;为所需要的参数。空则不是这种</span></span><br><span class="line">        Method method = myTestClass.getMethod(<span class="string">"output"</span>, <span class="keyword">new</span> Class[]&#123;&#125;);</span><br><span class="line">        <span class="comment">// 是否有类型为MyAnnotation的注解</span></span><br><span class="line">        <span class="keyword">if</span> (method.isAnnotationPresent(MyAnnotation.class))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 获得注解</span></span><br><span class="line">            MyAnnotation annotation = method.getAnnotation(MyAnnotation.class);</span><br><span class="line">            <span class="comment">// 调用注解的内容</span></span><br><span class="line">            System.out.println(annotation.hello());</span><br><span class="line">            System.out.println(annotation.world());</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"----------------------------------"</span>);</span><br><span class="line">        <span class="comment">// 获得所有注解。必须是runtime类型的</span></span><br><span class="line">        Annotation[] annotations = method.getAnnotations();</span><br><span class="line">        <span class="keyword">for</span> (Annotation annotation : annotations)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 遍历所有注解的名字</span></span><br><span class="line">            System.out.println(annotation.annotationType().getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Hello,Beijing</span><br><span class="line">Hello,world</span><br><span class="line">----------------------------------</span><br><span class="line">com.dragon.test.annotation.MyAnnotation</span><br></pre></td></tr></table></figure>
+<h1 id="通过接口引用对象"><a href="#通过接口引用对象" class="headerlink" title="通过接口引用对象"></a>通过接口引用对象</h1><p>对于参数类型，要优先使用接口而不是类。通俗地讲，应该优先使用接口而不是类来引用对象。如果有合适的接口类型存在，那么对于参数、返回值、变量和域来说，就应该使用接口类型来声明。只有当你利用构造函数创建某个对象的时候，才真正引用这个对象的类。</p>
+<p>考虑Vector的情形，它是List接口的一个实现，在声明变量的时候应该养成这样的习惯：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Good - use interface as type</span><br><span class="line">List&lt;？&gt; list= new Vector&lt;？&gt;();</span><br></pre></td></tr></table></figure>
+<p>而不是像这样的声明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//Bad - use class as type</span><br><span class="line">Vector&lt;?&gt; list= new Vector&lt;?&gt;();</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ol>
+<li>假如一个类实现了多个接口,那么用接口类型来定义它的引用变量的话,一眼就可以明白,这里是需要这个类的哪些方法。</li>
+<li>程序更加灵活。当你决定更换实现时，只需要改变构造器中类的名称。其他使用list地方的代码根本不需要改动。第一个声明可以被改变为：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;?&gt; list= new ArrayList&lt;?&gt;();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注意：<br>list只能使用ArrayList已经实现了的List接口中的方法，ArrayList中那些自己的、没有在List接口中定义的方法是不可以被访问到的。List.add其实是List接口的方法，但是调用ArrayList方法如clone（）方法是调用不到的。</p>
+<p>适合于用类来引用对象的情形：</p>
+<ol>
+<li>如果没有合适的接口存在，可以用类来引用对象。<br>例如，考虑值类（String、BigInteger）很少用多个实现编写，他们通常是final的，并且很少有对应的接口。使用这种值类作为参数、变量、域或者返回值类型就比较合适。</li>
+<li>对象属于一个框架，而框架的基本类型是类，不是接口。（对象属于基于类的框架）<br>例如java.util.TimerTask抽象类。应该用相关的基类（往往是抽象类）来引用对象，而不是它的实现类。</li>
+<li>类实现了接口，但是它提供了接口中不存在的额外方法。<br>例如LinkedHashMap，程序依赖于这些额外的方法，这种类就应该只被用来引用它的实例。</li>
+</ol>
+<p>以上这些例子并不全面，而只是代表了一些“适合于用类来引用对象”的情形</p>
+<p>总结：给定的对象是否具有适当的接口应该是很明显的。如果是，用接口引用对象就会使程序更加灵活；如果不是，则使用类层次结构中提供了必要功能的最基础的类。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/设计模式/" rel="next" title="设计模式---基于Java详解(全)">
+                <i class="fa fa-chevron-left"></i> 设计模式---基于Java详解(全)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/一致性哈希算法/" rel="prev" title="一致性哈希算法">
+                一致性哈希算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="le">
+            
+              <p class="site-author-name" itemprop="name">le</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/490" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#String-和-StringBuffer、StringBuilder-的区别是什么？"><span class="nav-number">1.</span> <span class="nav-text">String 和 StringBuffer、StringBuilder 的区别是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#可变性"><span class="nav-number">1.1.</span> <span class="nav-text">可变性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程安全性"><span class="nav-number">1.2.</span> <span class="nav-text">线程安全性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能"><span class="nav-number">1.3.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对于三者使用的总结："><span class="nav-number">1.4.</span> <span class="nav-text">对于三者使用的总结：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于-final-关键字的一些总结"><span class="nav-number">2.</span> <span class="nav-text">关于 final 关键字的一些总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Object类的常见方法总结"><span class="nav-number">3.</span> <span class="nav-text">Object类的常见方法总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java的异常体系"><span class="nav-number">4.</span> <span class="nav-text">Java的异常体系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Error（错误）"><span class="nav-number">4.1.</span> <span class="nav-text">Error（错误）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exception（异常）"><span class="nav-number">4.2.</span> <span class="nav-text">Exception（异常）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unchecked-Exception（RuntimeException）"><span class="nav-number">4.2.1.</span> <span class="nav-text">unchecked Exception（RuntimeException）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#checked-Exception（非RuntimeException）"><span class="nav-number">4.2.2.</span> <span class="nav-text">checked Exception（非RuntimeException）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Throwable类常用方法"><span class="nav-number">4.2.3.</span> <span class="nav-text">Throwable类常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常处理总结"><span class="nav-number">4.2.4.</span> <span class="nav-text">异常处理总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#获取用键盘输入常用的的两种方法"><span class="nav-number">5.</span> <span class="nav-text">获取用键盘输入常用的的两种方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接口和抽象类的区别是什么"><span class="nav-number">6.</span> <span class="nav-text">接口和抽象类的区别是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深拷贝与浅拷贝"><span class="nav-number">7.</span> <span class="nav-text">深拷贝与浅拷贝</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#反射、泛型"><span class="nav-number">8.</span> <span class="nav-text">反射、泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型"><span class="nav-number">8.1.</span> <span class="nav-text">泛型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反射"><span class="nav-number">8.2.</span> <span class="nav-text">反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库驱动为什么用反射"><span class="nav-number">8.3.</span> <span class="nav-text">数据库驱动为什么用反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内省-Introspector"><span class="nav-number">8.4.</span> <span class="nav-text">内省 (Introspector)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Web"><span class="nav-number">9.</span> <span class="nav-text">Java Web</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Servlet的生命周期与工作原理"><span class="nav-number">9.1.</span> <span class="nav-text">Servlet的生命周期与工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat"><span class="nav-number">9.2.</span> <span class="nav-text">Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结构"><span class="nav-number">9.2.1.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomca的两大组件：Connecter和Container"><span class="nav-number">9.2.2.</span> <span class="nav-text">Tomca的两大组件：Connecter和Container</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat-Server处理一个HTTP请求的过程"><span class="nav-number">9.2.3.</span> <span class="nav-text">Tomcat Server处理一个HTTP请求的过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-序列化和反序列化"><span class="nav-number">10.</span> <span class="nav-text">Java 序列化和反序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现"><span class="nav-number">10.1.</span> <span class="nav-text">如何实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化的控制：Externalizable-接口"><span class="nav-number">10.2.</span> <span class="nav-text">序列化的控制：Externalizable 接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Externalizable-接口的替代方法"><span class="nav-number">10.3.</span> <span class="nav-text">Externalizable 接口的替代方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的序列化协议"><span class="nav-number">10.4.</span> <span class="nav-text">常见的序列化协议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-动态代理"><span class="nav-number">11.</span> <span class="nav-text">Java 动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代理模式（JDK代理）"><span class="nav-number">11.1.</span> <span class="nav-text">代理模式（JDK代理）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CGLIB代理"><span class="nav-number">11.2.</span> <span class="nav-text">CGLIB代理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java注解"><span class="nav-number">12.</span> <span class="nav-text">Java注解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解JAVA注解"><span class="nav-number">12.1.</span> <span class="nav-text">深入理解JAVA注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#元注解（meta-annotation）："><span class="nav-number">12.1.1.</span> <span class="nav-text">元注解（meta-annotation）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义注解："><span class="nav-number">12.1.2.</span> <span class="nav-text">自定义注解：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注解的使用"><span class="nav-number">12.2.</span> <span class="nav-text">注解的使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过接口引用对象"><span class="nav-number">13.</span> <span class="nav-text">通过接口引用对象</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">le</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">241.8k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: '490',
+            repo: 'https://github.com/490/490.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'dd4cdc4ae526b060d983e343530d30ed338af4b2',
+            
+                client_id: '2340dc349a2e19013ca4'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'Yi80CT04XNkVSJTMAPm5FtWc-gzGzoHsz',
+        appKey: 'j3zcBrBI4kxBuazJBe3Gra3B',
+        placeholder: '^_^',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":80,"height":160},"mobile":{"show":true}});</script></body>
+</html>
