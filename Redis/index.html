@@ -96,7 +96,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190311_133906.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_134003.png">
 <meta property="og:image" content="http://490.github.io/images/20190311_134009.png">
-<meta property="og:updated_time" content="2019-06-01T00:50:17.209Z">
+<meta property="og:updated_time" content="2019-08-10T15:21:31.030Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis基础知识">
 <meta name="twitter:description" content="简单来说 Redis 就是一个数据库，不过与传统数据库不同的是 Redis 的数据是存在内存中的，所以存写速度非常快，因此 Redis 被广泛应用于缓存方向。此外，redis 也经常用来做分布式锁。">
@@ -362,7 +362,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  7.9k
+                  9.1k
                 </span>
               
 
@@ -378,7 +378,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  28
+                  33
                 </span>
               
             </div>
@@ -585,7 +585,27 @@
 <li>不会发生死锁：有一个客户端在持有锁的过程中崩溃而没有解锁，也能保证其他客户端能够加锁。</li>
 <li>获取锁和释放锁的性能要好</li>
 </ul>
-<h2 id="基于数据库表"><a href="#基于数据库表" class="headerlink" title="基于数据库表"></a>基于数据库表</h2><h2 id="基于-Redis-的分布式锁"><a href="#基于-Redis-的分布式锁" class="headerlink" title="基于 Redis 的分布式锁"></a>基于 Redis 的分布式锁</h2><h2 id="基于-Zookeeper-实现分布式锁"><a href="#基于-Zookeeper-实现分布式锁" class="headerlink" title="基于 Zookeeper 实现分布式锁"></a>基于 Zookeeper 实现分布式锁</h2><p>基于 Zookeeper 临时有序节点可以实现的分布式锁。大致思想为：每个客户端对某个方法加锁时，在 Zookeeper 上的与该方法对应的指定节点的目录下，生成一个唯一的瞬时有序节点。 判断是否获取锁的方式很简单，只需要判断有序节点中序号最小的一个。 当释放锁的时候，只需将这个瞬时节点删除即可。同时，其可以避免服务宕机导致的锁无法释放，而产生的死锁问题。完成业务流程后，删除对应的子节点释放锁。</p>
+<h2 id="基于数据库表"><a href="#基于数据库表" class="headerlink" title="基于数据库表"></a>基于数据库表</h2><h2 id="基于-Redis-的分布式锁"><a href="#基于-Redis-的分布式锁" class="headerlink" title="基于 Redis 的分布式锁"></a>基于 Redis 的分布式锁</h2><p><code>SETNX key value</code><br>将key的值设为value，并且仅当key不存在。<br>若给定的key已经存在，则SETNX不做任何操作。<br>SETNX 是SET if Not eXists的简写。<br>返回整数，具体为</p>
+<ul>
+<li>1，当 key 的值被设置</li>
+<li>0，当 key 的值没被设置</li>
+</ul>
+<p>如果一个进程获得锁之后，断开了与redis的连接（进程挂断或者网络中断），那么锁一直的不断释放，其他的进程就一直获取不到锁，就出现了 “死锁”</p>
+<p>然而，锁超时时，我们不能简单地使用 DEL 命令删除键 lock.foo 以释放锁。考虑以下情况，进程P1已经首先获得了锁 lock.foo，然后进程P1挂掉了。进程P2，P3正在不断地检测锁是否已释放或者已超时，执行流程如下:</p>
+<ol>
+<li>P2和P3进程读取键 lock.foo 的值，检测锁是否已超时（通过比较当前时间和键 lock.foo 的值来判断是否超时）</li>
+<li>P2和P3进程发现锁 lock.foo 已超时</li>
+<li>P2执行 DEL lock.foo命令</li>
+<li>P2执行 SETNX lock.foo命令，并返回1，即P2获得锁</li>
+<li>P3执行 DEL lock.foo命令将P2刚刚设置的键 lock.foo 删除（这步是由于P3刚才已检测到锁已超时）</li>
+<li>P3执行 SETNX lock.foo命令，并返回1，即P3获得锁</li>
+<li>P2和P3同时获得了锁</li>
+</ol>
+<p>从上面的情况可以得知，在检测到锁超时后，进程不能直接简单地执行 DEL 删除键的操作以获得锁。</p>
+<p>为了解决上述算法可能出现的多个进程同时获得锁的问题，我们再来看以下的算法。<br>我们同样假设进程P1已经首先获得了锁 lock.foo，然后进程P1挂掉了。接下来的情况：</p>
+<p>进程P4执行 SETNX lock.foo 以尝试获取锁<br>由于进程P1已获得了锁，所以P4执行 SETNX lock.foo 返回0，即获取锁失败<br>P4执行 GET lock.foo 来检测锁是否已超时，如果没超时，则等待一段时间，再次检测<br>如果P4检测到锁已超时，即当前的时间大于键 lock.foo 的值，P4会执行以下操作<br>GETSET lock.foo <current 1 unix timestamp + lock timeout><br>由于 GETSET 操作在设置键的值的同时，还会返回键的旧值，通过比较键 lock.foo 的旧值是否小于当前时间，可以判断进程是否已获得锁<br>假如另一个进程P5也检测到锁已超时，并在P4之前执行了 GETSET 操作，那么P4的 GETSET 操作返回的是一个大于当前时间的时间戳，这样P4就不会获得锁而继续等待。注意到，即使P4接下来将键 lock.foo 的值设置了比P5设置的更大的值也没影响。<br>另外，值得注意的是，在进程释放锁，即执行 DEL lock.foo 操作前，需要先判断锁是否已超时。如果锁已超时，那么锁可能已由其他进程获得，这时直接执行 DEL lock.foo 操作会导致把其他进程已获得的锁释放掉。</current></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (timeout &gt;= <span class="number">0</span>) </span><br><span class="line">&#123;</span><br><span class="line">            <span class="keyword">long</span> expires = System.currentTimeMillis() + expireMsecs + <span class="number">1</span>;</span><br><span class="line">            String expiresStr = String.valueOf(expires); <span class="comment">//锁到期时间</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.setNX(lockKey, expiresStr)) </span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// lock acquired</span></span><br><span class="line">                locked = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            String currentValueStr = <span class="keyword">this</span>.get(lockKey); <span class="comment">//redis里的时间</span></span><br><span class="line">            <span class="keyword">if</span> (currentValueStr != <span class="keyword">null</span> &amp;&amp; Long.parseLong(currentValueStr) &lt; System.currentTimeMillis()) </span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//判断是否为空，不为空的情况下，如果被其他线程设置了值，则第二个条件判断是过不去的</span></span><br><span class="line">                <span class="comment">// lock is expired</span></span><br><span class="line"></span><br><span class="line">                String oldValueStr = <span class="keyword">this</span>.getSet(lockKey, expiresStr);</span><br><span class="line">                <span class="comment">//获取上一个锁到期时间，并设置现在的锁到期时间，</span></span><br><span class="line">                <span class="comment">//只有一个线程才能获取上一个线上的设置时间，因为jedis.getSet是同步的</span></span><br><span class="line">                <span class="keyword">if</span> (oldValueStr != <span class="keyword">null</span> &amp;&amp; oldValueStr.equals(currentValueStr)) </span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="comment">//防止误删（覆盖，因为key是相同的）了他人的锁——这里达不到效果，这里值会被覆盖，但是因为什么相差了很少的时间，所以可以接受</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment">//[分布式的情况下]:如过这个时候，多个线程恰好都到了这里，但是只有一个线程的设置值和当前值相同，他才有权利获取锁</span></span><br><span class="line">                    <span class="comment">// lock acquired</span></span><br><span class="line">                    locked = <span class="keyword">true</span>;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            timeout -= DEFAULT_ACQUIRY_RESOLUTION_MILLIS;</span><br><span class="line"></span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">                延迟100 毫秒,  这里使用随机时间可能会好一点,可以防止饥饿进程的出现,即,当同时到达多个进程,</span></span><br><span class="line"><span class="comment">                只会有一个进程获得锁,其他的都用同样的频率进行尝试,后面有来了一些进行,也以同样的频率申请锁,这将可能导致前面来的锁得不到满足.</span></span><br><span class="line"><span class="comment">                使用随机的等待时间可以一定程度上保证公平性</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            Thread.sleep(DEFAULT_ACQUIRY_RESOLUTION_MILLIS);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="基于-Zookeeper-实现分布式锁"><a href="#基于-Zookeeper-实现分布式锁" class="headerlink" title="基于 Zookeeper 实现分布式锁"></a>基于 Zookeeper 实现分布式锁</h2><p>基于 Zookeeper 临时有序节点可以实现的分布式锁。大致思想为：每个客户端对某个方法加锁时，在 Zookeeper 上的与该方法对应的指定节点的目录下，生成一个唯一的瞬时有序节点。 判断是否获取锁的方式很简单，只需要判断有序节点中序号最小的一个。 当释放锁的时候，只需将这个瞬时节点删除即可。同时，其可以避免服务宕机导致的锁无法释放，而产生的死锁问题。完成业务流程后，删除对应的子节点释放锁。</p>
 <h1 id="如何保证缓存与数据库双写时的数据一致性？"><a href="#如何保证缓存与数据库双写时的数据一致性？" class="headerlink" title="如何保证缓存与数据库双写时的数据一致性？"></a>如何保证缓存与数据库双写时的数据一致性？</h1><p>你只要用缓存，就可能会涉及到缓存与数据库双存储双写，你只要是双写，就一定会有数据一致性的问题，那么你如何解决一致性问题？</p>
 <p>一般来说，就是如果你的系统不是严格要求缓存+数据库必须一致性的话，缓存可以稍微的跟数据库偶尔有不一致的情况，最好不要做这个方案，读请求和写请求串行化，串到一个内存队列里去，就是读的时候肯定不写，写的时候肯定不读，这样就可以保证一定不会出现不一致的情况，但是这会导致系统的吞吐量大幅度降低，用比正常情况下多几倍的机器去支撑线上的一个请求。</p>
 <p><strong>最经典的缓存 + 数据库读写的模式：Cache Aside Pattern。</strong> 即：</p>
@@ -847,7 +867,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">273k</span>
+    <span title="Site words total count">274.6k</span>
   
 </div>
 
