@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190318_083546.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133536.png">
 <meta property="og:image" content="http://490.github.io/images/20190318_133608.png">
-<meta property="og:updated_time" content="2019-06-15T02:11:47.304Z">
+<meta property="og:updated_time" content="2019-08-13T07:57:21.504Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL数据库基础知识">
 <meta name="twitter:description" content="索引事务隔离级别锁SQL joinInnodb和MyISAM引擎MyCAT">
@@ -386,7 +386,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  25.6k
+                  25.8k
                 </span>
               
 
@@ -835,6 +835,8 @@
 <p><strong>SELECT</strong><br>InnoDB会根据以下两个条件检查每行记录: a.InnoDB只会查找版本早于当前事务版本的数据行(也就是,行的系统版本号小于或等于事务的系统版本号)，这样可以确保事务读取的行，要么是在事务开始前已经存在的，要么是事务自身插入或者修改过的. b.行的删除版本要么未定义,要么大于当前事务版本号,这可以确保事务读取到的行，在事务开始之前未被删除.<br>只有a,b同时满足的记录，才能返回作为查询结果.<br><strong>DELETE</strong><br>InnoDB会为删除的每一行保存当前系统的版本号(事务的ID)作为删除标识.<br><img src="http://490.github.io/images/20190310_084503.png" alt="image"></p>
 <p>innodb索引和数据在一起</p>
 <p>myisam不在一起</p>
+<p>这种额外的记录所带来的结果就是对于大多数查询来说根本就不需要获得一个锁。他们只是简单地以最快的速度来读取数据，确保只选择符合条件的行。这个方案的缺点在于存储引擎必须为每一行存储更多的数据，做更多的检查工作，处理更多的善后操作。</p>
+<p>MVCC只工作在REPEATABLE READ和READ COMMITED隔离级别下。READ UNCOMMITED不是MVCC兼容的，因为查询不能找到适合他们事务版本的行版本；它们每次都只能读到最新的版本。<br>SERIABLABLE也不与MVCC兼容，因为读操作会锁定他们返回的每一行数据。</p>
 <h1 id="存储程序"><a href="#存储程序" class="headerlink" title="存储程序"></a>存储程序</h1><p><a href="https://mp.weixin.qq.com/s?__biz=MzIxNTQ3NDMzMw==&amp;mid=2247483963&amp;idx=1&amp;sn=eaf578dcb032daf0409179d95439e3b5&amp;scene=19#wechat_redirect" target="_blank" rel="noopener">原文链接</a></p>
 <p>有时候为了完成一个常用的功能需要执行许多条语句，每次都在客户端里一条一条的去输入这么多语句是很烦的，我们希望有一种批处理的形式，让我们以很简单的方式一次性的执行完这些语句，<code>MySQL</code>中的<code>存储程序</code>本质上封装了一些可执行的语句，然后给用户提供一种简单的调用方式来执行这些语句，根据调用方式的不同，我们可以把<code>存储程序</code>分为<code>存储例程</code>、<code>触发器</code>和<code>事件</code>这几种类型。其中，<code>存储例程</code>又可以被细分为<code>存储函数</code>和<code>存储过程</code>。我们画个图表示一下：</p>
 <p><img src="http://490.github.io/images/20190323_103912.png" alt="image"></p>
@@ -1279,7 +1281,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">279.6k</span>
+    <span title="Site words total count">280.3k</span>
   
 </div>
 
