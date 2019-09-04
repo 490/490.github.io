@@ -88,12 +88,14 @@
 <meta property="og:image" content="http://490.github.io/images/20190718_085900.png">
 <meta property="og:image" content="http://490.github.io/images/20190718_090117.png">
 <meta property="og:image" content="http://490.github.io/images/20190718_090128.png">
+<meta property="og:image" content="http://490.github.io/images/20190904_091032.png">
+<meta property="og:image" content="http://490.github.io/images/20190904_091038.png">
 <meta property="og:image" content="https://s1.51cto.com/images/blog/201901/17/0c8047532a232e90e8e99b1783cd1a7d.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
 <meta property="og:image" content="https://s1.51cto.com/images/blog/201901/17/f4ccb4b3d930c7a332c6f1bbc56a39ea.png?x-oss-process=image/watermark,size_16,text_QDUxQ1RP5Y2a5a6i,color_FFFFFF,t_100,g_se,x_10,y_10,shadow_90,type_ZmFuZ3poZW5naGVpdGk=">
 <meta property="og:image" content="http://490.github.io/images/20190717_101905.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200118.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200258.png">
-<meta property="og:updated_time" content="2019-07-25T02:03:14.847Z">
+<meta property="og:updated_time" content="2019-09-04T01:10:45.391Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark">
 <meta name="twitter:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理；">
@@ -359,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  12.1k
+                  12.3k
                 </span>
               
 
@@ -375,7 +377,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  47
+                  48
                 </span>
               
             </div>
@@ -678,6 +680,11 @@
 <p>提交mr作业到yarn上运行： wc</p>
 <p><code>/home/hadoop/app/hadoop-2.6.0-cdh5.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.7.0.jar</code></p>
 <p><code>hadoop jar /home/hadoop/app/hadoop-2.6.0-cdh5.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.7.0.jar wordcount /input/wc/hello.txt /output/wc/</code></p>
+<p>Yarn应用程序涉及三大组件 - 客户端，ApplicationMaster（AM）和容器，如图2.3所示。启动新的Yarn应用程序需从Yarn客户端开始，该客户端与ResourceManager通信以创建新的Yarn ApplicationMaster实例，此过程Yarn客户端会让ResourceManager通知ApplicationMaster物理资源要求。</p>
+<p>ApplicationMaster是Yarn应用程序主进程，不执行任何特定于应用程序的工作，因为这些函数被委托给容器。但是，它负责管理特定于应用程序的容器：询问ResourceManager其创建容器的意图，然后与NodeManager联系以实际执行容器创建。作为此过程的一部分，ApplicationMaster必须根据主机启动容器，并确定容器的内存和CPU要求以指定容器所需资源。</p>
+<p>ResourceManager根据资源要求安排工作，它使主机能够运行混合容器，如图2.4所示。ApplicationMaster负责应用程序的特定容错，在容器失败时从ResourceManager接收状态消息，并基于具体事件采取操作（通过要求ResourceManager创建新容器解决）或忽略这些事件。</p>
+<p><img src="http://490.github.io/images/20190904_091032.png" alt="image"></p>
+<p><img src="http://490.github.io/images/20190904_091038.png" alt="image"></p>
 <h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><ul>
 <li>Flume是一个分布式的、可靠的、高可用的海量日志采集、聚合和传输的系统</li>
 <li>数据流模型：Source-Channel-Sink</li>
@@ -1002,7 +1009,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">280.3k</span>
+    <span title="Site words total count">280.6k</span>
   
 </div>
 
