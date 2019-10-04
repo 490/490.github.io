@@ -95,7 +95,7 @@
 <meta property="og:image" content="http://490.github.io/images/20190717_101905.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200118.png">
 <meta property="og:image" content="http://490.github.io/images/20190717_200258.png">
-<meta property="og:updated_time" content="2019-09-04T01:10:45.391Z">
+<meta property="og:updated_time" content="2019-10-04T04:26:52.035Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark">
 <meta name="twitter:description" content="MapReduce局限性MapReduce的局限性：1）代码繁琐；2）只能够支持map和reduce方法；3）执行效率低下；4）不适合迭代多次、交互式、流式的处理；">
@@ -361,7 +361,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  12.3k
+                  12.4k
                 </span>
               
 
@@ -377,7 +377,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  48
+                  49
                 </span>
               
             </div>
@@ -640,6 +640,7 @@
 <p><img src="http://490.github.io/images/20190718_090117.png" alt="image"></p>
 <p>Spark Streaming主要的抽象是DStream（Discretized Stream，离散化数据流），表示连续不断的数据流。在内部实现上，Spark Streaming的输入数据按照时间片（如1秒）分成一段段的DStream，每一段数据转换为Spark中的RDD，对DStream的操作都最终转变为对相应的RDD的操作。图2.6展示了当进行单词统计时，每个时间片的数据（存储句子的RDD）经过flatMap操作，生成了存储单词的RDD。</p>
 <p><img src="http://490.github.io/images/20190718_090128.png" alt="image"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.imooc.spark</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.streaming.&#123;Seconds, StreamingContext&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 使用Spark Streaming处理文件系统(local/hdfs)的数据</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">object FileWordCount &#123;</span><br><span class="line"></span><br><span class="line">  <span class="function">def <span class="title">main</span><span class="params">(args: Array[String])</span>: Unit </span>= &#123;</span><br><span class="line"></span><br><span class="line">    val sparkConf = <span class="keyword">new</span> SparkConf().setMaster(<span class="string">"local"</span>).setAppName(<span class="string">"FileWordCount"</span>)</span><br><span class="line">    val ssc = <span class="keyword">new</span> StreamingContext(sparkConf, Seconds(<span class="number">5</span>))</span><br><span class="line"></span><br><span class="line">    val lines = ssc.textFileStream(<span class="string">"E:\\BUAA\\找工作\\Spark Streaming实时流处理项目实战(3)\\Linux\\vmware.log"</span>)</span><br><span class="line"></span><br><span class="line">    val result = lines.flatMap(_.split(<span class="string">" "</span>)).map((_,<span class="number">1</span>)).reduceByKey(_+_)</span><br><span class="line">    result.print()</span><br><span class="line"></span><br><span class="line">    ssc.start()</span><br><span class="line">    ssc.awaitTermination()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="YARN架构"><a href="#YARN架构" class="headerlink" title="YARN架构"></a>YARN架构</h1><p>1 RM(ResourceManager) + N NM(NodeManager)</p>
 <p>ResourceManager的职责： 一个集群active状态的RM只有一个，负责整个集群的资源管理和调度</p>
 <ul>
@@ -1009,7 +1010,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">280.6k</span>
+    <span title="Site words total count">280.7k</span>
   
 </div>
 
